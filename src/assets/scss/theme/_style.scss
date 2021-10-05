@@ -7849,9 +7849,10 @@ footer {
     .checkout-form {
         .checkout-details {
             position: relative;
-            background-color: $grey-lighter;
+            background-color: $white;
             border: 1px solid $round-border;
-            padding: 40px;
+            padding: 20px;
+            border-radius:3px;
         }
         .check-out {
             .form-group {
@@ -7904,17 +7905,19 @@ footer {
             &[type="number"],
             &[type="url"] {
                 width: 100%;
-                padding: 0 22px;
-                height: 45px;
-                border: 1px solid #dddddd;
+                padding: 0 15px;
+                height: 40px;
+                border: 2px solid #dddddd;
+                border-radius:8px;
             }
         }
         select,
         textarea {
             width: 100%;
             padding: 0 22px;
-            height: 45px;
-            border: 1px solid #dddddd;
+            height: 40px;
+            border: 2px solid #dddddd;
+            border-radius:8px;
         }
     }
     .check-box {
@@ -7945,12 +7948,12 @@ footer {
     margin-bottom: 50px;
     .title-box {
         position: relative;
-        padding-bottom: 25px;
+        padding-bottom: 15px;
         color: $grey4;
-        font-weight: 600;
-        font-size: 22px;
+        font-weight: 400;
+        font-size: 16px;
         border-bottom: 1px solid #ededed;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         span {
             position: relative;
             width: 35%;
@@ -7961,7 +7964,7 @@ footer {
     .qty {
         position: relative;
         border-bottom: 1px solid #ededed;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         li {
             position: relative;
             display: block;
@@ -7971,7 +7974,7 @@ footer {
             margin-bottom: 20px;
             span {
                 float: right;
-                font-size: 18px;
+                font-size: 16px;
                 line-height: 20px;
                 color: #232323;
                 font-weight: 400;
@@ -7982,19 +7985,19 @@ footer {
     .sub-total {
         position: relative;
         border-bottom: 1px solid $round-border;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         li {
             position: relative;
             display: inline-block;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 400;
             color: $font-color;
             line-height: 20px;
             margin-bottom: 20px;
             width: 100%;
             .count {
                 position: relative;
-                font-size: 18px;
+                font-size: 16px;
                 line-height: 20px;
                 color: var(--theme-deafult);
                 font-weight: 400;
@@ -8022,17 +8025,17 @@ footer {
         li {
             position: relative;
             display: block;
-            font-weight: 400;
+            font-weight: 600;
             color: $font-color;
             line-height: 20px;
             margin-bottom: 10px;
-            font-size: 18px;
+            font-size: 16px;
             .count {
                 position: relative;
-                font-size: 18px;
+                font-size: 16px;
                 line-height: 20px;
                 color: var(--theme-deafult);
-                font-weight: 400;
+                font-weight: 600;
             }
             span {
                 float: right;
@@ -14358,3 +14361,88 @@ div#loading-bar {
         text-decoration:underline;
     }
 }
+.font-12{
+    font-size: 12px !important;
+}
+.rounded-lg{
+    border-radius:0.8rem !important;
+}
+.flex_item{
+    display:flex;
+}
+.cart_product_img{
+    width:50%;
+}
+.cart_product_info{
+    width:50%;
+    margin-left:10px;
+    .product_title{
+        font-size: 16px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        a{
+            color: $dark-font;
+            font-weight:700;
+        }
+    }
+}
+.cart_item_action{
+    i{
+        margin-right:10px;
+        font-size:18px;
+        font-weight: 700;
+    }
+    li{
+        margin-bottom:10px;
+        display:block;
+        a{
+            cursor:pointer;
+        }
+    }
+}
+.qty-box{
+    .quantity-left-minus,
+    .quantity-right-plus{
+        border-radius: 50% !important;
+        width: 35px;
+        height: 35px;
+        margin-top: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .input-group{
+        .input-group-prepend{
+            .btn{
+                &:hover{
+                    background:#e0e0e0 !important;
+                }
+            }
+        }
+        .form-control{
+            border-radius: 10px !important;
+            background: none;
+            margin:0 10px;
+            height:40px;
+            border: 2px solid #ced4da;
+        }
+        span{
+            button{
+                border: 2px solid #ced4da;
+            }
+        }
+        
+    }
+}
+.cart_section{
+    .checkout-details {
+        position: relative;
+        background-color: #ffffff;
+        border: 1px solid #dddddd;
+        padding: 20px;
+        border-radius: 3px;
+    }
+}
+
