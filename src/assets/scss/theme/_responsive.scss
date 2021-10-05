@@ -5349,6 +5349,18 @@ background-color: $black;*/
             }
         }
     }
+    .cart_item_action{
+        li{
+            margin-bottom:10px;
+            margin-right:10px;
+            display:inline-block;
+        }
+    }
+    .qty-box{
+        .quantity-left-minus{
+            margin-bottom:3px;
+        }
+    }
 }
 
 @media (min-width: 577px) {

@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Cart'" [breadcrumb]="'Cart'"></app-breadcrumb>
+<!-- <app-breadcrumb [title]="'Cart'" [breadcrumb]="'Cart'"></app-breadcrumb> -->
 <!-- section start -->
 <section class="cart-section section-b-space">
     <div class="container">
@@ -7,103 +7,236 @@
         <h3><strong>Your Cart is Empty</strong></h3>
         <h4>Add something to make me happy :)</h4>
         </div>
-        <div class="row" *ngIf="products.length">
-        <div class="col-sm-12">
-            <table class="table cart-table table-responsive-xs">
-                <thead>
-                    <tr class="table-head">
-                        <th scope="col">image</th>
-                        <th scope="col">product name</th>
-                        <th scope="col">price</th>
-                        <th scope="col">quantity</th>
-                        <th scope="col">action</th>
-                        <th scope="col">total</th>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let product of products">
-                    <tr>
-                        <td>
+
+        <div class="row cart_section" *ngIf="products.length">
+            <div class="col-sm-12">
+                <div class="title1 section-b-space">
+                  <h2>Your shopping bag</h2>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-8 col-12">
+                <div class="row justify-content-center align-items-center mb-3" *ngFor="let product of products">
+                    <div class="col-sm-5 col-md-5 col-9 flex_item">
+                        <div class="cart_product_img">
                             <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">
-                                <img [src]="product.images[0].src" [alt]="product.images[0].alt">
+                                <img class="img-fluid" [src]="product.images[0].src" [alt]="product.images[0].alt">
                             </a>
-                        </td>
-                        <td>
-                            <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">{{ product.title | titlecase }}</a>
-                            <div class="mobile-cart-content row">
-                                <div class="col-xs-3">
-                                    <div class="qty-box">
-                                        <div class="input-group">
-                                            <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
+                        </div>
+                        <div class="cart_product_info">
+                            <p class="mb-2 product_title"><a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">{{ product.title | titlecase }}</a></p>
+                            <p class="mb-2">Size: Medium</p>
+                            <p class="mb-2">Color: Cranberry</p>
+                            <p class="mb-2">{{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-3">
+                        <div class="qty-box">
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement(product)">
+                                        <i class="ti-minus"></i>
+                                    </button>
+                                </span>
+                                <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
+                                <span class="input-group-prepend">
+                                    <button type="button" class="btn quantity-right-plus"  data-type="plus" (click)="increment(product)">
+                                        <i class="ti-plus"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-12">
+                        <ul class="cart_item_action mt-2">
+                            <li><i class="ti-pencil"></i>Edit Item</li>
+                            <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
+                            <li><i class="ti-heart"></i>Save For Later</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12 col-xs-12">
+                <div class="checkout-details">
+                  <div class="order-box">
+                    <div class="title-box">
+                      <div>Product <span> Total</span></div>
+                    </div>
+                    <ul class="qty">
+                      <li>Pink Slim Shirt × 1 <span>$25.10</span></li>
+                      <li>SLim Fit Jeans × 1 <span>$555.00</span></li>
+                    </ul>
+                    <ul class="sub-total">
+                      <li>Subtotal <span class="count">$580.10</span></li>
+                      <li>Coupon <span class="count">-$77.60</span></li>
+                      <li>Gift Card <span class="count">-$100.00</span></li>
+                      <li>Estimated Tax  <span class="count">$23.28</span></li>
+                      <li>Estimated Shipping  <span class="count">FREE</span></li>
+                    </ul>
+
+                    <ul class="total">
+                      <li>Estimated Total <span class="count">$425.78</span></li>
+                    </ul>
+                  </div>
+
+                  <div class="payment-box">
+                    <div class="upper-box">
+                      <div class="payment-options">
+                        <ul>
+                          <li>
+                            <div class="radio-option">
+                              <input type="radio" name="payment-group" id="payment-1" checked>
+                              <label for="payment-1">Check Payments<span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
+                            </div>
+                          </li>
+
+                          <li>
+                            <div class="radio-option">
+                              <input type="radio" name="payment-group" id="payment-2">
+                              <label for="payment-2">Cash On Delivery<span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="radio-option paypal">
+                              <input type="radio" name="payment-group" id="payment-3">
+                              <label for="payment-3">PayPal<span class="image"><img src="assets/images/paypal.png" alt="" /></span></label>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <a [routerLink]="['shop/checkout']" class="btn-solid rounded-lg btn">continue to shipping method</a>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+            <div class="col-sm-12 d-none">
+                <table class="table cart-table table-responsive-xs">
+                    <thead>
+                        <tr class="table-head">
+                            <th scope="col">image</th>
+                            <th scope="col">product name</th>
+                            <th scope="col">price</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">action</th>
+                            <th scope="col">total</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let product of products">
+                        <tr>
+                            <td>
+                                <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">
+                                    <img [src]="product.images[0].src" [alt]="product.images[0].alt">
+                                </a>
+                            </td>
+                            <td>
+                                <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">{{ product.title | titlecase }}</a>
+                                <div class="mobile-cart-content row">
+                                    <div class="col-xs-3">
+                                        <div class="qty-box">
+                                            <!-- <div class="input-group">
+                                                <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
+                                            </div> -->
                                         </div>
                                     </div>
+                                    <div class="col-xs-3">
+                                        <h2 class="td-color">
+                                            {{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                        </h2>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <h2 class="td-color">
+                                            <a (click)="removeItem(product)" class="icon">
+                                                <i class="ti-close"></i>
+                                            </a>
+                                        </h2>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3">
-                                    <h2 class="td-color">
-                                        {{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
-                                    </h2>
+                            </td>
+                            <td>
+                                <h2>
+                                    {{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                </h2>
+                            </td>
+                            <td>
+                                <div class="qty-box">
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement(product)">
+                                                <i class="ti-angle-left"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
+                                        <span class="input-group-prepend">
+                                            <button type="button" class="btn quantity-right-plus"  data-type="plus" (click)="increment(product)">
+                                                <i class="ti-angle-right"></i>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3">
-                                    <h2 class="td-color">
-                                        <a (click)="removeItem(product)" class="icon">
-                                            <i class="ti-close"></i>
-                                        </a>
-                                    </h2>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h2>
-                                {{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
-                            </h2>
-                        </td>
-                        <td>
-                            <div class="qty-box">
-                                <div class="input-group">
-                                    <span class="input-group-prepend">
-                                        <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement(product)">
-                                            <i class="ti-angle-left"></i>
-                                        </button>
-                                    </span>
-                                    <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
-                                    <span class="input-group-prepend">
-                                        <button type="button" class="btn quantity-right-plus"  data-type="plus" (click)="increment(product)">
-                                            <i class="ti-angle-right"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <a href="javascript:void(0)" (click)="removeItem(product)" class="icon">
-                            <i class="ti-close"></i>
-                        </a>
-                        </td>
-                        <td>
-                            <h2 class="td-color">
-                                {{ ((product.price | discount:product) * product.quantity) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
-                            </h2>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table cart-table table-responsive-md">
-                <tfoot>
-                    <tr>
-                        <td>total price :</td>
-                        <td>
-                            <h2> {{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</h2>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" (click)="removeItem(product)" class="icon">
+                                <i class="ti-close"></i>
+                            </a>
+                            </td>
+                            <td>
+                                <h2 class="td-color">
+                                    {{ ((product.price | discount:product) * product.quantity) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                </h2>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table cart-table table-responsive-md">
+                    <tfoot>
+                        <tr>
+                            <td>total price :</td>
+                            <td>
+                                <h2> {{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</h2>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
-        </div>
+
         <div class="row cart-buttons" *ngIf='products.length'>
             <div class="col-6">
                 <a [routerLink]="['/shop/collection/left/sidebar']" class="btn btn-solid">continue shopping</a>
             </div>
             <div class="col-6">
                 <a [routerLink]="['/shop/checkout']" class="btn btn-solid">check out</a>
+            </div>
+        </div>
+        <div class="row section-t-space">
+            <div class="col-12">
+                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                    <ngb-panel title="Simple">
+                        <ng-template ngbPanelContent>
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+                            aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+                            sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+                            craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                            occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+                            labore sustainable VHS.
+                        </ng-template>
+                    </ngb-panel>
+                    <ngb-panel>
+                        <ng-template ngbPanelTitle>
+                            <span>&#9733; <b>Fancy</b> title &#9733;</span>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+                            aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+                            sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+                            craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                            occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+                            labore sustainable VHS.
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
             </div>
         </div>
     </div>
