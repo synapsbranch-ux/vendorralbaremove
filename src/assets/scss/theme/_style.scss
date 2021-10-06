@@ -2402,7 +2402,7 @@ header {
         display: inline-block;
         height: 20px;
         width: 20px;
-        border-radius: 100%;
+        /*border-radius: 100%;*/
         margin-right: 5px;
         transition: all 0.1s ease;
         vertical-align: middle;
@@ -2717,7 +2717,7 @@ header {
                 display: inline-block;
                 height: 20px;
                 width: 20px;
-                border-radius: 100%;
+                /*border-radius: 100%;*/
                 margin-right: 5px;
                 transition: all 0.1s ease;
                 cursor: pointer;
@@ -3020,7 +3020,7 @@ header {
                                     display: inline-block;
                                     height: 20px;
                                     width: 20px;
-                                    border-radius: 100%;
+                                    /*border-radius: 100%;*/
                                     margin-right: 5px;
                                     margin-top: 20px;
                                     transition: all 0.1s ease;
@@ -3596,7 +3596,7 @@ header {
                                 display: inline-block;
                                 height: 20px;
                                 width: 20px;
-                                border-radius: 100%;
+                                /*border-radius: 100%;*/
                                 margin-right: 5px;
                                 margin-top: 15px;
                                 transition: all 0.1s ease;
@@ -7775,7 +7775,7 @@ footer {
                     display: inline-block;
                     height: 15px;
                     width: 15px;
-                    border-radius: 100%;
+                    /*border-radius: 100%;*/
                     margin: 0 3px;
                     transition: all 0.3s ease;
                     cursor: pointer;
@@ -14331,6 +14331,7 @@ div#loading-bar {
     background-repeat: no-repeat;
     background-position: 0;
     transition: background 300ms ease-in-out;
+    overflow:hidden;
 }
 .section-b-space-2{
     padding-bottom:30px;
@@ -14437,12 +14438,120 @@ div#loading-bar {
     }
 }
 .cart_section{
+    .title1{
+        h2{
+            position:relative;
+            &:after{
+                content:'';
+                position:absolute;
+                bottom:-15px;
+                left:0;
+                right:0;
+                width:100px;
+                height:3px;
+                background: var(--theme-deafult);
+                margin: 0 auto;
+            }
+        }
+
+    }
+    .card{
+        border-radius:0;
+        border-top:1px solid #e1e1e1;
+        border-left:0;
+        border-right:0;
+    }
+    .card-header{
+        padding: 0.3rem 1.25rem;
+        padding-left:0;
+        background:none;
+        .btn-link{
+            width:100%;
+            text-transform:capitalize;
+            &:hover,
+            &:active,
+            &:focus{
+                text-decoration:none;
+            }
+        }
+    }
+    .est_info{
+        font-size:14px;
+    }
+    a {
+        &.btn {
+            &.paypal_btn {
+                padding: 13px 29px;
+                color: $white;
+                letter-spacing: 0.05em;
+                border: 2px solid #ffc43a;
+                background-image: -webkit-linear-gradient(30deg, #ffc43a 50%, transparent 50%);
+                background-image: linear-gradient(30deg, #ffc43a 50%, transparent 50%);
+                background-size: 850px;
+                background-repeat: no-repeat;
+                background-position: 0;
+                -webkit-transition: background 300ms ease-in-out;
+                transition: background 300ms ease-in-out;
+                &:hover {
+                    background-position: 100%;
+                    color: $black;
+                    background-color: $white;
+                }
+                &:active {
+                    background-image: -webkit-linear-gradient(30deg, #ffc43a 50%, transparent 50%);
+                    background-image: linear-gradient(30deg, #ffc43a 50%, transparent 50%);
+                    color: $white;
+                    background: #ffc43a;
+                }
+            } 
+        }
+    }
+    
+    
     .checkout-details {
         position: relative;
         background-color: #ffffff;
         border: 1px solid #dddddd;
         padding: 20px;
         border-radius: 3px;
+    }
+}
+.checkout-form{
+    .title1{
+        h2{
+            position:relative;
+            &:after{
+                content:'';
+                position:absolute;
+                bottom:-15px;
+                left:0;
+                right:0;
+                width:100px;
+                height:3px;
+                background: var(--theme-deafult);
+                margin: 0 auto;
+            }
+        }
+
+    }
+    .card{
+        border-radius:0;
+        border-top:1px solid #e1e1e1;
+        border-left:0;
+        border-right:0;
+    }
+    .card-header{
+        padding: 0.3rem 1.25rem;
+        padding-left:0;
+        background:none;
+        .btn-link{
+            text-transform:capitalize;
+            &:hover,
+            &:active,
+            &:focus{
+                text-decoration:none;
+            }
+        }
     }
 }
 

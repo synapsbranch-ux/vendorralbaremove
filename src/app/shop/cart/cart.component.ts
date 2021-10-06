@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProductSlider } from '../../shared/data/slider';
 import { ProductService } from "../../shared/services/product.service";
 import { Product } from "../../shared/classes/product";
 
@@ -11,6 +12,7 @@ import { Product } from "../../shared/classes/product";
 export class CartComponent implements OnInit {
 
   public products: Product[] = [];
+  public ProductSliderConfig: any = ProductSlider;
 
   constructor(public productService: ProductService) {
     this.productService.cartItems.subscribe(response => this.products = response);
