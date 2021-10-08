@@ -5299,14 +5299,14 @@ footer {
 .product-filter-tags {
     li {
         display: inline-flex;
-        margin-bottom: 30px;
+        margin-bottom: 5px;
         a {
             &.filter_tag {
-                color: $grey;
-                border: 1px solid $grey;
+                background:$grey;
+                color: $white;
                 padding: 4px 10px 4px 12px;
                 text-transform: capitalize;
-                border-radius: 15px;
+                border-radius: 5px;
                 font-size: 13px;
             }
             i {
@@ -5569,7 +5569,7 @@ footer {
 
 // breadcrumb section //
 .breadcrumb-section {
-    background-color: $top-header;
+    /*background-color: $top-header;*/
     padding: 30px 0;
     .page-title {
         display: flex;
@@ -5582,8 +5582,8 @@ footer {
     }
     .breadcrumb {
         background-color: transparent;
-        justify-content: flex-end;
-        text-transform: uppercase;
+        /*justify-content: flex-end;
+        text-transform: uppercase;*/
         font-size: 14px;
         color: $grey2;
         font-weight: 600;
@@ -5720,8 +5720,8 @@ footer {
 // category page //
 .collection-filter-block {
     margin-bottom: 30px;
-    padding: 0 30px;
-    border: 1px solid lighten($black, 86.5%);
+    padding: 0 15px;
+    /*border: 1px solid lighten($black, 86.5%);*/
     background-color: $white;
     .product-service {
         padding: 30px 0;
@@ -7165,8 +7165,10 @@ footer {
         cursor: pointer;
     }
     >div.owl-thumb.active {
-        border-color: $font-grey;
+        border-color: transparent;
         transition: all 0.5s ease;
+        border: none;
+        border-bottom:4px solid $theme-deafult;
     }
 }
 
@@ -7178,8 +7180,10 @@ footer {
         >div {
             //display: flex;
             margin: 15px 15px 0 15px;
-            border: 1px solid $round-border;
-            transition: all 0.5s ease;
+            //border: 1px solid $round-border;
+            //transition: all 0.5s ease;
+            border: none;
+            border-bottom: 4px solid #fff;
         }
         &.slick-current {
             >div {
@@ -7349,12 +7353,15 @@ footer {
         margin-bottom: 20px;
         .btn-solid,
         .btn-outline {
-            padding: 7px 25px;
+            padding: 15px 25px;
         }
         a {
             &:last-child {
                 margin-left: 10px;
             }
+        }
+        .virtual_btn{
+            box-shadow: 0 10px 10px rgb(27 124 191 / 45%);
         }
     }
     .product-description {
@@ -7371,7 +7378,7 @@ footer {
                 justify-content: unset;
                 width: unset;
                 .form-control {
-                    border-right: none;
+                    /*border-right: none;*/
                 }
             }
         }
@@ -14552,6 +14559,58 @@ div#loading-bar {
                 text-decoration:none;
             }
         }
+    }
+}
+.filter_block{
+    .block-title{
+        text-transform: uppercase;
+        font-size: 16px;
+        color: $grey4;
+        font-weight: 600;
+        margin-bottom:20px;
+    }
+    .clear_filter{
+        float: right;
+        text-transform: capitalize;
+        font-size:14px;
+    }
+}
+.feedback_block{
+    padding: 0 0 60px 0;
+    h3{
+        font-size: 30px;
+        font-weight: 400;
+        color: $black;
+        letter-spacing: 0.03em;
+        margin-bottom: 30px;
+    }
+    p{
+        color: $black;
+        margin-bottom: 5px;
+        font-weight:600;
+    }
+    .border_btm{
+        padding: 15px 0;
+        border-bottom:1px solid $border;
+    }
+    .rating {
+        margin-bottom:5px;
+        i{
+            &:nth-child(-n+4){
+                color: $black;
+            }
+        }
+    }
+    .cmt_date{
+        font-size: 12px;
+        color: $grey-light;
+        font-weight: 400;
+    }
+    .cmt{
+        font-size: 14px;
+        line-height: 20px;
+        color: $grey-light;
+        font-weight: 400;
     }
 }
 

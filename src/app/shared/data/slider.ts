@@ -239,8 +239,8 @@ export let ProductDetailsMainSlider: any = {
 
 // Product Details Thumb Slider
 export let ProductDetailsThumbSlider: any = {
-    items: 3,
-    loop: true,
-    margin: 10,
+    items: 4,
+    loop: false,
+    margin: 5,
     dots:false
 }
