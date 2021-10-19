@@ -891,10 +891,10 @@ header {
         content: "\f107";
         font-family: $font-awesome;
         position: absolute;
-        right: 3px;
+        right: -5px;
     }
     .onhover-show-div {
-        top: 50px;
+        top: 30px;
         position: absolute;
         z-index: 10;
         background-color: $white;
@@ -1327,6 +1327,7 @@ header {
             display: inline-block;
             li {
                 padding-left: 20px;
+                padding-right:10px;
             }
             a{
                 color: var(--black);
@@ -14612,5 +14613,8 @@ div#loading-bar {
         color: $grey-light;
         font-weight: 400;
     }
+}
+.ngxImageZoomLensEnabled{
+    border: 2px solid $border !important;
 }
 

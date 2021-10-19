@@ -5,6 +5,7 @@ import { Ng5SliderModule } from 'ng5-slider';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SharedModule } from '../shared/shared.module';
 import { ShopRoutingModule } from './shop-routing.module';
+import { NgxImageZoomModule } from 'ngx-image-zoom';
 
 // Product Details Components
 import { ProductLeftSidebarComponent } from './product/sidebar/product-left-sidebar/product-left-sidebar.component';
@@ -79,7 +80,8 @@ import { SuccessComponent } from './checkout/success/success.component';
     Ng5SliderModule,
     InfiniteScrollModule,
     SharedModule,
-    ShopRoutingModule
+    ShopRoutingModule,
+    NgxImageZoomModule
   ]
 })
 export class ShopModule { }
