@@ -1,9 +1,9 @@
 <div *ngIf="!loader">
   <div class="img-wrapper">
-    <div class="lable-block">
+    <!-- <div class="lable-block">
       <span class="lable3" *ngIf="product.new">new</span>
       <span class="lable4" *ngIf="product.sale">on sale</span>
-    </div>
+    </div> -->
     <div class="front">
       <a [routerLink]="['/shop/product/no/sidebar/', product.title.replace(' ', '-')]">
         <img 
@@ -25,7 +25,7 @@
         </a>
       </li>
     </ul>
-    <div class="cart-info cart-wrap">
+    <!-- <div class="cart-info cart-wrap">
       <a href="javascript:void(0)" title="Add to cart" (click)="CartModal.openModal(product)"
         *ngIf="cartModal">
         <i class="ti-shopping-cart"></i>
@@ -43,7 +43,7 @@
       <a href="javascript:void(0)" title="Compare" (click)="addToCompare(product)">
         <i class="ti-reload" aria-hidden="true"></i>
       </a>
-    </div>
+    </div> -->
   </div>
   <div class="product-detail">
     <div>
