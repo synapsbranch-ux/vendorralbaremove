@@ -3,7 +3,7 @@
     <h3 class="collapse-block-title" (click)="collapse = !collapse">price</h3>
     <div class="collection-collapse-block-content">
         <div class="collection-brand-filter">
-            <div class="mt-2">
+            <!-- <div class="mt-2">
                 <ng5-slider 
                     [(value)]="min" 
                     [(highValue)]="max" 
@@ -11,6 +11,22 @@
                     (userChangeEnd)="appliedFilter($event)"
                     *ngIf="isBrowser">
                 </ng5-slider>
+            </div> -->
+            <div class="custom-control custom-checkbox collection-filter-checkbox">
+              <input type="checkbox" class="custom-control-input" />
+              <label class="custom-control-label" for="">Under $500</label>
+            </div>
+            <div class="custom-control custom-checkbox collection-filter-checkbox">
+              <input type="checkbox" class="custom-control-input" />
+              <label class="custom-control-label" for="">$500 - $1000</label>
+            </div>
+            <div class="custom-control custom-checkbox collection-filter-checkbox">
+              <input type="checkbox" class="custom-control-input" />
+              <label class="custom-control-label" for="">$1000 - $5000</label>
+            </div>
+            <div class="custom-control custom-checkbox collection-filter-checkbox">
+              <input type="checkbox" class="custom-control-input" />
+              <label class="custom-control-label" for="">Over $5000</label>
             </div>
         </div>
     </div>
