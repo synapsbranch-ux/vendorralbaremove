@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Wishlist'" [breadcrumb]="'Wishlist'"></app-breadcrumb>
+<!-- <app-breadcrumb [title]="'Wishlist'" [breadcrumb]="'Wishlist'"></app-breadcrumb> -->
 <!--section start-->
 <section class="wishlist-section section-b-space">
   <div class="container">
@@ -72,8 +72,8 @@
     </div>
     <div class="row wishlist-buttons" *ngIf='products.length'>
       <div class="col-12">
-        <a [routerLink]="['/shop/collection/left/sidebar']" class="btn btn-solid">continue shopping</a>
-        <a [routerLink]="['/shop/checkout']" class="btn btn-solid">check out</a>
+        <a [routerLink]="['/shop/collection/left/sidebar']" class="btn btn-solid rounded-lg">continue shopping</a>
+        <a [routerLink]="['/shop/checkout']" class="btn btn-solid rounded-lg">check out</a>
       </div>
     </div>
   </div>
