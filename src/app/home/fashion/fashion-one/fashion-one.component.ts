@@ -3,6 +3,7 @@ import { ProductSlider } from '../../../shared/data/slider';
 import { Product } from '../../../shared/classes/product';
 import { ProductService } from '../../../shared/services/product.service';
 import { StoreService } from 'src/app/shared/services/store.service';
+import { Store } from 'src/app/shared/classes/store';
 
 @Component({
   selector: 'app-fashion-one',
@@ -13,9 +14,11 @@ export class FashionOneComponent implements OnInit {
 
   public products: Product[] = [];
   public productCollections: any[] = [];
+  public stores: Store[] = [];
   
   constructor(public productService: ProductService,public storeService: StoreService) {
     this.productService.getProducts.subscribe(response => {
+      console.log('Product Received!', response);
       this.products = response.filter(item => item.type == 'fashion');
       // Get Product Collection
       this.products.filter((item) => {
@@ -24,9 +27,6 @@ export class FashionOneComponent implements OnInit {
           if (index === -1) this.productCollections.push(collection);
         })
       })
-    this.storeService.getStores.subscribe(response => {
-      console.log(response);
-    });
     });
   }
   public ProductSliderConfig: any = ProductSlider;
@@ -36,16 +36,25 @@ export class FashionOneComponent implements OnInit {
     subTitle: 'Signature Collection',
     discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
     image: 'assets/images/slider/home_slider.png'
-  }, {
+  }, 
+  {
     title: 'welcome to fashion',
     subTitle: 'Women fashion',
     discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
     image: 'assets/images/slider/home_slider.png'
   }]
 
+  get(): void {
+    this.storeService.getStores.subscribe(response => {
 
+      if(response["error"] === 0){
+        this.stores = response["data"];
+      }
+    });
+  }
 
   ngOnInit(): void {
+    this.get();
   }
 
   // Product Tab collection

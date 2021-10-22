@@ -15,8 +15,8 @@ export class StoreService {
   private get stores(): Observable<Store[]>{
     const body={"page": 1}
     this.Stores = this.http.post(environment.baseUrl+'stores',body);
-    console.log(this.Stores);
-    return;
+    console.log('Store Service called!', this.Stores);
+    return this.Stores;
   }
   // get Stores
   public get getStores(): Observable<Store[]>{

@@ -34,7 +34,8 @@ export class ProductService {
   private get products(): Observable<Product[]> {
     this.Products = this.http.get<Product[]>('assets/data/products.json').pipe(map(data => data));
     this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
-    return this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
+    this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
+    return this.Products; 
   }
 
   // Get Products
