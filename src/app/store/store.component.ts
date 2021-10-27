@@ -11,7 +11,7 @@ export class StoreComponent implements OnInit {
   public stores: Store[] = [];
 
   constructor(public storeService: StoreService) { 
-    this.storeService.getStores.subscribe(response => {
+    this.storeService.getStoresMore.subscribe(response => {
       console.log(response);
       if(response["error"] === 0){
         console.log('Store response=====>>>', response["status"]);
@@ -21,6 +21,16 @@ export class StoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  getMoreStores(){
+    this.storeService.getStoresMore.subscribe(response => {
+      console.log(response);
+      if(response["error"] === 0){
+        console.log('Store response=====>>>', response["status"]);
+        this.stores = response["data"];
+      }
+    });
   }
 
 }
