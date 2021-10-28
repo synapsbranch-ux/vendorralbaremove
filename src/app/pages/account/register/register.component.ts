@@ -7,12 +7,16 @@ import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
+
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   submitted = false;
   constructor(private fromBuilder: FormBuilder) { }
   
+  otp: string;
+  showOtpComponent = true;
+
   ngOnInit(): void {
      this.form =  new FormGroup({
         'fname': new FormControl(null, [Validators.required]),

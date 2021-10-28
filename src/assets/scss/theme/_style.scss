@@ -891,10 +891,11 @@ header {
         content: "\f107";
         font-family: $font-awesome;
         position: absolute;
-        right: -5px;
+        right: -1px;
+        cursor: pointer;
     }
     .onhover-show-div {
-        top: 30px;
+        top: 19px;
         position: absolute;
         z-index: 10;
         background-color: $white;
@@ -912,6 +913,15 @@ header {
         border-radius: 0 !important;
         &.product-page-full {
             z-index: 99999;
+        }
+        li{
+            padding: 0 !important;
+            display: block;
+            padding-left: 20px !important;
+            margin-bottom: 5px;
+            a{
+                display: block;
+            }
         }
     }
     &:hover {
@@ -14616,5 +14626,10 @@ div#loading-bar {
 }
 .ngxImageZoomLensEnabled{
     border: 2px solid $border !important;
+}
+.otp-input{
+    padding: 0 !important;
+    height: 50px !important;
+    border-radius: 0 !important;
 }
 
