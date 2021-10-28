@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, Validator} from '@angular/forms';
 
 // @ts-check
 @Component({
@@ -24,10 +24,11 @@ export class RegisterComponent implements OnInit {
         'email': new FormControl(null, [Validators.required, Validators.email]),
         'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
         'repeat_password': new FormControl(null, [Validators.required]),
-        'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')])
+        'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
+
       },
       /*{
-        validators: [Validation.match('password', 'confirmPassword')]
+        validator: [Validation.match('password', 'confirmPassword')]
       }*/);
   }
 
@@ -45,8 +46,21 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
+    this.showDiv.otp = true;
+    this.showDiv.signUpDiv = false;
     console.log(JSON.stringify(this.form.value, null, 2));
+
   }
 
+  showDiv = {
+    signUpDiv : true,
+    otp : false,
+  }
+
+  generateOtp(no){
+    if(no){
+
+    }
+  }
+  
 }
