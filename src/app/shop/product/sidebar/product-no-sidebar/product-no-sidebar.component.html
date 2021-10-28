@@ -52,9 +52,9 @@
                     <h3>
                         {{ (product?.price | discount:product) * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}
                     </h3>
-                    <div class="rating">
+                    <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
-                    </div>
+                    </div> -->
                     <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
                     <ul class="color-variant border-product" *ngIf="Color(product?.variants).length">
@@ -144,20 +144,20 @@
                         <ng-template ngbTabContent>
                             <form class="theme-form">
                             <div class="form-row">
-                                <div class="col-md-12 ">
-                                <div class="media">
-                                    <label>Rating</label>
-                                    <div class="media-body ml-3">
-                                    <div class="rating three-star">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
+                                <!-- <div class="col-md-12 ">
+                                    <div class="media">
+                                        <label>Rating</label>
+                                        <div class="media-body ml-3">
+                                        <div class="rating three-star">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        </div>
                                     </div>
-                                    </div>
-                                </div>
-                                </div>
+                                </div> -->
                                 <!--<div class="col-md-6">
                                     <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name" placeholder="Enter Your name" required>
@@ -166,7 +166,7 @@
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control" id="email" placeholder="Email" required>
                                 </div>-->
-                                <div class="col-md-12">
+                                <div class="col-md-12 mt-3">
                                     <label for="review">Review Title</label>
                                     <input type="text" class="form-control" id="review" placeholder="Enter your Review Subjects" required>
                                 </div>
@@ -204,7 +204,7 @@
                         <p>Based on</p>
                         <p>175 reviews</p>
                     </div>
-                    <div class="col-sm-6 col-12">
+                    <!--<div class="col-sm-6 col-12">
                         <div class="rating three-star">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -215,21 +215,21 @@
                         <p>
                             4 out of 5 stars
                         </p>
-                    </div>
+                    </div>-->
                 </div>
             </div>
-            <div class="col-sm-8 col-12">
+            <!-- <div class="col-sm-8 col-12">
                 <button class="btn btn-solid rounded-lg">create a review</button>
-            </div>
+            </div> -->
         </div>
         <div class="row border_btm">
-            <div class="col-sm-4 col-12">
+            <div class="col-sm-2 col-12">
                 <div class="row">
-                    <div class="col-sm-6 col-12">
+                    <div class="col-sm-12 col-12">
                         <p>Molly S.</p>
                         <p class="cmt_date">Mar 2, 2020</p>
                     </div>
-                    <div class="col-sm-6 col-12">
+                    <!--<div class="col-sm-6 col-12">
                         <div class="rating three-star">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -237,56 +237,38 @@
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
-            <div class="col-sm-8 col-12">
+            <div class="col-sm-10 col-12">
                 <p>Lorem ipsum dolor sit amet</p>
                 <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas.</p>
             </div>
         </div>
         <div class="row border_btm">
-            <div class="col-sm-4 col-12">
+            <div class="col-sm-2 col-12">
                 <div class="row">
                     <div class="col-sm-6 col-12">
                         <p>Molly S.</p>
                         <p class="cmt_date">Mar 2, 2020</p>
                     </div>
-                    <div class="col-sm-6 col-12">
-                        <div class="rating three-star">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="col-sm-8 col-12">
+            <div class="col-sm-10 col-12">
                 <p>Lorem ipsum dolor sit amet</p>
                 <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed.</p>
             </div>
         </div>
         <div class="row border_btm">
-            <div class="col-sm-4 col-12">
+            <div class="col-sm-2 col-12">
                 <div class="row">
                     <div class="col-sm-6 col-12">
                         <p>Molly S.</p>
                         <p class="cmt_date">Mar 2, 2020</p>
                     </div>
-                    <div class="col-sm-6 col-12">
-                        <div class="rating three-star">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="col-sm-8 col-12">
+            <div class="col-sm-10 col-12">
                 <p>Lorem ipsum dolor sit amet</p>
                 <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas.</p>
             </div>
