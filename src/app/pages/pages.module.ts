@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GalleryModule } from '@ks89/angular-modal-gallery';
 import { SharedModule } from '../shared/shared.module';
 import { PagesRoutingModule } from './pages-routing.module';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 // Pages Components
 import { WishlistComponent } from './account/wishlist/wishlist.component';
@@ -79,7 +80,8 @@ import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonr
     CommonModule,
     GalleryModule.forRoot(),
     SharedModule,
-    PagesRoutingModule
+    PagesRoutingModule,
+    NgOtpInputModule
   ]
 })
 export class PagesModule { }
