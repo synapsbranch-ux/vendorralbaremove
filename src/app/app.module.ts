@@ -17,6 +17,7 @@ import { PagesComponent } from './pages/pages.component';
 import { ElementsComponent } from './elements/elements.component';
 
 import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 
 // AoT requires an exported function for factories
@@ -52,7 +53,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     SharedModule,
     AppRoutingModule,
-    NgxImageZoomModule
+    NgxImageZoomModule,
+    NgOtpInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
