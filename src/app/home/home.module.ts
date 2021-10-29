@@ -11,7 +11,7 @@ import { BlogComponent } from './widgets/blog/blog.component';
 import { LogoComponent } from './widgets/logo/logo.component';
 import { ServicesComponent } from './widgets/services/services.component';
 import { CollectionComponent } from './widgets/collection/collection.component';
-import { StoreComponent } from './store/store.component';
+import { StoreComponent } from '../store/store.component';
 
 @NgModule({
   declarations: [
