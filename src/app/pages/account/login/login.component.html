@@ -8,12 +8,25 @@
                 <div class="theme-card">
                     <form class="theme-form" [formGroup]="form" (ngSubmit)="onSubmit()">
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="Email" required="" formControlName="email">
+                            <label for="lemail">Email</label>
+                            <input type="text" class="form-control" id="lemail" placeholder="Email" required="" formControlName="lemail">
+                            <div *ngIf="lemail.invalid && (lemail.dirty || lemail.touched)" class="text text-danger">
+                                <div *ngIf="lemail.errors?.required">
+                                    Email is required.
+                                </div>
+                                <div *ngIf="lemail.errors?.email">
+                                    Please enter a valid email.
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="review">Password</label>
-                            <input type="password" class="form-control" id="review" placeholder="Enter your password" required="" formControlName="">
+                            <label for="lpassword">Password</label>
+                            <input type="password" class="form-control" id="lpassword" placeholder="Enter your password" required="" formControlName="lpassword">
+                            <div *ngIf="lpassword.invalid && (lpassword.dirty || lpassword.touched)" class="text text-danger">
+                                <div *ngIf="lpassword.errors?.required">
+                                    Password is required.
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-solid rounded-lg">Login</button>
                     </form>

@@ -1,5 +1,7 @@
 import { Injectable, HostListener } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 // Menu
 export interface Menu {
@@ -19,8 +21,11 @@ export interface Menu {
 })
 
 export class NavService {
-
-	constructor() { }
+	menuItems;
+	constructor(private http: HttpClient) {
+		this.menuItems = this.genMenu();
+		console.log('Category ==>>', this.menuItems);
+	 }
 
 	public screenWidth: any;
 	public leftMenuToggle: boolean = false;
@@ -32,6 +37,10 @@ export class NavService {
 		this.screenWidth = window.innerWidth;
 	}
 
+	genMenu(): Observable<Menu>{
+		return this.http.get(environment.baseUrl+'category');
+	} 
+	  
 	MENUITEMS: Menu[] = [
 		{
 			title: 'Shoes', type: 'sub', active: false, children: [
