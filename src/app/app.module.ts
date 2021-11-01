@@ -18,6 +18,7 @@ import { ElementsComponent } from './elements/elements.component';
 
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgOtpInputModule } from  'ng-otp-input';
+import { DepartmentComponent } from './department/department.component';
 
 
 // AoT requires an exported function for factories
@@ -30,7 +31,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     ShopComponent,
     PagesComponent,
-    ElementsComponent
+    ElementsComponent,
+    DepartmentComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
