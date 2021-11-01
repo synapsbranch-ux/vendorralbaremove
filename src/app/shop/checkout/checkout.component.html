@@ -127,12 +127,32 @@
                                                 </div>
                                             </ng-template>
                                             <ng-template ngbPanelContent>
-                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                                                aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                                sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                                                occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                                                labore sustainable VHS.
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="radio-option d-flex align-items-start">
+                                                            <input type="radio" name="address" id="address-one">
+                                                            <label for="address-one" class="ml-2">
+                                                                Shipping Address 1<br>
+                                                                Gerg Harvell<br>
+                                                                568, Suite Ave.<br>
+                                                                Austrlia, 235153<br>
+                                                                Contact No. 123456789
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio-option d-flex align-items-start">
+                                                            <input type="radio" name="address" id="address-two">
+                                                            <label for="address-two" class="ml-2">
+                                                                Shipping Address 2<br>
+                                                                Gerg Harvell<br>
+                                                                568, Suite Ave.<br>
+                                                                Austrlia, 235153<br>
+                                                                Contact No. 123456789
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </ng-template>
                                         </ngb-panel>
                                         <ngb-panel>
@@ -149,7 +169,7 @@
                                                                 <li>
                                                                     <div class="radio-option">
                                                                         <input type="radio" [(ngModel)]="payment" [value]="'Stripe'"  name="payment-group" id="payment-2">
-                                                                        <label for="payment-2">Stripe
+                                                                        <label for="payment-2">Cash On Delivery
                                                                             <span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
                                                                     </div>
                                                                 </li>
@@ -163,9 +183,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="text-right">
-                                                        <button type="submit" class="btn-solid btn" [disabled]="!checkoutForm.valid" (click)="stripeCheckout()" *ngIf="payment == 'Stripe'">
+                                                        
+                                                        <!-- <button type="submit" class="btn-solid btn rounded-lg" [disabled]="!checkoutForm.valid" (click)="stripeCheckout()" *ngIf="payment == 'Stripe'">
                                                            Place Order
-                                                        </button>
+                                                        </button> -->
+                                                        
+                                                        <a [routerLink]="['/pages/order/success']">
+                                                            <button type="submit" class="btn-solid btn rounded-lg">
+                                                               Place Order
+                                                            </button>
+                                                        </a>
+                                                        
                                                         <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal>
                                                     </div>
                                                 </div>
