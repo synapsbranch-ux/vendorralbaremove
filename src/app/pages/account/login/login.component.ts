@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, Validator} from '@angular/forms';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +11,17 @@ export class LoginComponent implements OnInit {
   form : FormGroup;
   submitted= false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public userService: UserService) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      'lemail': new FormControl(null, [Validators.required, Validators.email]),
-      'lpassword': new FormControl(null, [Validators.required])
+      'phone_email': new FormControl(null, [Validators.required]),
+      'login_password': new FormControl(null, [Validators.required])
     });
   }
 
-  get lemail(){ return this.form.get('lemail');}
-  get lpassword(){ return this.form.get('lpassword');}
+  get phone_email(){ return this.form.get('phone_email');}
+  get login_password(){ return this.form.get('login_password');}
 
     onSubmit(): void {
 
@@ -29,7 +30,17 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    let formData = this.form.value;
     console.log(JSON.stringify(this.form.value, null, 2));
+    let data = {
+      'email_phone': formData.phone_email,
+      'password': formData.login_password,
+    }
+    this.userService.userLogin(data).subscribe(
+      res => {
+        console.log(' Login Success',res);
+      }
+    );
     
     }
 
