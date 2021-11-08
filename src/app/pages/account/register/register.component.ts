@@ -53,13 +53,10 @@ export class RegisterComponent implements OnInit {
     this.showDiv.otp = true;
     this.showDiv.signUpDiv = false;
     let formData = this.form.value;
-    console.log(formData);
-    console.log('User Phone No', formData.phone);
+
     if(this.callForOtp==false){
       this.userService.genOtp({'phone':formData.phone, 'type': 'SignUp'}).subscribe(
         res => {
-          console.log(res);
-          console.log(res['error']);
           if(res['error'] == 0){
             this.callForOtp = true;
             //this.userOtp = res['data'].otpValue;

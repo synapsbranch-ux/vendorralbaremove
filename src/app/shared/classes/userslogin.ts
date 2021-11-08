@@ -1,4 +1,4 @@
-export class Usersignup {
+export class Userlogin {
     name?: String;
     email?: String;
     phone?: Number;

@@ -21,4 +21,8 @@ export class UserService {
   userSignUp(data: any): Observable<Usersignup>{
     return this.http.post(environment.baseUrl+'user/signup',data);
   } 
+
+  userLogin(data){
+    return this.http.post(environment.baseUrl+'user/login',data);
+  }
 }
