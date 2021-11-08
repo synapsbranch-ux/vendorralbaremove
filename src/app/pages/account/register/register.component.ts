@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
   callForOtp = false;
-  userOtp = 0;
+  userOtp;
   public otp: Otp[] = [];
   constructor(private fromBuilder: FormBuilder, public userService: UserService) { }
   
@@ -62,23 +62,29 @@ export class RegisterComponent implements OnInit {
           console.log(res['error']);
           if(res['error'] == 0){
             this.callForOtp = true;
-            this.userOtp = res['data'].otpValue;
+            //this.userOtp = res['data'].otpValue;
           }
         });
     }else{
-      let data = {
-        'name': formData.fname+' '+formData.lname,
-        'email': formData.email,
-        'password': formData.password,
-        'repeat_password': formData.repeat_password,
-        'phone': formData.phone,
-        'otp': this.userOtp
-      }
-      this.userService.userSignUp(data).subscribe(
-        res => {
-          console.log(' Signup Success',res);
+
+      if(this.userOtp){
+        let data = {
+          'name': formData.fname+' '+formData.lname,
+          'email': formData.email,
+          'password': formData.password,
+          'repeat_password': formData.repeat_password,
+          'phone': formData.phone,
+          'otp': this.userOtp
         }
-      );
+        this.userService.userSignUp(data).subscribe(
+          res => {
+            console.log(' Signup Success',res);
+          }
+        );
+      }else{
+        console.log('Please enter OTP first');
+      }
+      
     }
   }
 
@@ -87,5 +93,7 @@ export class RegisterComponent implements OnInit {
     otp : false,
   }
 
- 
+  onOtpChange(ele){
+    this.userOtp = ele;
+  }
 }

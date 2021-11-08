@@ -86,7 +86,7 @@
                             <div class="form-row" *ngIf="showDiv.otp">
                                 <div class="col-md-12">
                                     <label for="otp">OTP</label>
-                                    <ng-otp-input  [config]="{length:4, isPasswordInput: true, allowNumbersOnly: true}"></ng-otp-input>
+                                    <ng-otp-input  [config]="{length:4, isPasswordInput: true, allowNumbersOnly: true}" (onInputChange)="onOtpChange($event)"></ng-otp-input>
                                 </div>
                             </div>
                             
