@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, Validator} from '@angular/forms';
+import { UserService } from 'src/app/shared/services/user.service';
+import { Otp } from 'src/app/shared/classes/otp';
 
 // @ts-check
 @Component({
@@ -12,9 +14,11 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   submitted = false;
-  constructor(private fromBuilder: FormBuilder) { }
+  callForOtp = false;
+  userOtp;
+  public otp: Otp[] = [];
+  constructor(private fromBuilder: FormBuilder, public userService: UserService) { }
   
-  otp: string;
   showOtpComponent = true;
 
   ngOnInit(): void {
@@ -38,9 +42,9 @@ export class RegisterComponent implements OnInit {
   get password() { return this.form.get('password');}
   get repeat_password() { return this.form.get('repeat_password'); }
   get phone() { return this.form.get('phone');}
+  //get otp() {return this.form.get('otp')}
 
   onSubmit(): void {
-    alert('Clicked!');
     this.submitted = true;
 
     if (this.form.invalid) {
@@ -48,8 +52,40 @@ export class RegisterComponent implements OnInit {
     }
     this.showDiv.otp = true;
     this.showDiv.signUpDiv = false;
-    console.log(JSON.stringify(this.form.value, null, 2));
+    let formData = this.form.value;
+    console.log(formData);
+    console.log('User Phone No', formData.phone);
+    if(this.callForOtp==false){
+      this.userService.genOtp({'phone':formData.phone, 'type': 'SignUp'}).subscribe(
+        res => {
+          console.log(res);
+          console.log(res['error']);
+          if(res['error'] == 0){
+            this.callForOtp = true;
+            //this.userOtp = res['data'].otpValue;
+          }
+        });
+    }else{
 
+      if(this.userOtp){
+        let data = {
+          'name': formData.fname+' '+formData.lname,
+          'email': formData.email,
+          'password': formData.password,
+          'repeat_password': formData.repeat_password,
+          'phone': formData.phone,
+          'otp': this.userOtp
+        }
+        this.userService.userSignUp(data).subscribe(
+          res => {
+            console.log(' Signup Success',res);
+          }
+        );
+      }else{
+        console.log('Please enter OTP first');
+      }
+      
+    }
   }
 
   showDiv = {
@@ -57,10 +93,7 @@ export class RegisterComponent implements OnInit {
     otp : false,
   }
 
-  generateOtp(no){
-    if(no){
-
-    }
+  onOtpChange(ele){
+    this.userOtp = ele;
   }
-  
 }
