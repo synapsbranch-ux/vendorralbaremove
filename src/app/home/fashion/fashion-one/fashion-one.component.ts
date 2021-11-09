@@ -49,6 +49,7 @@ export class FashionOneComponent implements OnInit {
 
       if(response["error"] === 0){
         this.stores = response["data"];
+        console.log(this.stores);
       }
     });
   }

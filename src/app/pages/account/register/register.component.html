@@ -15,12 +15,6 @@
                                     <div *ngIf="fname.errors?.required">
                                         First name is required.
                                     </div>
-                                    <div *ngIf="fname.errors?.minlength">
-                                        Name must be at least 4 characters long.
-                                    </div>
-                                    <div *ngIf="fname.errors?.forbiddenName">
-                                        Name cannot be Bob.
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
@@ -64,10 +58,11 @@
                             <div class="col-md-6 mb-4" *ngIf="showDiv.signUpDiv">
                                 <label for="repeat_password">Repeat Password</label>
                                 <input type="password" class="form-control m-0" id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password">
-                                <div *ngIf="repeat_password.invalid && (repeat_password.dirty || repeat_password.touched)" class="text text-danger mt-1">
+                                <div *ngIf="repeat_password.invalid && (repeat_password.dirty || repeat_password.touched) && repeat_password.errors" class="text text-danger mt-1">
                                     <div *ngIf="repeat_password.errors?.required">
                                         Repeat password is required.
                                     </div>
+                                    <div *ngIf="repeat_password.errors.matching">Passwords does not match</div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
@@ -87,12 +82,21 @@
                                 <div class="col-md-12">
                                     <label for="otp">OTP</label>
                                     <ng-otp-input  [config]="{length:4, isPasswordInput: true, allowNumbersOnly: true}" (onInputChange)="onOtpChange($event)"></ng-otp-input>
+                                    <div class="alert alert-danger" role="alert" *ngIf="!otpValid">
+                                        Please enter valid OTP
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <button type="submit" class="btn btn-solid rounded-lg"> Create Account </button>
                             </div>
+
+                            <div class="alert alert-success" role="alert" *ngIf="isValid">
+                                Your Registration sucessfull
+                            </div>
+
+                            
                     </form>
                 </div>
             </div>

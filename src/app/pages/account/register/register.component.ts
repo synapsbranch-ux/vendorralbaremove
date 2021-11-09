@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl, Validator} from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Otp } from 'src/app/shared/classes/otp';
+
+import Validation from '../utils/validation';
 
 // @ts-check
 @Component({
@@ -12,12 +15,14 @@ import { Otp } from 'src/app/shared/classes/otp';
 
 export class RegisterComponent implements OnInit {
 
+  otpValid: boolean = true;
+  isValid: boolean = false;
   form: FormGroup;
   submitted = false;
   callForOtp = false;
   userOtp;
   public otp: Otp[] = [];
-  constructor(private fromBuilder: FormBuilder, public userService: UserService) { }
+  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router) { }
   
   showOtpComponent = true;
 
@@ -31,9 +36,10 @@ export class RegisterComponent implements OnInit {
         'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
 
       },
-      /*{
-        validator: [Validation.match('password', 'confirmPassword')]
-      }*/);
+       {
+        validators: [Validation.match('password', 'repeat_password')]
+       }
+      );
   }
 
   get fname() { return this.form.get('fname'); }
@@ -60,6 +66,7 @@ export class RegisterComponent implements OnInit {
           if(res['error'] == 0){
             this.callForOtp = true;
             //this.userOtp = res['data'].otpValue;
+            console.log(res);
           }
         });
     }else{
@@ -76,10 +83,17 @@ export class RegisterComponent implements OnInit {
         this.userService.userSignUp(data).subscribe(
           res => {
             console.log(' Signup Success',res);
+            this.otpValid=true;
+            this.isValid = true;
+            setTimeout(() => {
+              this.router.navigate(['/pages/login']);
+            },3000)
+            
           }
         );
       }else{
         console.log('Please enter OTP first');
+        this.otpValid=false;
       }
       
     }

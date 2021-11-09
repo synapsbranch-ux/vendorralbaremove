@@ -9,9 +9,19 @@ export class DashboardComponent implements OnInit {
 
   public openDashboard: boolean = false;
 
-  constructor() { }
+
+
+
+  constructor() { 
+
+    var name:string ="";
+    var email:string= "";
+    var phone:string="";
+    
+  }
 
   ngOnInit(): void {
+  
   }
 
   ToggleDashboard() {
