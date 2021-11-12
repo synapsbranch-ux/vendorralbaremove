@@ -30,6 +30,11 @@
                         </div>
                         <p class="m-0 float-right"><a [routerLink]="['/pages/forget/password']">Forget Password</a></p>
                         <button type="submit" class="btn btn-solid rounded-lg">Login</button>
+                    
+                        <div [className]="loginValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="loginValid || loginInValid">
+                            {{loginMassage}}
+                        </div>
+                    
                     </form>
                 </div>
             </div>

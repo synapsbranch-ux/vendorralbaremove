@@ -24,6 +24,7 @@ import { StockInventoryComponent } from './product/widgets/stock-inventory/stock
 import { RelatedProductComponent } from './product/widgets/related-product/related-product.component';
 
 // Collection Components
+import { CollectionComponent } from './collection/collection.component';
 import { CollectionLeftSidebarComponent } from './collection/collection-left-sidebar/collection-left-sidebar.component';
 import { CollectionRightSidebarComponent } from './collection/collection-right-sidebar/collection-right-sidebar.component';
 import { CollectionNoSidebarComponent } from './collection/collection-no-sidebar/collection-no-sidebar.component';
@@ -58,6 +59,7 @@ import { SuccessComponent } from './checkout/success/success.component';
     SocialComponent,
     StockInventoryComponent,
     RelatedProductComponent,
+    CollectionComponent,
     CollectionLeftSidebarComponent,
     CollectionRightSidebarComponent,
     CollectionNoSidebarComponent,

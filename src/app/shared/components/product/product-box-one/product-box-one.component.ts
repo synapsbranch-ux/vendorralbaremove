@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { QuickViewComponent } from "../../modal/quick-view/quick-view.component";
 import { CartModalComponent } from "../../modal/cart-modal/cart-modal.component";
-import { Product } from "../../../classes/product";
+import { ProductNew } from "../../../classes/product";
 import { ProductService } from "../../../services/product.service";
 
 @Component({
@@ -11,7 +11,7 @@ import { ProductService } from "../../../services/product.service";
 })
 export class ProductBoxOneComponent implements OnInit {
 
-  @Input() product: Product;
+  @Input() product: ProductNew;
   @Input() currency: any = this.productService.Currency; // Default Currency 
   @Input() thumbnail: boolean = false; // Default False 
   @Input() onHowerChangeImage: boolean = false; // Default False
@@ -29,27 +29,28 @@ export class ProductBoxOneComponent implements OnInit {
     if(this.loader) {
       setTimeout(() => { this.loader = false; }, 2000); // Skeleton Loader
     }
+    
   }
 
   // Get Product Color
-  Color(variants) {
+  Color(product_varient_options) {
     const uniqColor = [];
-    for (let i = 0; i < Object.keys(variants).length; i++) {
-      if (uniqColor.indexOf(variants[i].color) === -1 && variants[i].color) {
-        uniqColor.push(variants[i].color)
+    for (let i = 0; i < (product_varient_options).length; i++) {
+      if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
+        uniqColor.push(product_varient_options[i]);
       }
     }
+    
     return uniqColor
   }
 
+
   // Change Variants
   ChangeVariants(color, product) {
-    product.variants.map((item) => {
-      if (item.color === color) {
-        product.images.map((img) => {
-          if (img.image_id === item.image_id) {
-            this.ImageSrc = img.src;
-          }
+    product.product_varient_options.map((item) => {
+      if (item.color_options === color) {
+        product.product_image.map((img) => {
+            this.ImageSrc = img.pro_image;
         })
       }
     })

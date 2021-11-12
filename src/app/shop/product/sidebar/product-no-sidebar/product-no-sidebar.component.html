@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-lg-6">
                 <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar  class="product-slick">
-                    <ng-container *ngFor="let image of product.images; index as i">
+                    <ng-container *ngFor="let image of product.product_image; index as i">
                         <ng-template carouselSlide [id]="i">
                             <div>
                                 <lib-ngx-image-zoom class="img-fluid"
-                                    [thumbImage]="'assets/images/product/placeholder.jpg'"
-                                    [fullImage]="'assets/images/product/placeholder.jpg'"
+                                    [thumbImage]="image.pro_image"
+                                    [fullImage]="image.pro_image"
                                     [magnification]="1.5"
                                     [enableLens]="true"
                                     [lensWidth]="300"
@@ -28,12 +28,12 @@
                     <div class="col-12 p-0">
                         <div class="slider-nav">
                             <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
-                                <ng-container *ngFor="let image of product.images; index as i">
+                                <ng-container *ngFor="let image of product.product_image; index as i">
                                     <ng-template carouselSlide [id]="i">
                                         <div class="owl-thumb" [class.active]="i == activeSlide">
                                         <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
-                                           [lazyLoad]="image.src" 
-                                           [alt]="image.alt" class="img-fluid" [src]="image.src" (click)="owlCar.to(activeSlide = i.toString())">
+                                           [lazyLoad]="image.pro_image" 
+                                           [alt]="product.product_name" class="img-fluid" [src]="image.pro_image" (click)="owlCar.to(activeSlide = i.toString())">
                                         </div>
                                     </ng-template>
                                 </ng-container>
@@ -44,36 +44,36 @@
             </div>
             <div class="col-lg-6 rtl-text">
                 <div class="product-right">
-                    <h2>{{ product?.title }}</h2>
-                    <h4>
-                        <del *ngIf="product?.discount">{{ product?.price * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}</del>
+                    <h2>{{ product?.product_name }}</h2>
+                    <!-- <h4>
+                        <del *ngIf="product?.discount">{{ product?.product_sale_price * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}</del>
                         <span>{{ product?.discount }}% off</span>
-                    </h4>
+                    </h4> -->
                     <h3>
-                        {{ (product?.price | discount:product) * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}
+                        {{ product?.product_sale_price}}
                     </h3>
                     <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
                     <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
-                    <ul class="color-variant border-product" *ngIf="Color(product?.variants).length">
-                        <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.variants); index as i" 
+                    <ul class="color-variant border-product" *ngIf="Color(product?.product_varient_options[1].color_options).length">
+                        <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.product_varient_options[1].color_options); index as i" 
                             [ngStyle]="{'background-color': color}"
                             (click)="owlCar.to(activeSlide = i.toString())">
                         </li>
                     </ul>
                     
                     <div class="product-description pb-4">
-                        <h6 class="product-title size-text" *ngIf="Size(product.variants).length">
+                        <h6 class="product-title size-text" *ngIf="Size(product.product_varient_options[0].size_options).length">
                             select size
                             <span>
                               <a href="javascrip:void(0)" (click)="SizeChart.openModal()">size chart</a>
                             </span>
                         </h6>
-                        <div class="size-box" *ngIf="Size(product.variants).length">
+                        <div class="size-box" *ngIf="Size(product.product_varient_options[0].size_options).length">
                             <ul>
-                                <li [class.active]="selectedSize == size" *ngFor="let size of Size(product.variants)">
+                                <li [class.active]="selectedSize == size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
                                     <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | titlecase }}</a>
                                 </li>
                             </ul>
@@ -128,7 +128,7 @@
                     <ngb-tab>
                         <ng-template ngbTabTitle>Description</ng-template>
                         <ng-template ngbTabContent>
-                            <p>{{ product.description }}</p>
+                            <!-- <p>{{ product.description }}</p> -->
                         </ng-template>
                     </ngb-tab>
                     <!-- <ngb-tab>
@@ -190,7 +190,7 @@
     <section class="section-t-space">
         <img src="assets/images/banner/product_details_page_banner.jpg" class="img-fluid" alt="banner">
     </section>
-  <app-related-product [type]="product?.type"></app-related-product>
+  <app-related-product [type]="product?.product_category"></app-related-product>
 </section>
 
 <!--Feedback and Review-->

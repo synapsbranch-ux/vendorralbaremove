@@ -27,11 +27,11 @@ export class MenuComponent implements OnInit {
         let menuChild;
         if(items.category_child.length > 0){
           menuChild = items.category_child.map(function(childItems){
-             return { path: childItems.category_slug, title: childItems.category_name, type: 'link' }
+             return { path: 'shop/collection?category='+childItems.category_slug, title: childItems.category_name, type: 'link' }
           });
         }
         return {
-          title: items.category_name, path: items.category_slug, type: 'link', active: false, children: menuChild
+          title: items.category_name, path: 'shop/collection?category='+items.category_slug, type: 'link', active: false, children: menuChild
         }
       });
     });

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from "../../services/product.service";
 import { Product } from "../../classes/product";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -12,6 +13,7 @@ import { Product } from "../../classes/product";
 })
 export class SettingsComponent implements OnInit {
 
+  user_id:string
   public products: Product[] = [];
   public search: boolean = false;
   
@@ -43,11 +45,14 @@ export class SettingsComponent implements OnInit {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private translate: TranslateService,
-    public productService: ProductService) {
+    public productService: ProductService, private router: Router) {
     this.productService.cartItems.subscribe(response => this.products = response);
   }
 
   ngOnInit(): void {
+
+  this.user_id=localStorage.getItem('user_id');
+
   }
 
   searchToggle(){
@@ -70,6 +75,12 @@ export class SettingsComponent implements OnInit {
 
   changeCurrency(currency: any) {
     this.productService.Currency = currency
+  }
+
+  logout()
+  {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
 }

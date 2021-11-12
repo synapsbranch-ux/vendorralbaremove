@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, startWith, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Product } from '../classes/product';
+import { environment } from 'src/environments/environment';
 
 const state = {
   products: JSON.parse(localStorage['products'] || '[]'),
@@ -31,17 +32,32 @@ export class ProductService {
   */
 
   // Product
-  private get products(): Observable<Product[]> {
-    this.Products = this.http.get<Product[]>('assets/data/products.json').pipe(map(data => data));
-    this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
+   private get products(): Observable<Product[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({      
+        'category': 'apparels',
+      })
+    };
+    this.Products = this.http.get<Product[]>(environment.baseUrl+'product/list',httpOptions).pipe(map((data:any)=>{
+      console.log("eta amar data",data.data)
+      return data.data;
+    }));
+    
+    this.Products.subscribe((next: any) => { 
+
+      localStorage['products'] = JSON.stringify(next)
+
+    });
     this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
     return this.Products; 
   }
 
+
+
   // Get Products
   public get getProducts(): Observable<Product[]> {
     return this.products;
-  }
+  } 
 
   // Get Products By Slug
   public getProductBySlug(slug: string): Observable<Product> {
@@ -218,8 +234,10 @@ export class ProductService {
 
   // Get Product Filter
   public filterProducts(filter: any): Observable<Product[]> {
-    return this.products.pipe(map(product => 
+    console.log('Service. Filter ==>',this.products);
+    return this.products.pipe(map((product) => 
       product.filter((item: Product) => {
+        console.log('========>>>',item );
         if (!filter.length) return true
         const Tags = filter.some((prev) => { // Match Tags
           if (item.tags) {

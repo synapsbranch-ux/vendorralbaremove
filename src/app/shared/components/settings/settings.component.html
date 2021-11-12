@@ -48,17 +48,17 @@
         <i class="fa fa-user-o" aria-hidden="true"></i> My Account
       </a>
       <ul class="onhover-show-div">
-        <li>
+        <li *ngIf="!user_id">
           <a [routerLink]="['/pages/login']" data-lng="en">
             Login
           </a>
         </li>
-        <li>
+        <li *ngIf="user_id">
           <a [routerLink]="['/pages/dashboard']">
             Profile
           </a>
         </li>
-        <li>
+        <li *ngIf="user_id" (click)="logout();">
           <a data-lng="es">
             Logout
           </a>

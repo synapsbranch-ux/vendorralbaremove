@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  loginMassage:string="";
+  loginValid: boolean = false;
+  loginInValid: boolean = false;
   form : FormGroup;
   submitted= false;
 
@@ -39,12 +43,29 @@ export class LoginComponent implements OnInit {
     }
     this.userService.userLogin(data).subscribe(
       res => {
+
         console.log(' Login Success',res);
         localStorage.setItem('user_id', res['data'].user_id);
         localStorage.setItem('user_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
-        this.router.navigate(['/pages/dashboard']);
-      }
+
+        this.loginValid=true;
+        this.loginInValid=false;
+        this.loginMassage="Login sucessfull";
+        setTimeout(() => {
+          this.router.navigate(['/pages/dashboard'])
+          .then(() => {
+            window.location.reload();
+          });
+        },2000)  
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        console.log(error.message);
+        this.loginValid=false;
+        this.loginInValid=true;
+        this.loginMassage="Username and Password does not match";
+   }
     );
     
     }

@@ -15,7 +15,10 @@ import Validation from '../utils/validation';
 
 export class RegisterComponent implements OnInit {
 
+  otpMassage:string=""
+  signupMassage:string=""
   otpValid: boolean = true;
+  phValid: boolean = true;
   isValid: boolean = false;
   form: FormGroup;
   submitted = false;
@@ -56,8 +59,8 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.showDiv.otp = true;
-    this.showDiv.signUpDiv = false;
+    
+    
     let formData = this.form.value;
 
     if(this.callForOtp==false){
@@ -65,10 +68,21 @@ export class RegisterComponent implements OnInit {
         res => {
           if(res['error'] == 0){
             this.callForOtp = true;
-            //this.userOtp = res['data'].otpValue;
+            this.showDiv.otp = true;
+            this.phValid=true;
+            this.showDiv.signUpDiv = false;
+            // this.getOtpVal = res['data'].otpValue;
             console.log(res);
           }
-        });
+        },
+        error => {
+          // .... HANDLE ERROR HERE 
+          console.log(error.message);
+          this.phValid=false;
+          this.signupMassage="Phone number already exist";
+          this.showDiv.signUpDiv = true;
+          this.showDiv.otp = false;
+     });
     }else{
 
       if(this.userOtp){
@@ -83,17 +97,29 @@ export class RegisterComponent implements OnInit {
         this.userService.userSignUp(data).subscribe(
           res => {
             console.log(' Signup Success',res);
+
             this.otpValid=true;
             this.isValid = true;
+            this.signupMassage="Your Registration sucessfull";
+
             setTimeout(() => {
-              this.router.navigate(['/pages/login']);
-            },3000)
-            
-          }
+              this.router.navigate(['/pages/login'])
+              .then(() => {
+                window.location.reload();
+              });
+            },3000)          
+          },
+          error => {
+            // .... HANDLE ERROR HERE 
+            console.log(error.message);
+            this.otpMassage="OTP does not match";
+            this.otpValid=false;
+       }
         );
       }else{
-        console.log('Please enter OTP first');
-        this.otpValid=false;
+          console.log('Please enter OTP first');
+          this.otpMassage="Please enter OTP first";
+          this.otpValid=false;
       }
       
     }

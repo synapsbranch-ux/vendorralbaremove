@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../../shared/data/slider';
-import { Product } from '../../../../shared/classes/product';
+import { ProductNew } from '../../../../shared/classes/product';
 import { ProductService } from '../../../../shared/services/product.service';
 import { SizeModalComponent } from "../../../../shared/components/modal/size-modal/size-modal.component";
 
@@ -12,7 +12,7 @@ import { SizeModalComponent } from "../../../../shared/components/modal/size-mod
 })
 export class ProductNoSidebarComponent implements OnInit {
 
-  public product: Product = {};
+  public product: ProductNew = {};
   public counter: number = 1;
   public activeSlide: any = 0;
   public selectedSize: any;
@@ -23,32 +23,40 @@ export class ProductNoSidebarComponent implements OnInit {
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
 
   constructor(private route: ActivatedRoute, private router: Router,
-    public productService: ProductService) { 
+    public productService: ProductService) {
       this.route.data.subscribe(response => this.product = response.data );
     }
 
   ngOnInit(): void {
+    console.log('product single ===',this.product)
   }
 
   // Get Product Color
-  Color(variants) {
-    const uniqColor = []
-    for (let i = 0; i < Object.keys(variants).length; i++) {
-      if (uniqColor.indexOf(variants[i].color) === -1 && variants[i].color) {
-        uniqColor.push(variants[i].color)
-      }
-    }
+  Color(product_varient_options) {
+    const uniqColor = [];
+    // for (let i = 0; i < (product_varient_options).length; i++) {
+    //   if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
+    //     uniqColor.push(product_varient_options[i]);
+    //   }
+    // }
+
+    uniqColor.push(product_varient_options);
+    
     return uniqColor
   }
 
   // Get Product Size
-  Size(variants) {
+  Size(product_varient_options) {
+
+    console.log('size ---',product_varient_options)
     const uniqSize = []
-    for (let i = 0; i < Object.keys(variants).length; i++) {
-      if (uniqSize.indexOf(variants[i].size) === -1 && variants[i].size) {
-        uniqSize.push(variants[i].size)
-      }
-    }
+    console.log('Doubt about length');
+    // for (let i = 0; i < (product_varient_options[0].size_options).length; i++) {
+    //   if (!uniqSize.includes(product_varient_options[0].size_options[i]) && product_varient_options[0].size_options[i]) {
+    //     uniqSize.push(product_varient_options[0].size_options[i])
+    //   }
+    // }
+    uniqSize.push(product_varient_options);
     return uniqSize
   }
 

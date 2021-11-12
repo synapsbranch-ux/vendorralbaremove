@@ -9,8 +9,8 @@
 	              <div class="text-left">
 	                <h1>{{slider.title}}<br>{{slider.subTitle}}</h1>
 	                <p>{{slider.discription}}</p>
-	                <a [routerLink]="['/shop/collection/left/sidebar']" 
-	                   [queryParams]="{ category: category}" 
+	                <a [routerLink]="['/shop/collection']" 
+	                   [queryParams]="{ category: 'apparels'}" 
 	                   class="btn btn-solid rounded-lg" [ngClass]="buttonClass">
 	                   {{buttonText}}
 	                </a>

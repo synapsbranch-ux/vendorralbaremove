@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { json } from 'express';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,20 +9,23 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   public openDashboard: boolean = false;
-
+  userName:string="";
+  userEmail:string="";
+  userPhone:string="";
+  userData: JSON;
 
 
 
   constructor() { 
-
-    var name:string ="";
-    var email:string= "";
-    var phone:string="";
     
   }
 
   ngOnInit(): void {
-  
+    let obj = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(obj);
+    this.userName= obj['data'].name;
+    this.userEmail= obj['data'].email;
+    this.userPhone= obj['data'].phone;
   }
 
   ToggleDashboard() {

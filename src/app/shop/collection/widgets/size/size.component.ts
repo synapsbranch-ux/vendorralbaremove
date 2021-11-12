@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Product } from '../../../../shared/classes/product';
+import { ProductNew } from '../../../../shared/classes/product';
 
 @Component({
   selector: 'app-size',
@@ -8,7 +8,7 @@ import { Product } from '../../../../shared/classes/product';
 })
 export class SizeComponent implements OnInit {
 
-  @Input() products: Product[] = [];
+  @Input() products: ProductNew[] = [];
   @Input() size: any[] = [];
   
   @Output() sizeFilter  : EventEmitter<any> = new EventEmitter<any>();
@@ -24,10 +24,10 @@ export class SizeComponent implements OnInit {
   get filterbysize() {
     const uniqueSize = []
     this.products.filter((product) => {
-      product.variants.filter((variant) => {
-        if (variant.size) {
-          const index = uniqueSize.indexOf(variant.size)
-          if (index === -1) uniqueSize.push(variant.size)
+      product.product_varient_options[0].size_options.filter((product_varient_options) => {
+        if (product_varient_options[0].size_options) {
+          const index = uniqueSize.indexOf(product_varient_options[0].size_options)
+          if (index === -1) uniqueSize.push(product_varient_options[0].size_options)
         }
       })
     })

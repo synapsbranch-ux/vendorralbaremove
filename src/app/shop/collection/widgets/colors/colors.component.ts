@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Product } from '../../../../shared/classes/product';
+import { ProductNew } from '../../../../shared/classes/product';
 
 @Component({
   selector: 'app-colors',
@@ -8,7 +8,7 @@ import { Product } from '../../../../shared/classes/product';
 })
 export class ColorsComponent implements OnInit {
 
-  @Input() products: Product[] = [];
+  @Input() products: ProductNew[] = [];
   @Input() colors: any[] = [];
 
   @Output() colorsFilter  : EventEmitter<any> = new EventEmitter<any>();
@@ -24,10 +24,10 @@ export class ColorsComponent implements OnInit {
   get filterbycolor() {
     const uniqueColors = []
     this.products.filter((product) => {
-      product.variants.filter((variant) => {
-        if (variant.color) {
-          const index = uniqueColors.indexOf(variant.color)
-          if (index === -1) uniqueColors.push(variant.color)
+      product.product_varient_options[1].color_options.filter((product_varient_options) => {
+        if (product_varient_options[1].color_options) {
+          const index = uniqueColors.indexOf(product_varient_options[1].color_options)
+          if (index === -1) uniqueColors.push(product_varient_options[1].color_options)
         }
       })
     })

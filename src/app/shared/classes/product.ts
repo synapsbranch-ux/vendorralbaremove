@@ -18,6 +18,44 @@ export interface Product {
     images?: Images[];
 }
 
+export interface ProductNew {
+    _id?: string;
+    product_name?: string;
+    product_slug?: string;
+    product_department?: any[];
+    product_category?: ProCatagories[];
+    product_varient?: NewVariants[];
+    product_varient_options?: VariantsOptions[];
+    product_image?: NewImages[];
+    product_retail_price?: number;
+    product_sale_price?: number;
+    status?: string;
+    stock?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface ProCatagories {
+    category_name?: string;
+    category_slug?: string;
+    status?: string;
+    _id?: string;
+}
+
+export interface NewVariants {
+    _id?: number;
+    varient_name?: string;
+}
+export interface VariantsOptions {
+    size_options?: any[];
+    color_options?: any[];
+}
+
+export interface NewImages {
+    pro_image?: string;
+    status?: string;
+}
+
 export interface Variants {
     variant_id?: number;
     id?: number;
@@ -26,6 +64,7 @@ export interface Variants {
     color?: string;
     image_id?: number;
 }
+
 
 export interface Images {
     image_id?: number;

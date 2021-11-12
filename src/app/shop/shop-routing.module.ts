@@ -9,6 +9,7 @@ import { FourImageComponent } from './product/four-image/four-image.component';
 import { BundleProductComponent } from './product/bundle-product/bundle-product.component';
 import { ImageOutsideComponent } from './product/image-outside/image-outside.component';
 
+import { CollectionComponent } from './collection/collection.component';
 import { CollectionLeftSidebarComponent } from './collection/collection-left-sidebar/collection-left-sidebar.component';
 import { CollectionRightSidebarComponent } from './collection/collection-right-sidebar/collection-right-sidebar.component';
 import { CollectionNoSidebarComponent } from './collection/collection-no-sidebar/collection-no-sidebar.component';
@@ -38,7 +39,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'product/no/sidebar/:slug',
+    path: 'product/:slug',
     component: ProductNoSidebarComponent,
     resolve: {
       data: Resolver
@@ -71,6 +72,10 @@ const routes: Routes = [
     resolve: {
       data: Resolver
     }
+  },
+  {
+    path: 'collection',
+    component: CollectionComponent
   },
   {
     path: 'collection/left/sidebar',
