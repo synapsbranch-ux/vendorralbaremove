@@ -57,14 +57,17 @@
                     </div> -->
                     <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
+                    <div *ngIf="product?.product_varient_options[1]">
                     <ul class="color-variant border-product" *ngIf="Color(product?.product_varient_options[1].color_options).length">
                         <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.product_varient_options[1].color_options); index as i" 
                             [ngStyle]="{'background-color': color}"
                             (click)="owlCar.to(activeSlide = i.toString())">
                         </li>
                     </ul>
-                    
+                    </div>
+
                     <div class="product-description pb-4">
+                        <div *ngIf="product?.product_varient_options[0]">
                         <h6 class="product-title size-text" *ngIf="Size(product.product_varient_options[0].size_options).length">
                             select size
                             <span>
@@ -74,9 +77,10 @@
                         <div class="size-box" *ngIf="Size(product.product_varient_options[0].size_options).length">
                             <ul>
                                 <li [class.active]="selectedSize == size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
-                                    <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | titlecase }}</a>
+                                    <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | uppercase}}</a>
                                 </li>
                             </ul>
+                        </div>
                         </div>
                         <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
                         <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>

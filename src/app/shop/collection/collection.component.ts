@@ -39,6 +39,7 @@ export class CollectionComponent implements OnInit {
         this.tags = [...this.brands, ...this.colors, ...this.size]; // All Tags Array
         
         this.category = params.category ? params.category : null;
+        console.log('collection page catagories == ',this.category);
         this.sortBy = params.sortBy ? params.sortBy : 'ascending';
         this.pageNo = params.page ? params.page : this.pageNo;
 
@@ -63,6 +64,7 @@ export class CollectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
 

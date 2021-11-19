@@ -33,6 +33,8 @@ import { MasonryGridTwoComponent } from './portfolio/masonry-grid-two/masonry-gr
 import { MasonryGridThreeComponent } from './portfolio/masonry-grid-three/masonry-grid-three.component';
 import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-grid-four.component';
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
+import { AuthGuard } from '../shared/services/auth-guard.service';
+
 
 const routes: Routes = [
   { 
@@ -45,7 +47,7 @@ const routes: Routes = [
   },
   { 
     path: 'dashboard', 
-    component: DashboardComponent 
+    component: DashboardComponent,canActivate: [AuthGuard], 
   },
   { 
     path: 'login', 
@@ -61,7 +63,7 @@ const routes: Routes = [
   },
   { 
     path: 'profile', 
-    component: ProfileComponent 
+    component: ProfileComponent,canActivate: [AuthGuard], 
   },
   { 
     path: 'contact', 

@@ -32,7 +32,7 @@
                         <button type="submit" class="btn btn-solid rounded-lg">Login</button>
                     
                         <div [className]="loginValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="loginValid || loginInValid">
-                            {{loginMassage}}
+                            <div class="d-flex align-items-center"><span *ngIf="loginValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{loginMassage}}</div>
                         </div>
                     
                     </form>

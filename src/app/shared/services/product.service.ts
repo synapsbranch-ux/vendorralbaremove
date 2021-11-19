@@ -5,6 +5,7 @@ import { map, startWith, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Product } from '../classes/product';
 import { environment } from 'src/environments/environment';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const state = {
   products: JSON.parse(localStorage['products'] || '[]'),
@@ -21,8 +22,9 @@ export class ProductService {
   public Currency = { name: 'Dollar', currency: 'USD', price: 1 } // Default Currency
   public OpenCart: boolean = false;
   public Products
+  catagories:any="";
 
-  constructor(private http: HttpClient,
+  constructor(private http: HttpClient, private route: ActivatedRoute,
     private toastrService: ToastrService) { }
 
   /*
@@ -33,9 +35,10 @@ export class ProductService {
 
   // Product
    private get products(): Observable<Product[]> {
+    this.catagories = this.route.snapshot.queryParamMap.get('category')
     const httpOptions = {
       headers: new HttpHeaders({      
-        'category': 'apparels',
+        'category': this.catagories,
       })
     };
     this.Products = this.http.get<Product[]>(environment.baseUrl+'product/list',httpOptions).pipe(map((data:any)=>{
@@ -63,7 +66,7 @@ export class ProductService {
   public getProductBySlug(slug: string): Observable<Product> {
     return this.products.pipe(map(items => { 
       return items.find((item: any) => { 
-        return item.title.replace(' ', '-') === slug; 
+        return item.product_slug.replace(' ', '-') === slug; 
       }); 
     }));
   }

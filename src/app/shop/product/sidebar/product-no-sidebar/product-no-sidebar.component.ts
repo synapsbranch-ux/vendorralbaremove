@@ -24,22 +24,22 @@ export class ProductNoSidebarComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router,
     public productService: ProductService) {
-      this.route.data.subscribe(response => this.product = response.data );
+      this.route.data.subscribe(response =>{ 
+        this.product = response.data;
+      });
     }
 
   ngOnInit(): void {
-    console.log('product single ===',this.product)
   }
 
   // Get Product Color
   Color(product_varient_options) {
     const uniqColor = [];
-    // for (let i = 0; i < (product_varient_options).length; i++) {
-    //   if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
-    //     uniqColor.push(product_varient_options[i]);
-    //   }
-    // }
-
+    for (let i = 0; i < (product_varient_options).length; i++) {
+      if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
+        uniqColor.push(product_varient_options[i]);
+      }
+    }
     uniqColor.push(product_varient_options);
     
     return uniqColor
@@ -47,16 +47,13 @@ export class ProductNoSidebarComponent implements OnInit {
 
   // Get Product Size
   Size(product_varient_options) {
-
-    console.log('size ---',product_varient_options)
+    
     const uniqSize = []
-    console.log('Doubt about length');
-    // for (let i = 0; i < (product_varient_options[0].size_options).length; i++) {
-    //   if (!uniqSize.includes(product_varient_options[0].size_options[i]) && product_varient_options[0].size_options[i]) {
-    //     uniqSize.push(product_varient_options[0].size_options[i])
-    //   }
-    // }
-    uniqSize.push(product_varient_options);
+    for (let i = 0; i < (product_varient_options).length; i++) {
+      if (!uniqSize.includes(product_varient_options[i]) && product_varient_options[i]) {
+        uniqSize.push(product_varient_options[i])
+      }
+    }
     return uniqSize
   }
 

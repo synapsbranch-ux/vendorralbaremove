@@ -15,8 +15,8 @@ import Validation from '../utils/validation';
 
 export class RegisterComponent implements OnInit {
 
-  otpMassage:string=""
-  signupMassage:string=""
+  otpMassage:string="";
+  signupMassage:string="";
   otpValid: boolean = true;
   phValid: boolean = true;
   isValid: boolean = false;

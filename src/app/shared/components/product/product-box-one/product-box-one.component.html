@@ -57,11 +57,14 @@
         {{ product?.product_sale_price  | currency:currency?.currency:'symbol' }}
         <!-- <del *ngIf="product?.discount"><span class="money"> {{ product?.price * currency?.price | currency:currency?.currency:'symbol' }}</span></del> -->
       </h4>
-      <ul class="color-variant" *ngIf="Color(product?.product_varient_options[1].color_options).length">
-        <li [class]="color" *ngFor="let color of Color(product?.product_varient_options[1].color_options)" [ngStyle]="{'background-color': color}"
-          (click)="ChangeVariants(color, product)">
-        </li>
-      </ul>
+      <div *ngIf="product?.product_varient_options[1]">
+        <ul class="color-variant" *ngIf="Color(product?.product_varient_options[1].color_options).length">
+          <li [class]="color" *ngFor="let color of Color(product?.product_varient_options[1].color_options)" [ngStyle]="{'background-color': color}"
+            (click)="ChangeVariants(color, product)">
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
 </div>

@@ -93,7 +93,7 @@
                             </div>
 
                             <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
-                                {{signupMassage}}
+                                <div class="d-flex align-items-center"><span *ngIf="isValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{signupMassage}}</div>
                             </div>
                             
                     </form>
