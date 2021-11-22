@@ -21,7 +21,7 @@
           <span class="sub-arrow" *ngIf="menuItem.children"></span>
         </a>
         <!-- Link -->
-        <a [routerLink]="menuItem.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link"
+        <a href="{{menuItem.path}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link"
           *ngIf="menuItem.type === 'link'">
           {{ menuItem.title }}
           <div class="lable-nav" *ngIf="menuItem.badge">{{ menuItem.badgeText | translate }}</div>
@@ -51,7 +51,7 @@
               <span class="sub-arrow" *ngIf="childrenItem.children"></span>
             </a>
             <!-- Link -->
-            <a [routerLink]="childrenItem.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" 
+            <a href="{{childrenItem.path}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" 
               *ngIf="childrenItem.type === 'link' ">
               {{ childrenItem.title | translate }}
               <span class="new-tag" *ngIf="childrenItem.badge">{{ childrenItem.badgeText | translate }}</span>

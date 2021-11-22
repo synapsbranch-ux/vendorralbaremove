@@ -22,8 +22,9 @@ export class FashionOneComponent implements OnInit {
     this.productService.getProducts.subscribe(response => {
       console.log('Product Received!.....', response['data']);
 
-      this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
-      console.log('Items ==>',this.products);
+      // this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
+      // console.log('Items ==>',this.products);
+      
       // Get Product Collection
       this.products.filter((item) => {
         item.collection.filter((collection) => {

@@ -24,12 +24,15 @@ export class ColorsComponent implements OnInit {
   get filterbycolor() {
     const uniqueColors = []
     this.products.filter((product) => {
+      if(product.product_varient_options[1])
+      {
       product.product_varient_options[1].color_options.filter((product_varient_options) => {
         if (product_varient_options[1].color_options) {
           const index = uniqueColors.indexOf(product_varient_options[1].color_options)
           if (index === -1) uniqueColors.push(product_varient_options[1].color_options)
         }
       })
+    }
     })
     return uniqueColors
   }

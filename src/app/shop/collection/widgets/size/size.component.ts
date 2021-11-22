@@ -24,12 +24,15 @@ export class SizeComponent implements OnInit {
   get filterbysize() {
     const uniqueSize = []
     this.products.filter((product) => {
+      if(product.product_varient_options[0])
+      {
       product.product_varient_options[0].size_options.filter((product_varient_options) => {
         if (product_varient_options[0].size_options) {
           const index = uniqueSize.indexOf(product_varient_options[0].size_options)
           if (index === -1) uniqueSize.push(product_varient_options[0].size_options)
         }
       })
+    }
     })
     return uniqueSize
   }
