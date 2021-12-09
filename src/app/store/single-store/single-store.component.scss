@@ -1,0 +1,26 @@
+.store-image {
+    opacity: 0.8;
+    width: 85px;
+    height: 85px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: gray;
+    display: inline-block;
+    margin: 10px;
+  }
+  .store-image:hover {
+    opacity: 1;
+  }
+  
+  .storeside-img > input {
+    display: none;
+  }
+  .storeside-img > .store-image {
+    cursor: pointer;
+    border: 2px solid black;
+  }
+  .storeside-img > input:checked + .store-image {
+    border: 2px solid orange;
+    opacity: 1;
+  }

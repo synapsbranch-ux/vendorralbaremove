@@ -86,17 +86,18 @@
       <ul class="show-div shopping-cart" *ngIf='products.length'>
         <li *ngFor="let product of products">
           <div class="media">
-            <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">
-              <img class="mr-3" [src]="product?.images[0].src" [alt]="product?.images[0].alt">
+            <a [routerLink]="['/shop/product/', product.product_slug]">
+              <img class="mr-3" [src]="product?.product_image[0].pro_image" [alt]="product?.product_name">
             </a>
             <div class="media-body">
-              <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">
-                <h4>{{ product?.title }}</h4>
+              <a [routerLink]="['/shop/product/', product.product_slug]">
+                <h4>{{ product?.product_name }}</h4>
               </a>
               <h4>
                 <span>
                   {{ product?.quantity }} x 
-                  {{ product?.price * productService?.Currency.price | discount:product | currency:productService?.Currency.currency:'symbol' }}
+                  {{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'}}
+          
                 </span>
               </h4>
             </div>

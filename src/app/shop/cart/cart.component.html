@@ -18,15 +18,15 @@
                 <div class="row justify-content-center align-items-center mb-4" *ngFor="let product of products">
                     <div class="col-sm-5 col-md-5 col-9 flex_item">
                         <div class="cart_product_img">
-                            <a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">
-                                <img class="img-fluid" [src]="product.images[0].src" [alt]="product.images[0].alt">
+                            <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">
+                                <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
                             </a>
                         </div>
                         <div class="cart_product_info">
-                            <p class="mb-2 product_title"><a [routerLink]="['/shop/product/left/sidebar/', product.title.replace(' ', '-')]">{{ product.title | titlecase }}</a></p>
-                            <p class="mb-2">Size: Medium</p>
-                            <p class="mb-2">Color: Cranberry</p>
-                            <p class="mb-2">{{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}</p>
+                            <p class="mb-2 product_title"><a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">{{ product.product_name | titlecase }}</a></p>
+                            <p class="mb-2">Size: {{product.product_varient_options[0].size_options}}</p>
+                            <p class="mb-2 cart_procolor">Color: <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
+                            <p class="mb-2">{{ (product.price | discount:product) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>
                         </div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-3">
@@ -48,9 +48,9 @@
                     </div>
                     <div class="col-sm-3 col-12">
                         <ul class="cart_item_action mt-2">
-                            <li><i class="ti-pencil"></i>Edit Item</li>
+                            <!-- <li><i class="ti-pencil"></i>Edit Item</li> -->
                             <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
-                            <li><i class="ti-heart"></i>Save For Later</li>
+                            <li><a (click)="addwishlist(product)"><i class="ti-heart"></i>Save For Later</a></li>
                         </ul>
                     </div>
                 </div>
@@ -116,29 +116,28 @@
                     <div class="title-box">
                       <div>Product <span> Total</span></div>
                     </div>
-                    <ul class="qty">
-                      <li>Pink Slim Shirt × 1 <span>$25.10</span></li>
-                      <li>SLim Fit Jeans × 1 <span>$555.00</span></li>
+                    <ul class="qty" *ngFor="let product of products">
+                      <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ (product.product_sale_price) * (product.quantity) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
                     </ul>
                     <ul class="sub-total">
-                      <li>Subtotal <span class="count">$580.10</span></li>
-                      <li>Coupon <span class="count">-$77.60</span></li>
+                      <li>Subtotal <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                      <!-- <li>Coupon <span class="count">-$77.60</span></li>
                       <li>Gift Card <span class="count">-$100.00</span></li>
                       <li>Estimated Tax  <span class="count">$23.28</span></li>
-                      <li>Estimated Shipping  <span class="count">FREE</span></li>
+                      <li>Estimated Shipping  <span class="count">FREE</span></li> -->
                     </ul>
 
                     <ul class="total">
-                      <li>Estimated Total <span class="count">$425.78</span></li>
+                      <li>Estimated Total <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
                     </ul>
                   </div>
                   <div class="text-center">
                     <a [routerLink]="['/shop/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
                       <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
                   </div>
-                  <div class="text-center mt-3">
+                  <!-- <div class="text-center mt-3">
                       <a href="javascript:void(0)" class="btn rounded-lg paypal_btn w-100"><i class="fa fa-paypal mr-1"></i>Paypal</a>
-                  </div>
+                  </div> -->
                 </div>
             </div>
             <!-- Product price box end -->
@@ -156,7 +155,7 @@
                 </div>
             </div>
         </div>
-        <div class="row section-b-space">
+        <!-- <div class="row section-b-space">
             <div class="col-8 offset-2">
               <owl-carousel-o class="product-m no-arrow" [options]="ProductSliderConfig">
                 <ng-container *ngFor="let product of products | slice:0:16">
@@ -164,7 +163,7 @@
                     <div class="product-box">
                       <app-product-box-one 
                         [product]="product" 
-                        [currency]="productService?.Currency"
+                        [currency]="product_service?.Currency"
                         [thumbnail]="true"
                         [cartModal]="true">
                       </app-product-box-one>
@@ -173,7 +172,7 @@
                 </ng-container>
               </owl-carousel-o>
             </div>
-          </div>
+          </div> -->
 
     </div>
 </section>

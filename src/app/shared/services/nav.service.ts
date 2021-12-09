@@ -51,30 +51,6 @@ export class NavService {
 		
 	} 
 
-	/* MENUITEMS: Menu[] = [
-		{
-			title: 'Shoes', type: 'sub', active: false, children: [
-				{ path: '/shop/collection/left/sidebar', title: 'Category 1', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 2', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 3', type: 'link' }
-			]
-		},
-		{
-			title: 'Apparels', type: 'sub', active: false, children: [
-				{ path: '/shop/collection/left/sidebar', title: 'Category 1', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 2', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 3', type: 'link' }
-			]
-		},
-		{
-			title: 'Hand Bags', type: 'sub', active: false, children: [
-				{ path: '/shop/collection/left/sidebar', title: 'Category 1', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 2', type: 'link' },
-				{ path: '/shop/collection/left/sidebar', title: 'Category 3', type: 'link' }
-			]
-		}	
-	];*/
-
 	LEFTMENUITEMS: Menu[] = [
 		{
 			title: 'clothing', type: 'sub', megaMenu: true, active: false, children: [

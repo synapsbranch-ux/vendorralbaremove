@@ -12,6 +12,7 @@ import { LogoComponent } from './widgets/logo/logo.component';
 import { ServicesComponent } from './widgets/services/services.component';
 import { CollectionComponent } from './widgets/collection/collection.component';
 import { StoreComponent } from '../store/store.component';
+import { SingleStoreComponent } from '../store/single-store/single-store.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { StoreComponent } from '../store/store.component';
     LogoComponent,
     ServicesComponent,
     CollectionComponent,
-    StoreComponent
+    StoreComponent,
+    SingleStoreComponent
   ],
   imports: [
     CommonModule,

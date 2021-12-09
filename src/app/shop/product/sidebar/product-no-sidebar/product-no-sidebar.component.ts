@@ -16,6 +16,7 @@ export class ProductNoSidebarComponent implements OnInit {
   public counter: number = 1;
   public activeSlide: any = 0;
   public selectedSize: any;
+  public selectedColor: any;
   
   @ViewChild("sizeChart") SizeChart: SizeModalComponent;
 
@@ -26,6 +27,7 @@ export class ProductNoSidebarComponent implements OnInit {
     public productService: ProductService) {
       this.route.data.subscribe(response =>{ 
         this.product = response.data;
+        console.log('Product Deatils =====', this.product);
       });
     }
 
@@ -34,31 +36,39 @@ export class ProductNoSidebarComponent implements OnInit {
 
   // Get Product Color
   Color(product_varient_options) {
-    const uniqColor = [];
-    for (let i = 0; i < (product_varient_options).length; i++) {
-      if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
-        uniqColor.push(product_varient_options[i]);
+    if((product_varient_options).length >= 0)
+    {
+      const uniqColor = [];
+      for (let i = 0; i < (product_varient_options).length; i++) {
+        if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
+          uniqColor.push(product_varient_options[i]);
+        }
       }
+      uniqColor.push(product_varient_options);
+      
+      return uniqColor
     }
-    uniqColor.push(product_varient_options);
-    
-    return uniqColor
   }
 
   // Get Product Size
-  Size(product_varient_options) {
-    
-    const uniqSize = []
-    for (let i = 0; i < (product_varient_options).length; i++) {
-      if (!uniqSize.includes(product_varient_options[i]) && product_varient_options[i]) {
-        uniqSize.push(product_varient_options[i])
-      }
+Size(product_varient_options) {
+  if((product_varient_options).length >= 0)
+  {
+  const uniqSize = []
+  for (let i = 0; i < (product_varient_options).length; i++) {
+    if (!uniqSize.includes(product_varient_options[i]) && product_varient_options[i]) {
+      uniqSize.push(product_varient_options[i])
     }
-    return uniqSize
   }
+  return uniqSize
+}
+}
 
   selectSize(size) {
     this.selectedSize = size;
+  }
+  selectColor(color) {
+    this.selectedColor = color;
   }
   
   // Increament
@@ -74,9 +84,13 @@ export class ProductNoSidebarComponent implements OnInit {
   // Add to cart
   async addToCart(product: any) {
     product.quantity = this.counter || 1;
+    product.product_varient_options[0].size_options=this.selectedSize;
+    product.product_varient_options[1].color_options=this.selectedColor;
+    console.log(product.quantity);
     const status = await this.productService.addToCart(product);
     if(status)
       this.router.navigate(['/shop/cart']);
+    console.log(status);
   }
 
   // Buy Now

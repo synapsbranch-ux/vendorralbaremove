@@ -1,73 +1,89 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, Validator} from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+selector: 'app-login',
+templateUrl: './login.component.html',
+styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
-  loginMassage:string="";
-  loginValid: boolean = false;
-  loginInValid: boolean = false;
-  form : FormGroup;
-  submitted= false;
+loginMassage:string="";
+loginValid: boolean = false;
+loginInValid: boolean = false;
+form : FormGroup;
+submitted= false;
+returnUrl:string;
 
-  constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router) { }
+constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router,private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-    this.form = new FormGroup({
-      'phone_email': new FormControl(null, [Validators.required]),
-      'login_password': new FormControl(null, [Validators.required])
-    });
+ngOnInit(): void {
+  this.form = new FormGroup({
+    'phone_email': new FormControl(null, [Validators.required]),
+    'login_password': new FormControl(null, [Validators.required])
+  });
+
+  // get return url from route parameters or default to '/'
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+}
+
+get phone_email(){ return this.form.get('phone_email');}
+get login_password(){ return this.form.get('login_password');}
+
+  onSubmit(): void {
+
+    this.submitted = true;
+
+  if (this.form.invalid) {
+    return;
   }
+  let formData = this.form.value;
+  console.log(JSON.stringify(this.form.value, null, 2));
+  let data = {
+    'email_phone': formData.phone_email,
+    'password': formData.login_password,
+  }
+  this.userService.userLogin(data).subscribe(
+    res => {
 
-  get phone_email(){ return this.form.get('phone_email');}
-  get login_password(){ return this.form.get('login_password');}
+      console.log(' Login Success',res);
+      localStorage.setItem('user_id', res['data'].user_id);
+      localStorage.setItem('user_token', res['data'].token);
+      localStorage.setItem('currentUser', JSON.stringify(res));
 
-    onSubmit(): void {
-
-      this.submitted = true;
-
-    if (this.form.invalid) {
-      return;
-    }
-    let formData = this.form.value;
-    console.log(JSON.stringify(this.form.value, null, 2));
-    let data = {
-      'email_phone': formData.phone_email,
-      'password': formData.login_password,
-    }
-    this.userService.userLogin(data).subscribe(
-      res => {
-
-        console.log(' Login Success',res);
-        localStorage.setItem('user_id', res['data'].user_id);
-        localStorage.setItem('user_token', res['data'].token);
-        localStorage.setItem('currentUser', JSON.stringify(res));
-
-        this.loginValid=true;
-        this.loginInValid=false;
-        this.loginMassage="Login sucessfull";
-        setTimeout(() => {
-          this.router.navigate(['/pages/dashboard'])
-          .then(() => {
-             window.location.reload();
-          });
-        },2000)  
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        console.log(error.message);
-        this.loginValid=false;
-        this.loginInValid=true;
-        this.loginMassage="Username and Password does not match";
-   }
-    );
-    
-    }
+      this.loginValid=true;
+      this.loginInValid=false;
+      this.loginMassage="Login sucessfull";
+      setTimeout(() => {
+        if(this.returnUrl !="/")
+        {
+        // login successful so redirect to return url
+        this.router.navigateByUrl(this.returnUrl)
+        .then(() => {
+            window.location.reload();
+        });
+        }
+        else
+        {
+          
+        this.router.navigate(['/pages/dashboard'])
+        .then(() => {
+            window.location.reload();
+        });
+      }
+      },2000)  
+    },
+    error => {
+      // .... HANDLE ERROR HERE 
+      console.log(error.message);
+      this.loginValid=false;
+      this.loginInValid=true;
+      this.loginMassage="Username and Password does not match";
+  }
+  );
+  
+  }
 
 }

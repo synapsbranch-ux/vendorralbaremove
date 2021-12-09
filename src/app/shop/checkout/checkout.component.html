@@ -87,9 +87,6 @@
                                     <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.required" class="text text-danger">
                                      Address is required
                                     </div>
-                                    <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.maxlength" class="text text-danger">
-                                      Maximum 50 character
-                                    </div>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Street Address 2 <span class="font-12 text-muted float-right">Optional</span></div>
@@ -130,7 +127,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input type="radio" name="address" id="address-one">
+                                                            <input type="radio" name="address_select" id="address-one" [formControl]="checkoutForm.controls['address-one']" checked>
                                                             <label for="address-one" class="ml-2">
                                                                 Shipping Address 1<br>
                                                                 Gerg Harvell<br>
@@ -142,7 +139,7 @@
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input type="radio" name="address" id="address-two">
+                                                            <input type="radio" name="address_select" id="address-two" [formControl]="checkoutForm.controls['address-two']">
                                                             <label for="address-two" class="ml-2">
                                                                 Shipping Address 2<br>
                                                                 Gerg Harvell<br>
@@ -151,50 +148,6 @@
                                                                 Contact No. 123456789
                                                             </label>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </ngb-panel>
-                                        <ngb-panel>
-                                            <ng-template ngbPanelTitle>
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <h5 class="m-0" >3. Payment Information</h5>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template ngbPanelContent>
-                                                <div class="payment-box" *ngIf='products.length'>
-                                                    <div class="upper-box">
-                                                        <div class="payment-options">
-                                                            <ul>
-                                                                <li>
-                                                                    <div class="radio-option">
-                                                                        <input type="radio" [(ngModel)]="payment" [value]="'Stripe'"  name="payment-group" id="payment-2">
-                                                                        <label for="payment-2">Cash On Delivery
-                                                                            <span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div class="radio-option paypal">
-                                                                        <input type="radio" [(ngModel)]="payment" [value]="'Paypal'" name="payment-group" id="payment-3">
-                                                                        <label for="payment-3">PayPal<span class="image"><img src="assets/images/paypal.png" alt="" /></span></label>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        
-                                                        <!-- <button type="submit" class="btn-solid btn rounded-lg" [disabled]="!checkoutForm.valid" (click)="stripeCheckout()" *ngIf="payment == 'Stripe'">
-                                                           Place Order
-                                                        </button> -->
-                                                        
-                                                        <a [routerLink]="['/pages/order/success']">
-                                                            <button type="submit" class="btn-solid btn rounded-lg">
-                                                               Place Order
-                                                            </button>
-                                                        </a>
-                                                        
-                                                        <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal>
                                                     </div>
                                                 </div>
                                             </ng-template>
@@ -212,9 +165,9 @@
                                     </div>
                                     <ul class="qty" *ngIf='products.length'>
                                         <li *ngFor="let product of products">
-                                        	 {{ product.title }} × {{ product.quantity }}
+                                        	 {{ product.product_name }} × {{ product.quantity }}
                                         	<span>
-                                                {{ (product.price | discount:product) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                                {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
                                             </span>
                                         </li>
                                     </ul>
@@ -235,9 +188,37 @@
                                     </ul>
                                 </div>
 
-                                <div class="text-right">
-                                    <button type="submit" class="btn-solid btn rounded-lg">continue to shipping method</button>
+                            <div class="payment-box" >
+                                <div class="upper-box">
+                                    <div class="payment-options">
+                                        <ul>
+                                            <li>
+                                                <div class="radio-option">
+                                                    <input type="radio" [(ngModel)]="payment" [value]="'Stripe'"  name="payment-group" id="payment-2">
+                                                    <label for="payment-2">Cash On Delivery
+                                                        <span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="radio-option paypal">
+                                                    <input type="radio" [(ngModel)]="payment" [value]="'Paypal'" name="payment-group" id="payment-3">
+                                                    <label for="payment-3">PayPal<span class="image"><img src="assets/images/paypal.png" alt="" /></span></label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <div class="text-right">
+                                    
+                                    <a (click) = "placeorder(products)">
+                                        <button type="submit" [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
+                                            Place Order
+                                        </button>
+                                    </a>
+                                    
+                                    <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

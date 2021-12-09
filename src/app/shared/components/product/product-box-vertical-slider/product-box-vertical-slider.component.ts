@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NewProductSlider } from '../../../data/slider';
-import { Product } from '../../../classes/product';
+import { ProductNew } from '../../../classes/product';
 import { ProductService } from '../../../services/product.service';
 
 @Component({
@@ -11,15 +11,16 @@ import { ProductService } from '../../../services/product.service';
 export class ProductBoxVerticalSliderComponent implements OnInit {
 
   @Input() title: string = 'New Product'; // Default
-  @Input() type: string = 'fashion'; // Default Fashion
+  @Input() type: string = 'apparels'; // Default Fashion
 
-  public products : Product[] = [];
+  public products : ProductNew[] = [];
 
   public NewProductSliderConfig: any = NewProductSlider;
 
   constructor(public productService: ProductService) { 
     this.productService.getProducts.subscribe(response => 
-      this.products = response.filter(item => item.type == this.type)
+      this.products = response.filter(
+        item => item.product_category[0] == this.type)
     );
   }
 

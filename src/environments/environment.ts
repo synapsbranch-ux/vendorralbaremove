@@ -7,7 +7,7 @@ export const environment = {
   instagram_token: 'INSTA_TOKEN',
   stripe_token: 'STRIPE_TOKEN',
   paypal_token: 'PAYPAL_TOKEN',
-  baseUrl: 'http://3.17.72.209:5000/api/v1/',
+  baseUrl: 'http://3.137.128.230:5000/api/v1/',
   // baseUrl: 'http://192.168.1.228:5000/api/v1/',
 };
 

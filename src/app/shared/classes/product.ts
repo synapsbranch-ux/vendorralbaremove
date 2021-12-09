@@ -33,6 +33,7 @@ export interface ProductNew {
     stock?: number;
     createdAt?: Date;
     updatedAt?: Date;
+    quantity?: number;
 }
 
 export interface ProCatagories {

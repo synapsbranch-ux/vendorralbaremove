@@ -25,15 +25,11 @@ export class MenuComponent implements OnInit {
 
    //this.menuItems
     menuarr.subscribe(result=> {
-
-      console.log('Menu item print ==== >',result);
-
       this.menuItems = result['data'].map(function(items) {
         let menuChild;
         if(items.category_child.length > 0){
           menuChild = items.category_child.map(function(childItems){
             
-            console.log('Menu item child print ==== >',childItems.category_slug);
 
              return { path: 'shop/collection?category='+childItems.category_slug, title: childItems.category_name, type: 'link' }
           });

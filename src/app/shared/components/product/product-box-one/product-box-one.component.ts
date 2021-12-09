@@ -35,7 +35,6 @@ export class ProductBoxOneComponent implements OnInit {
   // Get Product Color
   Color(product_varient_options) {
     const uniqColor = [];
-    console.log('color Component -- ',product_varient_options);
     for (let i = 0; i < (product_varient_options).length; i++) {
       if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
         uniqColor.push(product_varient_options[i]);

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
@@ -19,6 +19,7 @@ import { ElementsComponent } from './elements/elements.component';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { DepartmentComponent } from './department/department.component';
+import { JwtInterceptor } from './jwt.interceptor';
 
 
 // AoT requires an exported function for factories
@@ -58,7 +59,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxImageZoomModule,
     NgOtpInputModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

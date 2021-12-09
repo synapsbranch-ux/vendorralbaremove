@@ -57,11 +57,12 @@
                     </div> -->
                     <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
+                    
                     <div *ngIf="product?.product_varient_options[1]">
                     <ul class="color-variant border-product" *ngIf="Color(product?.product_varient_options[1].color_options).length">
                         <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.product_varient_options[1].color_options); index as i" 
                             [ngStyle]="{'background-color': color}"
-                            (click)="owlCar.to(activeSlide = i.toString())">
+                            (click)="owlCar.to(activeSlide = i.toString()); selectColor(color)">
                         </li>
                     </ul>
                     </div>

@@ -34,6 +34,7 @@ import { MasonryGridThreeComponent } from './portfolio/masonry-grid-three/masonr
 import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-grid-four.component';
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
 import { AuthGuard } from '../shared/services/auth-guard.service';
+import { Room3Dstore } from './room-3dstore/room-3dstore.component';
 
 
 const routes: Routes = [
@@ -164,7 +165,11 @@ const routes: Routes = [
   { 
     path: 'portfolio/masonry/full-width', 
     component: MasonryFullWidthComponent 
-  }
+  },
+  { 
+    path: '3dstore', 
+    component: Room3Dstore 
+  },
 ];
 
 @NgModule({

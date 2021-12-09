@@ -19,20 +19,20 @@ export class FashionOneComponent implements OnInit {
   public stores: Store[] = [];
   
   constructor(public productService: ProductService,public storeService: StoreService) {
-    this.productService.getProducts.subscribe(response => {
-      console.log('Product Received!.....', response['data']);
+    // this.productService.getProducts.subscribe(response => {
+    //   console.log('Product Received!.....', response['data']);
 
-      // this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
-      // console.log('Items ==>',this.products);
+    //   // this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
+    //   // console.log('Items ==>',this.products);
       
-      // Get Product Collection
-      this.products.filter((item) => {
-        item.collection.filter((collection) => {
-          const index = this.productCollections.indexOf(collection);
-          if (index === -1) this.productCollections.push(collection);
-        })
-      })
-    });
+    //   // Get Product Collection
+    //   this.products.filter((item) => {
+    //     item.collection.filter((collection) => {
+    //       const index = this.productCollections.indexOf(collection);
+    //       if (index === -1) this.productCollections.push(collection);
+    //     })
+    //   })
+    // });
   }
   public ProductSliderConfig: any = ProductSlider;
 
@@ -57,6 +57,11 @@ export class FashionOneComponent implements OnInit {
         console.log(this.stores);
       }
     });
+  }
+
+  single_store()
+  {
+    
   }
 
   ngOnInit(): void {

@@ -40,6 +40,7 @@ import { MasonryGridTwoComponent } from './portfolio/masonry-grid-two/masonry-gr
 import { MasonryGridThreeComponent } from './portfolio/masonry-grid-three/masonry-grid-three.component';
 import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-grid-four.component';
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
+import { Room3Dstore } from './room-3dstore/room-3dstore.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonr
     MasonryGridTwoComponent,
     MasonryGridThreeComponent,
     MasonryGridFourComponent,
-    MasonryFullWidthComponent
+    MasonryFullWidthComponent,
+    Room3Dstore
   ],
   imports: [
     CommonModule,

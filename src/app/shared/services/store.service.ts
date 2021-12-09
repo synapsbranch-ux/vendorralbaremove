@@ -20,7 +20,7 @@ export class StoreService {
     return this.Stores;
   }
   public get getStoresMore(): Observable<Store[]>{
-    const body={"page": 1, "limit": 4}
+    const body={"page": 1, "limit": 10}
     this.Stores = this.http.post(environment.baseUrl+'stores',body);
     
     return this.Stores;

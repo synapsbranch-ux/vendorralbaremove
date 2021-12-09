@@ -7,6 +7,7 @@ import { ElementsComponent } from './elements/elements.component';
 import { FashionOneComponent } from './home/fashion/fashion-one/fashion-one.component';
 import { StoreComponent } from './store/store.component';
 import { DepartmentComponent } from './department/department.component';
+import { SingleStoreComponent } from './store/single-store/single-store.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,10 @@ const routes: Routes = [
   },
   {
     path: 'store',
-    component: StoreComponent
+    children: [
+     {path: '', component: StoreComponent},
+     {path: 'single-store/:id', component: SingleStoreComponent}
+   ]
   },
   {
     path: 'department',

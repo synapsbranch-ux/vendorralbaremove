@@ -1,0 +1,38 @@
+
+<app-header-one [sticky]="true"></app-header-one>
+<div class="title1 section-t-space section-b-space-2">
+  <h2>stores</h2>
+  <h4 class="title-inner1">Lorem ipsum dolor sit amet</h4>
+</div>
+<section class="p-t-0 section-b-space">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="img-wrapper">
+                <div class="front">
+                    <img      
+                      [src]="ImageSrc ? ImageSrc : storeimgUrl"
+                      class="img-fluid lazy-loading" 
+                      alt="product_name" />
+                </div>
+              </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mt-4">
+                  <h3 class="text-black">{{storename}}</h3>
+          <p>Choose Department for Store</p>
+          <div>                   
+            <label class="storeside-img"  *ngFor="let department of DepartmentsList">
+            <input type="radio" value="{{department._id}}" name="departments" (click)=stordepartment(department._id) />
+            <div class="store-image" style="background-image: url({{department.department_image}})"></div>
+            </label>
+
+          </div>
+        </div>
+        </div>
+    </div>
+  </div>
+</section>
+<app-newsletter></app-newsletter>
+<app-footer-one></app-footer-one>

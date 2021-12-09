@@ -3,9 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 import { environment } from '../../../environments/environment';
-import { Product } from "../../shared/classes/product";
+import { ProductNew } from "../../shared/classes/product";
 import { ProductService } from "../../shared/services/product.service";
 import { OrderService } from "../../shared/services/order.service";
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -15,20 +16,21 @@ import { OrderService } from "../../shared/services/order.service";
 export class CheckoutComponent implements OnInit {
 
   public checkoutForm:  FormGroup;
-  public products: Product[] = [];
+  public products: ProductNew[] = [];
   public payPalConfig ? : IPayPalConfig;
   public payment: string = 'Stripe';
   public amount:  any;
+  returnUrl: string;
 
   constructor(private fb: FormBuilder,
     public productService: ProductService,
-    private orderService: OrderService) { 
+    private orderService: OrderService, private route: ActivatedRoute,private router: Router) { 
     this.checkoutForm = this.fb.group({
       firstname: ['', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z ]+[a-zA-Z]$')]],
       lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z ]+[a-zA-Z]$')]],
       phone: ['', [Validators.required, Validators.pattern('[0-9]+')]],
       email: ['', [Validators.required, Validators.email]],
-      address: ['', [Validators.required, Validators.maxLength(50)]],
+      address: ['', [Validators.required]],
       country: ['', Validators.required],
       town: ['', Validators.required],
       state: ['', Validators.required],
@@ -40,6 +42,9 @@ export class CheckoutComponent implements OnInit {
     this.productService.cartItems.subscribe(response => this.products = response);
     this.getTotal.subscribe(amount => this.amount = amount);
     this.initConfig();
+
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   public get getTotal(): Observable<number> {
@@ -112,6 +117,29 @@ export class CheckoutComponent implements OnInit {
             console.log('onClick', data, actions);
         }
     };
+  }
+
+  placeorder(products)
+  {
+
+    const currentUser = localStorage.getItem("user_id");
+    if (currentUser) {
+        // authorised so return true
+        this.productService.addToCartItemDb(products);
+         this.router.navigate(['/pages/order/success']);
+    }
+    else
+    {
+    // not logged in so redirect to login page with the return url
+    // this.router.navigate(['/pages/login']);
+    // this.router.navigateByUrl(this.returnUrl);
+    this.router.navigate(['/pages/login'], { queryParams: { returnUrl: '/shop/checkout' }});
+
+    console.log(this.returnUrl);
+    }
+
+    // console.log(products);
+
   }
 
 }

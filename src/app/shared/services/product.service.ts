@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, startWith, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { Product } from '../classes/product';
+import { ProductNew } from '../classes/product';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 
 const state = {
+
   products: JSON.parse(localStorage['products'] || '[]'),
   wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
   compare: JSON.parse(localStorage['compareItems'] || '[]'),
@@ -23,6 +24,7 @@ export class ProductService {
   public OpenCart: boolean = false;
   public Products
   catagories:any="";
+  token:any;
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
     private toastrService: ToastrService) { }
@@ -34,15 +36,14 @@ export class ProductService {
   */
 
   // Product
-   private get products(): Observable<Product[]> {
+   private get products(): Observable<ProductNew[]> {
     this.catagories = this.route.snapshot.queryParamMap.get('category')
     const httpOptions = {
       headers: new HttpHeaders({      
         'category': this.catagories,
       })
     };
-    this.Products = this.http.get<Product[]>(environment.baseUrl+'product/list',httpOptions).pipe(map((data:any)=>{
-      console.log("eta amar data",data.data)
+    this.Products = this.http.get<ProductNew[]>(environment.baseUrl+'product/list',httpOptions).pipe(map((data:any)=>{
       return data.data;
     }));
     
@@ -58,12 +59,13 @@ export class ProductService {
 
 
   // Get Products
-  public get getProducts(): Observable<Product[]> {
+  public get getProducts(): Observable<ProductNew[]> {
     return this.products;
   } 
 
   // Get Products By Slug
-  public getProductBySlug(slug: string): Observable<Product> {
+
+  public getProductBySlug(slug: string): Observable<ProductNew> {
     return this.products.pipe(map(items => { 
       return items.find((item: any) => { 
         return item.product_slug.replace(' ', '-') === slug; 
@@ -71,6 +73,10 @@ export class ProductService {
     }));
   }
 
+  getproductsBySlugs(data: any): Observable<any>{
+
+    return this.http.get(environment.baseUrl+'product/'+data);
+  }
 
   /*
     ---------------------------------------------
@@ -79,12 +85,12 @@ export class ProductService {
   */
 
   // Get Wishlist Items
-  public get wishlistItems(): Observable<Product[]> {
+  public get wishlistItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
       observer.next(state.wishlist);
       observer.complete();
     });
-    return <Observable<Product[]>>itemsStream;
+    return <Observable<ProductNew[]>>itemsStream;
   }
 
   // Add to Wishlist
@@ -101,7 +107,7 @@ export class ProductService {
   }
 
   // Remove Wishlist items
-  public removeWishlistItem(product: Product): any {
+  public removeWishlistItem(product: ProductNew): any {
     const index = state.wishlist.indexOf(product);
     state.wishlist.splice(index, 1);
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
@@ -115,12 +121,12 @@ export class ProductService {
   */
 
   // Get Compare Items
-  public get compareItems(): Observable<Product[]> {
+  public get compareItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
       observer.next(state.compare);
       observer.complete();
     });
-    return <Observable<Product[]>>itemsStream;
+    return <Observable<ProductNew[]>>itemsStream;
   }
 
   // Add to Compare
@@ -137,7 +143,7 @@ export class ProductService {
   }
 
   // Remove Compare items
-  public removeCompareItem(product: Product): any {
+  public removeCompareItem(product: ProductNew): any {
     const index = state.compare.indexOf(product);
     state.compare.splice(index, 1);
     localStorage.setItem("compareItems", JSON.stringify(state.compare));
@@ -151,22 +157,19 @@ export class ProductService {
   */
 
   // Get Cart Items
-  public get cartItems(): Observable<Product[]> {
+  public get cartItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
       observer.next(state.cart);
       observer.complete();
     });
-    return <Observable<Product[]>>itemsStream;
+    return <Observable<ProductNew[]>>itemsStream;
   }
 
   // Add to Cart
   public addToCart(product): any {
-    const cartItem = state.cart.find(item => item.id === product.id);
+    const cartItem = state.cart.find(item => item._id === product._id);
     const qty = product.quantity ? product.quantity : 1;
     const items = cartItem ? cartItem : product;
-    const stock = this.calculateStockCounts(items, qty);
-    
-    if(!stock) return false
 
     if (cartItem) {
         cartItem.quantity += qty    
@@ -178,20 +181,49 @@ export class ProductService {
     }
 
     this.OpenCart = true; // If we use cart variation modal
-    localStorage.setItem("cartItems", JSON.stringify(state.cart));
+
+    const currentUser = localStorage.getItem("user_id");
+    if (currentUser) {
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      this.addToCartItemDb(product)
+      console.log('Add to cart User Login === ',state.cart);
+    }
+    else
+    {
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      console.log('Add to cart User Not Login === ',state.cart);
+    }
+
+    
+    console.log('Add to cart === ',state.cart);
     return true;
   }
 
   // Update Cart Quantity
-  public updateCartQuantity(product: Product, quantity: number): Product | boolean {
+  public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
     return state.cart.find((items, index) => {
-      if (items.id === product.id) {
+      if (items._id === product._id) {
+       
         const qty = state.cart[index].quantity + quantity
         const stock = this.calculateStockCounts(state.cart[index], quantity)
         if (qty !== 0 && stock) {
           state.cart[index].quantity = qty
         }
-        localStorage.setItem("cartItems", JSON.stringify(state.cart));
+        else
+        {
+          this.removeCartItem(product);
+        }
+        const currentUser = localStorage.getItem("user_id");
+        if (currentUser) {
+          localStorage.setItem("cartItems", JSON.stringify(state.cart));
+          this.addToCartItemDb(product)
+          console.log('Add to cart User Login === ',state.cart);
+        }
+        else
+        {
+          localStorage.setItem("cartItems", JSON.stringify(state.cart));
+          console.log('Add to cart User Not Login === ',state.cart);
+        }
         return true
       }
     })
@@ -209,7 +241,7 @@ export class ProductService {
   }
 
   // Remove Cart items
-  public removeCartItem(product: Product): any {
+  public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
     state.cart.splice(index, 1);
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
@@ -217,17 +249,82 @@ export class ProductService {
   }
 
   // Total amount 
+
   public cartTotalAmount(): Observable<number> {
-    return this.cartItems.pipe(map((product: Product[]) => {
-      return product.reduce((prev, curr: Product) => {
-        let price = curr.price;
-        if(curr.discount) {
-          price = curr.price - (curr.price * curr.discount / 100)
-        }
+    return this.cartItems.pipe(map((product: ProductNew[]) => {
+      return product.reduce((prev, curr: ProductNew) => {
+        let price = curr.product_sale_price;
         return (prev + price * curr.quantity) * this.Currency.price;
       }, 0);
     }));
   }
+
+
+    /*
+    ---------------------------------------------
+    ---------------  ADD To CART DATABASE  -----------------
+    ---------------------------------------------
+  */
+
+  // Get Cart Items
+
+  public get cartItemsDb(): Observable<ProductNew[]> {
+    const itemsStream = new Observable(observer => {
+      observer.next(state.cart);
+      observer.complete();
+    });
+    return <Observable<ProductNew[]>>itemsStream;
+  }
+
+  // Add to Cart
+  public addToCartItemDb(product): any {
+    const cartItem = state.cart.find(item => item._id === product._id);
+    console.log('check add to cart DB', cartItem);
+
+    for (const element of state.cart) {
+      console.log(element);
+
+      let data = 
+      {
+        "pro_id": element._id,
+        "pro_name": element.product_name,
+        "pro_slug": element.product_slug,
+        "qty": element.quantity,
+        "price": element.product_sale_price,
+        "options":[
+            {"size": element.product_varient_options[0].size_options},
+            {"color": element.product_varient_options[1].color_options}
+        ]
+    }
+
+    this.addToCartDb(data).subscribe(
+      res => {
+
+        console.log('Cart Added',res);  
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        console.log(error.message);
+   }
+    );      
+
+    }
+
+  this.allCartProducts().subscribe(
+    res =>{
+      console.log('Return Cart Products',res);
+    }
+  )
+    return true;
+  }
+
+  // // Remove Cart items
+  // public removeCartItemDb(product: ProductNew): any {
+  //   const index = state.wishlist.indexOf(product);
+  //   state.wishlist.splice(index, 1);
+  //   localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
+  //   return true
+  // }
 
   /*
     ---------------------------------------------
@@ -236,68 +333,59 @@ export class ProductService {
   */
 
   // Get Product Filter
-  public filterProducts(filter: any): Observable<Product[]> {
+  public filterProducts(filter: any): Observable<ProductNew[]> {
     console.log('Service. Filter ==>',this.products);
     return this.products.pipe(map((product) => 
-      product.filter((item: Product) => {
-        console.log('========>>>',item );
+      product.filter((item: ProductNew) => {
         if (!filter.length) return true
-        const Tags = filter.some((prev) => { // Match Tags
-          if (item.tags) {
-            if (item.tags.includes(prev)) {
-              return prev
-            }
-          }
-        })
-        return Tags
       })
     ));
   }
 
   // Sorting Filter
-  public sortProducts(products: Product[], payload: string): any {
+  public sortProducts(products: ProductNew[], payload: string): any {
 
     if(payload === 'ascending') {
       return products.sort((a, b) => {
-        if (a.id < b.id) {
+        if (a._id < b._id) {
           return -1;
-        } else if (a.id > b.id) {
+        } else if (a._id > b._id) {
           return 1;
         }
         return 0;
       })
     } else if (payload === 'a-z') {
       return products.sort((a, b) => {
-        if (a.title < b.title) {
+        if (a.product_name < b.product_name) {
           return -1;
-        } else if (a.title > b.title) {
+        } else if (a.product_name > b.product_name) {
           return 1;
         }
         return 0;
       })
     } else if (payload === 'z-a') {
       return products.sort((a, b) => {
-        if (a.title > b.title) {
+        if (a.product_name > b.product_name) {
           return -1;
-        } else if (a.title < b.title) {
+        } else if (a.product_name < b.product_name) {
           return 1;
         }
         return 0;
       })
     } else if (payload === 'low') {
       return products.sort((a, b) => {
-        if (a.price < b.price) {
+        if (a.product_sale_price < b.product_sale_price) {
           return -1;
-        } else if (a.price > b.price) {
+        } else if (a.product_sale_price > b.product_sale_price) {
           return 1;
         }
         return 0;
       })
     } else if (payload === 'high') {
       return products.sort((a, b) => {
-        if (a.price > b.price) {
+        if (a.product_sale_price > b.product_sale_price) {
           return -1;
-        } else if (a.price < b.price) {
+        } else if (a.product_sale_price < b.product_sale_price) {
           return 1;
         }
         return 0;
@@ -357,4 +445,38 @@ export class ProductService {
     };
   }
 
+  ////////////////////////////////////////
+// API Call For ADD TO CArt
+////////////////////////////////////////
+
+addToCartDb(data: any): Observable<any>{
+  this.token = localStorage.getItem('user_token') // Will return if it is not set 
+
+this.token = "Bearer " + this.token
+let httpOptions = {
+headers: new HttpHeaders({
+  'Authorization': this.token
+})
 }
+
+  return this.http.post(environment.baseUrl+'cart/add',data,httpOptions);
+} 
+
+allCartProducts(){
+  this.token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+  let httpOptionsroom = {
+    headers: new HttpHeaders({
+      'Authorization': "Bearer " + this.token
+    })
+  }
+  
+  return this.http.get(environment.baseUrl+'cart/list',httpOptionsroom);
+
+}
+
+}
+
+
+
+

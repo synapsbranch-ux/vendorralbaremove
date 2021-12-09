@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from "../../services/product.service";
-import { Product } from "../../classes/product";
+import { ProductNew } from "../../classes/product";
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,8 +13,11 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
 
+  cartproducts=[];
+  product_img:any;
+
   user_id:string
-  public products: Product[] = [];
+  public products: ProductNew[] = [];
   public search: boolean = false;
   
   public languages = [{ 
@@ -45,14 +48,63 @@ export class SettingsComponent implements OnInit {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private translate: TranslateService,
-    public productService: ProductService, private router: Router) {
+    public productService: ProductService, private router: Router , private product_service: ProductService) {
     this.productService.cartItems.subscribe(response => this.products = response);
   }
 
   ngOnInit(): void {
 
   this.user_id=localStorage.getItem('user_id');
+  console.log('Setting Run');
+  const currentUser = localStorage.getItem("user_id");
+  if (currentUser) {
+    console.log('User Login');
 
+const cartItems_local = localStorage.getItem('cartItems');
+
+console.log('Local storage check',cartItems_local);
+
+      this.product_service.allCartProducts().subscribe(
+        res =>{
+          console.log('Return Cart Products1',res['data'].products);
+            for (const element of res['data'].products) {   
+              
+              this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
+
+                 this.product_img=product['data'].product_image[0].pro_image;
+                 let data = 
+                 {
+                   "_id": element.pro_id,
+                   "product_image": [
+                     {
+                         "pro_image": this.product_img,
+                         "status": "active"
+                     },
+                   ],
+                   "product_name": element.pro_name,
+                   "product_slug": element.pro_slug,
+                   "quantity": element.qty,
+                   "product_sale_price": element.price,
+                   "product_varient_options":[
+                       {"size_options": element.options[0].size},
+                       {"color_options": element.options[1].color}
+                   ]
+               }
+               this.cartproducts.push(data);
+                localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+                console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+              })                          
+            
+        }
+        
+      }
+      )
+
+  }
+  else
+  {
+    console.log('User Not Login');
+  }
   }
 
   searchToggle(){
