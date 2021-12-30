@@ -15,7 +15,6 @@
               <th scope="col">image</th>
               <th scope="col">product name</th>
               <th scope="col">price</th>
-              <th scope="col">availability</th>
               <th scope="col">action</th>
             </tr>
           </thead>
@@ -29,9 +28,6 @@
               <td>
                   <a [routerLink]="['/shop/product/', product.product_slug]">{{ product.product_name | titlecase }}</a>
                   <div class="mobile-cart-content row">
-                    <div class="col-xs-3">
-                      <p>{{ product.stock ? 'in stock' : 'out of stock' }}</p>
-                    </div>
                     <div class="col-xs-3">
                       <h2 class="td-color">
                           {{ (product.product_sale_price) }}
@@ -53,9 +49,6 @@
                   <h2>
                     {{ product.product_sale_price | currency: productService.Currency?.currency:'symbol' }}
                   </h2>
-              </td>
-              <td>
-                  <p>{{ product.stock ? 'in stock' : 'out of stock' }}</p>
               </td>
               <td>
                   <a href="javascript:void(0)" (click)="removeItem(product)" class="icon mr-3">

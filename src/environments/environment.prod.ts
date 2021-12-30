@@ -3,5 +3,5 @@ export const environment = {
   instagram_token: 'INSTA_TOKEN',
   stripe_token: 'STRIPE_TOKEN',
   paypal_token: 'PAYPAL_TOKEN',
-  baseUrl: 'http://3.137.128.230:5000/api/v1/'
+  baseUrl: 'https://api.ralbatech.com/api/v1/'
 };

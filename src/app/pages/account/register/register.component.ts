@@ -24,6 +24,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   callForOtp = false;
   userOtp;
+  getOtpVal:any;
   public otp: Otp[] = [];
   constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router) { }
   
@@ -71,7 +72,7 @@ export class RegisterComponent implements OnInit {
             this.showDiv.otp = true;
             this.phValid=true;
             this.showDiv.signUpDiv = false;
-            // this.getOtpVal = res['data'].otpValue;
+             this.getOtpVal = res['data'].otpValue;
             console.log(res);
           }
         },
@@ -109,12 +110,12 @@ export class RegisterComponent implements OnInit {
               });
             },3000)          
           },
-          error => {
-            // .... HANDLE ERROR HERE 
-            console.log(error.message);
-            this.otpMassage="OTP does not match";
-            this.otpValid=false;
-       }
+      //     error => {
+      //       // .... HANDLE ERROR HERE 
+      //       console.log(error.message);
+      //       this.otpMassage="OTP does not match";
+      //       this.otpValid=false;
+      //  }
         );
       }else{
           console.log('Please enter OTP first');

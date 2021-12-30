@@ -60,7 +60,7 @@ export class SingleStoreComponent implements OnInit {
   {
     console.log('Department Id',departmenbt_id);
     console.log('Vendor Id', this.vendor_id);
-    window.open("http://ralba3decommerce.s3-website-us-east-1.amazonaws.com?d_id="+departmenbt_id+"&v_id="+this.vendor_id , "_blank");
+    window.open("https://store.ralbatech.com/?d_id="+departmenbt_id+"&v_id="+this.vendor_id , "_blank");
   }
 
 

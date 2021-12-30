@@ -23,6 +23,8 @@ export class JwtInterceptor implements HttpInterceptor {
       {
       localStorage.clear();
       window.location.reload();
+
+      console.log(event);
       }
       }       
       return event;

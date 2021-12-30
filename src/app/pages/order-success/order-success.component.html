@@ -21,38 +21,40 @@
             <div class="col-lg-6">
                 <div class="product-order">
                     <h3>your order details</h3>
-                    <div class="row product-order-detail">
+                    <div class="row product-order-detail" *ngFor="let product of products">
                         <div class="col-3">
-                            <img src="assets/images/product/fashion/1.jpg" alt="" class="img-fluid">
+                            <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">
+                                <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
+                            </a>
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>product name</h4>
-                                <h5>cotton shirt</h5>
+                                <h5><a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">{{ product.product_name | titlecase }}</a></h5>
                             </div>
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>quantity</h4>
-                                <h5>1</h5>
+                                <h5>{{product.quantity}}</h5>
                             </div>
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>price</h4>
-                                <h5>$555.00</h5>
+                                <h5>{{product.product_sale_price}}</h5>
                             </div>
                         </div>
                     </div>
                     <div class="total-sec">
                         <ul>
-                            <li>subtotal <span>$55.00</span></li>
-                            <li>shipping <span>$12.00</span></li>
-                            <li>tax(GST) <span>$10.00</span></li>
+                            <li>subtotal <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                            <li>shipping <span>$00.00</span></li>
+                            <li>tax(GST) <span>$00.00</span></li>
                         </ul>
                     </div>
                     <div class="final-total">
-                        <h3>total <span>$77.00</span></h3>
+                        <h3>total <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></h3>
                     </div>
                 </div>
             </div>
@@ -83,7 +85,7 @@
                     <div class="col-md-12">
                         <div class="delivery-sec">
                             <h3>expected date of delivery</h3>
-                            <h2>october 22, 2030</h2>
+                            <h2>{{ today | date:'MMMM d, y'}}</h2>
                         </div>
                     </div>
                 </div>

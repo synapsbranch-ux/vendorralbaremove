@@ -24,6 +24,7 @@ export interface ProductNew {
     product_slug?: string;
     product_department?: any[];
     product_category?: ProCatagories[];
+    product_store?: ProStores[];
     product_varient?: NewVariants[];
     product_varient_options?: VariantsOptions[];
     product_image?: NewImages[];
@@ -64,6 +65,11 @@ export interface Variants {
     size?: string;
     color?: string;
     image_id?: number;
+}
+export interface ProStores
+{
+    _id?: number;
+    store_name?: string;  
 }
 
 

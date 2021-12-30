@@ -3,6 +3,9 @@ export let HomeSlider: any = {
     loop: true,
     nav: true,
     dots: false,
+    autoplay: true,
+    autoplaySpeed: 1500,
+    slideTransition: 'linear',
     navContainerClass: 'owl-nav',
     navClass: [ 'owl-prev', 'owl-next' ],
     navText: [ '<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>' ],
@@ -189,7 +192,7 @@ export let  CompareSlider: any = {
 
 // Product Slider
 export let ProductSlider: any = {
-    loop: false,
+    loop: true,
     dots: false,
     navSpeed: 300,
     responsive: {

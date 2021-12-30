@@ -6,9 +6,12 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
+  public no_results:number=0;
 
   @Input() title : string;
   @Input() breadcrumb : string;
+
+
 
   constructor() {
   }

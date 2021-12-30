@@ -52,15 +52,15 @@ const routes: Routes = [
   },
   { 
     path: 'login', 
-    component: LoginComponent 
+    component: LoginComponent
   },
   { 
     path: 'register', 
-    component: RegisterComponent 
+    component: RegisterComponent
   },
   { 
     path: 'forget/password', 
-    component: ForgetPasswordComponent 
+    component: ForgetPasswordComponent,canActivate: [AuthGuard], 
   },
   { 
     path: 'profile', 
@@ -92,7 +92,7 @@ const routes: Routes = [
   },
   { 
     path: 'order/success', 
-    component: OrderSuccessComponent 
+    component: OrderSuccessComponent,canActivate: [AuthGuard],
   },
   { 
     path: 'compare/one', 

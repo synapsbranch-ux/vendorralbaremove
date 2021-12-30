@@ -17,7 +17,7 @@ export class WishlistComponent implements OnInit {
     this.productService.wishlistItems.subscribe(
       response => {
         this.products = response
-        console.log(this.products);
+        console.log('WishList Products ======= ',this.products);
       }
       
       

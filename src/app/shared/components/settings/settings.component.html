@@ -86,17 +86,17 @@
       <ul class="show-div shopping-cart" *ngIf='products.length'>
         <li *ngFor="let product of products">
           <div class="media">
-            <a [routerLink]="['/shop/product/', product.product_slug]">
+            <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
               <img class="mr-3" [src]="product?.product_image[0].pro_image" [alt]="product?.product_name">
-            </a>
+            <!-- </a> -->
             <div class="media-body">
-              <a [routerLink]="['/shop/product/', product.product_slug]">
+              <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
                 <h4>{{ product?.product_name }}</h4>
-              </a>
+              <!-- </a> -->
               <h4>
                 <span>
                   {{ product?.quantity }} x 
-                  {{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'}}
+                  {{ product?.product_sale_price | currency: product_service.Currency?.currency:'symbol'}}
           
                 </span>
               </h4>
@@ -108,7 +108,7 @@
         </li>
         <li>
           <div class="total">
-            <h5>subtotal : <span>{{ getTotal | async | currency:productService?.Currency.currency:'symbol' }}</span></h5>
+            <h5>subtotal : <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></h5>
           </div>
         </li>
         <li>
@@ -121,7 +121,7 @@
     </li>
     <li class="onhover-div mobile-virtualstore">
       <div>
-        <a [routerLink]="['/shop/wishlist']">
+        <a href="https://store.ralbatech.com/?d_id=61700f431446e50d6f1c5eaa&v_id=615ac800c81beb34a2484f67" target="_blank">
           <i class="fa fa-cubes" aria-hidden="true"></i>Virtual Studio
         </a>
       </div>

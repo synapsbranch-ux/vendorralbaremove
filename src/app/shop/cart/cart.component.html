@@ -18,12 +18,16 @@
                 <div class="row justify-content-center align-items-center mb-4" *ngFor="let product of products">
                     <div class="col-sm-5 col-md-5 col-9 flex_item">
                         <div class="cart_product_img">
-                            <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">
+                            <!-- <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active"> -->
                                 <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
-                            </a>
+                            <!-- </a> -->
                         </div>
                         <div class="cart_product_info">
-                            <p class="mb-2 product_title"><a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">{{ product.product_name | titlecase }}</a></p>
+                            <p class="mb-2 product_title">
+                                <!-- <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active"> -->
+                                    {{ product.product_name | titlecase }}
+                                <!-- </a> -->
+                            </p>
                             <p class="mb-2">Size: {{product.product_varient_options[0].size_options}}</p>
                             <p class="mb-2 cart_procolor">Color: <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
                             <p class="mb-2">{{ (product.price | discount:product) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>

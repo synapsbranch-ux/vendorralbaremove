@@ -4,6 +4,7 @@ import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../..
 import { ProductNew } from '../../../../shared/classes/product';
 import { ProductService } from '../../../../shared/services/product.service';
 import { SizeModalComponent } from "../../../../shared/components/modal/size-modal/size-modal.component";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-no-sidebar',
@@ -17,6 +18,7 @@ export class ProductNoSidebarComponent implements OnInit {
   public activeSlide: any = 0;
   public selectedSize: any;
   public selectedColor: any;
+  addtocartstatus: boolean = false;
   
   @ViewChild("sizeChart") SizeChart: SizeModalComponent;
 
@@ -24,7 +26,7 @@ export class ProductNoSidebarComponent implements OnInit {
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
 
   constructor(private route: ActivatedRoute, private router: Router,
-    public productService: ProductService) {
+    public productService: ProductService, private toastrService: ToastrService) {
       this.route.data.subscribe(response =>{ 
         this.product = response.data;
         console.log('Product Deatils =====', this.product);
@@ -32,10 +34,15 @@ export class ProductNoSidebarComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    
   }
+
+  
+
 
   // Get Product Color
   Color(product_varient_options) {
+    console.log('Color Function ====',product_varient_options);
     if((product_varient_options).length >= 0)
     {
       const uniqColor = [];
@@ -52,6 +59,7 @@ export class ProductNoSidebarComponent implements OnInit {
 
   // Get Product Size
 Size(product_varient_options) {
+  console.log('Size Function ====',product_varient_options);
   if((product_varient_options).length >= 0)
   {
   const uniqSize = []
@@ -84,13 +92,39 @@ Size(product_varient_options) {
   // Add to cart
   async addToCart(product: any) {
     product.quantity = this.counter || 1;
-    product.product_varient_options[0].size_options=this.selectedSize;
-    product.product_varient_options[1].color_options=this.selectedColor;
-    console.log(product.quantity);
+
+
+    console.log('Product Size Option ============',product.product_varient_options[0].size_options);
+    console.log('Product Color Option ============',product.product_varient_options[1].color_options);
+    console.log('Product Quentity ============',product.quantity);
+    if(this.selectedSize && this.selectedColor)
+    {
+    if(this.selectedSize)
+    {
+      product.product_varient_options[0].size_options=this.selectedSize;
+    }
+
+    if(this.selectedColor)
+    {
+      product.product_varient_options[1].color_options=this.selectedColor;
+    }
+
     const status = await this.productService.addToCart(product);
     if(status)
-      this.router.navigate(['/shop/cart']);
-    console.log(status);
+    {
+      this.toastrService.success('Product has been added in Cart.');
+      // this.router.navigate(['/shop/cart']);
+    }
+    console.log('Add To CArt Status =======',status);
+    console.log('Ready to Cart');
+    }
+    else
+    {
+      this.toastrService.warning('Please choose all veriation');
+      console.log('Not Ready Cart');
+    }
+
+
   }
 
   // Buy Now

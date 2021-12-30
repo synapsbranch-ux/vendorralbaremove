@@ -27,9 +27,12 @@ export class ColorsComponent implements OnInit {
       if(product.product_varient_options[1])
       {
       product.product_varient_options[1].color_options.filter((product_varient_options) => {
-        if (product_varient_options[1].color_options) {
-          const index = uniqueColors.indexOf(product_varient_options[1].color_options)
-          if (index === -1) uniqueColors.push(product_varient_options[1].color_options)
+        if (product.product_varient_options[1].color_options.length > 0) {
+
+         
+
+          const index = uniqueColors.indexOf(product_varient_options)
+          if (index === -1) uniqueColors.push(product_varient_options)
         }
       })
     }

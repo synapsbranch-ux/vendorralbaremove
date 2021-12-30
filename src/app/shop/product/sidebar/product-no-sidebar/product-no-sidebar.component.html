@@ -59,7 +59,7 @@
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
                     
                     <div *ngIf="product?.product_varient_options[1]">
-                    <ul class="color-variant border-product" *ngIf="Color(product?.product_varient_options[1].color_options).length">
+                    <ul class="color-variant border-product">
                         <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.product_varient_options[1].color_options); index as i" 
                             [ngStyle]="{'background-color': color}"
                             (click)="owlCar.to(activeSlide = i.toString()); selectColor(color)">
@@ -69,13 +69,13 @@
 
                     <div class="product-description pb-4">
                         <div *ngIf="product?.product_varient_options[0]">
-                        <h6 class="product-title size-text" *ngIf="Size(product.product_varient_options[0].size_options).length">
+                        <h6 class="product-title size-text" >
                             select size
                             <span>
                               <a href="javascrip:void(0)" (click)="SizeChart.openModal()">size chart</a>
                             </span>
                         </h6>
-                        <div class="size-box" *ngIf="Size(product.product_varient_options[0].size_options).length">
+                        <div class="size-box">
                             <ul>
                                 <li [class.active]="selectedSize == size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
                                     <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | uppercase}}</a>
@@ -103,9 +103,9 @@
                         </div>
                     </div>
                     <div class="product-buttons">
-                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn" [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to cart</a>
-                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3" [class.disabled]="counter > product.stock" (click)="buyNow(product)">buy now</a>
-                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3">360 view</a>
+                        <a class="btn btn-solid rounded-lg virtual_btn" [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to cart</a>
+                        <!-- <a class="btn btn-solid rounded-lg virtual_btn ml-3" [class.disabled]="counter > product.stock" (click)="buyNow(product)">buy now</a>
+                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3">360 view</a> -->
                     </div>
                     <!--<div class="border-product">
                         <h6 class="product-title">product details</h6>
@@ -126,166 +126,10 @@
                 </div>
             </div>
         </div>
-        <section class="tab-product m-0">
-            <div class="row">
-                <div class="col-sm-12 col-lg-12">
-                <ngb-tabset [type]="'tabs'" class="nav-material">
-                    <ngb-tab>
-                        <ng-template ngbTabTitle>Description</ng-template>
-                        <ng-template ngbTabContent>
-                            <!-- <p>{{ product.description }}</p> -->
-                        </ng-template>
-                    </ngb-tab>
-                    <!-- <ngb-tab>
-                        <ng-template ngbTabTitle>Video</ng-template>
-                        <ng-template ngbTabContent>
-                            <div class="mt-3 text-center">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/BUWzX78Ye_8" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                            </div>
-                        </ng-template>
-                    </ngb-tab> -->
-                    <ngb-tab>
-                        <ng-template ngbTabTitle>Write Review</ng-template>
-                        <ng-template ngbTabContent>
-                            <form class="theme-form">
-                            <div class="form-row">
-                                <!-- <div class="col-md-12 ">
-                                    <div class="media">
-                                        <label>Rating</label>
-                                        <div class="media-body ml-3">
-                                        <div class="rating three-star">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!--<div class="col-md-6">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Enter Your name" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email" placeholder="Email" required>
-                                </div>-->
-                                <div class="col-md-12 mt-3">
-                                    <label for="review">Review Title</label>
-                                    <input type="text" class="form-control" id="review" placeholder="Enter your Review Subjects" required>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="review">Write a Review</label>
-                                    <textarea class="form-control" placeholder="Wrire Your Testimonial Here" id="exampleFormControlTextarea1" rows="6"></textarea>
-                                </div>
-                                <div class="col-md-12">
-                                    <button class="btn btn-solid rounded-lg" type="submit">Submit Your Review</button>
-                                </div>
-                            </div>
-                            </form>
-                        </ng-template>
-                    </ngb-tab>
-                </ngb-tabset>
-                </div>
-            </div>
-        </section>
     </div>
   </div>
-    <section class="section-t-space">
-        <img src="assets/images/banner/product_details_page_banner.jpg" class="img-fluid" alt="banner">
-    </section>
-  <app-related-product [type]="product?.product_category"></app-related-product>
+  <app-related-product [type]="product?.product_category[0]"></app-related-product>
 </section>
 
-<!--Feedback and Review-->
-<section class="feedback_block">
-    <div class="container">
-        <h3 class="text-center">Feedback & Reviews</h3>
-        <div class="row border_btm">
-            <div class="col-sm-4 col-12">
-                <div class="row">
-                    <div class="col-sm-6 col-12">
-                        <p>Based on</p>
-                        <p>175 reviews</p>
-                    </div>
-                    <!--<div class="col-sm-6 col-12">
-                        <div class="rating three-star">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <p>
-                            4 out of 5 stars
-                        </p>
-                    </div>-->
-                </div>
-            </div>
-            <!-- <div class="col-sm-8 col-12">
-                <button class="btn btn-solid rounded-lg">create a review</button>
-            </div> -->
-        </div>
-        <div class="row border_btm">
-            <div class="col-sm-2 col-12">
-                <div class="row">
-                    <div class="col-sm-12 col-12">
-                        <p>Molly S.</p>
-                        <p class="cmt_date">Mar 2, 2020</p>
-                    </div>
-                    <!--<div class="col-sm-6 col-12">
-                        <div class="rating three-star">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                    </div>-->
-                </div>
-            </div>
-            <div class="col-sm-10 col-12">
-                <p>Lorem ipsum dolor sit amet</p>
-                <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas.</p>
-            </div>
-        </div>
-        <div class="row border_btm">
-            <div class="col-sm-2 col-12">
-                <div class="row">
-                    <div class="col-sm-6 col-12">
-                        <p>Molly S.</p>
-                        <p class="cmt_date">Mar 2, 2020</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-10 col-12">
-                <p>Lorem ipsum dolor sit amet</p>
-                <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed.</p>
-            </div>
-        </div>
-        <div class="row border_btm">
-            <div class="col-sm-2 col-12">
-                <div class="row">
-                    <div class="col-sm-6 col-12">
-                        <p>Molly S.</p>
-                        <p class="cmt_date">Mar 2, 2020</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-10 col-12">
-                <p>Lorem ipsum dolor sit amet</p>
-                <p class="cmt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto accusamus sed, aspernatur eius voluptas veritatis, saepe eos recusandae porro deleniti dolorum voluptatem, illum dolorem repellat corporis minima rerum quas.</p>
-            </div>
-        </div>
-
-        <div class="row section-t-space">
-            <div class="col-12 text-center">
-                <button class="btn btn-outline rounded-lg">more reviews</button>
-                <p class="p-3 cmt">Currently displaying 3 of 175 reviews</p>
-            </div>
-        </div>
-    </div>
-</section>
 <app-size-modal #sizeChart [product]="product"></app-size-modal>
 <!-- Section ends -->

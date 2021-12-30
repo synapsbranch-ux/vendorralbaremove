@@ -38,6 +38,7 @@ export class CollectionNoSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('All Product filter Catagoories ====== ',this.products);
   }
 
   // SortBy Filter

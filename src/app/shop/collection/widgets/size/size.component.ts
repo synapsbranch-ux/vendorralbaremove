@@ -24,12 +24,15 @@ export class SizeComponent implements OnInit {
   get filterbysize() {
     const uniqueSize = []
     this.products.filter((product) => {
+      
       if(product.product_varient_options[0])
       {
+
+
       product.product_varient_options[0].size_options.filter((product_varient_options) => {
-        if (product_varient_options[0].size_options) {
-          const index = uniqueSize.indexOf(product_varient_options[0].size_options)
-          if (index === -1) uniqueSize.push(product_varient_options[0].size_options)
+        if (product.product_varient_options[0].size_options.length > 0) {
+          const index = uniqueSize.indexOf(product_varient_options)
+          if (index === -1) uniqueSize.push(product_varient_options)
         }
       })
     }
@@ -38,11 +41,17 @@ export class SizeComponent implements OnInit {
   }
 
   appliedFilter(event) {
+    console.log('Apply Filter Value', event);
     let index = this.size.indexOf(event.target.value);  // checked and unchecked value
-    if (event.target.checked)   
+    // console.log('Apply Filter Value Index', this.size);
+    if (event.target.checked) {
       this.size.push(event.target.value); // push in array cheked value
+      console.log('Apply Filter Value Index', this.size);
+    }  
     else 
+    {
       this.size.splice(index,1);  // removed in array unchecked value  
+    }
     
     let size = this.size.length ? { size: this.size.join(",") } : { size: null }; 
     this.sizeFilter.emit(size);

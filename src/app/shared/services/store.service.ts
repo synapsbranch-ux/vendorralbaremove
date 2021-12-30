@@ -14,15 +14,16 @@ export class StoreService {
 
   // get Stores
   public get getStores(): Observable<Store[]>{
-    const body={"page": 1, "limit": 2}
+    const body={"page": 1, "limit": 4}
     this.Stores = this.http.post(environment.baseUrl+'stores',body);
     console.log('Store Service called!', this.Stores);
     return this.Stores;
   }
   public get getStoresMore(): Observable<Store[]>{
-    const body={"page": 1, "limit": 10}
+    const body={"page": 1, "limit": 50}
     this.Stores = this.http.post(environment.baseUrl+'stores',body);
     
     return this.Stores;
   }
+
 }

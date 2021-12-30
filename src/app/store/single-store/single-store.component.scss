@@ -1,5 +1,4 @@
 .store-image {
-    opacity: 0.8;
     width: 85px;
     height: 85px;
     background-position: center center;
@@ -7,20 +6,14 @@
     background-repeat: no-repeat;
     background-color: gray;
     display: inline-block;
-    margin: 10px;
+    margin: 10px 10px 3px 10px;
+    cursor: pointer;
+    
   }
-  .store-image:hover {
-    opacity: 1;
+  .storeside-img {
+    border: solid 3px transparent;
+  }
+  .storeside-img:hover {
+    border: solid 3px #3e323e;
   }
   
-  .storeside-img > input {
-    display: none;
-  }
-  .storeside-img > .store-image {
-    cursor: pointer;
-    border: 2px solid black;
-  }
-  .storeside-img > input:checked + .store-image {
-    border: 2px solid orange;
-    opacity: 1;
-  }

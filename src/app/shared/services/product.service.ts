@@ -5,7 +5,7 @@ import { map, startWith, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { ProductNew } from '../classes/product';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 const state = {
 
@@ -24,7 +24,10 @@ export class ProductService {
   public OpenCart: boolean = false;
   public Products
   catagories:any="";
+  public catagoriesalt;
   token:any;
+  catarr:any;
+  
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
     private toastrService: ToastrService) { }
@@ -35,15 +38,41 @@ export class ProductService {
     ---------------------------------------------
   */
 
+    
+    // resolve(route: ActivatedRouteSnapshot){
+    //   console.log('Current Slug Products ===== ',route.params.slug);
+    // }
+
+
   // Product
+
+
    private get products(): Observable<ProductNew[]> {
     this.catagories = this.route.snapshot.queryParamMap.get('category')
-    const httpOptions = {
-      headers: new HttpHeaders({      
-        'category': this.catagories,
-      })
-    };
-    this.Products = this.http.get<ProductNew[]>(environment.baseUrl+'product/list',httpOptions).pipe(map((data:any)=>{
+    this.catarr = {     
+      'category': this.catagories
+  };
+
+    if(this.catagories === null)
+    {
+       this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
+         res =>
+         {
+          this.catagoriesalt = res['data'].product_category.category_name;
+          console.log('product Slug catagories ======', res['data'].product_category.category_name)
+          this.catarr = {     
+            'category': this.catagoriesalt
+        };
+         }
+       )
+    }
+    
+    
+
+    console.log('Product Category Name arr === ',this.catarr);
+    this.Products = this.http.post<ProductNew[]>(environment.baseUrl+'product/list',this.catarr).pipe(map((data:any)=>{
+      console.log('Product Data === ',data.data);
+      
       return data.data;
     }));
     
@@ -95,7 +124,7 @@ export class ProductService {
 
   // Add to Wishlist
   public addToWishlist(product): any {
-    const wishlistItem = state.wishlist.find(item => item.id === product.id)
+    const wishlistItem = state.wishlist.find(item => item._id === product._id);
     if (!wishlistItem) {
       state.wishlist.push({
         ...product
@@ -103,6 +132,7 @@ export class ProductService {
     }
     this.toastrService.success('Product has been added in wishlist.');
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
+    console.log('Wishlist added Localstorage',localStorage.getItem('wishlistItems'));
     return true
   }
 
@@ -131,7 +161,7 @@ export class ProductService {
 
   // Add to Compare
   public addToCompare(product): any {
-    const compareItem = state.compare.find(item => item.id === product.id)
+    const compareItem = state.compare.find(item => item.id === product._id)
     if (!compareItem) {
       state.compare.push({
         ...product
@@ -334,9 +364,10 @@ export class ProductService {
 
   // Get Product Filter
   public filterProducts(filter: any): Observable<ProductNew[]> {
-    console.log('Service. Filter ==>',this.products);
+    
     return this.products.pipe(map((product) => 
       product.filter((item: ProductNew) => {
+        console.log('Service. Filter ==>',item);
         if (!filter.length) return true
       })
     ));
