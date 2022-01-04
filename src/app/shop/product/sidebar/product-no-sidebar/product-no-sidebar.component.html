@@ -60,9 +60,9 @@
                     
                     <div *ngIf="product?.product_varient_options[1]">
                     <ul class="color-variant border-product">
-                        <li [class]="color" [class.active]="activeSlide == i.toString()" *ngFor="let color of Color(product?.product_varient_options[1].color_options); index as i" 
-                            [ngStyle]="{'background-color': color}"
-                            (click)="owlCar.to(activeSlide = i.toString()); selectColor(color)">
+                        <li [class]="productColor" [class.active]="selectedColor == productColor" 
+                            [ngStyle]="{'background-color': productColor}"
+                            (click)="selectColor(productColor)">
                         </li>
                     </ul>
                     </div>

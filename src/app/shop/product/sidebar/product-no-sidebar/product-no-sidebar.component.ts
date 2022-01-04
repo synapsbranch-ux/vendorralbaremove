@@ -19,6 +19,9 @@ export class ProductNoSidebarComponent implements OnInit {
   public selectedSize: any;
   public selectedColor: any;
   addtocartstatus: boolean = false;
+
+  productColor:any;
+  productSize:any;
   
   @ViewChild("sizeChart") SizeChart: SizeModalComponent;
 
@@ -34,7 +37,8 @@ export class ProductNoSidebarComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+    this.productColor=this.product.product_varient_options[1].color_options;
+    this.productSize=this.product.product_varient_options[0].size_options;
   }
 
   
@@ -42,7 +46,7 @@ export class ProductNoSidebarComponent implements OnInit {
 
   // Get Product Color
   Color(product_varient_options) {
-    console.log('Color Function ====',product_varient_options);
+    // console.log('Color Function ====',product_varient_options);
     if((product_varient_options).length >= 0)
     {
       const uniqColor = [];
@@ -59,7 +63,7 @@ export class ProductNoSidebarComponent implements OnInit {
 
   // Get Product Size
 Size(product_varient_options) {
-  console.log('Size Function ====',product_varient_options);
+  // console.log('Size Function ====',product_varient_options);
   if((product_varient_options).length >= 0)
   {
   const uniqSize = []
@@ -77,6 +81,7 @@ Size(product_varient_options) {
   }
   selectColor(color) {
     this.selectedColor = color;
+    console.log('Selected Color : ', this.selectedColor );
   }
   
   // Increament

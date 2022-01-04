@@ -16,4 +16,14 @@
   .storeside-img:hover {
     border: solid 3px #3e323e;
   }
-  
+  .true{
+    cursor: not-allowed;
+    pointer-events: all !important;
+  }
+  .roomavailabla.false{
+    display: none;
+  }
+  .roomavailabla.true{
+    display: block;
+    color: #ff0000;
+  }

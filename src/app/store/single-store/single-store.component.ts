@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { StoreService } from 'src/app/shared/services/store.service';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-product-box-one',
@@ -21,6 +22,8 @@ export class SingleStoreComponent implements OnInit {
   StoreLists=[];
 
   DepartmentsList=[];
+
+  roomavailablity=[];
 
 
   constructor( private storeService: StoreService , private route: ActivatedRoute ) { 
@@ -49,18 +52,48 @@ export class SingleStoreComponent implements OnInit {
       const filterItem = child.filter(item => item != undefined);
       if(filterItem.length > 0){
         this.DepartmentsList=filterItem[0];
-      console.log(this.DepartmentsList);
+        for(let [index, element] of this.DepartmentsList.entries())
+        {
+
+console.log('For Department -==',index);
+let rdata={
+  "department_id": element._id,
+  "vendor_id": this.vendor_id,
+}
+this.storeService.roomAvailableCheck(rdata).subscribe(
+  res =>
+  {
+    console.log('room API ==',res['data']);
+    if(res['data'].room_name)
+    {
+      this.roomavailablity[index] = 'false';
+    console.log('false ===', res['data'].room_name);
+    }
+    else
+    {
+      this.roomavailablity[index] = 'true';
+    }
+  }
+)
+
+        }
+      console.log('Department list ====',this.DepartmentsList);
+      console.log('Room Availble === ',this.roomavailablity);
       }
 
     });
 
   }
 
-  stordepartment(departmenbt_id)
+  stordepartment(departmenbt_id,room_status)
   {
-    console.log('Department Id',departmenbt_id);
-    console.log('Vendor Id', this.vendor_id);
-    window.open("https://store.ralbatech.com/?d_id="+departmenbt_id+"&v_id="+this.vendor_id , "_blank");
+    if(room_status == 'false')
+    {
+      console.log('Department Id',departmenbt_id);
+      console.log('Vendor Id', this.vendor_id);
+      window.open("https://store.ralbatech.com/?d_id="+departmenbt_id+"&v_id="+this.vendor_id , "_blank");
+    }
+
   }
 
 

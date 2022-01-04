@@ -23,9 +23,11 @@
                   <h3 class="text-black">{{storename}}</h3>
           <p *ngIf="DepartmentsList.length" >Choose Department for Store</p> 
           <div class="d-flex  d-lists">          
-            <div  class="d-flex flex-column text-center storeside-img"  *ngFor="let department of DepartmentsList">
-            <div class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department._id)></div>
+            <div  class="d-flex flex-column text-center storeside-img"  *ngFor="let department of DepartmentsList let i = index" ngClass="{{roomavailablity[i]}}" >
+            <div ngClass="{{roomavailablity[i]}}"  class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department._id,roomavailablity[i])></div>
             <small>{{department.department_name}}</small>
+
+            <small class="roomavailabla" ngClass="{{roomavailablity[i]}}">Room Not Available</small>
           </div> 
         </div>             
          

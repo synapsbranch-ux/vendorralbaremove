@@ -26,4 +26,8 @@ export class StoreService {
     return this.Stores;
   }
 
+  roomAvailableCheck(data: any): Observable<any>{
+    return this.http.post(environment.baseUrl+'stores/configuration',data);
+  } 
+
 }
