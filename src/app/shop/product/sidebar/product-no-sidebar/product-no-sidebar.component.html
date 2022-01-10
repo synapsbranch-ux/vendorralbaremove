@@ -17,9 +17,54 @@
                                     [lensWidth]="300"
                                     [lensHeight]="300"
                                 ></lib-ngx-image-zoom>
+                               
                                 <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
                                    [lazyLoad]="image.src" 
                                    [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide [id]="2">
+                            <div>
+                                <model-viewer class="model-viewer"
+                                camera-controls
+                                camera-orbit="45deg 55deg 2.5m"
+                                src="https://ralbaassetstorage.s3.us-east-2.amazonaws.com/product/pro-1641461172.glb"
+                                alt="A 3D model Product"
+                                data-js-focus-visible=""
+                                ar-status="not-presenting"
+                              >
+                              </model-viewer>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                    <ng-container *ngFor="let image of product.product_image; index as i">
+                        <ng-template carouselSlide [id]="i">
+                            <div>
+                                <lib-ngx-image-zoom class="img-fluid"
+                                    [thumbImage]="image.pro_image"
+                                    [fullImage]="image.pro_image"
+                                    [magnification]="1.5"
+                                    [enableLens]="true"
+                                    [lensWidth]="300"
+                                    [lensHeight]="300"
+                                ></lib-ngx-image-zoom>
+                               
+                                <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
+                                   [lazyLoad]="image.src" 
+                                   [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide [id]="2">
+                            <div>
+                                <model-viewer class="model-viewer"
+                                camera-controls
+                                camera-orbit="45deg 55deg 2.5m"
+                                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                                alt="A 3D model of an astronaut"
+                                data-js-focus-visible=""
+                                ar-status="not-presenting"
+                              >
+                              </model-viewer>
                             </div>
                         </ng-template>
                     </ng-container>
@@ -28,7 +73,7 @@
                     <div class="col-12 p-0">
                         <div class="slider-nav">
                             <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
-                                <ng-container *ngFor="let image of product.product_image; index as i">
+                                <ng-container *ngFor="let image of product.product_image; index as i ">
                                     <ng-template carouselSlide [id]="i">
                                         <div class="owl-thumb" [class.active]="i == activeSlide">
                                         <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
@@ -43,7 +88,9 @@
                 </div>
             </div>
             <div class="col-lg-6 rtl-text">
-                <div class="product-right">
+                
+
+<div class="product-right">
                     <h2>{{ product?.product_name }}</h2>
                     <!-- <h4>
                         <del *ngIf="product?.discount">{{ product?.product_sale_price * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}</del>

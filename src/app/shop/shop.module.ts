@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { Ng5SliderModule } from 'ng5-slider';
@@ -76,6 +76,10 @@ import { SuccessComponent } from './checkout/success/success.component';
     CheckoutComponent,
     SuccessComponent
   ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
+
   imports: [
     CommonModule,
     NgxPayPalModule,

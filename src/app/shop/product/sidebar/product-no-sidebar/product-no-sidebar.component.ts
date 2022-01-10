@@ -5,6 +5,7 @@ import { ProductNew } from '../../../../shared/classes/product';
 import { ProductService } from '../../../../shared/services/product.service';
 import { SizeModalComponent } from "../../../../shared/components/modal/size-modal/size-modal.component";
 import { ToastrService } from 'ngx-toastr';
+import '@google/model-viewer'
 
 @Component({
   selector: 'app-product-no-sidebar',

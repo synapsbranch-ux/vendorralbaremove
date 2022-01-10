@@ -28,6 +28,7 @@ export interface ProductNew {
     product_varient?: NewVariants[];
     product_varient_options?: VariantsOptions[];
     product_image?: NewImages[];
+    product_3d_image?: New3dImages[];
     product_retail_price?: number;
     product_sale_price?: number;
     status?: string;
@@ -55,6 +56,11 @@ export interface VariantsOptions {
 
 export interface NewImages {
     pro_image?: string;
+    status?: string;
+}
+
+export interface New3dImages {
+    pro_3d_image?: string;
     status?: string;
 }
 
