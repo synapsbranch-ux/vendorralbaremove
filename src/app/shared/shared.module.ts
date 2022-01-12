@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,7 +28,6 @@ import { ProductBoxVerticalComponent } from './components/product/product-box-ve
 import { ProductBoxVerticalSliderComponent } from './components/product/product-box-vertical-slider/product-box-vertical-slider.component';
 
 // Modals Components
-import { NewsletterComponent } from './components/modal/newsletter/newsletter.component';
 import { QuickViewComponent } from './components/modal/quick-view/quick-view.component';
 import { CartModalComponent } from './components/modal/cart-modal/cart-modal.component';
 import { CartVariationComponent } from './components/modal/cart-variation/cart-variation.component';
@@ -47,6 +46,7 @@ import { TapToTopComponent } from './components/tap-to-top/tap-to-top.component'
 
 // Pipes
 import { DiscountPipe } from './pipes/discount.pipe';
+import { view3DModalComponent } from './components/modal/product-view3D/product-view3D.component';
 
 @NgModule({
   declarations: [
@@ -64,17 +64,20 @@ import { DiscountPipe } from './pipes/discount.pipe';
     ProductBoxFiveComponent,
     ProductBoxVerticalComponent,
     ProductBoxVerticalSliderComponent,
-    NewsletterComponent,
     QuickViewComponent,
     CartModalComponent,
     CartVariationComponent,
     VideoModalComponent,
     SizeModalComponent,
+    view3DModalComponent,
     AgeVerificationComponent,
     SkeletonProductBoxComponent,
     LayoutBoxComponent,
     TapToTopComponent,
     DiscountPipe
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   imports: [
     CommonModule,
@@ -111,12 +114,12 @@ import { DiscountPipe } from './pipes/discount.pipe';
     ProductBoxFiveComponent,
     ProductBoxVerticalComponent,
     ProductBoxVerticalSliderComponent,
-    NewsletterComponent,
     QuickViewComponent,
     CartModalComponent,
     CartVariationComponent,
     VideoModalComponent,
     SizeModalComponent,
+    view3DModalComponent,
     AgeVerificationComponent,
     SkeletonProductBoxComponent,
     LayoutBoxComponent,

@@ -171,7 +171,7 @@ export let TeamSlider: any = {
 
 // Compare Slider
 export let  CompareSlider: any = {
-    loop: true,
+    loop: false,
     dots: false,
     navSpeed: 300,
     responsive: {
@@ -192,7 +192,7 @@ export let  CompareSlider: any = {
 
 // Product Slider
 export let ProductSlider: any = {
-    loop: true,
+    loop: false,
     dots: false,
     navSpeed: 300,
     responsive: {
@@ -214,7 +214,7 @@ export let ProductSlider: any = {
 // Product Slider
 export let ProductOneSlider: any = {
     items: 1,
-    loop: true,
+    loop: false,
     dots: false,
     navSpeed: 300
 }
@@ -222,8 +222,8 @@ export let ProductOneSlider: any = {
 // New Product Slider
 export let NewProductSlider: any = {
     items: 1,
-    loop: true,
-    nav: true,
+    loop: false,
+    nav: false,
     dots:false,
     navContainerClass: 'owl-nav',
     navClass: [ 'owl-prev', 'owl-next' ],
@@ -236,8 +236,7 @@ export let ProductDetailsMainSlider: any = {
     nav: false,
     dots:false,
     autoplay: false,
-    slideSpeed: 300,
-    loop: true
+    loop: false
 }
 
 // Product Details Thumb Slider

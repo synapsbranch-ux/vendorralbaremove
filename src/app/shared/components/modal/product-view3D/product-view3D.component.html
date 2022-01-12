@@ -1,0 +1,22 @@
+<ng-template class="theme-modal" #view3D let-modal>
+	<div class="modal-content">
+	  <div class="modal-header">
+		  Product 3D View
+	    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
+	      <span aria-hidden="true">&times;</span>
+	    </button>
+	  </div>
+	  <div class="modal-body">
+		<model-viewer class="model-viewer"
+		camera-controls
+		camera-orbit="75deg 75deg 20m"
+		src="{{image3d}}"
+		alt="A 3D model Product"
+		data-js-focus-visible=""
+		ar-status="not-presenting"
+	  >
+	  </model-viewer>
+
+	   </div>
+	</div>
+</ng-template>

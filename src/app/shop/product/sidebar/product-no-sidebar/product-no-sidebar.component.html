@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
-                <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar  class="product-slick">
+                <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar  class="product-slick1">
                     <ng-container *ngFor="let image of product.product_image; index as i">
                         <ng-template carouselSlide [id]="i">
                             <div>
@@ -23,12 +23,12 @@
                                    [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
                             </div>
                         </ng-template>
-                        <ng-template carouselSlide [id]="2">
+                        <ng-template carouselSlide [id]="product.product_image?.length + 1">
                             <div>
                                 <model-viewer class="model-viewer"
                                 camera-controls
-                                camera-orbit="45deg 55deg 2.5m"
-                                src="https://ralbaassetstorage.s3.us-east-2.amazonaws.com/product/pro-1641461172.glb"
+                                camera-orbit="75deg 75deg 10.5m"
+                                src="{{image3d}}"
                                 alt="A 3D model Product"
                                 data-js-focus-visible=""
                                 ar-status="not-presenting"
@@ -37,41 +37,10 @@
                             </div>
                         </ng-template>
                     </ng-container>
-                    <ng-container *ngFor="let image of product.product_image; index as i">
-                        <ng-template carouselSlide [id]="i">
-                            <div>
-                                <lib-ngx-image-zoom class="img-fluid"
-                                    [thumbImage]="image.pro_image"
-                                    [fullImage]="image.pro_image"
-                                    [magnification]="1.5"
-                                    [enableLens]="true"
-                                    [lensWidth]="300"
-                                    [lensHeight]="300"
-                                ></lib-ngx-image-zoom>
-                               
-                                <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
-                                   [lazyLoad]="image.src" 
-                                   [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
-                            </div>
-                        </ng-template>
-                        <ng-template carouselSlide [id]="2">
-                            <div>
-                                <model-viewer class="model-viewer"
-                                camera-controls
-                                camera-orbit="45deg 55deg 2.5m"
-                                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-                                alt="A 3D model of an astronaut"
-                                data-js-focus-visible=""
-                                ar-status="not-presenting"
-                              >
-                              </model-viewer>
-                            </div>
-                        </ng-template>
-                    </ng-container>
                 </owl-carousel-o>
-                <div class="row">
-                    <div class="col-12 p-0">
-                        <div class="slider-nav">
+                <div class="row align-items-center" >
+                    <div class="col-10 p-0">
+                        <div class="slider-nav small-slider-product">
                             <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
                                 <ng-container *ngFor="let image of product.product_image; index as i ">
                                     <ng-template carouselSlide [id]="i">
@@ -82,8 +51,16 @@
                                         </div>
                                     </ng-template>
                                 </ng-container>
+                                
                             </owl-carousel-o>
+
                         </div>
+                    </div>
+                    <div class="col-2 p-0">
+                        <div class="d-flex">
+                            <a href="javascrip:void(0)" (click)="view3D.openModal()"><img class="img-fluid" src="assets/images/3d-object.jpg" alt="360 View"></a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -105,7 +82,7 @@
                     <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
                     
-                    <div *ngIf="product?.product_varient_options[1]">
+                    <div *ngIf="product?.product_varient_options">
                     <ul class="color-variant border-product">
                         <li [class]="productColor" [class.active]="selectedColor == productColor" 
                             [ngStyle]="{'background-color': productColor}"
@@ -115,7 +92,7 @@
                     </div>
 
                     <div class="product-description pb-4">
-                        <div *ngIf="product?.product_varient_options[0]">
+                        <div *ngIf="product?.product_varient_options">
                         <h6 class="product-title size-text" >
                             select size
                             <span>
@@ -165,7 +142,7 @@
                             <form class="d-inline-block">
                                 <button class="wishlist-btn" (click)="addToWishlist(product)">
                                     <i class="fa fa-heart-o"></i>
-                                    <span class="title-font">Save</span>
+                                    <span class="title-font">Wishlist</span>
                                 </button>
                             </form>
                         </div>
@@ -175,8 +152,9 @@
         </div>
     </div>
   </div>
-  <app-related-product [type]="product?.product_category[0]"></app-related-product>
+  <app-related-product [type]="'apparels'"></app-related-product>
 </section>
 
 <app-size-modal #sizeChart [product]="product"></app-size-modal>
+<app-product-view3D #view3D [image3d]="image3d"></app-product-view3D>
 <!-- Section ends -->

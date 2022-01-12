@@ -10,19 +10,32 @@ import { ProductService } from '../../../../shared/services/product.service';
 export class RelatedProductComponent implements OnInit {
   
   @Input() type: string
-
+  productCategory:any
   public products: ProductNew[] = [];
 
   constructor(public productService: ProductService) { 
-    this.productService.getProducts.subscribe(response => 
-      {
-     
-      this.products = response.filter(
-        item => item.product_category[0] == this.type
-        
-        )
-      }
-    );
+
+    this.productService.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
+         res =>
+         {
+          this.type = res['data'].product_category.category_slug;
+          let catdata=
+          {
+            'category': this.type
+          }
+          console.log('Related cat   ',catdata);
+          this.productService.getProductscat(catdata).subscribe(response => 
+            {
+              // this.productCategory=response['data'].product_category;
+      
+              console.log('Related Products ==== >>>',response)
+              this.products=response['data'];
+            
+            }
+          );
+         }
+       )
+
   }
 
   ngOnInit(): void {

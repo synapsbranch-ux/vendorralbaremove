@@ -6,6 +6,7 @@ import { ProductService } from '../../../../shared/services/product.service';
 import { SizeModalComponent } from "../../../../shared/components/modal/size-modal/size-modal.component";
 import { ToastrService } from 'ngx-toastr';
 import '@google/model-viewer'
+import { view3DModalComponent } from 'src/app/shared/components/modal/product-view3D/product-view3D.component';
 
 @Component({
   selector: 'app-product-no-sidebar',
@@ -23,17 +24,28 @@ export class ProductNoSidebarComponent implements OnInit {
 
   productColor:any;
   productSize:any;
+  image3d:any;
+  productCategory:any;
   
   @ViewChild("sizeChart") SizeChart: SizeModalComponent;
+  @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
 
   constructor(private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService) {
-      this.route.data.subscribe(response =>{ 
+    console.log('product Slug ', this.route.snapshot.paramMap.get('id'));
+    
+      this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
         this.product = response.data;
-        console.log('Product Deatils =====', this.product);
+        console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
+        this.productCategory=response.data.product_category.category_slug;
+        console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory.category_slug);
+        this.image3d=this.product.product_3d_image[0].pro_3d_image;
+        console.log('Product 3D image =====', this.image3d);
+        this.productColor=this.product.product_varient_options[1].color_options;
+        this.productSize=this.product.product_varient_options[0].size_options;
       });
     }
 

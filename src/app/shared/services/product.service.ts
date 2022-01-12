@@ -58,8 +58,8 @@ export class ProductService {
        this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
          res =>
          {
-          this.catagoriesalt = res['data'].product_category.category_name;
-          console.log('product Slug catagories ======', res['data'].product_category.category_name)
+          this.catagoriesalt = res['data'].product_category.category_slug;
+          console.log('product Slug catagories ======', res['data'].product_category.category_slug)
           this.catarr = {     
             'category': this.catagoriesalt
         };
@@ -91,6 +91,11 @@ export class ProductService {
   public get getProducts(): Observable<ProductNew[]> {
     return this.products;
   } 
+
+    // Get Products BY categoriess
+   getProductscat(data: any): Observable<any> {
+    return this.http.post<ProductNew[]>(environment.baseUrl+'product/list',data);
+    } 
 
   // Get Products By Slug
 
