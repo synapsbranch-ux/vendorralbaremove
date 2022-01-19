@@ -22,6 +22,7 @@ export interface ProductNew {
     _id?: string;
     product_name?: string;
     product_slug?: string;
+    product_description?: string;
     product_department?: ProDepartment[];
     product_category?: ProCatagories[];
     product_store?: ProStores[];

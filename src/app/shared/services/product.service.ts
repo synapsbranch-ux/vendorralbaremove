@@ -26,7 +26,7 @@ export class ProductService {
   catagories:any="";
   public catagoriesalt;
   token:any;
-  catarr:any;
+  catarr={};
   
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
@@ -48,28 +48,33 @@ export class ProductService {
 
 
    private get products(): Observable<ProductNew[]> {
-    this.catagories = this.route.snapshot.queryParamMap.get('category')
-    this.catarr = {     
-      'category': this.catagories
-  };
+    this.catagories = this.route.snapshot.paramMap.get('slug');
+console.log('Product Service cat Slug ===>',this.catagories);
 
+if(this.catagories != null)
+{
+    this.catarr = {     
+      'category': this.catagories,
+  };
+}
     if(this.catagories === null)
     {
        this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
          res =>
          {
+          console.log('Product Service Product Cat search Slug ===>',res);
+
           this.catagoriesalt = res['data'].product_category.category_slug;
           console.log('product Slug catagories ======', res['data'].product_category.category_slug)
           this.catarr = {     
-            'category': this.catagoriesalt
+            'category': this.catagoriesalt,
         };
          }
        )
     }
-    
-    
 
     console.log('Product Category Name arr === ',this.catarr);
+
     this.Products = this.http.post<ProductNew[]>(environment.baseUrl+'product/list',this.catarr).pipe(map((data:any)=>{
       console.log('Product Data === ',data.data);
       
@@ -90,6 +95,10 @@ export class ProductService {
   // Get Products
   public get getProducts(): Observable<ProductNew[]> {
     return this.products;
+  } 
+
+  getProductsBycat(catdata: any): Observable<any> {
+      return this.http.post<ProductNew[]>(environment.baseUrl+'product/list',catdata);
   } 
 
     // Get Products BY categoriess

@@ -14,7 +14,7 @@ import { Resolver } from '../shared/services/resolver.service';
 const routes: Routes = [
 
   {
-    path: ':storeslug/:departmentslug/:slug',
+    path: 'store/:storeslug/:departmentslug/:slug',
     component: ProductNoSidebarComponent,
     resolve: {
       data: Resolver
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'categories/:slug',
+    path: 'category/:slug',
     component: CollectionComponent
   },
   {

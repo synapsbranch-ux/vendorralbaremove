@@ -32,6 +32,17 @@ export class CollectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+let catdata=
+{
+  'category': this.route.snapshot.paramMap.get('slug'),
+}
+    this.productService.getProductsBycat(catdata).subscribe(
+      res =>
+      {
+        console.log('collections >>>>>>>>>>>',res['data']);
+        this.products=res['data'];
+      }
+    )
 
           // Get Query params..
           this.route.queryParams.subscribe(params => {
@@ -55,9 +66,9 @@ export class CollectionComponent implements OnInit {
     
               console.log('Product Catagories constructor',this.products );
 
-              console.log('Product Catagories Check',params.category);
+              console.log('Product Catagories Check',this.route.snapshot.paramMap.get('slug'));
               // Category Filter
-              if(params.category)
+              if(this.route.snapshot.paramMap.get('slug'))
     
                 this.products = this.products.filter((item: any) => item.product_category.category_slug == this.category);
 

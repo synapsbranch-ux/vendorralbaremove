@@ -79,7 +79,7 @@
                     <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
-                    <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas eveniet ea reprehenderit quidem fugiat at tempora veniam sequi amet eum? Quis unde corrupti, quia magni nisi quam fugiat delectus molestiae.</p>
+                    <p class="mb-2">{{ product?.product_description}}</p>
                     <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
                     
                     <div *ngIf="product?.product_varient_options">

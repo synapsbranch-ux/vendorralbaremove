@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../classes/product';
+import { ProductNew } from '../../classes/product';
 import { ProductService } from '../../services/product.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ProductService } from '../../services/product.service';
 })
 export class CategoriesComponent implements OnInit {
 
-  public products: Product[] = [];
+  public products: ProductNew[] = [];
   public collapse: boolean = true;
 
   constructor(public productService: ProductService) { 
@@ -20,7 +20,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   get filterbyCategory() {
-    const category = [...new Set(this.products.map(product => product.type))]
+    const category = [...new Set(this.products.map(product => product.product_category[0].category_slug))]
     return category
   }
 

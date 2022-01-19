@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
-import { Product } from "../../shared/classes/product";
+import { ProductNew } from "../../shared/classes/product";
 
 @Component({
   selector: 'app-compare',
@@ -10,7 +10,7 @@ import { Product } from "../../shared/classes/product";
 })
 export class CompareComponent implements OnInit {
 
-  public products: Product[] = [];
+  public products: ProductNew[] = [];
 
   constructor(private router: Router, 
     public productService: ProductService) {
@@ -23,7 +23,7 @@ export class CompareComponent implements OnInit {
   async addToCart(product: any) {
     const status = await this.productService.addToCart(product);
     if(status) {
-      this.router.navigate(['/shop/cart']);
+      this.router.navigate(['/cart']);
     }
   }
 

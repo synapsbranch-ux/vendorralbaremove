@@ -31,11 +31,11 @@ export class MenuComponent implements OnInit {
           menuChild = items.category_child.map(function(childItems){
             
 
-             return { path: 'collection?category='+childItems.category_slug, title: childItems.category_name, type: 'link' }
+             return { path: 'category/'+childItems.category_slug, title: childItems.category_name, type: 'link' }
           });
         }
         return {
-          title: items.category_name, path: 'collection?category='+items.category_slug, type: 'link', active: false, children: menuChild
+          title: items.category_name, path: 'category/'+items.category_slug, type: 'link', active: false, children: menuChild
         }
       });
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../../shared/data/slider';
 import { ProductNew } from '../../../../shared/classes/product';
@@ -13,7 +13,7 @@ import { view3DModalComponent } from 'src/app/shared/components/modal/product-vi
   templateUrl: './product-no-sidebar.component.html',
   styleUrls: ['./product-no-sidebar.component.scss']
 })
-export class ProductNoSidebarComponent implements OnInit {
+export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   public product: ProductNew = {};
   public counter: number = 1;
@@ -35,7 +35,7 @@ export class ProductNoSidebarComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService) {
-    console.log('product Slug ', this.route.snapshot.paramMap.get('id'));
+    console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
     
       this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
         this.product = response.data;
@@ -54,7 +54,10 @@ export class ProductNoSidebarComponent implements OnInit {
     this.productSize=this.product.product_varient_options[0].size_options;
   }
 
-  
+  ngOnChanges()
+  {
+    
+  }
 
 
   // Get Product Color
