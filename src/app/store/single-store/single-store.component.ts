@@ -16,7 +16,7 @@ export class SingleStoreComponent implements OnInit {
 
   storename:string
   storeimgUrl:any
-  store_id:any
+  store_slug:any
   vendor_id:any
 
   StoreLists=[];
@@ -34,14 +34,14 @@ export class SingleStoreComponent implements OnInit {
   ngOnInit() {
    
     this.route.params.subscribe(params => {      
-      this.store_id=params['id'];
+      this.store_slug=params['slug'];
     });
 
     this.storeService.getStoresMore.subscribe(response => {
       console.log('Single Store response  =>', response['data']);
       this.StoreLists=response['data'];
       const child = this.StoreLists.map((store_l) => {
-        if(store_l._id == this.store_id){    
+        if(store_l.store_slug == this.store_slug){    
           this.storename=store_l.store_name;
           this.storeimgUrl=store_l.store_image
           this.vendor_id=store_l.store_owner._id;
@@ -85,13 +85,13 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
 
   }
 
-  stordepartment(departmenbt_id,room_status)
+  stordepartment(department_slug,room_status)
   {
     if(room_status == 'false')
     {
-      console.log('Department Id',departmenbt_id);
-      console.log('Vendor Id', this.vendor_id);
-      window.open("https://store.ralbatech.com/?d_id="+departmenbt_id+"&v_id="+this.vendor_id , "_blank");
+      console.log('Department Slug',department_slug);
+      // window.open("https://store.ralbatech.com/?d_id="+department_slug ,"_blank");
+      window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
     }
 
   }

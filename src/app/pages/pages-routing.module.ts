@@ -35,6 +35,7 @@ import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
 import { AuthGuard } from '../shared/services/auth-guard.service';
 import { Room3Dstore } from './room-3dstore/room-3dstore.component';
+import { RegisterVendorComponent } from './account/register-vendor/register-vendor.component';
 
 
 const routes: Routes = [
@@ -57,6 +58,10 @@ const routes: Routes = [
   { 
     path: 'register', 
     component: RegisterComponent
+  },
+  { 
+    path: 'register-vendor', 
+    component: RegisterVendorComponent
   },
   { 
     path: 'forget/password', 

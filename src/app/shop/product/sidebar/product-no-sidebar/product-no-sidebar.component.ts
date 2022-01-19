@@ -150,7 +150,7 @@ Size(product_varient_options) {
     product.quantity = this.counter || 1;
     const status = await this.productService.addToCart(product);
     if(status)
-      this.router.navigate(['/shop/checkout']);
+      this.router.navigate(['/checkout']);
   }
 
   // Add to Wishlist

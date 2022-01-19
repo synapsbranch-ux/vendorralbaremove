@@ -29,6 +29,7 @@ export class ProductBoxOneComponent implements OnInit {
     if(this.loader) {
       setTimeout(() => { this.loader = false; }, 2000); // Skeleton Loader
     }
+  console.log('product-list page products ============>',this.product);
     
   }
 

@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'store',
     children: [
      {path: '', component: StoreComponent},
-     {path: 'single-store/:id', component: SingleStoreComponent}
+     {path: ':slug', component: SingleStoreComponent}
    ]
   },
   {
@@ -31,12 +31,12 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'shop',
+    path: '',
     component: ShopComponent,
     loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)
   },
   { 
-    path: 'pages',
+    path: '',
     component: PagesComponent,
     loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule) 
   },

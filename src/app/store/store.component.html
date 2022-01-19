@@ -7,7 +7,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-3 col-md-3 col-12" *ngFor="let store of stores; let i = index">
-        <a [routerLink]="['/store/single-store', store._id]"
+        <a [routerLink]="['/store/', store.store_slug]"
         routerLinkActive="router-link-active" >
           <div class="store_img collection-banner">
             <img src="{{store.store_image}}" alt="Store" class="img-fluid">

@@ -41,6 +41,7 @@ import { MasonryGridThreeComponent } from './portfolio/masonry-grid-three/masonr
 import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-grid-four.component';
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
 import { Room3Dstore } from './room-3dstore/room-3dstore.component';
+import { RegisterVendorComponent } from './account/register-vendor/register-vendor.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { Room3Dstore } from './room-3dstore/room-3dstore.component';
     DashboardComponent,
     LoginComponent,
     RegisterComponent,
+    RegisterVendorComponent,
     ForgetPasswordComponent,
     ProfileComponent,
     ContactComponent,

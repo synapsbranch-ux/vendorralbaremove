@@ -22,7 +22,7 @@ export interface ProductNew {
     _id?: string;
     product_name?: string;
     product_slug?: string;
-    product_department?: any[];
+    product_department?: ProDepartment[];
     product_category?: ProCatagories[];
     product_store?: ProStores[];
     product_varient?: NewVariants[];
@@ -72,10 +72,20 @@ export interface Variants {
     color?: string;
     image_id?: number;
 }
+
+
+export interface ProDepartment
+{
+    _id?: number;
+    department_name?: string;  
+    department_slug?: string;  
+}
+
 export interface ProStores
 {
     _id?: number;
     store_name?: string;  
+    store_slug?: string;  
 }
 
 

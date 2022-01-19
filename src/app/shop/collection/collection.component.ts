@@ -43,7 +43,7 @@ export class CollectionComponent implements OnInit {
             this.maxPrice = params.maxPrice ? params.maxPrice : this.maxPrice;
             this.tags = [...this.brands, ...this.colors, ...this.size]; // All Tags Array
             
-            this.category = params.category ? params.category : null;
+            this.category = this.route.snapshot.paramMap.get('slug');
             console.log('collection page catagories == ',this.category);
             this.sortBy = params.sortBy ? params.sortBy : 'ascending';
             this.pageNo = params.page ? params.page : this.pageNo;
