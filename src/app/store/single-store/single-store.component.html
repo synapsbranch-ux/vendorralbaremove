@@ -24,8 +24,8 @@
           <p *ngIf="DepartmentsList.length" >Choose Department for Store</p> 
           <div class="d-flex  d-lists">          
             <div  class="d-flex flex-column text-center storeside-img"  *ngFor="let department of DepartmentsList let i = index"  >
-            <div *ngIf="roomavailablity[i] == 'false'"   class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department._id,roomavailablity[i])></div>
-            <!-- <div *ngIf="roomavailablity[i] == 'false'"   class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department.department_slug,roomavailablity[i])></div> -->
+            <!-- <div *ngIf="roomavailablity[i] == 'false'"   class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department._id,roomavailablity[i])></div> -->
+            <div *ngIf="roomavailablity[i] == 'false'"   class="store-image" style="background-image: url({{department.department_image}})" (click)=stordepartment(department.department_slug,roomavailablity[i])></div>
             <small *ngIf="roomavailablity[i] == 'false'" >{{department.department_name}}</small>
           </div> 
         </div>             

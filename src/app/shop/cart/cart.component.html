@@ -28,8 +28,8 @@
                                     {{ product.product_name | titlecase }}
                                 <!-- </a> -->
                             </p>
-                            <p class="mb-2">Size: {{product.product_varient_options[0].size_options}}</p>
-                            <p class="mb-2 cart_procolor">Color: <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
+                            <p class="mb-2">Size:&nbsp;&nbsp; {{product.product_varient_options[0].size_options}}</p>
+                            <p class="mb-2 cart_procolor">Color:&nbsp;&nbsp; <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
                             <p class="mb-2">{{ (product.price | discount:product) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                     </ul>
                   </div>
                   <div class="text-center">
-                    <a [routerLink]="['/shop/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
+                    <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
                       <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
                   </div>
                   <!-- <div class="text-center mt-3">

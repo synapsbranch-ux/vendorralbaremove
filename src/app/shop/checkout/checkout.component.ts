@@ -126,14 +126,14 @@ export class CheckoutComponent implements OnInit {
     if (currentUser) {
         // authorised so return true
         this.productService.addToCartItemDb(products);
-         this.router.navigate(['/pages/order/success']);
+         this.router.navigate(['/order/success']);
     }
     else
     {
     // not logged in so redirect to login page with the return url
     // this.router.navigate(['/pages/login']);
     // this.router.navigateByUrl(this.returnUrl);
-    this.router.navigate(['/pages/login'], { queryParams: { returnUrl: '/shop/checkout' }});
+    this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});
 
     console.log(this.returnUrl);
     }

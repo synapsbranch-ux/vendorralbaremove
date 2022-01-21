@@ -23,19 +23,6 @@
                                    [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
                             </div>
                         </ng-template>
-                        <ng-template carouselSlide [id]="product.product_image?.length + 1">
-                            <div>
-                                <model-viewer class="model-viewer"
-                                camera-controls
-                                camera-orbit="75deg 75deg 10.5m"
-                                src="{{image3d}}"
-                                alt="A 3D model Product"
-                                data-js-focus-visible=""
-                                ar-status="not-presenting"
-                              >
-                              </model-viewer>
-                            </div>
-                        </ng-template>
                     </ng-container>
                 </owl-carousel-o>
                 <div class="row align-items-center" >
@@ -152,7 +139,7 @@
         </div>
     </div>
   </div>
-  <app-related-product [type]="'apparels'"></app-related-product>
+  <app-related-product [type]="productCategory"></app-related-product>
 </section>
 
 <app-size-modal #sizeChart [product]="product"></app-size-modal>

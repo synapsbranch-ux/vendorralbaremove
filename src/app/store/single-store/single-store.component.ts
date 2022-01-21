@@ -15,6 +15,7 @@ export class SingleStoreComponent implements OnInit {
   public stores;
 
   storename:string
+  storeslug:string
   storeimgUrl:any
   store_slug:any
   vendor_id:any
@@ -43,6 +44,7 @@ export class SingleStoreComponent implements OnInit {
       const child = this.StoreLists.map((store_l) => {
         if(store_l.store_slug == this.store_slug){    
           this.storename=store_l.store_name;
+          this.storeslug=store_l.store_slug;
           this.storeimgUrl=store_l.store_image
           this.vendor_id=store_l.store_owner._id;
           return store_l.store_department;
@@ -58,7 +60,7 @@ export class SingleStoreComponent implements OnInit {
 console.log('For Department -==',index);
 let rdata={
   "department_id": element._id,
-  "vendor_id": this.vendor_id,
+  "vendor_id": this.vendor_id
 }
 this.storeService.roomAvailableCheck(rdata).subscribe(
   res =>
@@ -90,8 +92,8 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
     if(room_status == 'false')
     {
       console.log('Department Slug',department_slug);
-      // window.open("https://store.ralbatech.com/?d_id="+department_slug ,"_blank");
-      window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
+      window.open("https://store.ralbatech.com/"+this.storeslug+"/"+department_slug ,"_self");
+      // window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
     }
 
   }

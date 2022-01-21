@@ -35,28 +35,42 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   constructor(private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService) {
-    console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
+    
     
       this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
         this.product = response.data;
+        
+        console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
         console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
         this.productCategory=response.data.product_category.category_slug;
-        console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory.category_slug);
+        console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
         this.image3d=this.product.product_3d_image[0].pro_3d_image;
         console.log('Product 3D image =====', this.image3d);
         this.productColor=this.product.product_varient_options[1].color_options;
         this.productSize=this.product.product_varient_options[0].size_options;
       });
+
+  this.route.data.subscribe(response =>
+    {
+      console.log('response.data', response.data)
+      if(response.data)
+      {
+        this.product = response.data 
+      }    
+    });
+
     }
 
   ngOnInit(): void {
-    this.productColor=this.product.product_varient_options[1].color_options;
-    this.productSize=this.product.product_varient_options[0].size_options;
+
+
   }
+
+  
 
   ngOnChanges()
   {
-    
+
   }
 
 
