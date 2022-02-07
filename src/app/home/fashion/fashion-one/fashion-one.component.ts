@@ -40,13 +40,25 @@ export class FashionOneComponent implements OnInit {
     title: 'Shop The New',
     subTitle: 'Signature Collection',
     discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/home_slider.png'
+    image: 'assets/images/slider/facade_1.png'
   }, 
   {
     title: 'welcome to fashion',
     subTitle: 'Women fashion',
     discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/home_slider.png'
+    image: 'assets/images/slider/facade_2.png'
+  }, 
+  {
+    title: 'welcome to fashion',
+    subTitle: 'Women fashion',
+    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
+    image: 'assets/images/slider/facade_3.png'
+  }, 
+  {
+    title: 'welcome to fashion',
+    subTitle: 'Women fashion',
+    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
+    image: 'assets/images/slider/facade_4.png'
   }]
 
   get(): void {
