@@ -50,7 +50,6 @@ export class ProductService {
    private get products(): Observable<ProductNew[]> {
     this.catagories = this.route.snapshot.paramMap.get('slug');
 console.log('Product Service cat Slug ===>',this.catagories);
-
 if(this.catagories != null)
 {
     this.catarr = {     
@@ -59,18 +58,28 @@ if(this.catagories != null)
 }
     if(this.catagories === null)
     {
-       this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
-         res =>
-         {
-          console.log('Product Service Product Cat search Slug ===>',res);
+      if(localStorage.getItem("product_slug"))
+      {
+        this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
+          res =>
+          {
+           console.log('Product Service Product Cat search Slug ===>',res);
+ 
+           this.catagoriesalt = res['data'].product_category.category_slug;
+           console.log('product Slug catagories ======', res['data'].product_category.category_slug)
+           this.catarr = {     
+             'category': this.catagoriesalt,
+         };
+          }
+        )
+      }
+      else
+      {
+        this.catarr = {     
+          'category': localStorage.getItem("cat_slug"),
+      };
+      }
 
-          this.catagoriesalt = res['data'].product_category.category_slug;
-          console.log('product Slug catagories ======', res['data'].product_category.category_slug)
-          this.catarr = {     
-            'category': this.catagoriesalt,
-        };
-         }
-       )
     }
 
     console.log('Product Category Name arr === ',this.catarr);

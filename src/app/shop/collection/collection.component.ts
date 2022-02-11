@@ -32,6 +32,7 @@ export class CollectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.setItem('cat_slug',this.route.snapshot.paramMap.get('slug'));
 let catdata=
 {
   'category': this.route.snapshot.paramMap.get('slug'),
@@ -44,48 +45,48 @@ let catdata=
       }
     )
 
-          // Get Query params..
-          this.route.queryParams.subscribe(params => {
+          // // Get Query params..
+          // this.route.queryParams.subscribe(params => {
 
-            this.brands = params.brand ? params.brand.split(",") : [];
-            this.colors = params.color ? params.color.split(",") : [];
-            this.size  = params.size ? params.size.split(",")  : [];
-            this.minPrice = params.minPrice ? params.minPrice : this.minPrice;
-            this.maxPrice = params.maxPrice ? params.maxPrice : this.maxPrice;
-            this.tags = [...this.brands, ...this.colors, ...this.size]; // All Tags Array
+          //   this.brands = params.brand ? params.brand.split(",") : [];
+          //   this.colors = params.color ? params.color.split(",") : [];
+          //   this.size  = params.size ? params.size.split(",")  : [];
+          //   this.minPrice = params.minPrice ? params.minPrice : this.minPrice;
+          //   this.maxPrice = params.maxPrice ? params.maxPrice : this.maxPrice;
+          //   this.tags = [...this.brands, ...this.colors, ...this.size]; // All Tags Array
             
-            this.category = this.route.snapshot.paramMap.get('slug');
-            console.log('collection page catagories == ',this.category);
-            this.sortBy = params.sortBy ? params.sortBy : 'ascending';
-            this.pageNo = params.page ? params.page : this.pageNo;
+          //   this.category = this.route.snapshot.paramMap.get('slug');
+          //   console.log('collection page catagories == ',this.category);
+          //   this.sortBy = params.sortBy ? params.sortBy : 'ascending';
+          //   this.pageNo = params.page ? params.page : this.pageNo;
     
-            // Get Filtered Products..
-            this.productService.filterProducts(this.tags).subscribe(response => {      
-              // Sorting Filter
-              this.products = this.productService.sortProducts(response, this.sortBy);
+          //   // Get Filtered Products..
+          //   this.productService.filterProducts(this.tags).subscribe(response => {      
+          //     // Sorting Filter
+          //     this.products = this.productService.sortProducts(response, this.sortBy);
     
-              console.log('Product Catagories constructor',this.products );
+          //     console.log('Product Catagories constructor',this.products );
 
-              console.log('Product Catagories Check',this.route.snapshot.paramMap.get('slug'));
-              // Category Filter
-              if(this.route.snapshot.paramMap.get('slug'))
+          //     console.log('Product Catagories Check',this.route.snapshot.paramMap.get('slug'));
+          //     // Category Filter
+          //     if(this.route.snapshot.paramMap.get('slug'))
     
-                this.products = this.products.filter((item: any) => item.product_category.category_slug == this.category);
+          //       this.products = this.products.filter((item: any) => item.product_category.category_slug == this.category);
 
-                console.log('Product Catagories Check',this.products );
+          //       console.log('Product Catagories Check',this.products );
 
-                // Price Filter
-              this.products = this.products.filter((item: any) => item.product_sale_price >= this.minPrice && item.product_sale_price <= this.maxPrice) 
+          //       // Price Filter
+          //     this.products = this.products.filter((item: any) => item.product_sale_price >= this.minPrice && item.product_sale_price <= this.maxPrice) 
             
-              console.log('Product Price Check',this.products );
+          //     console.log('Product Price Check',this.products );
 
-              // Paginate Products
-              this.paginate = this.productService.getPager(this.products.length, +this.pageNo);     // get paginate object from service
-              this.products = this.products.slice(this.paginate.startIndex, this.paginate.endIndex + 1); // get current page of items
+          //     // Paginate Products
+          //     this.paginate = this.productService.getPager(this.products.length, +this.pageNo);     // get paginate object from service
+          //     this.products = this.products.slice(this.paginate.startIndex, this.paginate.endIndex + 1); // get current page of items
     
-              console.log('Product Paginate Check',this.products );
-            })
-          })
+          //     console.log('Product Paginate Check',this.products );
+          //   })
+          // })
 
   }
 
