@@ -5,7 +5,7 @@
       <span class="lable4" *ngIf="product.sale">on sale</span>
     </div> -->
     <div class="front">
-      <a [routerLink]="['/store/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+      <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
         <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
         <img 
           [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'" 
@@ -16,7 +16,7 @@
       </a>
     </div>
     <div class="back" *ngIf="onHowerChangeImage">
-       <a [routerLink]="['/store/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+       <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
         <img [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" class="img-fluid lazy-loading" alt="{{ product.product_name}}">
       </a>
     </div>
@@ -50,7 +50,7 @@
   <div class="product-detail">
     <div class="mt-4">
       <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-       <a [routerLink]="['/store/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+       <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
         <h6>{{ product?.product_name | titlecase }}</h6>
       </a>
       <!-- <p>{{ product?.description }}</p> -->
