@@ -16,7 +16,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'store',
+    path: 'stores',
     children: [
      {path: '', component: StoreComponent},
      {path: ':slug', component: SingleStoreComponent}

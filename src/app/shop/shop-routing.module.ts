@@ -14,7 +14,7 @@ import { Resolver } from '../shared/services/resolver.service';
 const routes: Routes = [
 
   {
-    path: 'store/:storeslug/:departmentslug/:slug',
+    path: 'stores/:storeslug/:departmentslug/:slug',
     component: ProductNoSidebarComponent,
     resolve: {
       data: Resolver
