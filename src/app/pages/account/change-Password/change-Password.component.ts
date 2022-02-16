@@ -4,10 +4,10 @@ import { json } from 'express';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
 
   public openDashboard: boolean = false;
   userName:string="";
@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
     this.openDashboard = !this.openDashboard;
   }
 
+  
   logout()
   {
     localStorage.clear();

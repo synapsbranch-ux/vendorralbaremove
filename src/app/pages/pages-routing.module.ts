@@ -1,3 +1,7 @@
+import { EditAddressComponent } from './account/edit-address/edit-address.component';
+import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './account/change-Password/change-Password.component';
+import { AddressComponent } from './account/address/address.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -64,12 +68,24 @@ const routes: Routes = [
     component: RegisterVendorComponent
   },
   { 
-    path: 'forget/password', 
+    path: 'forget-password', 
     component: ForgetPasswordComponent,canActivate: [AuthGuard], 
   },
   { 
-    path: 'profile', 
-    component: ProfileComponent,canActivate: [AuthGuard], 
+    path: 'address', 
+    component: AddressComponent,canActivate: [AuthGuard], 
+  },
+  { 
+    path: 'edit-address', 
+    component: EditAddressComponent,canActivate: [AuthGuard], 
+  },
+  { 
+    path: 'change-password', 
+    component: ChangePasswordComponent,canActivate: [AuthGuard], 
+  },
+  { 
+    path: 'edit-profile', 
+    component: EditProfileComponent,canActivate: [AuthGuard], 
   },
   { 
     path: 'contact', 

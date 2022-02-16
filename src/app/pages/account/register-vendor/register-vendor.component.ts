@@ -73,7 +73,7 @@ export class RegisterVendorComponent implements OnInit {
           this.signupMassage="Your Registration sucessfull";
 
           setTimeout(() => {
-            this.router.navigate(['/pages/login'])
+            this.router.navigate(['/login'])
             .then(() => {
               window.location.reload();
             });

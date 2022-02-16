@@ -83,7 +83,7 @@ changeCurrency(currency: any) {
 logout()
 {
   localStorage.clear();
-  this.router.navigate(['pages/login'])
+  this.router.navigate(['/login'])
   .then(() => {
       window.location.reload();
   });

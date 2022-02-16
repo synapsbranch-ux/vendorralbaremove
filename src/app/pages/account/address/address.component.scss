@@ -1,0 +1,27 @@
+.card{
+    input{
+        position: absolute;
+        top:25px;
+        right:15px;
+    }
+}
+.active{
+    padding-left: 10px;
+}
+a{
+    cursor: pointer;
+}
+address h4 span{
+    font-size: 14px;
+    background-color: #c9c9c9;
+    padding: 4px;
+    border-radius: 6px;
+    margin-left: 20px;
+    border: solid 1px #9f9c9c;
+}
+address p {
+    margin-bottom: 0px;
+}
+.card{
+    margin-bottom: 10px;
+}

@@ -17,10 +17,10 @@
                     </div>
                     <div class="block-content">
                         <ul>
-                            <li><a href="javascript:void(0)">My Account</a></li>
-                            <li><a href="javascript:void(0)">Address Book</a></li>
-                            <li><a [routerLink]="['/forget/password']">Change Password</a></li>
-                            <li class="last"><a href="javascript:void(0)">Log Out</a></li>
+                            <li class="active"><a [routerLink]="['/dashboard']">My Account</a></li>
+                            <li><a [routerLink]="['/address']">Address Book</a></li>
+                            <li><a [routerLink]="['/change-password']">Change Password</a></li>
+                            <li class="last"><a (click)="logout()">Log Out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -44,13 +44,13 @@
                                     <div class="box">
                                         <div class="box-title">
                                             <h3>Contact Information</h3>
-                                            <a [routerLink]="['/profile']">Edit</a>
+                                            <a [routerLink]="['/edit-profile']">Edit</a>
                                         </div>
                                         <div class="box-content">
                                             <h6>{{userName}}</h6>
                                             <h6>{{userEmail}}</h6>
                                             <h6>{{userPhone}}</h6>
-                                            <h6><a [routerLink]="['/forget/password']">Change Password</a></h6>
+                                            <h6><a [routerLink]="['/change-password']">Change Password</a></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -67,30 +67,6 @@
                                         </div>
                                     </div>
                                 </div>-->
-                            </div>
-                            <div>
-                                <div class="box">
-                                    <div class="box-title">
-                                        <h3>Address Book</h3>
-                                        <a [routerLink]="['/profile']">Manage Addresses</a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h6>Default Billing Address</h6>
-                                            <address>
-                                                You have not set a default billing address.<br>
-                                                <a href="javascript:void(0)">Edit Address</a>
-                                            </address>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h6>Default Shipping Address</h6>
-                                            <address>
-                                                You have not set a default shipping address.<br>
-                                                <a href="javascript:void(0)">Edit Address</a>
-                                            </address>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

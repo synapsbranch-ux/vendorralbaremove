@@ -1,3 +1,7 @@
+import { EditAddressComponent } from './account/edit-address/edit-address.component';
+import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './account/change-Password/change-Password.component';
+import { AddressComponent } from './account/address/address.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GalleryModule } from '@ks89/angular-modal-gallery';
@@ -13,6 +17,7 @@ import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { ForgetPasswordComponent } from './account/forget-password/forget-password.component';
 import { ProfileComponent } from './account/profile/profile.component';
+
 import { ContactComponent } from './account/contact/contact.component';
 import { CheckoutComponent } from './account/checkout/checkout.component';
 import { AboutUsComponent } from './about-us/about-us.component';
@@ -52,7 +57,6 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     RegisterComponent,
     RegisterVendorComponent,
     ForgetPasswordComponent,
-    ProfileComponent,
     ContactComponent,
     CheckoutComponent,
     AboutUsComponent,
@@ -78,7 +82,11 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     MasonryGridThreeComponent,
     MasonryGridFourComponent,
     MasonryFullWidthComponent,
-    Room3Dstore
+    Room3Dstore,
+    AddressComponent,
+    ChangePasswordComponent,
+    EditProfileComponent,
+    EditAddressComponent
   ],
   imports: [
     CommonModule,

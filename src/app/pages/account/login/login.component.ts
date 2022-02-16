@@ -29,7 +29,7 @@ ngOnInit(): void {
 
   const currentUser = localStorage.getItem("user_id");
   if (currentUser) {
-    this.router.navigate(['/pages/dashboard'])
+    this.router.navigate(['/dashboard'])
   }
 
   this.form = new FormGroup({
@@ -151,7 +151,7 @@ else
         else
         {
           
-        this.router.navigate(['/pages/dashboard'])
+        this.router.navigate(['/dashboard'])
         .then(() => {
             window.location.reload();
         });

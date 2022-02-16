@@ -1,3 +1,4 @@
+import { HomesliderService } from './../../../shared/services/homeslider.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductSlider } from '../../../shared/data/slider';
 import { Product } from '../../../shared/classes/product';
@@ -17,8 +18,9 @@ export class FashionOneComponent implements OnInit {
   public products: Product[] = [];
   public productCollections: any[] = [];
   public stores: Store[] = [];
+  public homeslider:any=[];
   
-  constructor(public productService: ProductService,public storeService: StoreService) {
+  constructor(public productService: ProductService,public storeService: StoreService, public homesliderservice: HomesliderService) {
     // this.productService.getProducts.subscribe(response => {
     //   console.log('Product Received!.....', response['data']);
 
@@ -36,30 +38,18 @@ export class FashionOneComponent implements OnInit {
   }
   public ProductSliderConfig: any = ProductSlider;
 
-  public sliders = [{
-    title: 'Shop The New',
-    subTitle: 'Signature Collection',
-    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/facade_1.png'
-  }, 
-  {
-    title: 'welcome to fashion',
-    subTitle: 'Women fashion',
-    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/facade_2.png'
-  }, 
-  {
-    title: 'welcome to fashion',
-    subTitle: 'Women fashion',
-    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/facade_3.png'
-  }, 
-  {
-    title: 'welcome to fashion',
-    subTitle: 'Women fashion',
-    discription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-    image: 'assets/images/slider/facade_4.png'
-  }]
+  // public sliders = [{
+  //   title: 'Shop The New Signature Collection',
+  //   subTitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
+  //   image: 'assets/images/slider/facade_1.png'
+  // }, 
+  // {
+  //   title: 'Welcome to fashion Women fashion',
+  //   subTitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
+  //   image: 'assets/images/slider/facade_2.png'
+  // }]
+
+  public sliders = [];
 
   get(): void {
     this.storeService.getStores.subscribe(response => {
@@ -78,6 +68,15 @@ export class FashionOneComponent implements OnInit {
 
   ngOnInit(): void {
     this.get();
+    this.homesliderservice.getallSliderData().subscribe(
+      res =>
+      {
+        this.homeslider=res.data;
+        this.sliders=res.data;
+        console.log('Banner Slider',res.data);
+      }
+    )
+
   }
 
   // Product Tab collection
