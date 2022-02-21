@@ -529,6 +529,11 @@ allCartProducts(){
 
 }
 
+productSearch(data:any)
+{
+  return this.http.post(environment.baseUrl+'productsearch',data);
+}
+
 }
 
 

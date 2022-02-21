@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 
 @Component({
@@ -14,7 +15,7 @@ export class HeaderOneComponent implements OnInit {
   
   public stick: boolean = false;
 
-  constructor() { }
+  constructor( private router: Router,) { }
 
   ngOnInit(): void {
   }
@@ -29,5 +30,9 @@ export class HeaderOneComponent implements OnInit {
   	  this.stick = false;
   	}
   }
-
+  getSearchVAl(inputval:any)
+  {
+    console.log('Serarch String',inputval);
+    this.router.navigateByUrl('/search?u='+inputval);
+  }
 }

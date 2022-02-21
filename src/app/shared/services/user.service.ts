@@ -122,6 +122,18 @@ export class UserService {
     return this.http.post(environment.baseUrl+'user/update',data,httpOptionsroom);
   }
 
+  changePassword(data:any)
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/changepassword',data,httpOptionsroom);
+  }
+
   setUserAddressid(userAddtrss:any)
   {
     this.useraddressid=userAddtrss;
