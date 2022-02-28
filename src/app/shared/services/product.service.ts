@@ -30,7 +30,9 @@ export class ProductService {
   
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {
+      
+     }
 
   /*
     ---------------------------------------------
@@ -39,9 +41,9 @@ export class ProductService {
   */
 
     
-    // resolve(route: ActivatedRouteSnapshot){
-    //   console.log('Current Slug Products ===== ',route.params.slug);
-    // }
+//  resolve(route: ActivatedRouteSnapshot){
+//   console.log('Current Slug Products ===== ',route.params.slug);
+// }
 
 
   // Product
@@ -49,13 +51,13 @@ export class ProductService {
 
    private get products(): Observable<ProductNew[]> {
     this.catagories = this.route.snapshot.paramMap.get('slug');
-console.log('Product Service cat Slug ===>',this.catagories);
-if(this.catagories != null)
-{
-    this.catarr = {     
-      'category': this.catagories,
-  };
-}
+
+    if(this.catagories != null)
+    {
+        this.catarr = {     
+          'category': this.catagories,
+      };
+    }
     if(this.catagories === null)
     {
       if(localStorage.getItem("product_slug"))
@@ -90,8 +92,10 @@ if(this.catagories != null)
       return data.data;
     }));
     
-    this.Products.subscribe((next: any) => { 
 
+
+    this.Products.subscribe((next: any) => { 
+     
       localStorage['products'] = JSON.stringify(next)
 
     });
@@ -103,6 +107,7 @@ if(this.catagories != null)
 
   // Get Products
   public get getProducts(): Observable<ProductNew[]> {
+    
     return this.products;
   } 
 
@@ -120,7 +125,7 @@ if(this.catagories != null)
   public getProductBySlug(slug: string): Observable<ProductNew> {
     return this.products.pipe(map(items => { 
       return items.find((item: any) => { 
-        return item.product_slug.replace(' ', '-') === slug; 
+        return item.product_slug === slug; 
       }); 
     }));
   }

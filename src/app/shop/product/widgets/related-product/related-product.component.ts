@@ -15,30 +15,32 @@ export class RelatedProductComponent implements OnInit {
 
   constructor(public productService: ProductService) { 
 
-    this.productService.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
-         res =>
-         {
-          this.type = res['data'].product_category.category_slug;
-          let catdata=
-          {
-            'category': this.type
-          }
-          console.log('Related cat   ',catdata);
-          this.productService.getProductscat(catdata).subscribe(response => 
-            {
-              // this.productCategory=response['data'].product_category;
-      
-              console.log('Related Products ==== >>>',response)
-              this.products=response['data'];
-            
-            }
-          );
-         }
-       )
+
 
   }
 
   ngOnInit(): void {
+    console.log('Related cat First',localStorage.getItem("product_catg"));
+    this.productService.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
+      res =>
+      {
+       this.productCategory = res['data'].product_category.category_slug;
+       let catdata=
+       {
+         'category': this.productCategory
+       }
+       console.log('Related cat   ',catdata);
+       this.productService.getProductscat(catdata).subscribe(response => 
+         {
+           // this.productCategory=response['data'].product_category;
+   
+           console.log('Related Products ==== >>>',response)
+           this.products=response['data'];
+         
+         }
+       );
+      }
+    )
   }
 
 }

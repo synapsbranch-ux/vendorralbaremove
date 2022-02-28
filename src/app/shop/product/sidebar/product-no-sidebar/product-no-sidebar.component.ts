@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../../shared/data/slider';
-import { ProductNew } from '../../../../shared/classes/product';
+import { ProductNew,ProductNew2 } from '../../../../shared/classes/product';
 import { ProductService } from '../../../../shared/services/product.service';
 import { SizeModalComponent } from "../../../../shared/components/modal/size-modal/size-modal.component";
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ import { view3DModalComponent } from 'src/app/shared/components/modal/product-vi
   styleUrls: ['./product-no-sidebar.component.scss']
 })
 export class ProductNoSidebarComponent implements OnInit,OnChanges {
-
+  public products: ProductNew2[] = [];
   public product: ProductNew = {};
   public counter: number = 1;
   public activeSlide: any = 0;
@@ -39,30 +39,56 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
     
       this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
         this.product = response.data;
-        
         console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
         console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
         this.productCategory=response.data.product_category.category_slug;
+        localStorage.setItem("product_slug",this.route.snapshot.paramMap.get('slug'));
+        localStorage.setItem("product_catg",response.data.product_category.category_slug);
         console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
         this.image3d=this.product.product_3d_image[0].pro_3d_image;
         console.log('Product 3D image =====', this.image3d);
         this.productColor=this.product.product_varient_options[1].color_options;
         this.productSize=this.product.product_varient_options[0].size_options;
       });
+      
 
-  this.route.data.subscribe(response =>
-    {
-      console.log('response.data', response.data)
-      if(response.data)
-      {
-        this.product = response.data 
-      }    
-    });
+  // this.route.data.subscribe(response =>
+  //   {
+  //     console.log('response.data', response.data)
+  //     if(response.data)
+  //     {
+  //       this.product = response.data 
+  //     }    
+  //   });
 
     }
 
   ngOnInit(): void {
+    this.route.params.subscribe(
+      params => {
+        this.productService.getproductsBySlugs(params.slug).subscribe(response =>{ 
+          this.product = response.data;
+          this.productCategory=response.data.product_category.category_slug;
 
+          let catdata=
+          {
+            'category': this.productCategory
+          }
+          console.log('Related cat   ',catdata);
+          this.productService.getProductscat(catdata).subscribe(response => 
+            {      
+              console.log('Related Products ==== >>>',response)
+              this.products=response['data'];
+            
+            }
+          );
+
+          this.image3d=this.product.product_3d_image[0].pro_3d_image;
+          this.productColor=this.product.product_varient_options[1].color_options;
+          this.productSize=this.product.product_varient_options[0].size_options;
+        });
+      console.log('response.data', this.product)
+      })
 
   }
 

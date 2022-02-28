@@ -16,9 +16,6 @@ const routes: Routes = [
   {
     path: 'stores/:storeslug/:departmentslug/:slug',
     component: ProductNoSidebarComponent,
-    resolve: {
-      data: Resolver
-    }
   },
 
   {

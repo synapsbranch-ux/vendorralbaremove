@@ -140,13 +140,10 @@ else
 
 /////////////////////////////////////////////////////////   
       setTimeout(() => {
-        if(this.returnUrl !="/")
+        if(this.returnUrl)
         {
         // login successful so redirect to return url
         this.router.navigateByUrl(this.returnUrl)
-        .then(() => {
-            window.location.reload();
-        });
         }
         else
         {

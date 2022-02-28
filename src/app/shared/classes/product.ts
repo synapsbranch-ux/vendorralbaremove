@@ -38,7 +38,26 @@ export interface ProductNew {
     updatedAt?: Date;
     quantity?: number;
 }
-
+export interface ProductNew2 {
+    _id?: string;
+    product_name?: string;
+    product_slug?: string;
+    product_description?: string;
+    product_department?: ProDepartment[];
+    product_category?: ProCatagories[];
+    product_store?: ProStores[];
+    product_varient?: NewVariants[];
+    product_varient_options?: VariantsOptions[];
+    product_image?: NewImages[];
+    product_3d_image?: New3dImages[];
+    product_retail_price?: number;
+    product_sale_price?: number;
+    status?: string;
+    stock?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    quantity?: number;
+}
 export interface ProCatagories {
     category_name?: string;
     category_slug?: string;
