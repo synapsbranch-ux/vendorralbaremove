@@ -1,3 +1,5 @@
+import { ProductService } from './../../../shared/services/product.service';
+import { ProductNew } from './../../../shared/classes/product';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl, Validator} from '@angular/forms';
@@ -26,7 +28,13 @@ export class RegisterComponent implements OnInit {
   userOtp;
   getOtpVal:any;
   public otp: Otp[] = [];
-  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router) { }
+
+  cartproducts=[];
+  product_img:any;
+  public products: ProductNew[] = [];
+
+
+  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router, private product_service: ProductService) { }
   
   showOtpComponent = true;
 
@@ -97,6 +105,9 @@ export class RegisterComponent implements OnInit {
         }
         this.userService.userSignUp(data).subscribe(
           res => {
+
+            this.loginfn(formData.email,formData.password);
+
             console.log(' Signup Success',res);
 
             this.otpValid=true;
@@ -104,7 +115,7 @@ export class RegisterComponent implements OnInit {
             this.signupMassage="Your Registration sucessfull";
 
             setTimeout(() => {
-              this.router.navigate(['/login'])
+              this.router.navigate(['/dashboard'])
               .then(() => {
                 window.location.reload();
               });
@@ -129,6 +140,93 @@ export class RegisterComponent implements OnInit {
   showDiv = {
     signUpDiv : true,
     otp : false,
+  }
+
+  loginfn(username: any, password:any)
+  {
+    let data = {
+      'email_phone': username,
+      'password': password,
+    }
+    this.userService.userLogin(data).subscribe(
+      res => {
+  
+        console.log(' Login Success',res);
+        localStorage.setItem('user_id', res['data'].user_id);
+        localStorage.setItem('user_token', res['data'].token);
+        localStorage.setItem('currentUser', JSON.stringify(res));
+
+  /////////////////////////////////////////////////////////
+  
+  
+  //Cart Details
+  ///////////////////////////////////////////////////////////
+  const currentUser = localStorage.getItem("user_id");
+  
+  if (currentUser) {
+    console.log('User Login');
+  
+  const cartItems_local = localStorage.getItem('cartItems');
+  
+  console.log('Local storage check',cartItems_local);
+  
+      this.product_service.allCartProducts().subscribe(
+        res =>{
+          console.log('Return Cart',res);
+  
+          if(res['data'] != null)
+        {
+            for (const element of res['data'].products) {   
+  
+              console.log('cart Product slug',element.pro_slug);
+              
+              this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
+  
+                console.log('cart Product Image',product['data']);
+  
+                  this.product_img=product['data'].product_image[0].pro_image;
+                  let data = 
+                  {
+                    "_id": element.pro_id,
+                    "product_image": [
+                      {
+                          "pro_image": this.product_img,
+                          "status": "active"
+                      },
+                    ],
+                    "product_name": element.pro_name,
+                    "product_slug": element.pro_slug,
+                    "quantity": element.qty,
+                    "product_sale_price": element.price,
+                    "product_varient_options":[
+                        {"size_options": element.options[0].size},
+                        {"color_options": element.options[1].color}
+                    ]
+                }
+                this.cartproducts.push(data);          
+                this.products=this.cartproducts;     
+                localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+                console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+                
+              })                          
+            
+        }
+      }
+        
+      }
+      )
+  
+  }
+  else
+  {
+    console.log('User Not Login');
+  }
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        console.log(error.message);
+    }
+    );
   }
 
   onOtpChange(ele){

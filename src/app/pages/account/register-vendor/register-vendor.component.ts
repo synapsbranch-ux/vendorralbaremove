@@ -68,16 +68,19 @@ export class RegisterVendorComponent implements OnInit {
       }
       this.userService.vendorSignUp(data).subscribe(
         res => {
+
+
+
           console.log(' Signup Success',res);
           this.isValid = true;
           this.signupMassage="Your Registration sucessfull";
 
-          setTimeout(() => {
-            this.router.navigate(['/login'])
-            .then(() => {
-              window.location.reload();
-            });
-          },3000)          
+          // setTimeout(() => {
+          //   this.router.navigate(['/login'])
+          //   .then(() => {
+          //     window.location.reload();
+          //   });
+          // },3000)          
         },
         error => {
           // .... HANDLE ERROR HERE 
