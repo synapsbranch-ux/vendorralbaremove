@@ -26,6 +26,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   productSize:any;
   image3d:any;
   productCategory:any;
+  product_external_link:any="#"
+
+  cartbuttonhideStatus:any='inactive';
+  quentityStatus:any='inactive';
+
   
   @ViewChild("sizeChart") SizeChart: SizeModalComponent;
   @ViewChild("view3D") view3D: view3DModalComponent;
@@ -37,19 +42,27 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
     public productService: ProductService, private toastrService: ToastrService) {
     
     
-      this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
-        this.product = response.data;
-        console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
-        console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
-        this.productCategory=response.data.product_category.category_slug;
-        localStorage.setItem("product_slug",this.route.snapshot.paramMap.get('slug'));
-        localStorage.setItem("product_catg",response.data.product_category.category_slug);
-        console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
-        this.image3d=this.product.product_3d_image[0].pro_3d_image;
-        console.log('Product 3D image =====', this.image3d);
-        this.productColor=this.product.product_varient_options[1].color_options;
-        this.productSize=this.product.product_varient_options[0].size_options;
-      });
+      // this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
+      //   this.product = response.data;
+      //   if(response.data.product_external_link){
+      //     this.product_external_link=response.data.product_external_link;
+      //   }
+      //   else
+      //   {
+      //     this.product_external_link="#"
+      //   }
+        
+      //   console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
+      //   console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
+      //   this.productCategory=response.data.product_category.category_slug;
+      //   localStorage.setItem("product_slug",this.route.snapshot.paramMap.get('slug'));
+      //   localStorage.setItem("product_catg",response.data.product_category.category_slug);
+      //   console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
+      //   this.image3d=this.product.product_3d_image[0].pro_3d_image;
+      //   console.log('Product 3D image =====', this.image3d);
+      //   this.productColor=this.product.product_varient_options[1].color_options;
+      //   this.productSize=this.product.product_varient_options[0].size_options;
+      // });
       
 
   // this.route.data.subscribe(response =>
@@ -64,10 +77,27 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
     }
 
   ngOnInit(): void {
+
+    this.productService.getSettingsDetails().subscribe(
+      res =>
+      {
+        this.cartbuttonhideStatus=res['data'][0].addto_cart_status;
+        this.quentityStatus=res['data'][0].quentity_status;
+
+        console.log('Product Settings',res);
+      }
+    )
     this.route.params.subscribe(
       params => {
         this.productService.getproductsBySlugs(params.slug).subscribe(response =>{ 
           this.product = response.data;
+          if(response.data.product_external_link){
+            this.product_external_link=response.data.product_external_link;
+          }
+          else
+          {
+            this.product_external_link="#"
+          }
           this.productCategory=response.data.product_category.category_slug;
 
           let catdata=
@@ -92,7 +122,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   }
 
-  
+  externalLInk(link:any)
+  {
+    window.open( link , "_blank");
+    console.log('Redirect Other Website')
+  }
 
   ngOnChanges()
   {

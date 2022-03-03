@@ -24,20 +24,12 @@ export class SingleStoreComponent implements OnInit {
 
   DepartmentsList=[];
 
+  departmentmsg:any
+
   roomavailablity=[];
 
 
   constructor( private storeService: StoreService , private route: ActivatedRoute ) { 
-
-
-  }
-
-  ngOnInit() {
-   
-    this.route.params.subscribe(params => {      
-      this.store_slug=params['slug'];
-    });
-
     this.storeService.getStoresMore.subscribe(response => {
       console.log('Single Store response  =>', response['data']);
       this.StoreLists=response['data'];
@@ -54,6 +46,12 @@ export class SingleStoreComponent implements OnInit {
       const filterItem = child.filter(item => item != undefined);
       if(filterItem.length > 0){
         this.DepartmentsList=filterItem[0];
+
+        if(!this.DepartmentsList.length)
+        {
+          this.departmentmsg="No Department Register Here";
+        }
+
         for(let [index, element] of this.DepartmentsList.entries())
         {
 
@@ -84,6 +82,16 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
       }
 
     });
+
+  }
+
+  ngOnInit() {
+   
+    this.route.params.subscribe(params => {      
+      this.store_slug=params['slug'];
+    });
+
+
 
   }
 

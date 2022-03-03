@@ -120,6 +120,10 @@ export class ProductService {
     return this.http.post<ProductNew[]>(environment.baseUrl+'product/list',data);
     } 
 
+    getSettingsDetails(): Observable<any> {
+      return this.http.get(environment.baseUrl+'settings');
+  } 
+
   // Get Products By Slug
 
   public getProductBySlug(slug: string): Observable<ProductNew> {

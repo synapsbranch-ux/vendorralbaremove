@@ -13,6 +13,8 @@ export class SearchComponent implements OnInit {
   searchva:any;
   form: FormGroup;
   public productList:any =[];
+  oproductfount:boolean=false;
+
   public ImageSrc : string
   @Input() onHowerChangeImage: boolean = false; // Default False
   @Input() thumbnail: boolean = false; // Default False 
@@ -30,6 +32,16 @@ export class SearchComponent implements OnInit {
         res =>
         {
           this.productList=res['data'];
+          console.log('product list Length',res['data'].length);
+          if(res['data'].length == undefined)
+          {
+            this.oproductfount=true;
+          }
+          else
+          {
+            this.oproductfount=false;
+          }
+          console.log(this.oproductfount);
           console.log('Search Results',res['data']);
         }
       )
