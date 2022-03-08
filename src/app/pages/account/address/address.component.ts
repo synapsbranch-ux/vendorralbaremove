@@ -66,11 +66,7 @@ export class AddressComponent implements OnInit {
 
   logout()
   {
-    localStorage.clear();
-    this.router.navigate(['/login'])
-    .then(() => {
-        window.location.reload();
-    });
+    this.userservice.logout();
   }
   setDefaultAddress(val:any, address_id:any)
   {

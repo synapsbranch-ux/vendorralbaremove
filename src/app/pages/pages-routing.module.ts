@@ -1,3 +1,5 @@
+import { ViewOrderComponent } from './account/view-order/view-order.component';
+import { OrderListComponent } from './account/order-list/order-list.component';
 import { EditAddressComponent } from './account/edit-address/edit-address.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './account/change-Password/change-Password.component';
@@ -6,14 +8,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { WishlistComponent } from './account/wishlist/wishlist.component';
-import { CartComponent } from './account/cart/cart.component';
 import { DashboardComponent } from './account/dashboard/dashboard.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { ForgetPasswordComponent } from './account/forget-password/forget-password.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { ContactComponent } from './account/contact/contact.component';
-import { CheckoutComponent } from './account/checkout/checkout.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { SearchComponent } from './search/search.component';
 import { TypographyComponent } from './typography/typography.component';
@@ -46,10 +46,6 @@ const routes: Routes = [
   { 
     path: 'wishlist', 
     component: WishlistComponent 
-  },
-  { 
-    path: 'cart', 
-    component: CartComponent 
   },
   { 
     path: 'dashboard', 
@@ -90,10 +86,6 @@ const routes: Routes = [
   { 
     path: 'contact', 
     component: ContactComponent 
-  },
-  { 
-    path: 'checkout', 
-    component: CheckoutComponent 
   },
   { 
     path: 'aboutus', 
@@ -190,6 +182,14 @@ const routes: Routes = [
   { 
     path: '3dstore', 
     component: Room3Dstore 
+  },
+  { 
+    path: 'order-list', 
+    component: OrderListComponent 
+  },
+  { 
+    path: 'view-order', 
+    component: ViewOrderComponent 
   },
 ];
 

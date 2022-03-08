@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +14,7 @@ export class UserService {
   useraddressid:any
   public Otp;
   public Usersignup;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router,) { }
 
   genOtp(data: any): Observable<Otp>{
     return this.http.post(environment.baseUrl+'user/generateOTP',data);
@@ -142,6 +143,15 @@ export class UserService {
   getUserAddressid()
   {
     return this.useraddressid;
+  }
+
+  logout()
+  {
+    localStorage.clear();
+    this.router.navigate(['/login'])
+    .then(() => {
+        window.location.reload();
+    });
   }
 
 }

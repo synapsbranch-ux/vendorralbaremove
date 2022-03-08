@@ -5,10 +5,10 @@ import { json } from 'express';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './view-order.component.html',
+  styleUrls: ['./view-order.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class ViewOrderComponent implements OnInit {
 
   public openDashboard: boolean = false;
   userName:string="";
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
 
   logout()
   {
-    this.userservice.logout();
+    this.userservice.logout();;
   }
 
 }

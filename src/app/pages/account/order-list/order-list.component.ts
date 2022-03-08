@@ -4,11 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { json } from 'express';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-order-list',
+  templateUrl: './order-list.component.html',
+  styleUrls: ['./order-list.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class OrderListComponent implements OnInit {
 
   public openDashboard: boolean = false;
   userName:string="";

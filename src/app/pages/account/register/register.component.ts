@@ -71,9 +71,9 @@ export class RegisterComponent implements OnInit {
     
     
     let formData = this.form.value;
-
+    let fullname=formData.fname+ ' '+formData.lname
     if(this.callForOtp==false){
-      this.userService.genOtp({'phone':formData.phone, 'type': 'SignUp'}).subscribe(
+      this.userService.genOtp({'phone':formData.phone,'name':fullname,'email':formData.email, 'type': 'SignUp'}).subscribe(
         res => {
           if(res['error'] == 0){
             this.callForOtp = true;

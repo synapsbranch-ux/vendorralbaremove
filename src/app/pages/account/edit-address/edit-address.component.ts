@@ -110,11 +110,7 @@ console.log('Address Details ',res['data'][0].user_full_name)
 
   logout()
   {
-    localStorage.clear();
-    this.router.navigate(['/login'])
-    .then(() => {
-        window.location.reload();
-    });
+    this.userservice.logout();
   }
 
   onSubmit()
