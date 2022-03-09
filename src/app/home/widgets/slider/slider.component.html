@@ -9,7 +9,7 @@
 	              <div class="text-left">
 	                <h1 [style.color]="slider.banner_title_color" >{{slider.banner_title}}</h1>
 	                <p [style.color]="slider.banner_subtitle_color">{{slider.banner_subtitle}}</p>
-	                <a [routerLink]="['/category/'+slider.banner_link]" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color"
+	                <a *ngIf="slider.banner_link" [routerLink]="['/category/'+slider.banner_link]" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color"
 	                   class="btn rounded-lg">
 	                   {{buttonText}}
 	                </a>
