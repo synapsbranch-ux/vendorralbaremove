@@ -84,7 +84,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
         this.cartbuttonhideStatus=res['data'][0].addto_cart_status;
         this.quentityStatus=res['data'][0].quentity_status;
 
-        console.log('Product Settings',res);
+    //    console.log('Product Settings',res);
       }
     )
     this.route.params.subscribe(
@@ -104,10 +104,10 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           {
             'category': this.productCategory
           }
-          console.log('Related cat   ',catdata);
+      //    console.log('Related cat   ',catdata);
           this.productService.getProductscat(catdata).subscribe(response => 
             {      
-              console.log('Related Products ==== >>>',response)
+           //   console.log('Related Products ==== >>>',response)
               this.products=response['data'];
             
             }
@@ -117,7 +117,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           this.productColor=this.product.product_varient_options[1].color_options;
           this.productSize=this.product.product_varient_options[0].size_options;
         });
-      console.log('response.data', this.product)
+   //   console.log('response.data', this.product)
       })
 
   }
@@ -125,7 +125,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   externalLInk(link:any)
   {
     window.open( link , "_blank");
-    console.log('Redirect Other Website')
+  //  console.log('Redirect Other Website')
   }
 
   ngOnChanges()
@@ -153,13 +153,14 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   // Get Product Size
 Size(product_varient_options) {
-  // console.log('Size Function ====',product_varient_options);
+ 
   if((product_varient_options).length >= 0)
   {
   const uniqSize = []
   for (let i = 0; i < (product_varient_options).length; i++) {
-    if (!uniqSize.includes(product_varient_options[i]) && product_varient_options[i]) {
-      uniqSize.push(product_varient_options[i])
+
+    if (!uniqSize.includes(product_varient_options) && product_varient_options) {
+      uniqSize.push(product_varient_options)
     }
   }
   return uniqSize
@@ -168,6 +169,7 @@ Size(product_varient_options) {
 
   selectSize(size) {
     this.selectedSize = size;
+    console.log('Selected Size : ', this.selectedSize );
   }
   selectColor(color) {
     this.selectedColor = color;
@@ -189,9 +191,9 @@ Size(product_varient_options) {
     product.quantity = this.counter || 1;
 
 
-    console.log('Product Size Option ============',product.product_varient_options[0].size_options);
-    console.log('Product Color Option ============',product.product_varient_options[1].color_options);
-    console.log('Product Quentity ============',product.quantity);
+   // console.log('Product Size Option ============',product.product_varient_options[0].size_options);
+   // console.log('Product Color Option ============',product.product_varient_options[1].color_options);
+   //console.log('Product Quentity ============',product.quantity);
     if(this.selectedSize && this.selectedColor)
     {
     if(this.selectedSize)
@@ -211,12 +213,12 @@ Size(product_varient_options) {
       // this.router.navigate(['/shop/cart']);
     }
     console.log('Add To CArt Status =======',status);
-    console.log('Ready to Cart');
+   // console.log('Ready to Cart');
     }
     else
     {
       this.toastrService.warning('Please choose all veriation');
-      console.log('Not Ready Cart');
+    //  console.log('Not Ready Cart');
     }
 
 

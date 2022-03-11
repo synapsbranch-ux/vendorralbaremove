@@ -79,7 +79,7 @@
           <i class="fa fa-shopping-bag"></i> My Cart
         </a>
       </div>
-      <span class="cart_qty_cls">{{ products.length }}</span>
+      <span class="cart_qty_cls" *ngIf="products.length">{{ products.length }}</span>
       <ul class="show-div shopping-cart" *ngIf='!products.length'>
         <h5>Your cart is currently empty.</h5>
       </ul>

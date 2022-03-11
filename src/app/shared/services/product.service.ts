@@ -227,11 +227,106 @@ export class ProductService {
     return <Observable<ProductNew[]>>itemsStream;
   }
 
-  // Add to Cart
-  public addToCart(product): any {
-    const cartItem = state.cart.find(item => item._id === product._id);
+  // // Add to Cart
+  // public addToCart(product): any {
+  //   const cartItem = state.cart.find(item => item._id === product._id);
+  //   const qty = product.quantity ? product.quantity : 1;
+  //   const items = cartItem ? cartItem : product;
+
+  //   if (cartItem) {
+  //       cartItem.quantity += qty    
+  //   } else {
+  //     state.cart.push({
+  //       ...product,
+  //       quantity: qty
+  //     })
+  //   }
+
+  //   this.OpenCart = true; // If we use cart variation modal
+
+  //   const currentUser = localStorage.getItem("user_id");
+  //   if (currentUser) {
+  //     localStorage.setItem("cartItems", JSON.stringify(state.cart));
+  //     console.log('Add to cart User Login === ',state.cart);
+  //   }
+  //   else
+  //   {
+  //     localStorage.setItem("cartItems", JSON.stringify(state.cart));
+  //     console.log('Add to cart User Not Login === ',state.cart);
+  //   }
+
+    
+  //   console.log('Add to cart === ',state.cart);
+  //   return true;
+  // }
+
+  // // Update Cart Quantity
+  // public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
+  //   return state.cart.find((items, index) => {
+  //     if (items._id === product._id) {
+       
+  //       const qty = state.cart[index].quantity + quantity
+  //       const stock = this.calculateStockCounts(state.cart[index], quantity)
+  //       if (qty !== 0 && stock) {
+  //         state.cart[index].quantity = qty
+  //       }
+  //       else
+  //       {
+  //         this.removeCartItem(product);
+  //       }
+  //       const currentUser = localStorage.getItem("user_id");
+  //       if (currentUser) {
+  //         localStorage.setItem("cartItems", JSON.stringify(state.cart));
+  //         console.log('Add to cart User Login === ',state.cart);
+  //       }
+  //       else
+  //       {
+  //         localStorage.setItem("cartItems", JSON.stringify(state.cart));
+  //         console.log('Add to cart User Not Login === ',state.cart);
+  //       }
+  //       return true
+  //     }
+  //   })
+  // }
+
+  //   // Calculate Stock Counts
+  // public calculateStockCounts(product, quantity) {
+  //   const qty = product.quantity + quantity
+  //   const stock = product.stock
+  //   if (stock < qty || stock == 0) {
+  //     this.toastrService.error('You can not add more items than available. In stock '+ stock +' items.');
+  //     return false
+  //   }
+  //   return true
+  // }
+
+  // // Remove Cart items
+  // public removeCartItem(product: ProductNew): any {
+  //   const index = state.cart.indexOf(product);
+  //   state.cart.splice(index, 1);
+  //   localStorage.setItem("cartItems", JSON.stringify(state.cart));
+  //   return true
+  // }
+
+  // // Total amount 
+
+  // public cartTotalAmount(): Observable<number> {
+  //   return this.cartItems.pipe(map((product: ProductNew[]) => {
+  //     return product.reduce((prev, curr: ProductNew) => {
+  //       let price = curr.product_sale_price;
+  //       return (prev + price * curr.quantity) * this.Currency.price;
+  //     }, 0);
+  //   }));
+  // }
+
+   // Add to Cart
+   public addToCart(product): any {
+    const cartItem = state.cart.find(item => item.id === product.id);
     const qty = product.quantity ? product.quantity : 1;
     const items = cartItem ? cartItem : product;
+    const stock = this.calculateStockCounts(items, qty);
+    
+    if(!stock) return false
 
     if (cartItem) {
         cartItem.quantity += qty    
@@ -243,49 +338,20 @@ export class ProductService {
     }
 
     this.OpenCart = true; // If we use cart variation modal
-
-    const currentUser = localStorage.getItem("user_id");
-    if (currentUser) {
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
-      this.addToCartItemDb(product)
-      console.log('Add to cart User Login === ',state.cart);
-    }
-    else
-    {
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
-      console.log('Add to cart User Not Login === ',state.cart);
-    }
-
-    
-    console.log('Add to cart === ',state.cart);
+    localStorage.setItem("cartItems", JSON.stringify(state.cart));
     return true;
   }
 
   // Update Cart Quantity
   public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
     return state.cart.find((items, index) => {
-      if (items._id === product._id) {
-       
+      if (items.id === product._id) {
         const qty = state.cart[index].quantity + quantity
         const stock = this.calculateStockCounts(state.cart[index], quantity)
         if (qty !== 0 && stock) {
           state.cart[index].quantity = qty
         }
-        else
-        {
-          this.removeCartItem(product);
-        }
-        const currentUser = localStorage.getItem("user_id");
-        if (currentUser) {
-          localStorage.setItem("cartItems", JSON.stringify(state.cart));
-          this.addToCartItemDb(product)
-          console.log('Add to cart User Login === ',state.cart);
-        }
-        else
-        {
-          localStorage.setItem("cartItems", JSON.stringify(state.cart));
-          console.log('Add to cart User Not Login === ',state.cart);
-        }
+        localStorage.setItem("cartItems", JSON.stringify(state.cart));
         return true
       }
     })
@@ -311,16 +377,17 @@ export class ProductService {
   }
 
   // Total amount 
-
   public cartTotalAmount(): Observable<number> {
     return this.cartItems.pipe(map((product: ProductNew[]) => {
       return product.reduce((prev, curr: ProductNew) => {
         let price = curr.product_sale_price;
-        return (prev + price * curr.quantity) * this.Currency.price;
+        return (price * curr.quantity) * this.Currency.price;
       }, 0);
     }));
   }
 
+
+  
 
     /*
     ---------------------------------------------
@@ -339,46 +406,46 @@ export class ProductService {
   }
 
   // Add to Cart
-  public addToCartItemDb(product): any {
-    const cartItem = state.cart.find(item => item._id === product._id);
-    console.log('check add to cart DB', cartItem);
+  // public addToCartItemDb(product): any {
+  //   const cartItem = state.cart.find(item => item._id === product._id);
+  //   console.log('check add to cart DB', cartItem);
 
-    for (const element of state.cart) {
-      console.log(element);
+  //   for (const element of state.cart) {
+  //     console.log(element);
 
-      let data = 
-      {
-        "pro_id": element._id,
-        "pro_name": element.product_name,
-        "pro_slug": element.product_slug,
-        "qty": element.quantity,
-        "price": element.product_sale_price,
-        "options":[
-            {"size": element.product_varient_options[0].size_options},
-            {"color": element.product_varient_options[1].color_options}
-        ]
-    }
+  //     let data = 
+  //     {
+  //       "pro_id": element._id,
+  //       "pro_name": element.product_name,
+  //       "pro_slug": element.product_slug,
+  //       "qty": element.quantity,
+  //       "price": element.product_sale_price,
+  //       "options":[
+  //           {"size": element.product_varient_options[0].size_options},
+  //           {"color": element.product_varient_options[1].color_options}
+  //       ]
+  //   }
 
-    this.addToCartDb(data).subscribe(
-      res => {
+  //   this.addToCartDb(data).subscribe(
+  //     res => {
 
-        console.log('Cart Added',res);  
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        console.log(error.message);
-   }
-    );      
+  //       console.log('Cart Added',res);  
+  //     },
+  //     error => {
+  //       // .... HANDLE ERROR HERE 
+  //       console.log(error.message);
+  //  }
+  //   );      
 
-    }
+    // }
 
-  this.allCartProducts().subscribe(
-    res =>{
-      console.log('Return Cart Products',res);
-    }
-  )
-    return true;
-  }
+  // this.allCartProducts().subscribe(
+  //   res =>{
+  //     console.log('Return Cart Products',res);
+  //   }
+  // )
+  //   return true;
+  // }
 
   // // Remove Cart items
   // public removeCartItemDb(product: ProductNew): any {

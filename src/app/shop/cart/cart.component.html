@@ -37,13 +37,13 @@
                         <div class="qty-box">
                             <div class="input-group">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement(product)">
+                                    <button type="button" class="btn quantity-left-minus" [disabled]="!desableincrement" data-type="minus" (click)="decrement(product)">
                                         <i class="ti-minus"></i>
                                     </button>
                                 </span>
                                 <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-right-plus"  data-type="plus" (click)="increment(product)">
+                                    <button type="button" class="btn quantity-right-plus"  data-type="plus"  (click)="increment(product)" >
                                         <i class="ti-plus"></i>
                                     </button>
                                 </span>
@@ -146,38 +146,6 @@
             </div>
             <!-- Product price box end -->
         </div>
-    </div>
-</section>
-<!--section end-->
-<!-- section start -->
-<section class="section-t-space">
-    <div class="container padding-cls">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title1 section-b-space">
-                  <h2>Recently Viewed</h2>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="row section-b-space">
-            <div class="col-8 offset-2">
-              <owl-carousel-o class="product-m no-arrow" [options]="ProductSliderConfig">
-                <ng-container *ngFor="let product of products | slice:0:16">
-                  <ng-template carouselSlide>
-                    <div class="product-box">
-                      <app-product-box-one 
-                        [product]="product" 
-                        [currency]="product_service?.Currency"
-                        [thumbnail]="true"
-                        [cartModal]="true">
-                      </app-product-box-one>
-                    </div>
-                  </ng-template>
-                </ng-container>
-              </owl-carousel-o>
-            </div>
-          </div> -->
-
     </div>
 </section>
 <!--section end-->

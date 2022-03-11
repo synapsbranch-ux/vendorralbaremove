@@ -5,6 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ProductNew } from 'src/app/shared/classes/product';
 
+const state = {
+
+  products: JSON.parse(localStorage['products'] || '[]'),
+  wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
+  compare: JSON.parse(localStorage['compareItems'] || '[]'),
+  cart: JSON.parse(localStorage['cartItems'] || '[]')
+}
+
 @Component({
 selector: 'app-login',
 templateUrl: './login.component.html',
@@ -26,6 +34,11 @@ public products: ProductNew[] = [];
 constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router,private route: ActivatedRoute, public product_service: ProductService) { }
 
 ngOnInit(): void {
+
+  console.log('Cart Item From Login',state.cart)
+
+
+
 
   const currentUser = localStorage.getItem("user_id");
   if (currentUser) {
@@ -49,6 +62,8 @@ get login_password(){ return this.form.get('login_password');}
   onSubmit(): void {
 
     this.submitted = true;
+
+
 
   if (this.form.invalid) {
     return;
@@ -79,11 +94,31 @@ const currentUser = localStorage.getItem("user_id");
 
 if (currentUser) {
   console.log('User Login');
+  console.log('Cart Item From Login',state.cart)
+for(const csdata of state.cart)
+{
+  let cdata=
+  {
+        "pro_id": csdata._id,
+        "pro_name": csdata.product_name,
+        "pro_slug": csdata.product_slug,
+        "qty": csdata.quantity,
+        "price": csdata.product_sale_price,
+        "options":[
+            {"size": csdata.product_varient_options[0].size_options},
+            {"color": csdata.product_varient_options[1].color_options}
+        ]
 
-const cartItems_local = localStorage.getItem('cartItems');
+  }
 
-console.log('Local storage check',cartItems_local);
+  console.log('Ready to submit cart data',cdata);
 
+  this.product_service.addToCartDb(cdata).subscribe(
+  res =>  {    
+console.log('Cart item added from login',res);
+    }
+  )
+}
     this.product_service.allCartProducts().subscribe(
       res =>{
         console.log('Return Cart',res);
