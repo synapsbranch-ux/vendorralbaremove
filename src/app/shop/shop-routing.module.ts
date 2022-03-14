@@ -38,10 +38,10 @@ const routes: Routes = [
     path: 'checkout',
     component: CheckoutComponent
   },
-  {
-    path: 'checkout/success/:id',
-    component: SuccessComponent
-  }
+  // {
+  //   path: 'checkout/success/:id',
+  //   component: SuccessComponent
+  // }
 ];
 
 @NgModule({

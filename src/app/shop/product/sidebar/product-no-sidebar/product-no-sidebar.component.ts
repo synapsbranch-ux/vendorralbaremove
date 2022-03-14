@@ -8,6 +8,15 @@ import { ToastrService } from 'ngx-toastr';
 import '@google/model-viewer'
 import { view3DModalComponent } from 'src/app/shared/components/modal/product-view3D/product-view3D.component';
 
+
+const state = {
+
+  products: JSON.parse(localStorage['products'] || '[]'),
+  wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
+  compare: JSON.parse(localStorage['compareItems'] || '[]'),
+  cart: JSON.parse(localStorage['cartItems'] || '[]')
+}
+
 @Component({
   selector: 'app-product-no-sidebar',
   templateUrl: './product-no-sidebar.component.html',

@@ -4,6 +4,14 @@ import { ViewportScroller } from '@angular/common';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from '../../shared/classes/product';
 
+const state = {
+
+  products: JSON.parse(localStorage['products'] || '[]'),
+  wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
+  compare: JSON.parse(localStorage['compareItems'] || '[]'),
+  cart: JSON.parse(localStorage['cartItems'] || '[]')
+}
+
 @Component({
   selector: 'app-collection',
   templateUrl: './collection.component.html'

@@ -1,3 +1,5 @@
+import { environment } from './../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -11,7 +13,7 @@ const state = {
 })
 export class OrderService {
 
-  constructor(private router: Router) { }
+  constructor(private http: HttpClient, private router: Router,) { }
 
   // Get Checkout Items
   public get checkoutItems(): Observable<any> {
@@ -35,6 +37,30 @@ export class OrderService {
     localStorage.setItem("checkoutItems", JSON.stringify(item));
     localStorage.removeItem("cartItems");
     this.router.navigate(['/checkout/success', orderId]);
+  }
+
+  getAllAddress()
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.get(environment.baseUrl+'user/addressList',httpOptionsroom);
+  }
+
+  userCreateOrder(data)
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/orderCreate',data,httpOptionsroom);
   }
   
 }

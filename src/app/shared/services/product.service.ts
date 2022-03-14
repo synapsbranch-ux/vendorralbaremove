@@ -321,7 +321,7 @@ export class ProductService {
 
    // Add to Cart
    public addToCart(product): any {
-    const cartItem = state.cart.find(item => item.id === product.id);
+    const cartItem = state.cart.find(item => item.id === product._id);
     const qty = product.quantity ? product.quantity : 1;
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
@@ -331,14 +331,51 @@ export class ProductService {
     if (cartItem) {
         cartItem.quantity += qty    
     } else {
-      state.cart.push({
-        ...product,
-        quantity: qty
-      })
+
+
+      if(localStorage.getItem('user_id'))
+      {
+        let cdata=
+        {
+              "pro_id": product._id,
+              "pro_name": product.product_name,
+              "pro_slug": product.product_slug,
+              "qty": product.quantity,
+              "price": product.product_sale_price,
+              "options":[
+                  {"size": product.product_varient_options[0].size_options},
+                  {"color": product.product_varient_options[1].color_options}
+              ]
+      
+        }
+        console.log('Ready to submit cart data',cdata);
+      
+        this.addToCartDb(cdata).subscribe(
+        res =>  {   
+          console.log('ADD TO CART DB',res['data']._id)
+
+          state.cart.push({
+            ...product,
+            quantity: qty,
+            cart_id: res['data']._id
+          })
+
+      console.log('Cart item added from login Retain local ',state.cart);
+          }
+        )
+      }
+
+
     }
+
+
 
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
+
+
+  console.log('Local Storage Cart Item',state.cart);
+
     return true;
   }
 
@@ -351,6 +388,9 @@ export class ProductService {
         if (qty !== 0 && stock) {
           state.cart[index].quantity = qty
         }
+
+
+
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
         return true
       }
@@ -371,8 +411,21 @@ export class ProductService {
   // Remove Cart items
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
-    state.cart.splice(index, 1);
-    localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      let dcDAta=
+      {
+        "cart_id": product.cart_id,
+        "pro_id": product._id,
+      }
+
+      this.deleteToCartDb(dcDAta).subscribe(
+        res =>
+        {
+            console.log('Delete Cart From DB Return',res);
+        }
+      )
+      console.log('Ready to delete Cart Item',dcDAta);    
+      state.cart.splice(index, 1);
+     localStorage.setItem("cartItems", JSON.stringify(state.cart));
     return true
   }
 
@@ -590,6 +643,17 @@ headers: new HttpHeaders({
 }
 
   return this.http.post(environment.baseUrl+'cart/add',data,httpOptions);
+}
+
+deleteToCartDb(data: any): Observable<any>{
+this.token = localStorage.getItem('user_token') // Will return if it is not set 
+this.token = "Bearer " + this.token
+let httpOptions = {
+headers: new HttpHeaders({
+  'Authorization': this.token
+})
+}
+  return this.http.post(environment.baseUrl+'cart/delete',data,httpOptions);
 } 
 
 allCartProducts(){

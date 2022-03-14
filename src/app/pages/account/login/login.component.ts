@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, Validator} from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -115,7 +116,10 @@ for(const csdata of state.cart)
 
   this.product_service.addToCartDb(cdata).subscribe(
   res =>  {    
-console.log('Cart item added from login',res);
+    csdata.cart_id = res['data']._id;
+    console.log('Cart item added from login',res);
+
+
     }
   )
 }
@@ -124,7 +128,7 @@ console.log('Cart item added from login',res);
         console.log('Return Cart',res);
 
         if(res['data'] != null)
-      {
+        {
           for (const element of res['data'].products) {   
 
             console.log('cart Product slug',element.pro_slug);
@@ -143,6 +147,7 @@ console.log('Cart item added from login',res);
                         "status": "active"
                     },
                   ],
+                  "cart_id": element._id,
                   "product_name": element.pro_name,
                   "product_slug": element.pro_slug,
                   "quantity": element.qty,
@@ -151,7 +156,7 @@ console.log('Cart item added from login',res);
                       {"size_options": element.options[0].size},
                       {"color_options": element.options[1].color}
                   ]
-              }
+                }
               this.cartproducts.push(data);          
               this.products=this.cartproducts;     
               localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));

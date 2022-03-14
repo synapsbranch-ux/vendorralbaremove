@@ -37,6 +37,7 @@ export interface ProductNew {
     createdAt?: Date;
     updatedAt?: Date;
     quantity?: number;
+    cart_id?: string;
 }
 export interface ProductNew2 {
     _id?: string;

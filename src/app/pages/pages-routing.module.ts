@@ -104,7 +104,7 @@ const routes: Routes = [
     component: ReviewComponent 
   },
   { 
-    path: 'order/success', 
+    path: 'order/success/:id', 
     component: OrderSuccessComponent,canActivate: [AuthGuard],
   },
   { 

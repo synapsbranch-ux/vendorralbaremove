@@ -2,15 +2,20 @@
 <section class="section-b-space">
     <div class="container padding-cls">
         <div class="checkout-page">
-            <div class="checkout-form">
-                <form [formGroup]="checkoutForm" (ngSubmit)="placeorder()" [ngClass]="{desabledform: !isUserLogin}">
+
+            <div class="checkout-form" >
+                <form [formGroup]="checkoutForm" (ngSubmit)="placeorder()" >
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="title1 section-b-space">
                               <h2>Checkout</h2>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-sm-12 col-xs-12">
+                        <div class="login-sec col-sm-12 pb-4" *ngIf="isUserLogin">
+                            <p>You need to login, to continue.. </p>
+                            <button type="button" (click)="checkoutLogin()" class="btn btn-solid rounded-lg">Login</button>
+                        </div>
+                        <div class="col-lg-7 col-sm-12 col-xs-12" [class.desabledform] = "isUserLogin" >
                             <div class="checkout-title">
                                 <h3>Billing Details</h3>
                                 <p class="mb-1">Contact Information</p>
@@ -19,11 +24,11 @@
                             <div class="row">
                               <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Email Address</div>
-                                    <input type="text" formControlName="email"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text" formControlName="email"  placeholder="" autocomplete="off" >
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Phone</div>
-                                    <input type="text"  formControlName="phone"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"  formControlName="phone"  placeholder="" autocomplete="off" >
                                 </div>
                             </div>
                             <div class="row">
@@ -45,36 +50,36 @@
                             <div class="row check-out">
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">First Name</div>
-                                    <input type="text"  formControlName="firstname"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"  formControlName="firstname"  placeholder="" autocomplete="off" >
 
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Last Name </div>
-                                    <input type="text"   formControlName="lastname"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"   formControlName="lastname"  placeholder="" autocomplete="off" >
                                 </div>
                                 
                                 
                                 
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Street Address</div>
-                                    <input type="text" formControlName="address1"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text" formControlName="address1"  placeholder="" autocomplete="off" >
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Street Address 2 <span class="font-12 text-muted float-right">Optional</span></div>
-                                    <input type="text"   formControlName="address2" placeholder="Street address" [disabled]="!isUserLogin">
+                                    <input type="text"   formControlName="address2" placeholder="Street address" >
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">City</div>
-                                    <input type="text"  formControlName="town"  placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"  formControlName="town"  placeholder="" autocomplete="off" >
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <div class="field-label">State</div>
-                                    <input type="text"   formControlName="state"   placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"   formControlName="state"   placeholder="" autocomplete="off" >
 
                                 </div>
                                 <div class="form-group col-md-2 col-sm-6 col-xs-12">
                                     <div class="field-label">ZIP</div>
-                                    <input type="text"  formControlName="postalcode"   placeholder="" autocomplete="off" [disabled]="!isUserLogin">
+                                    <input type="text"  formControlName="postalcode"   placeholder="" autocomplete="off" >
                                 </div>
                             </div>
                             <div class="row">
@@ -90,7 +95,7 @@
                                                 <div class="row" >
                                                     <div class="col-sm-6" *ngFor="let address of useraddressslist">
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input type="radio" name="userAddress" value="{{address._id}}" formControlName="userAddress" [checked]="address.is_default == 1" [disabled]="!isUserLogin">
+                                                            <input type="radio" class="user_address_id" name="userAddress" value="{{address._id}}" [checked]="address.is_default == 1" formControlName="userAddressId" >
                                                             <address>
                                                                 <h4> {{address.user_full_name}} </h4>
                                                                 <p>{{address.addressline1}}, {{address.addressline2}}</p>
@@ -108,7 +113,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-5 col-sm-12 col-xs-12">
+                        <div class="col-lg-5 col-sm-12 col-xs-12" [class.desabledform] = "isUserLogin">
                             <div class="checkout-details">
                                 <div class="order-box">
                                     <div class="title-box">
@@ -142,21 +147,30 @@
                             <div class="payment-box" >
                                 <div class="upper-box">
                                     <div class="payment-options">
-                                        <ul>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption">
+                                                <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="Paypal" mdbInput formControlName="paymentOption">
+                                                <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
+                                                <img class="image d-block" src="assets/images/paypal.png" alt="" />
+                                            </div>
+                                        <!-- <ul>
                                             <li>
                                                 <div class="radio-option">
-                                                    <input type="radio"   formControlName="paymentCash"  id="payment-2" [disabled]="!isUserLogin">
+                                                    <input type="radio" value="COD"  checked >
                                                     <label for="payment-2">Cash On Delivery
                                                         <span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="radio-option paypal">
-                                                    <input type="radio" formControlName="paymentPaypal"  id="payment-3" [disabled]="!isUserLogin">
+                                                    <input type="radio" value="COD"  >
                                                     <label for="payment-3">PayPal<span class="image"><img src="assets/images/paypal.png" alt="" /></span></label>
                                                 </div>
                                             </li>
-                                        </ul>
+                                        </ul> -->
                                     </div>
                                 </div>
                                 <div class="text-right">
@@ -164,8 +178,11 @@
                                             Place Order
                                         </button>
                                     
+                                        <div [className]="orderValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="orderValid">
+                                            <div class="d-flex align-items-center"><span *ngIf="orderValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{orderMassage}}</div>
                                     <!-- <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal> -->
-                                </div>
+                                        </div>
+                            </div>
                             </div>
                             </div>
                         </div>

@@ -8,6 +8,14 @@ import { ProductService } from "../../shared/services/product.service";
 import { OrderService } from "../../shared/services/order.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
+import { v4 as uuidv4 } from 'uuid';
+const state = {
+
+  products: JSON.parse(localStorage['products'] || '[]'),
+  wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
+  compare: JSON.parse(localStorage['compareItems'] || '[]'),
+  cart: JSON.parse(localStorage['cartItems'] || '[]')
+}
 
 @Component({
   selector: 'app-checkout',
@@ -23,6 +31,8 @@ export class CheckoutComponent implements OnInit {
   public amount:  any;
   returnUrl: string;
   useraddressslist=[];
+  orderValid:boolean=false;
+  orderMassage:any;
 
   isUserLogin:boolean=true;
 
@@ -33,6 +43,12 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+  if(localStorage.getItem('user_id'))
+  {
+    this.isUserLogin=false;
+  }
+
     this.productService.cartItems.subscribe(response => this.products = response);
     this.getTotal.subscribe(amount => this.amount = amount);
     // this.initConfig();
@@ -47,12 +63,32 @@ export class CheckoutComponent implements OnInit {
       'town': new FormControl(null, [Validators.required]),
       'state': new FormControl(null, [Validators.required]),
       'postalcode': new FormControl(null, [Validators.required]),
+      'paymentOption': new FormControl(null, [Validators.required]),
+      'userAddressId': new FormControl(null, [Validators.required]),
     })
 
     // get return url from route parameters or default to '/'
     // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-    this.getallAddressList();
+    if(this.isUserLogin)
+    {
+      this.checkoutForm.controls['phone'].disable();
+      this.checkoutForm.controls['email'].disable();
+      this.checkoutForm.controls['firstname'].disable();
+      this.checkoutForm.controls['lastname'].disable();
+      this.checkoutForm.controls['address1'].disable();
+      this.checkoutForm.controls['address2'].disable();
+      this.checkoutForm.controls['country'].disable();
+      this.checkoutForm.controls['town'].disable();
+      this.checkoutForm.controls['state'].disable();
+      this.checkoutForm.controls['postalcode'].disable();
+      this.checkoutForm.controls['paymentOption'].disable();
+     
+    }
+    if(!this.isUserLogin)
+    {
+      this.getuserallAddressList();
+    }
 
   }
 
@@ -66,20 +102,27 @@ export class CheckoutComponent implements OnInit {
   get town() { return this.checkoutForm.get('town');}
   get state() { return this.checkoutForm.get('state');}
   get postalcode() { return this.checkoutForm.get('postalcode');}
+  get paymentOption() { return this.checkoutForm.get('paymentOption');}
+  get userAddressId() { return this.checkoutForm.get('userAddressId');}
 
 
-  getallAddressList()
+  getuserallAddressList()
   {
-    // this.userservice.getAllAddress().subscribe(
-    //   res =>
-    //   {
-    //     this.useraddressslist=res['data'];
-    //     console.log('User Address List', res['data']);
-    //   }
-    // )
+    this.orderService.getAllAddress().subscribe(
+      res =>
+      {
+        this.useraddressslist=res['data'];
+        console.log('User Address List', res['data']);
+      }
+    )
   }
   public get getTotal(): Observable<number> {
     return this.productService.cartTotalAmount();
+  }
+
+  checkoutLogin()
+  {
+    this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});
   }
 
   // // Stripe Payment Gateway
@@ -152,15 +195,105 @@ export class CheckoutComponent implements OnInit {
 
   placeorder()
   {
-
-
-
-
     const currentUser = localStorage.getItem("user_id");
     if (currentUser) {
-        // authorised so return true
-        // this.productService.addToCartItemDb(products);
-         this.router.navigate(['/order/success']);
+      
+
+      let orderTotal=0;
+      let transactionId=0;
+      let paymentStatus="success";
+      let formData = this.checkoutForm.value;
+
+      if(formData.paymentOption == 'COD')
+      {
+        transactionId=uuidv4();
+      }
+      console.log('Payment Status',formData.paymentOption);
+
+      this.getTotal.subscribe(
+        res =>
+        {
+          orderTotal=res
+          
+        }
+      )
+      
+     console.log('Cart Products',this.products)
+
+     let orderProducts=[];
+
+     for(const elem of this.products)
+     {
+
+this.productService.getproductsBySlugs(elem.product_slug).subscribe(
+  res =>
+  {
+
+    let odetails= {
+      "store_id": res['data'].product_store._id,
+      "vendor_id": res['data'].product_owner._id,
+      "department_id": res['data'].product_department._id,
+      "product_id": elem._id,
+      "product_name": elem.product_name,
+      "product_slug": elem.product_slug,
+      "qty": elem.quantity,
+      "price": elem.product_sale_price,
+      "options":[
+          {"size": elem.product_varient_options[0].size_options},
+          {"color": elem.product_varient_options[1].color_options}
+      ]
+    }
+
+    orderProducts.push(odetails);
+  }
+)
+     }
+
+
+
+let orderData=
+{
+  "total_order_amount": orderTotal,
+  "order_status": "initiated",
+  "payment_status": paymentStatus,
+  "payment_method": formData.paymentOption,
+  "transaction_id": transactionId,
+  "shipping_address_id": formData.userAddressId,
+  "billing_email": formData.email,
+  "billing_phone": formData.phone,
+  "billing_country": formData.country,
+  "billing_first_name": formData.firstname,
+  "billing_last_name": formData.lastname,
+  "billing_address1": formData.address1,
+  "billing_address2": formData.address2,
+  "billing_city": formData.town,
+  "billing_state": formData.state,
+  "billing_zip": formData.postalcode,
+  "order_details": orderProducts
+}
+
+console.log('Order Generate',orderData);
+
+this.orderService.userCreateOrder(orderData).subscribe(
+
+  res =>
+  {
+    this.orderValid=true;
+    this.orderMassage="Your Order Placed Sucessfully";
+    for(const elem of this.products)
+    {
+      this.productService.removeCartItem(elem);
+    }
+    setTimeout(() => {
+      this.router.navigateByUrl('/order/success/'+res['data']._id);
+    },1500) 
+    // this.productService.addToCartItemDb(products);
+   
+    console.log('Order Created',res);
+  }
+)
+
+
     }
     else
     {
@@ -171,8 +304,6 @@ export class CheckoutComponent implements OnInit {
 
     console.log(this.returnUrl);
     }
-
-    // console.log(products);
 
   }
 
