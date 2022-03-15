@@ -227,98 +227,6 @@ export class ProductService {
     return <Observable<ProductNew[]>>itemsStream;
   }
 
-  // // Add to Cart
-  // public addToCart(product): any {
-  //   const cartItem = state.cart.find(item => item._id === product._id);
-  //   const qty = product.quantity ? product.quantity : 1;
-  //   const items = cartItem ? cartItem : product;
-
-  //   if (cartItem) {
-  //       cartItem.quantity += qty    
-  //   } else {
-  //     state.cart.push({
-  //       ...product,
-  //       quantity: qty
-  //     })
-  //   }
-
-  //   this.OpenCart = true; // If we use cart variation modal
-
-  //   const currentUser = localStorage.getItem("user_id");
-  //   if (currentUser) {
-  //     localStorage.setItem("cartItems", JSON.stringify(state.cart));
-  //     console.log('Add to cart User Login === ',state.cart);
-  //   }
-  //   else
-  //   {
-  //     localStorage.setItem("cartItems", JSON.stringify(state.cart));
-  //     console.log('Add to cart User Not Login === ',state.cart);
-  //   }
-
-    
-  //   console.log('Add to cart === ',state.cart);
-  //   return true;
-  // }
-
-  // // Update Cart Quantity
-  // public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
-  //   return state.cart.find((items, index) => {
-  //     if (items._id === product._id) {
-       
-  //       const qty = state.cart[index].quantity + quantity
-  //       const stock = this.calculateStockCounts(state.cart[index], quantity)
-  //       if (qty !== 0 && stock) {
-  //         state.cart[index].quantity = qty
-  //       }
-  //       else
-  //       {
-  //         this.removeCartItem(product);
-  //       }
-  //       const currentUser = localStorage.getItem("user_id");
-  //       if (currentUser) {
-  //         localStorage.setItem("cartItems", JSON.stringify(state.cart));
-  //         console.log('Add to cart User Login === ',state.cart);
-  //       }
-  //       else
-  //       {
-  //         localStorage.setItem("cartItems", JSON.stringify(state.cart));
-  //         console.log('Add to cart User Not Login === ',state.cart);
-  //       }
-  //       return true
-  //     }
-  //   })
-  // }
-
-  //   // Calculate Stock Counts
-  // public calculateStockCounts(product, quantity) {
-  //   const qty = product.quantity + quantity
-  //   const stock = product.stock
-  //   if (stock < qty || stock == 0) {
-  //     this.toastrService.error('You can not add more items than available. In stock '+ stock +' items.');
-  //     return false
-  //   }
-  //   return true
-  // }
-
-  // // Remove Cart items
-  // public removeCartItem(product: ProductNew): any {
-  //   const index = state.cart.indexOf(product);
-  //   state.cart.splice(index, 1);
-  //   localStorage.setItem("cartItems", JSON.stringify(state.cart));
-  //   return true
-  // }
-
-  // // Total amount 
-
-  // public cartTotalAmount(): Observable<number> {
-  //   return this.cartItems.pipe(map((product: ProductNew[]) => {
-  //     return product.reduce((prev, curr: ProductNew) => {
-  //       let price = curr.product_sale_price;
-  //       return (prev + price * curr.quantity) * this.Currency.price;
-  //     }, 0);
-  //   }));
-  // }
-
    // Add to Cart
    public addToCart(product): any {
     const cartItem = state.cart.find(item => item.id === product._id);
@@ -331,14 +239,13 @@ export class ProductService {
     if (cartItem) {
         cartItem.quantity += qty    
     } else {
-
-
-      if(localStorage.getItem('user_id'))
-      {
-        let cdata=
+          if(localStorage.getItem('user_id'))
+          {
+            let cdata=
         {
               "pro_id": product._id,
               "pro_name": product.product_name,
+              "pro_image": product.product_image[0].pro_image,
               "pro_slug": product.product_slug,
               "qty": product.quantity,
               "price": product.product_sale_price,
@@ -348,7 +255,7 @@ export class ProductService {
               ]
       
         }
-        console.log('Ready to submit cart data',cdata);
+        console.log('full Product Cart Data for Submit',cdata);
       
         this.addToCartDb(cdata).subscribe(
         res =>  {   
@@ -357,24 +264,35 @@ export class ProductService {
           state.cart.push({
             ...product,
             quantity: qty,
-            cart_id: res['data']._id
+            cart_id: res['data']._id,
+            product_department: product.product_department._id,
+            product_store: product.product_store._id,
+            product_owner: product.product_owner._id
           })
 
       console.log('Cart item added from login Retain local ',state.cart);
           }
         )
       }
+      else
+      {
+        state.cart.push({
+          ...product,
+          quantity: qty,
+          product_department: product.product_department._id,
+          product_store: product.product_store._id,
+          product_owner: product.product_owner._id
+        })
+
+        console.log('Cart item added from Without login Retain local ',state.cart);
+      }
 
 
     }
 
-
-
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
-
-
-  console.log('Local Storage Cart Item',state.cart);
+    console.log('Local Storage Cart Item',state.cart);
 
     return true;
   }
@@ -388,8 +306,6 @@ export class ProductService {
         if (qty !== 0 && stock) {
           state.cart[index].quantity = qty
         }
-
-
 
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
         return true
@@ -416,6 +332,7 @@ export class ProductService {
         "cart_id": product.cart_id,
         "pro_id": product._id,
       }
+      console.log('Ready to delete Cart Item',dcDAta);  
 
       this.deleteToCartDb(dcDAta).subscribe(
         res =>
@@ -423,7 +340,7 @@ export class ProductService {
             console.log('Delete Cart From DB Return',res);
         }
       )
-      console.log('Ready to delete Cart Item',dcDAta);    
+  
       state.cart.splice(index, 1);
      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     return true

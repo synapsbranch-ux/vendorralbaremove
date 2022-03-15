@@ -37,37 +37,34 @@
                             <p>From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.</p>
                         </div>-->
                         <div class="box-account box-info">
-                            <div class="box-head">
-                                <h2>Account Information</h2>
+                            <div class="box-head pb-3" *ngIf="orderliststatus">
+                                <h2>Order List</h2>
+                            </div>
+                            <div class="box-head pb-3" *ngIf="!orderliststatus">
+                                <h3 class="text-center ">You have no order </h3>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="box">
-                                        <div class="box-title">
-                                            <h3>Contact Information</h3>
-                                            <a [routerLink]="['/edit-profile']">Edit</a>
-                                        </div>
-                                        <div class="box-content">
-                                            <h6>{{userName}}</h6>
-                                            <h6>{{userEmail}}</h6>
-                                            <h6>{{userPhone}}</h6>
-                                            <h6><a [routerLink]="['/change-password']">Change Password</a></h6>
+                                <div class="col-sm-6" *ngFor="let order of orderList">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <address (click)="viewOrder(order._id)">
+                                                <div>
+                                                        <img src="{{order.order_details[0].product_image}}" alt="{{order.order_details[0].product_name}}" class="img-fluid">
+                                                </div>
+                                                <div>
+                                                    <h4>{{order.order_details[0].product_name}}</h4>
+                                                    <p>No Items : {{order.order_details[0].qty}}</p>
+                                                    <p>Total Amount : {{order.order_details[0].price}}</p>
+                                                    <h5>Ph: {{order.billing_phone}}</h5>
+                                                    <a (click)="viewOrder(order._id)">View Order</a>
+                                                </div>
+
+                                            </address>
+                                          
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                <!--<div class="col-sm-6">
-                                    <div class="box">
-                                        <div class="box-title">
-                                            <h3>Newsletters</h3>
-                                            <a href="javascript:void(0)">Edit</a>
-                                        </div>
-                                        <div class="box-content">
-                                            <p>
-                                                You are currently not subscribed to any newsletter.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>-->
                             </div>
                         </div>
                     </div>

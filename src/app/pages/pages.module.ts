@@ -1,5 +1,5 @@
+import { OrderDetailsComponent } from './account/order-details/order-details.component';
 import { OrderListComponent } from './account/order-list/order-list.component';
-import { ViewOrderComponent } from './account/view-order/view-order.component';
 import { EditAddressComponent } from './account/edit-address/edit-address.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './account/change-Password/change-Password.component';
@@ -85,7 +85,7 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     ChangePasswordComponent,
     EditProfileComponent,
     EditAddressComponent,
-    ViewOrderComponent,
+    OrderDetailsComponent,
     OrderListComponent
   ],
   imports: [

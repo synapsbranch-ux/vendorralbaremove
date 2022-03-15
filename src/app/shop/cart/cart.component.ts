@@ -73,7 +73,8 @@ if(localStorage.getItem('user_id'))
                 ]
               }
             this.cartproducts.push(data);          
-            this.products=this.cartproducts;     
+            this.products=this.cartproducts;
+            this.getTotal;     
             localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
             console.log('Return LocalStorage',localStorage.getItem("cartItems"));
             

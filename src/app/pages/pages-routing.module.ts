@@ -1,4 +1,4 @@
-import { ViewOrderComponent } from './account/view-order/view-order.component';
+import { OrderDetailsComponent } from './account/order-details/order-details.component';
 import { OrderListComponent } from './account/order-list/order-list.component';
 import { EditAddressComponent } from './account/edit-address/edit-address.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
@@ -104,7 +104,7 @@ const routes: Routes = [
     component: ReviewComponent 
   },
   { 
-    path: 'order/success/:id', 
+    path: 'order/success', 
     component: OrderSuccessComponent,canActivate: [AuthGuard],
   },
   { 
@@ -189,7 +189,7 @@ const routes: Routes = [
   },
   { 
     path: 'view-order', 
-    component: ViewOrderComponent 
+    component: OrderDetailsComponent 
   },
 ];
 

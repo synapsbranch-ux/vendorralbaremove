@@ -12,6 +12,7 @@ import { Usersignup } from '../classes/usersignup';
 export class UserService {
 
   useraddressid:any
+  userorderid:any
   public Otp;
   public Usersignup;
   constructor(private http: HttpClient, private router: Router,) { }
@@ -41,6 +42,28 @@ export class UserService {
       })
     }
     return this.http.get(environment.baseUrl+'user/addressList',httpOptionsroom);
+  }
+  getAllOrderList()
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.get(environment.baseUrl+'user/orderList',httpOptionsroom);
+  }
+  getAllOrderDetailsList(data)
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/orderList',data,httpOptionsroom);
   }
   getSingleAddress(data:any)
   {
@@ -143,6 +166,16 @@ export class UserService {
   getUserAddressid()
   {
     return this.useraddressid;
+  }
+
+  setUserOrderid(userOrderId:any)
+  {
+    this.userorderid=userOrderId;
+  }
+
+  getUserOrderid()
+  {
+    return this.userorderid;
   }
 
   logout()

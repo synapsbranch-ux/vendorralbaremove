@@ -8,3 +8,21 @@
 a{
     cursor: pointer;
 }
+.card-body p {
+    margin-bottom: .3rem;
+}
+.card{
+    margin-bottom: 1rem;
+}
+address{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+address div{
+    flex-basis: 48%;
+}
+address img{
+    width: 200px;
+    height: 200px;
+}

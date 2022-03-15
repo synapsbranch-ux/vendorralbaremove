@@ -43,7 +43,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    console.log('Cart Products',state.cart)
   if(localStorage.getItem('user_id'))
   {
     this.isUserLogin=false;
@@ -220,59 +220,53 @@ export class CheckoutComponent implements OnInit {
       
      console.log('Cart Products',this.products)
 
-     let orderProducts=[];
+     let orderProducts : Object[]=[];
 
      for(const elem of this.products)
      {
-
-this.productService.getproductsBySlugs(elem.product_slug).subscribe(
-  res =>
-  {
-
-    let odetails= {
-      "store_id": res['data'].product_store._id,
-      "vendor_id": res['data'].product_owner._id,
-      "department_id": res['data'].product_department._id,
-      "product_id": elem._id,
-      "product_name": elem.product_name,
-      "product_slug": elem.product_slug,
-      "qty": elem.quantity,
-      "price": elem.product_sale_price,
-      "options":[
-          {"size": elem.product_varient_options[0].size_options},
-          {"color": elem.product_varient_options[1].color_options}
-      ]
-    }
-
-    orderProducts.push(odetails);
-  }
-)
+       console.log('product Loop',elem);
+      let odetails= {
+        store_id: elem.product_store,
+        vendor_id: elem.product_owner,
+        department_id: elem.product_department,
+        product_id: elem._id,
+        product_name: elem.product_name,
+        product_image: elem.product_image[0].pro_image,
+        product_slug: elem.product_slug,
+        qty: elem.quantity,
+        price: elem.product_sale_price,
+        options:[
+            {size: elem.product_varient_options[0].size_options},
+            {color: elem.product_varient_options[1].color_options}
+        ]
+      }
+      orderProducts.push(odetails);
      }
 
 
-
+console.log('orderProducts',orderProducts)
 let orderData=
 {
-  "total_order_amount": orderTotal,
-  "order_status": "initiated",
-  "payment_status": paymentStatus,
-  "payment_method": formData.paymentOption,
-  "transaction_id": transactionId,
-  "shipping_address_id": formData.userAddressId,
-  "billing_email": formData.email,
-  "billing_phone": formData.phone,
-  "billing_country": formData.country,
-  "billing_first_name": formData.firstname,
-  "billing_last_name": formData.lastname,
-  "billing_address1": formData.address1,
-  "billing_address2": formData.address2,
-  "billing_city": formData.town,
-  "billing_state": formData.state,
-  "billing_zip": formData.postalcode,
-  "order_details": orderProducts
+  total_order_amount: orderTotal,
+  order_status: 'initiated',
+  payment_status: paymentStatus,
+  payment_method: formData.paymentOption,
+  transaction_id: transactionId,
+  shipping_address_id: formData.userAddressId,
+  billing_email: formData.email,
+  billing_phone: formData.phone,
+  billing_country: formData.country,
+  billing_first_name: formData.firstname,
+  billing_last_name: formData.lastname,
+  billing_address1: formData.address1,
+  billing_address2: formData.address2,
+  billing_city: formData.town,
+  billing_state: formData.state,
+  billing_zip: formData.postalcode,
+  order_details: orderProducts,
 }
-
-console.log('Order Generate',orderData);
+console.log('Order Generate STR 1',orderData);
+console.log('Order Generate STR 2',JSON.stringify(orderData));
 
 this.orderService.userCreateOrder(orderData).subscribe(
 
@@ -280,28 +274,23 @@ this.orderService.userCreateOrder(orderData).subscribe(
   {
     this.orderValid=true;
     this.orderMassage="Your Order Placed Sucessfully";
+    console.log('Order Created',res);
     for(const elem of this.products)
     {
       this.productService.removeCartItem(elem);
     }
+    this.userservice.setUserOrderid(res['data'].order_id);
     setTimeout(() => {
-      this.router.navigateByUrl('/order/success/'+res['data']._id);
-    },1500) 
-    // this.productService.addToCartItemDb(products);
-   
-    console.log('Order Created',res);
+      this.router.navigateByUrl('/order/success');
+    },1000) 
   }
-)
 
+)
 
     }
     else
     {
-    // not logged in so redirect to login page with the return url
-    // this.router.navigate(['/pages/login']);
-    // this.router.navigateByUrl(this.returnUrl);
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});
-
     console.log(this.returnUrl);
     }
 

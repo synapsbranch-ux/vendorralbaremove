@@ -7,7 +7,7 @@
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
                     <h2>thank you</h2>
                     <p>Payment is successfully processsed and your order is on the way</p>
-                    <p>Transaction ID:267676GHERT105467</p>
+                    <p>Transaction ID: {{transaction_id}}</p>
                 </div>
             </div>
         </div>
@@ -21,40 +21,36 @@
             <div class="col-lg-6">
                 <div class="product-order">
                     <h3>your order details</h3>
-                    <div class="row product-order-detail" *ngFor="let product of products">
+                    <div class="row product-order-detail" *ngFor="let product of oderProducts">
                         <div class="col-3">
-                            <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">
-                                <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
-                            </a>
+                                <img class="img-fluid" [src]="product.product_image" [alt]="product.product_name">
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>product name</h4>
-                                <h5><a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active">{{ product.product_name | titlecase }}</a></h5>
+                                <h5>{{ product.product_name | titlecase }}</h5>
                             </div>
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>quantity</h4>
-                                <h5>{{product.quantity}}</h5>
+                                <h5>{{product.qty}}</h5>
                             </div>
                         </div>
                         <div class="col-3 order_detail">
                             <div>
                                 <h4>price</h4>
-                                <h5>{{product.product_sale_price}}</h5>
+                                <h5>{{product.price}}</h5>
                             </div>
                         </div>
                     </div>
                     <div class="total-sec">
                         <ul>
-                            <li>subtotal <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
-                            <li>shipping <span>$00.00</span></li>
-                            <li>tax(GST) <span>$00.00</span></li>
+                            <li>subtotal <span>{{total_order_amount}}</span></li>
                         </ul>
                     </div>
                     <div class="final-total">
-                        <h3>total <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></h3>
+                        <h3>total <span>{{total_order_amount}}</span></h3>
                     </div>
                 </div>
             </div>
@@ -63,18 +59,20 @@
                     <div class="col-sm-6">
                         <h4>summery</h4>
                         <ul class="order-detail">
-                            <li>order ID: 5563853658932</li>
-                            <li>Order Date: October 22, 2020</li>
-                            <li>Order Total: $907.28</li>
+                            <li>order ID: {{order_id}}</li>
+                            <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
+                            <li>Order Total: {{total_order_amount}}</li>
                         </ul>
                     </div>
                     <div class="col-sm-6">
                         <h4>shipping address</h4>
                         <ul class="order-detail">
-                            <li>gerg harvell</li>
-                            <li>568, suite ave.</li>
-                            <li>Austrlia, 235153</li>
-                            <li>Contact No. 123456789</li>
+                            <li>{{orderAddress?.user_full_name}}</li>
+                            <li>{{orderAddress?.addressline1}}</li>
+                            <li>{{orderAddress?.addressline2}}</li>
+                            <li>{{orderAddress?.city}}</li>
+                            <li>{{orderAddress?.state}} - {{orderAddress?.postal_code}}</li>
+                            <li>Contact No. {{orderAddress?.mobile}}</li>
                         </ul>
                     </div>
 
@@ -85,7 +83,7 @@
                     <div class="col-md-12">
                         <div class="delivery-sec">
                             <h3>expected date of delivery</h3>
-                            <h2>{{ today | date:'MMMM d, y'}}</h2>
+                            <h2>{{expected_delivery | date:'MMMM d, y'}}</h2>
                         </div>
                     </div>
                 </div>

@@ -26,6 +26,7 @@ export interface ProductNew {
     product_department?: ProDepartment[];
     product_category?: ProCatagories[];
     product_store?: ProStores[];
+    product_owner?: ProOwner[];
     product_varient?: NewVariants[];
     product_varient_options?: VariantsOptions[];
     product_image?: NewImages[];
@@ -107,6 +108,10 @@ export interface ProStores
     _id?: number;
     store_name?: string;  
     store_slug?: string;  
+}
+export interface ProOwner {
+    _id?: string;
+    name?: string;
 }
 
 

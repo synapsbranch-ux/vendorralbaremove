@@ -1,6 +1,6 @@
 import { UserService } from 'src/app/shared/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from './../../shared/services/order.service';
+import { OrderService } from './../../../shared/services/order.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductNew } from 'src/app/shared/classes/product';
@@ -8,11 +8,12 @@ import { ProductSlider } from 'src/app/shared/data/slider';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-order-success',
-  templateUrl: './order-success.component.html',
-  styleUrls: ['./order-success.component.scss']
+  selector: 'app-order-details',
+  templateUrl: './order-details.component.html',
+  styleUrls: ['./order-details.component.scss']
 })
-export class OrderSuccessComponent implements OnInit {
+export class OrderDetailsComponent implements OnInit {
+  public openDashboard: boolean = false;
   public today: number = Date.now();
   public products: ProductNew[] = [];
   public ProductSliderConfig: any = ProductSlider;
@@ -46,10 +47,10 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-// if(this.userservice.getUserOrderid())
-// {
+if(this.userservice.getUserOrderid())
+{
   let oData={
-    order_id: this.userservice.getUserOrderid()
+     order_id: this.userservice.getUserOrderid()
   }
   this.orderservice.userSingleOrderDetails(oData).subscribe
   (
@@ -74,15 +75,15 @@ export class OrderSuccessComponent implements OnInit {
       this.billing_zip =res['data'][0].billing_zip;
       this.createdAt =res['data'][0].createdAt;
       this.payment_method =res['data'][0].payment_method;
-      this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 15)); 
+      this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 10)); 
       console.log('Order Deatils',this.expected_delivery);
     }
   )
-// }
-// else
-// {
-// this.router.navigateByUrl('/order-list');
-// }
+}
+else
+{
+ this.router.navigateByUrl('/order-list')
+}
 
 console.log('this.userservice.getUserOrderid()',this.userservice.getUserOrderid())
 
@@ -90,6 +91,15 @@ console.log('this.userservice.getUserOrderid()',this.userservice.getUserOrderid(
 
   public get getTotal(): Observable<number> {
     return this.product_service.cartTotalAmount();
+  }
+
+  ToggleDashboard() {
+    this.openDashboard = !this.openDashboard;
+  }
+
+  logout()
+  {
+    this.userservice.logout();
   }
 
 }

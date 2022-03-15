@@ -1,0 +1,108 @@
+
+<!-- <app-breadcrumb [title]="'Dashboard'" [breadcrumb]="'Dashboard'"></app-breadcrumb> -->
+
+<section class="section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="account-sidebar" (click)="ToggleDashboard()">
+                    <a hre="javascript:void(0)" class="popup-btn">
+                        my account
+                    </a>
+                </div>
+                <div class="dashboard-left" [class.open]="openDashboard">
+                    <div class="collection-mobile-back" (click)="ToggleDashboard()">
+                        <span class="filter-back">
+                            <i class="fa fa-angle-left" aria-hidden="true"></i> back
+                        </span>
+                    </div>
+                    <div class="block-content">
+                        <ul>
+                            <li ><a [routerLink]="['/dashboard']">My Account</a></li>
+                            <li><a [routerLink]="['/address']">Address Book</a></li>
+                            <li class="active"><a [routerLink]="['/order-list']">Order List</a></li>
+                            <li><a [routerLink]="['/change-password']">Change Password</a></li>
+                            <li class="last"><a (click)="logout()">Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="dashboard-right">
+                    <div class="dashboard row">
+                        <div class="col-lg-12">
+                            <div class="product-order">
+                                <h3>your order details</h3>
+                                <div class="row product-order-detail" *ngFor="let product of oderProducts">
+                                    <div class="col-3">
+                                            <img class="img-fluid" [src]="product.product_image" [alt]="product.product_name">
+                                    </div>
+                                    <div class="col-3 order_detail">
+                                        <div>
+                                            <h4>product name</h4>
+                                            <h5>{{ product.product_name | titlecase }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 order_detail">
+                                        <div>
+                                            <h4>quantity</h4>
+                                            <h5>{{product.qty}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 order_detail">
+                                        <div>
+                                            <h4>price</h4>
+                                            <h5>{{product.price}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-sec">
+                                    <ul>
+                                        <li>subtotal <span>{{total_order_amount}}</span></li>
+                                    </ul>
+                                </div>
+                                <div class="final-total">
+                                    <h3>total <span>{{total_order_amount}}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="row order-success-sec">
+                                <div class="col-sm-6">
+                                    <h4>summery</h4>
+                                    <ul class="order-detail">
+                                        <li>order ID: {{order_id}}</li>
+                                        <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
+                                        <li>Order Total: {{total_order_amount}}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4>shipping address</h4>
+                                    <ul class="order-detail">
+                                        <li>{{orderAddress?.user_full_name}}</li>
+                                        <li>{{orderAddress?.addressline1}}</li>
+                                        <li>{{orderAddress?.addressline2}}</li>
+                                        <li>{{orderAddress?.city}}</li>
+                                        <li>{{orderAddress?.state}} - {{orderAddress?.postal_code}}</li>
+                                        <li>Contact No. {{orderAddress?.mobile}}</li>
+                                    </ul>
+                                </div>
+            
+                                <div class="col-sm-12 payment-mode">
+                                    <h4>payment method</h4>
+                                    <p>Pay on Delivery (Cash/Card). Cash on delivery (COD) available. Card/Net banking acceptance subject to device availability.</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="delivery-sec">
+                                        <h3>expected date of delivery</h3>
+                                        <h2>{{expected_delivery | date:'MMMM d, y'}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -51,7 +51,7 @@ export class OrderService {
     return this.http.get(environment.baseUrl+'user/addressList',httpOptionsroom);
   }
 
-  userCreateOrder(data)
+  userCreateOrder(data:Object)
   {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
   
@@ -61,6 +61,18 @@ export class OrderService {
       })
     }
     return this.http.post(environment.baseUrl+'user/orderCreate',data,httpOptionsroom);
+  }
+
+  userSingleOrderDetails(data:Object)
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/orderDetails',data,httpOptionsroom);
   }
   
 }

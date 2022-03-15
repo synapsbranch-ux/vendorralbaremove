@@ -15,7 +15,8 @@ export class OrderListComponent implements OnInit {
   userEmail:string="";
   userPhone:string="";
   userData: JSON;
-
+  orderList=[];
+  orderliststatus:boolean=true;
 
 
   constructor( private router: Router, private userservice: UserService) { 
@@ -23,19 +24,44 @@ export class OrderListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userservice.getUserDetails().subscribe(
+    if(localStorage.getItem('user_id'))
+    {    
+      this.userservice.getUserDetails().subscribe(
       res =>
       {
        this.userName= res['data'][0].name;
        this.userEmail= res['data'][0].email;
        this.userPhone= res['data'][0].phone;
         console.log('User Details ',res['data'][0]);
+        
       }
     )
+    this.userservice.getAllOrderList().subscribe(
+      res =>
+      {
+        this.orderList=res['data'];
+        if(this.orderList.length < 1)
+        {
+this.orderliststatus=false;
+        }
+
+        console.log('Get all Order List',res['data'])
+      }
+      
+      )
+
+    }
+
+
   }
 
   ToggleDashboard() {
     this.openDashboard = !this.openDashboard;
+  }
+  viewOrder(orderId:any)
+  {
+    this.userservice.setUserOrderid(orderId);
+    this.router.navigateByUrl('/view-order')
   }
 
   logout()
