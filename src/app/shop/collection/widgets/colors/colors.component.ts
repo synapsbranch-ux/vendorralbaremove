@@ -24,17 +24,16 @@ export class ColorsComponent implements OnInit {
   get filterbycolor() {
     const uniqueColors = []
     this.products.filter((product) => {
-      if(product.product_varient_options[1])
+      if(product.product_varient_options[1].color_options)
       {
-      product.product_varient_options[1].color_options.filter((product_varient_options) => {
-        if (product.product_varient_options[1].color_options.length > 0) {
-
-         
-
-          const index = uniqueColors.indexOf(product_varient_options)
-          if (index === -1) uniqueColors.push(product_varient_options)
+      product.product_varient_options.filter((product_varient_color) => {
+        if (product.product_varient_options[1].color_options) {
+          const index = uniqueColors.indexOf(product.product_varient_options[1].color_options)
+          if (index === -1) uniqueColors.push(product.product_varient_options[1].color_options)
         }
       })
+
+
     }
     })
     return uniqueColors

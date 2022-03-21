@@ -96,39 +96,15 @@ const currentUser = localStorage.getItem("user_id");
 if (currentUser) {
   console.log('User Login');
   console.log('Cart Item From Login',state.cart)
-for(const csdata of state.cart)
-{
-  let cdata=
-  {
-        "pro_id": csdata._id,
-        "pro_name": csdata.product_name,
-        "pro_slug": csdata.product_slug,
-        "qty": csdata.quantity,
-        "price": csdata.product_sale_price,
-        "options":[
-            {"size": csdata.product_varient_options[0].size_options},
-            {"color": csdata.product_varient_options[1].color_options}
-        ]
 
-  }
-
-  console.log('Ready to submit cart data',cdata);
-
-  this.product_service.addToCartDb(cdata).subscribe(
-  res =>  {    
-    csdata.cart_id = res['data']._id;
-    console.log('Cart item added from login',res);
-
-
-    }
-  )
-}
     this.product_service.allCartProducts().subscribe(
       res =>{
         console.log('Return Cart',res);
-
-        if(res['data'] != null)
+        if(res['data'])
         {
+          let bodydata=res['data'];
+          if(bodydata.hasOwnProperty('products'))
+          {
           for (const element of res['data'].products) {   
 
             console.log('cart Product slug',element.pro_slug);
@@ -147,7 +123,7 @@ for(const csdata of state.cart)
                         "status": "active"
                     },
                   ],
-                  "cart_id": element._id,
+                  "cart_id": res['data']._id,
                   "product_name": element.pro_name,
                   "product_slug": element.pro_slug,
                   "quantity": element.qty,
@@ -166,9 +142,102 @@ for(const csdata of state.cart)
           
       }
     }
+    }
       
     }
     )
+
+if(state.cart.length > 0)    
+{
+
+    for(const csdata of state.cart)
+{
+  let cdata=
+  {
+        "pro_id": csdata._id,
+        "pro_name": csdata.product_name,
+        "pro_slug": csdata.product_slug,
+        "pro_image": csdata.product_image[0].pro_image,
+        "qty": csdata.quantity,
+        "price": csdata.product_sale_price,
+        "options":[
+            {"size": csdata.product_varient_options[0].size_options},
+            {"color": csdata.product_varient_options[1].color_options}
+        ]
+
+  }
+
+  console.log('Ready to submit cart data',cdata);
+
+  this.product_service.addToCartDb(cdata).subscribe(
+  res =>  {    
+    csdata.cart_id = res['data']._id;
+    console.log('Cart item added from login',res);
+    let data = 
+    {
+      "_id": csdata.pro_id,
+      "product_image": [
+        {
+            "pro_image": csdata.product_image[0].pro_image,
+            "status": "active"
+        },
+      ],
+      "cart_id": csdata._id,
+      "product_name": csdata.product_name,
+      "product_slug": csdata.product_slug,
+      "quantity": csdata.quantity,
+      "product_sale_price": csdata.product_sale_price,
+      "product_varient_options":[
+          {"size_options": csdata.product_varient_options[0].size_options},
+          {"color_options": csdata.product_varient_options[1].color_options}
+      ]
+    }
+    console.log('Cart item added Update After Login',data);
+  this.cartproducts.push(data);          
+  this.products=this.cartproducts;     
+  localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+  console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+
+  setTimeout(() => {
+    if(this.returnUrl)
+    {
+    // login successful so redirect to return url
+    this.router.navigateByUrl(this.returnUrl)
+    }
+    else
+    {
+      
+    this.router.navigate(['/dashboard'])
+    .then(() => {
+        window.location.reload();
+    });
+  }
+  },2000)  
+
+    }
+  )
+}
+}
+else
+{
+
+  setTimeout(() => {
+    if(this.returnUrl)
+    {
+    // login successful so redirect to return url
+    this.router.navigateByUrl(this.returnUrl)
+    }
+    else
+    {
+      
+    this.router.navigate(['/dashboard'])
+    .then(() => {
+        window.location.reload();
+    });
+  }
+  },2000)  
+
+}
 
 }
 else
@@ -179,21 +248,7 @@ else
 
 
 /////////////////////////////////////////////////////////   
-      setTimeout(() => {
-        if(this.returnUrl)
-        {
-        // login successful so redirect to return url
-        this.router.navigateByUrl(this.returnUrl)
-        }
-        else
-        {
-          
-        this.router.navigate(['/dashboard'])
-        .then(() => {
-            window.location.reload();
-        });
-      }
-      },2000)  
+
     },
     error => {
       // .... HANDLE ERROR HERE 

@@ -39,6 +39,7 @@ export interface ProductNew {
     updatedAt?: Date;
     quantity?: number;
     cart_id?: string;
+    tags?: any[];
 }
 export interface ProductNew2 {
     _id?: string;

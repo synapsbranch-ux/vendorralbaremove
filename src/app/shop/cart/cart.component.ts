@@ -35,57 +35,55 @@ export class CartComponent implements OnInit , OnChanges {
 
   ngOnInit(): void {
     this.product_service.cartItems.subscribe(response => this.products = response);
+    this.product_service.allCartProducts().subscribe(
+      res =>{
+        console.log('Return Cart',res);
+        if(res['data'])
+        {
+          let bodydata=res['data'];
+          if(bodydata.hasOwnProperty('products'))
+          {
+          for (const element of res['data'].products) {   
 
-if(localStorage.getItem('user_id'))
-{
-  this.product_service.allCartProducts().subscribe(
-    res =>{
-      console.log('Return Cart',res);
-
-      if(res['data'] != null)
-      {
-        for (const element of res['data'].products) {   
-
-          console.log('cart Product slug',element.pro_slug);
-          
-          this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
-
-            console.log('cart Product Image',product['data']);
-
-              this.product_img=product['data'].product_image[0].pro_image;
-              let data = 
-              {
-                "_id": element.pro_id,
-                "product_image": [
-                  {
-                      "pro_image": this.product_img,
-                      "status": "active"
-                  },
-                ],
-                "cart_id": element._id,
-                "product_name": element.pro_name,
-                "product_slug": element.pro_slug,
-                "quantity": element.qty,
-                "product_sale_price": element.price,
-                "product_varient_options":[
-                    {"size_options": element.options[0].size},
-                    {"color_options": element.options[1].color}
-                ]
-              }
-            this.cartproducts.push(data);          
-            this.products=this.cartproducts;
-            this.getTotal;     
-            localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-            console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+            console.log('cart Product slug',element.pro_slug);
             
-          })                          
-        
+            this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
+
+              console.log('cart Product Image',product['data']);
+
+                this.product_img=product['data'].product_image[0].pro_image;
+                let data = 
+                {
+                  "_id": element.pro_id,
+                  "product_image": [
+                    {
+                        "pro_image": this.product_img,
+                        "status": "active"
+                    },
+                  ],
+                  "cart_id": res['data']._id,
+                  "product_name": element.pro_name,
+                  "product_slug": element.pro_slug,
+                  "quantity": element.qty,
+                  "product_sale_price": element.price,
+                  "product_varient_options":[
+                      {"size_options": element.options[0].size},
+                      {"color_options": element.options[1].color}
+                  ]
+                }
+              this.cartproducts.push(data);          
+              this.products=this.cartproducts;     
+              localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+              console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+              
+            })                          
+          
+      }
     }
-  }
-    
-  }
-  )
-}
+    }
+      
+    }
+    )
 
   }
   
@@ -114,6 +112,13 @@ if(localStorage.getItem('user_id'))
 
 console.log(qty);    
     this.product_service.updateCartQuantity(product, qty);
+    this.getTotal.subscribe(
+      res =>
+      {
+        console.log('Increment Total',res);
+      }
+    );
+
   }
 
   // Decrement
@@ -131,6 +136,13 @@ console.log(qty);
 
     console.log(qty); 
     this.product_service.updateCartQuantity(product, qty);
+    this.getTotal.subscribe(
+      res =>
+      {
+        console.log('Decrement Total',res);
+      }
+    );
+    
   }
 
   public addwishlist(product)
@@ -140,7 +152,7 @@ console.log(qty);
 
   public removeItem(product: any) {
 
-      // console.log('Remove Cart Item',product);
+    console.log('Remove Cart Item',product);
 
     this.product_service.removeCartItem(product);
   }

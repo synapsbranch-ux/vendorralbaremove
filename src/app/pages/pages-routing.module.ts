@@ -21,7 +21,6 @@ import { ReviewComponent } from './review/review.component';
 import { OrderSuccessComponent } from './order-success/order-success.component';
 import { CompareOneComponent } from './compare/compare-one/compare-one.component';
 import { CompareTwoComponent } from './compare/compare-two/compare-two.component';
-import { CollectionComponent } from './collection/collection.component';
 import { LookbookComponent } from './lookbook/lookbook.component';
 import { ErrorComponent } from './error/error.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
@@ -65,7 +64,7 @@ const routes: Routes = [
   },
   { 
     path: 'forget-password', 
-    component: ForgetPasswordComponent,canActivate: [AuthGuard], 
+    component: ForgetPasswordComponent, 
   },
   { 
     path: 'address', 
@@ -115,10 +114,7 @@ const routes: Routes = [
     path: 'compare/two', 
     component: CompareTwoComponent 
   },
-  { 
-    path: 'collection', 
-    component: CollectionComponent 
-  },
+
   { 
     path: 'lookbook', 
     component: LookbookComponent 

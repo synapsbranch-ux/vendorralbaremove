@@ -19,22 +19,23 @@ export class SizeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   get filterbysize() {
     const uniqueSize = []
     this.products.filter((product) => {
       
-      if(product.product_varient_options[0])
+      if(product.product_varient_options[0].size_options)
       {
-
-
-      product.product_varient_options[0].size_options.filter((product_varient_options) => {
-        if (product.product_varient_options[0].size_options.length > 0) {
-          const index = uniqueSize.indexOf(product_varient_options)
-          if (index === -1) uniqueSize.push(product_varient_options)
+      product.product_varient_options.filter((product_varient_color) => {
+        if (product.product_varient_options[0].size_options) {
+          const index = uniqueSize.indexOf(product.product_varient_options[0].size_options)
+          if (index === -1) uniqueSize.push(product.product_varient_options[0].size_options)
         }
       })
+
+
     }
     })
     return uniqueSize

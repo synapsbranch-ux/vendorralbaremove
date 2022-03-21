@@ -158,6 +158,11 @@ export class UserService {
     return this.http.post(environment.baseUrl+'user/changepassword',data,httpOptionsroom);
   }
 
+  forgotPassword(data:any)
+  {
+    return this.http.post(environment.baseUrl+'user/forgotpassword',data);
+  }
+
   setUserAddressid(userAddtrss:any)
   {
     this.useraddressid=userAddtrss;

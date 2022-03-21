@@ -30,7 +30,7 @@
                             </p>
                             <p class="mb-2">Size:&nbsp;&nbsp; {{product.product_varient_options[0].size_options}}</p>
                             <p class="mb-2 cart_procolor">Color:&nbsp;&nbsp; <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
-                            <p class="mb-2">{{ (product.price | discount:product) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>
+                            <p class="mb-2">{{ (product.price) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>
                         </div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-3">

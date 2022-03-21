@@ -1,5 +1,5 @@
-<section class="p-0">
-    <img src="assets/images/slider/home_slider.png" class="img-fluid" alt="banner">
+<section class="p-0 category_banner">
+    <img src="{{categories_image}}" class="img-fluid" alt="banner">
 </section>
 <app-breadcrumb [title]="'Collection'" [breadcrumb]="'Collection'"></app-breadcrumb>
 <!-- section start -->
@@ -37,11 +37,11 @@
                         <div class="collection-filter-block">
                             <!-- brand filter start -->
                             <!-- color filter start here -->
-                            <!-- <app-colors [products]="products" [colors]="colors" (colorsFilter)="updateFilter($event)">
-                            </app-colors> -->
+                            <app-colors [products]="products" [colors]="colors" (colorsFilter)="updateFilter($event)">
+                            </app-colors>
                             <!-- size filter start here -->
-                            <!-- <app-size [products]="products" [size]="size" (sizeFilter)="updateFilter($event)">
-                            </app-size> -->
+                            <app-size [products]="products" [size]="size" (sizeFilter)="updateFilter($event)">
+                            </app-size>
                             <!-- price filter start here -->
                             <app-price [min]="minPrice" [max]="maxPrice" (priceFilter)="updateFilter($event)">
                             </app-price>

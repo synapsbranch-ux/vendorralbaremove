@@ -46,8 +46,8 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-// if(this.userservice.getUserOrderid())
-// {
+if(this.userservice.getUserOrderid())
+{
   let oData={
     order_id: this.userservice.getUserOrderid()
   }
@@ -74,15 +74,15 @@ export class OrderSuccessComponent implements OnInit {
       this.billing_zip =res['data'][0].billing_zip;
       this.createdAt =res['data'][0].createdAt;
       this.payment_method =res['data'][0].payment_method;
-      this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 15)); 
+      this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 10)); 
       console.log('Order Deatils',this.expected_delivery);
     }
   )
-// }
-// else
-// {
-// this.router.navigateByUrl('/order-list');
-// }
+}
+else
+{
+this.router.navigateByUrl('/order-list');
+}
 
 console.log('this.userservice.getUserOrderid()',this.userservice.getUserOrderid())
 

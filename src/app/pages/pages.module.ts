@@ -27,7 +27,6 @@ import { ReviewComponent } from './review/review.component';
 import { OrderSuccessComponent } from './order-success/order-success.component';
 import { CompareOneComponent } from './compare/compare-one/compare-one.component';
 import { CompareTwoComponent } from './compare/compare-two/compare-two.component';
-import { CollectionComponent } from './collection/collection.component';
 import { LookbookComponent } from './lookbook/lookbook.component';
 import { ErrorComponent } from './error/error.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
@@ -64,7 +63,6 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     OrderSuccessComponent,
     CompareOneComponent,
     CompareTwoComponent,
-    CollectionComponent,
     LookbookComponent,
     ErrorComponent,
     ComingSoonComponent,

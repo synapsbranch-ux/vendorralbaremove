@@ -63,7 +63,7 @@
                         <span>{{ product?.discount }}% off</span>
                     </h4> -->
                     <h3>
-                        {{ product?.product_sale_price}}
+                        {{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol' }}
                     </h3>
                     <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
@@ -84,9 +84,9 @@
                         <div *ngIf="product?.product_varient_options">
                         <h6 class="product-title size-text" >
                             select size
-                            <span>
+                            <!-- <span>
                               <a href="javascrip:void(0)" (click)="SizeChart.openModal()">size chart</a>
-                            </span>
+                            </span> -->
                         </h6>
                         <div class="size-box">
                             <ul>

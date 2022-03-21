@@ -143,70 +143,77 @@ export class CheckoutComponent implements OnInit {
   //   }) 
   // }
 
-  // // Paypal Payment Gateway
-  // private initConfig(): void {
-  //   this.payPalConfig = {
-  //       currency: this.productService.Currency.currency,
-  //       clientId: environment.paypal_token,
-  //       createOrderOnClient: (data) => < ICreateOrderRequest > {
-  //         intent: 'CAPTURE',
-  //         purchase_units: [{
-  //             amount: {
-  //               currency_code: this.productService.Currency.currency,
-  //               value: this.amount,
-  //               breakdown: {
-  //                   item_total: {
-  //                       currency_code: this.productService.Currency.currency,
-  //                       value: this.amount
-  //                   }
-  //               }
-  //             }
-  //         }]
-  //     },
-  //       advanced: {
-  //           commit: 'true'
-  //       },
-  //       style: {
-  //           label: 'paypal',
-  //           size:  'small', // small | medium | large | responsive
-  //           shape: 'rect', // pill | rect
-  //       },
-  //       onApprove: (data, actions) => {
-  //           this.orderService.createOrder(this.products, this.checkoutForm.value, data.orderID, this.getTotal);
-  //           console.log('onApprove - transaction was approved, but not authorized', data, actions);
-  //           actions.order.get().then(details => {
-  //               console.log('onApprove - you can get full order details inside onApprove: ', details);
-  //           });
-  //       },
-  //       onClientAuthorization: (data) => {
-  //           console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-  //       },
-  //       onCancel: (data, actions) => {
-  //           console.log('OnCancel', data, actions);
-  //       },
-  //       onError: err => {
-  //           console.log('OnError', err);
-  //       },
-  //       onClick: (data, actions) => {
-  //           console.log('onClick', data, actions);
-  //       }
-  //   };
-  // }
+  // Paypal Payment Gateway
+  private initConfig(): void {
+    this.payPalConfig = {
+        currency: this.productService.Currency.currency,
+        clientId: environment.paypal_token,
+        createOrderOnClient: (data) => < ICreateOrderRequest > {
+          intent: 'CAPTURE',
+          purchase_units: [{
+              amount: {
+                currency_code: this.productService.Currency.currency,
+                value: this.amount,
+                breakdown: {
+                    item_total: {
+                        currency_code: this.productService.Currency.currency,
+                        value: this.amount
+                    }
+                }
+              }
+          }]
+      },
+        advanced: {
+            commit: 'true'
+        },
+        style: {
+            label: 'paypal',
+            size:  'small', // small | medium | large | responsive
+            shape: 'rect', // pill | rect
+        },
+        onApprove: (data, actions) => {
+            this.orderService.createOrder(this.products, this.checkoutForm.value, data.orderID, this.getTotal);
+            console.log('onApprove - transaction was approved, but not authorized', data, actions);
+            actions.order.get().then(details => {
+                console.log('onApprove - you can get full order details inside onApprove: ', details);
+            });
+        },
+        onClientAuthorization: (data) => {
+            console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+        },
+        onCancel: (data, actions) => {
+            console.log('OnCancel', data, actions);
+        },
+        onError: err => {
+            console.log('OnError', err);
+        },
+        onClick: (data, actions) => {
+            console.log('onClick', data, actions);
+        }
+    };
+  }
 
   placeorder()
   {
     const currentUser = localStorage.getItem("user_id");
     if (currentUser) {
       
-
+if(this.products.length > 0)
+{
       let orderTotal=0;
       let transactionId=0;
-      let paymentStatus="success";
+      let paymentStatus="";
       let formData = this.checkoutForm.value;
 
       if(formData.paymentOption == 'COD')
       {
+        paymentStatus="success";
         transactionId=uuidv4();
+      }
+      else
+      {
+        this.initConfig();
+        paymentStatus="pending";
       }
       console.log('Payment Status',formData.paymentOption);
 
@@ -226,9 +233,9 @@ export class CheckoutComponent implements OnInit {
      {
        console.log('product Loop',elem);
       let odetails= {
-        store_id: elem.product_store,
-        vendor_id: elem.product_owner,
-        department_id: elem.product_department,
+        // store_id: elem.product_store,
+        // vendor_id: elem.product_owner,
+        // department_id: elem.product_department,
         product_id: elem._id,
         product_name: elem.product_name,
         product_image: elem.product_image[0].pro_image,
@@ -279,7 +286,7 @@ this.orderService.userCreateOrder(orderData).subscribe(
     {
       this.productService.removeCartItem(elem);
     }
-    this.userservice.setUserOrderid(res['data'].order_id);
+    this.userservice.setUserOrderid(res['data']._id);
     setTimeout(() => {
       this.router.navigateByUrl('/order/success');
     },1000) 
@@ -288,6 +295,7 @@ this.orderService.userCreateOrder(orderData).subscribe(
 )
 
     }
+  }
     else
     {
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});

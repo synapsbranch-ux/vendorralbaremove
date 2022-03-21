@@ -78,7 +78,8 @@
 
                     <div class="col-sm-12 payment-mode">
                         <h4>payment method</h4>
-                        <p>Pay on Delivery (Cash/Card). Cash on delivery (COD) available. Card/Net banking acceptance subject to device availability.</p>
+                        <p>{{payment_method}}</p>
+                        <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery (COD) available. Card/Net banking acceptance subject to device availability.</p>
                     </div>
                     <div class="col-md-12">
                         <div class="delivery-sec">
