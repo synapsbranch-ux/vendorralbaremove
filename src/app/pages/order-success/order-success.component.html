@@ -49,9 +49,12 @@
                             <li>subtotal <span>{{total_order_amount}}</span></li>
                         </ul>
                     </div>
-                    <div class="final-total">
-                        <h3>total <span>{{total_order_amount}}</span></h3>
-                    </div>
+                    <ul class="final-total pb-4">
+                        <li>Total: <h3 class="text-black">{{total_order_amount | currency}}</h3></li>
+                    </ul>
+                    <ul class="order-detail">
+                        <li>Order Status: <h3 class="text-black">{{ order_status | uppercase }}</h3></li>
+                    </ul>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -63,6 +66,7 @@
                             <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
                             <li>Order Total: {{total_order_amount}}</li>
                         </ul>
+                        
                     </div>
                     <div class="col-sm-6">
                         <h4>shipping address</h4>

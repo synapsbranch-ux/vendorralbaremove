@@ -34,6 +34,8 @@ export class CartComponent implements OnInit , OnChanges {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('user_id'))
+    {
     this.product_service.cartItems.subscribe(response => this.products = response);
     this.product_service.allCartProducts().subscribe(
       res =>{
@@ -84,6 +86,14 @@ export class CartComponent implements OnInit , OnChanges {
       
     }
     )
+  }
+  else
+  {
+    this.product_service.cartItems.subscribe(response => this.products = response);    
+    localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+    console.log('Return LocalStorage',localStorage.getItem("cartItems"));                            
+          
+  }
 
   }
   

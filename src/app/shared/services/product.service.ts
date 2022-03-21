@@ -379,14 +379,11 @@ export class ProductService {
         res =>
         {
             console.log('Delete Cart From DB Return',res);
-          
         }
       )
-      state.cart.splice(index, 1);
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     }
-
-  
+    state.cart.splice(index, 1);
+    localStorage.setItem("cartItems", JSON.stringify(state.cart));
 
     return true
   }
