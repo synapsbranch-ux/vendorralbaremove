@@ -148,14 +148,17 @@
                                 <div class="upper-box">
                                     <div class="payment-options">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
                                             </div>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
                                                 <img class="image d-block" src="assets/images/paypal.png" alt="" />
                                             </div>
+                                            <ngx-paypal *ngIf="paypalstatus"  
+                                            [config]="payPalConfig">
+                                            </ngx-paypal>
                                         <!-- <ul>
                                             <li>
                                                 <div class="radio-option">
@@ -174,7 +177,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                        <button type="submit" [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
+                                        <button type="submit" *ngIf="!paypalstatus"  [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>
                                     

@@ -26,7 +26,7 @@ export class OrderService {
   
 
   // Create order
-  public createOrder(product: any, details: any, orderId: any, amount: any) {
+  public createOrder2(product: any, details: any, orderId: any, amount: any) {
     var item = {
         shippingDetails: details,
         product: product,

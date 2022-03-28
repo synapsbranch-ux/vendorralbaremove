@@ -33,6 +33,7 @@ export class CheckoutComponent implements OnInit {
   useraddressslist=[];
   orderValid:boolean=false;
   orderMassage:any;
+  paypalstatus:boolean=false;
 
   isUserLogin:boolean=true;
 
@@ -51,7 +52,7 @@ export class CheckoutComponent implements OnInit {
 
     this.productService.cartItems.subscribe(response => this.products = response);
     this.getTotal.subscribe(amount => this.amount = amount);
-    // this.initConfig();
+    this.initConfig();
     this.checkoutForm = new FormGroup({
       'firstname': new FormControl(null, [Validators.required]),
       'lastname': new FormControl(null, [Validators.required]),
@@ -172,7 +173,9 @@ export class CheckoutComponent implements OnInit {
             shape: 'rect', // pill | rect
         },
         onApprove: (data, actions) => {
-            this.orderService.createOrder(this.products, this.checkoutForm.value, data.orderID, this.getTotal);
+            // this.orderService.createOrder(this.products, this.checkoutForm.value, data.orderID, this.getTotal);
+            this.placeorder();
+            this.paypalstatus=false;
             console.log('onApprove - transaction was approved, but not authorized', data, actions);
             actions.order.get().then(details => {
                 console.log('onApprove - you can get full order details inside onApprove: ', details);
@@ -191,6 +194,19 @@ export class CheckoutComponent implements OnInit {
             console.log('onClick', data, actions);
         }
     };
+  }
+
+  getpaymentoption(event)
+  {
+    if(event.target.value == 'COD')
+    {
+      this.paypalstatus=false;
+    }
+    if(event.target.value == 'paypal')
+    {
+      this.paypalstatus=true;
+    }
+    console.log(event.target.value);
   }
 
   placeorder()
@@ -275,24 +291,24 @@ let orderData=
 console.log('Order Generate STR 1',orderData);
 console.log('Order Generate STR 2',JSON.stringify(orderData));
 
-this.orderService.userCreateOrder(orderData).subscribe(
+// this.orderService.userCreateOrder(orderData).subscribe(
 
-  res =>
-  {
-    this.orderValid=true;
-    this.orderMassage="Your Order Placed Sucessfully";
-    console.log('Order Created',res);
-    for(const elem of this.products)
-    {
-      this.productService.removeCartItem(elem);
-    }
-    this.userservice.setUserOrderid(res['data']._id);
-    setTimeout(() => {
-      this.router.navigateByUrl('/order/success');
-    },1000) 
-  }
+//   res =>
+//   {
+//     this.orderValid=true;
+//     this.orderMassage="Your Order Placed Sucessfully";
+//     console.log('Order Created',res);
+//     for(const elem of this.products)
+//     {
+//       this.productService.removeCartItem(elem);
+//     }
+//     this.userservice.setUserOrderid(res['data']._id);
+//     setTimeout(() => {
+//       this.router.navigateByUrl('/order/success');
+//     },1000) 
+//   }
 
-)
+// )
 
     }
   }

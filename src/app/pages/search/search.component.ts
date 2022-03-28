@@ -33,7 +33,7 @@ export class SearchComponent implements OnInit {
         {
           this.productList=res['data'];
           console.log('product list Length',res['data'].length);
-          if(res['data'].length == undefined)
+          if(res['data'].length == 0)
           {
             this.oproductfount=true;
           }
