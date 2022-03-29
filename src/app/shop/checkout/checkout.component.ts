@@ -34,7 +34,7 @@ export class CheckoutComponent implements OnInit {
   orderValid:boolean=false;
   orderMassage:any;
   paypalstatus:boolean=false;
-
+  transactionId=0;
   isUserLogin:boolean=true;
 
   constructor(private fb: FormBuilder,
@@ -146,54 +146,73 @@ export class CheckoutComponent implements OnInit {
 
   // Paypal Payment Gateway
   private initConfig(): void {
+    let orderProductspaypal : Object[]=[];
+
+    for(const elem of this.products)
+    {
+      console.log('product Loop',elem);
+     let odetailsobj= 
+     {
+      name: elem.product_name,
+      quantity: elem.quantity,
+      unit_amount: {
+        currency_code: this.productService.Currency.currency,
+        value: elem.product_sale_price,
+      },
+    }
+    orderProductspaypal.push(odetailsobj);
+    }
+
     this.payPalConfig = {
-        currency: this.productService.Currency.currency,
-        clientId: environment.paypal_token,
-        createOrderOnClient: (data) => < ICreateOrderRequest > {
-          intent: 'CAPTURE',
-          purchase_units: [{
-              amount: {
-                currency_code: this.productService.Currency.currency,
-                value: this.amount,
-                breakdown: {
-                    item_total: {
-                        currency_code: this.productService.Currency.currency,
-                        value: this.amount
-                    }
+      currency: this.productService.Currency.currency,
+      clientId: environment.paypal_token,
+      createOrderOnClient: (data) => <ICreateOrderRequest>{
+        intent: 'CAPTURE',
+        purchase_units: [
+          {
+            amount: {
+              currency_code: this.productService.Currency.currency,
+              value: this.amount,
+              breakdown: {
+                item_total: {
+                  currency_code: this.productService.Currency.currency,
+                  value: this.amount
                 }
               }
-          }]
+            },
+            items: orderProductspaypal
+          }
+        ]
       },
-        advanced: {
-            commit: 'true'
-        },
-        style: {
-            label: 'paypal',
-            size:  'small', // small | medium | large | responsive
-            shape: 'rect', // pill | rect
-        },
-        onApprove: (data, actions) => {
-            // this.orderService.createOrder(this.products, this.checkoutForm.value, data.orderID, this.getTotal);
-            this.placeorder();
-            this.paypalstatus=false;
-            console.log('onApprove - transaction was approved, but not authorized', data, actions);
-            actions.order.get().then(details => {
-                console.log('onApprove - you can get full order details inside onApprove: ', details);
-            });
-        },
-        onClientAuthorization: (data) => {
-            console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-        },
-        onCancel: (data, actions) => {
-            console.log('OnCancel', data, actions);
-        },
-        onError: err => {
-            console.log('OnError', err);
-        },
-        onClick: (data, actions) => {
-            console.log('onClick', data, actions);
-        }
+      advanced: {
+        commit: 'true'
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+      onApprove: (data, actions) => {
+        console.log('onApprove - transaction was approved, but not authorized', data, actions);
+        actions.order.get().then(details => {
+          this.transactionId=details['id'];
+          this.placeorder();
+          console.log('onApprove - you can get full order details inside onApprove: ', details);
+        });
+      },
+      onClientAuthorization: (data) => {
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+      },
+      onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+      },
+      onError: err => {
+        console.log('OnError', err);
+      },
+      onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+      },
     };
+  
   }
 
   getpaymentoption(event)
@@ -217,14 +236,13 @@ export class CheckoutComponent implements OnInit {
 if(this.products.length > 0)
 {
       let orderTotal=0;
-      let transactionId=0;
       let paymentStatus="";
       let formData = this.checkoutForm.value;
 
       if(formData.paymentOption == 'COD')
       {
         paymentStatus="success";
-        transactionId=uuidv4();
+        this.transactionId=uuidv4();
       }
       else
       {
@@ -274,7 +292,7 @@ let orderData=
   order_status: 'initiated',
   payment_status: paymentStatus,
   payment_method: formData.paymentOption,
-  transaction_id: transactionId,
+  transaction_id: this.transactionId,
   shipping_address_id: formData.userAddressId,
   billing_email: formData.email,
   billing_phone: formData.phone,
@@ -288,27 +306,27 @@ let orderData=
   billing_zip: formData.postalcode,
   order_details: orderProducts,
 }
-console.log('Order Generate STR 1',orderData);
-console.log('Order Generate STR 2',JSON.stringify(orderData));
+// console.log('Order Generate STR 1',orderData);
+// console.log('Order Generate STR 2',JSON.stringify(orderData));
 
-// this.orderService.userCreateOrder(orderData).subscribe(
+this.orderService.userCreateOrder(orderData).subscribe(
 
-//   res =>
-//   {
-//     this.orderValid=true;
-//     this.orderMassage="Your Order Placed Sucessfully";
-//     console.log('Order Created',res);
-//     for(const elem of this.products)
-//     {
-//       this.productService.removeCartItem(elem);
-//     }
-//     this.userservice.setUserOrderid(res['data']._id);
-//     setTimeout(() => {
-//       this.router.navigateByUrl('/order/success');
-//     },1000) 
-//   }
+  res =>
+  {
+    this.orderValid=true;
+    this.orderMassage="Your Order Placed Sucessfully";
+    console.log('Order Created',res);
+    for(const elem of this.products)
+    {
+      this.productService.removeCartItem(elem);
+    }
+    this.userservice.setUserOrderid(res['data']._id);
+    setTimeout(() => {
+      this.router.navigateByUrl('/order/success');
+    },1000) 
+  }
 
-// )
+)
 
     }
   }
