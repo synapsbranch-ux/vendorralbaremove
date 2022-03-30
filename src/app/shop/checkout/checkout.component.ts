@@ -36,6 +36,7 @@ export class CheckoutComponent implements OnInit {
   paypalstatus:boolean=false;
   transactionId=0;
   isUserLogin:boolean=true;
+  paypalreurnData=[];
 
   constructor(private fb: FormBuilder,
     public productService: ProductService,private userservice: UserService,
@@ -195,7 +196,29 @@ export class CheckoutComponent implements OnInit {
         console.log('onApprove - transaction was approved, but not authorized', data, actions);
         actions.order.get().then(details => {
           this.transactionId=details['id'];
-          this.placeorder();
+          
+          setTimeout(() => {
+           this.placeorder();
+          },1500) 
+          this.paypalreurnData=[
+            {
+              transaction_id: details.id,
+              country_code: details.payer.address.country_code,
+              email_address: details.payer.email_address,
+              name:  `${details.payer.name.given_name} ${details.payer.name.surname}`,
+              customer_id_paypal: details.payer.payer_id,
+              paypal_status: details.status,
+            }
+          //   {
+          //   transaction_id: "703dc5d2-3dc3-4671-afaa-d20a773f738c",
+          //   country_code: "IN",
+          //   email_address: "test@yopmail.com",
+          //   name: "test",
+          //   customer_id_paypal: "620ca08597d509ecd22e6aa8",
+          //   paypal_status: "APPROVE",
+          // }
+          ];
+          
           console.log('onApprove - you can get full order details inside onApprove: ', details);
         });
       },
@@ -286,6 +309,10 @@ if(this.products.length > 0)
 
 
 console.log('orderProducts',orderProducts)
+
+console.log('Paypal return Arr',this.paypalreurnData);
+console.log('Paypal return Cuntry Code',this.paypalreurnData[0].country_code);
+
 let orderData=
 {
   total_order_amount: orderTotal,
@@ -293,6 +320,11 @@ let orderData=
   payment_status: paymentStatus,
   payment_method: formData.paymentOption,
   transaction_id: this.transactionId,
+  country_code: this.paypalreurnData[0].country_code,
+  email_address: this.paypalreurnData[0].email_address,
+  name: this.paypalreurnData[0].name,
+  customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
+  paypal_status: this.paypalreurnData[0].paypal_status,
   shipping_address_id: formData.userAddressId,
   billing_email: formData.email,
   billing_phone: formData.phone,

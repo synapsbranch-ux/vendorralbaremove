@@ -30,7 +30,7 @@ export class ProductService {
   
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService, private router: Router) {
       
      }
 
@@ -366,8 +366,11 @@ export class ProductService {
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
     console.log('Befor Structure Delete Cart',product);
+    state.cart.splice(index, 1);
+    localStorage.setItem("cartItems", JSON.stringify(state.cart));
     if(localStorage.getItem('user_id'))
     {
+
       let dcDAta=
       {
         "cart_id": product.cart_id,
@@ -375,15 +378,20 @@ export class ProductService {
       }
       console.log('Ready to delete Cart Item',dcDAta);  
 
+      
       this.deleteToCartDb(dcDAta).subscribe(
         res =>
         {
-            console.log('Delete Cart From DB Return',res);
+          console.log('Delete Cart From DB Return',res);
         }
       )
     }
-    state.cart.splice(index, 1);
-    localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      else
+      {
+        state.cart.splice(index, 1);
+        localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      }
+   
 
     return true
   }
