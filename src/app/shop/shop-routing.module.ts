@@ -1,3 +1,4 @@
+import { AuthGuard } from './../shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -24,11 +25,11 @@ const routes: Routes = [
   },
   {
     path: 'cart',
-    component: CartComponent
+    component: CartComponent,  canActivate: [AuthGuard]
   },
   {
     path: 'wishlist',
-    component: WishlistComponent
+    component: WishlistComponent,  canActivate: [AuthGuard]
   },
   {
     path: 'compare',
@@ -36,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: 'checkout',
-    component: CheckoutComponent
+    component: CheckoutComponent,  canActivate: [AuthGuard]
   },
   // {
   //   path: 'checkout/success/:id',

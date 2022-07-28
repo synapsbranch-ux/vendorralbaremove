@@ -1,24 +1,23 @@
 <owl-carousel-o [options]="HomeSliderConfig" class="home-slider" [ngClass]="class">
-	<ng-container *ngFor="let slider of sliders">
-	  <ng-template carouselSlide>
-	    <div class="home" [ngClass]="textClass" [ngStyle]="{'background-image': 'url('+slider.banner_background_image+')'}">
-	      <div class="container">
-	        <div class="row">
-	          <div class="col">
-	            <div class="slider-contain">
-	              <div class="text-left">
-	                <h1 [style.color]="slider.banner_title_color" >{{slider.banner_title}}</h1>
-	                <p [style.color]="slider.banner_subtitle_color">{{slider.banner_subtitle}}</p>
-	                <a *ngIf="slider.banner_link" [routerLink]="['/category/'+slider.banner_link]" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color"
-	                   class="btn rounded-lg">
+    <ng-container *ngFor="let slider of sliders">
+        <ng-template carouselSlide>
+            <div class="home" [ngClass]="textClass" [ngStyle]="{'background-image': 'url('+slider.banner_background_image+')'}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="slider-contain">
+                                <div class="text-left">
+                                    <h1 [style.color]="slider.banner_title_color">{{slider.banner_title}}</h1>
+                                    <p [style.color]="slider.banner_subtitle_color">{{slider.banner_subtitle}}</p>
+                                    <a *ngIf="slider.banner_department" href="https://store.ralbatech.com/{{slider.banner_store}}/{{slider.banner_department}}" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
 	                   {{buttonText}}
 	                </a>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	  </ng-template>
-	</ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </ng-container>
 </owl-carousel-o>

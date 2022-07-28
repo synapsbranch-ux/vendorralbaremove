@@ -7,13 +7,13 @@
                 <h3>Create your Business Account</h3>
                 <div class="theme-card">
                     <form class="theme-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-                        <div class="form-row" >
+                        <div class="form-row">
                             <div class="col-md-6 mb-4">
                                 <label for="fname"> Name</label>
-                                <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname" >
+                                <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname">
                                 <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="text text-danger mt-1">
                                     <div *ngIf="fname.errors?.required">
-                                         Name is required.
+                                        Name is required.
                                     </div>
                                 </div>
                             </div>
@@ -30,8 +30,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row" >
- 
+                        <div class="form-row">
+
                             <div class="col-md-6 mb-4">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control m-0" id="password" placeholder="Enter your password" required="" formControlName="password">
@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-4" >
+                            <div class="col-md-6 mb-4">
                                 <label for="repeat_password">Repeat Password</label>
                                 <input type="password" class="form-control m-0" id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password">
                                 <div *ngIf="repeat_password.invalid && (repeat_password.dirty || repeat_password.touched) && repeat_password.errors" class="text text-danger mt-1">
@@ -69,27 +69,25 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                            <div class="form-terms mb-5">
-                                <div class="custom-control custom-checkbox mr-sm-2 d-flex align-items-center">
-                                    <input type="checkbox" class="custom-control-input"
-                                        id="customControlAutosizing1" >
-                                    <label class="custom-control-label pt-04"
-                                        for="customControlAutosizing1"><span>I agree all statements
+                        </div>
+                        <div class="form-terms mb-5">
+                            <div class="custom-control custom-checkbox mr-sm-2 d-flex align-items-center">
+                                <input type="checkbox" class="custom-control-input" id="customControlAutosizing1">
+                                <label class="custom-control-label pt-04" for="customControlAutosizing1"><span>I agree all statements
                                             in <a href="javascript:void(0)" class="pull-right">Terms
                                                 &amp;
                                                 Conditions</a></span></label>
 
-                                </div>
                             </div>
-                            <div class="form-group">
-                                <button type="submit" [disabled]="form.invalid"  class="btn btn-solid rounded-lg"> Create Account </button>
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" [disabled]="form.invalid" class="btn btn-solid rounded-lg"> Create Account </button>
+                        </div>
 
-                            <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
+                        <!-- <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
                                 <div class="d-flex align-items-center"><span *ngIf="isValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{signupMassage}}</div>
-                            </div>
-                            
+                            </div> -->
+
                     </form>
                 </div>
             </div>

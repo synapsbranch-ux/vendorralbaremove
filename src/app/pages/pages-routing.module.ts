@@ -14,7 +14,6 @@ import { RegisterComponent } from './account/register/register.component';
 import { ForgetPasswordComponent } from './account/forget-password/forget-password.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { ContactComponent } from './account/contact/contact.component';
-import { AboutUsComponent } from './about-us/about-us.component';
 import { SearchComponent } from './search/search.component';
 import { TypographyComponent } from './typography/typography.component';
 import { ReviewComponent } from './review/review.component';
@@ -85,10 +84,6 @@ const routes: Routes = [
   { 
     path: 'contact', 
     component: ContactComponent 
-  },
-  { 
-    path: 'aboutus', 
-    component: AboutUsComponent 
   },
   { 
     path: 'search', 
@@ -181,11 +176,11 @@ const routes: Routes = [
   },
   { 
     path: 'order-list', 
-    component: OrderListComponent 
+    component: OrderListComponent, canActivate: [AuthGuard],  
   },
   { 
     path: 'view-order', 
-    component: OrderDetailsComponent 
+    component: OrderDetailsComponent, canActivate: [AuthGuard],  
   },
 ];
 

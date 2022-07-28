@@ -1,10 +1,11 @@
-<app-breadcrumb [title]="'Contact'" [breadcrumb]="'Contact'"></app-breadcrumb>
+<app-header-one [sticky]="true"></app-header-one>
 <!--section start-->
 <section class=" contact-page section-b-space">
     <div class="container">
         <div class="row section-b-space">
             <div class="col-lg-7 map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d50059.12775918716!2d72.78534673554945!3d21.16564923510817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1533793756956"   allowfullscreen></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3033.168994161686!2d-74.83282108442636!3d40.51575565753459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3f3d58d72f98f%3A0x9f04d5725f44d333!2s17%20Bressler%20Rd%2C%20Flemington%2C%20NJ%2008822%2C%20USA!5e0!3m2!1sen!2sin!4v1656416592185!5m2!1sen!2sin"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="col-lg-5">
                 <div class="contact-right">
@@ -15,8 +16,7 @@
                                 <h6>Contact Us</h6>
                             </div>
                             <div class="media-body">
-                                <p>+91 123 - 456 - 7890</p>
-                                <p>+86 163 - 451 - 7894</p>
+                                <p>732-763-0773</p>
                             </div>
                         </li>
                         <li>
@@ -25,28 +25,18 @@
                                 <h6>Address</h6>
                             </div>
                             <div class="media-body">
-                                <p>ABC Complex,Near xyz, New York</p>
-                                <p>USA 123456</p>
+                                <p>17 Bressler Rd, Flemington,</p>
+                                <p> NJ, 08822</p>
                             </div>
                         </li>
                         <li>
                             <div class="contact-icon">
                                 <img src="assets/images/icon/email.png" alt="Generic placeholder image">
-                                <h6>Address</h6>
+                                <h6>Email</h6>
                             </div>
                             <div class="media-body">
-                                <p>Support@Shopcart.com</p>
-                                <p>info@shopcart.com</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="contact-icon">
-                                <i class="fa fa-fax" aria-hidden="true"></i>
-                                <h6>Fax</h6>
-                            </div>
-                            <div class="media-body">
-                                <p>Support@Shopcart.com</p>
-                                <p>info@shopcart.com</p>
+                                <p>support@ralbatech.com</p>
+                                <p>info@ralbatech.com</p>
                             </div>
                         </li>
                     </ul>
@@ -55,30 +45,34 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="theme-form">
+                <form class="theme-form" [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="name">First Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter Your name" required="">
+                            <input type="text" class="form-control" formControlName="firstName" placeholder="First name" required="">
                         </div>
                         <div class="col-md-6">
                             <label for="email">Last Name</label>
-                            <input type="text" class="form-control" id="last-name" placeholder="Email" required="">
+                            <input type="text" class="form-control" formControlName="lastName" placeholder="Last name" required="">
                         </div>
                         <div class="col-md-6">
                             <label for="review">Phone number</label>
-                            <input type="text" class="form-control" id="review" placeholder="Enter your number" required="">
+                            <input type="text" class="form-control" formControlName="phone" placeholder="Enter your number" required="" maxlength="15">
                         </div>
                         <div class="col-md-6">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="Email" required="">
+                            <input type="text" class="form-control" formControlName="email" placeholder="Email" required="">
                         </div>
                         <div class="col-md-12">
                             <label for="review">Write Your Message</label>
-                            <textarea class="form-control" placeholder="Write Your Message" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" placeholder="Write Your Message" formControlName="massage" rows="6"></textarea>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-solid" type="submit">Send Your Message</button>
+                            <button class="btn btn-solid mr-4" type="submit">Send Your Message</button>
+                            <button class="btn btn-solid" type="reset">Reset</button>
+                        </div>
+                        <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid">
+                            <div class="d-flex align-items-center"><span *ngIf="isValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{submitMassage}}</div>
                         </div>
                     </div>
                 </form>
@@ -87,3 +81,5 @@
     </div>
 </section>
 <!--Section ends-->
+
+<app-footer-one></app-footer-one>

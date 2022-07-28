@@ -1,3 +1,5 @@
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { BrowserModule } from '@angular/platform-browser';
 import {  NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +35,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ShopComponent,
     PagesComponent,
     ElementsComponent,
-    DepartmentComponent
+    DepartmentComponent,
+    AboutUsComponent,
+    PrivacyPolicyComponent
   ],
 
   imports: [

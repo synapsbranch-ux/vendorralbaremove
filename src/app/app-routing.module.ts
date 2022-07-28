@@ -1,3 +1,7 @@
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { ContactComponent } from './pages/account/contact/contact.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -13,6 +17,21 @@ const routes: Routes = [
   {
     path: '',
     component: FashionOneComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'our-story',
+    component: AboutUsComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent,
     pathMatch: 'full'
   },
   {
@@ -48,6 +67,7 @@ const routes: Routes = [
     path: '**', // Navigate to Home Page if not found any page
     redirectTo: '/',
   },
+
 ];
 
 @NgModule({

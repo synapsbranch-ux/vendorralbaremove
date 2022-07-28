@@ -19,6 +19,7 @@ export class SingleStoreComponent implements OnInit {
   storeimgUrl:any
   store_slug:any
   vendor_id:any
+  store_id:any;
 
   StoreLists=[];
 
@@ -31,19 +32,35 @@ export class SingleStoreComponent implements OnInit {
 
   constructor( private storeService: StoreService , private route: ActivatedRoute ) { 
     this.storeService.getStoresMore.subscribe(response => {
-      console.log('Single Store response  =>', response['data']);
+      console.log('Single Store response  =>', response);
       this.StoreLists=response['data'];
       const child = this.StoreLists.map((store_l) => {
         if(store_l.store_slug == this.store_slug){    
           this.storename=store_l.store_name;
           this.storeslug=store_l.store_slug;
-          this.storeimgUrl=store_l.store_image
+          this.storeimgUrl=store_l.store_image;
           this.vendor_id=store_l.store_owner._id;
+          this.store_id=store_l._id;
           return store_l.store_department;
         }
       });
 
+      console.log('Store ID ======>',this.store_id);
+
+      let sdata={
+        "store_id": this.store_id,
+        "vendor_id": this.vendor_id
+      }
+      console.log('Sending Store Data',sdata);
+      this.storeService.storeviewcount(sdata).subscribe(
+        res =>
+        {
+          console.log('Store View API ==',res['data']);
+        }
+      )
+
       const filterItem = child.filter(item => item != undefined);
+      console.log('Department List Filter ==',filterItem);
       if(filterItem.length > 0){
         this.DepartmentsList=filterItem[0];
 

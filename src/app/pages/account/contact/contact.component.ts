@@ -1,3 +1,6 @@
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/shared/services/user.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +10,56 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactComponent implements OnInit {
 
-  constructor() { }
+  form: FormGroup;
+  isValid: boolean = false;
+  submitMassage:any;
+
+
+  constructor( private router: Router, private userservice: UserService ) { }
 
   ngOnInit(): void {
+
+    this.form =  new FormGroup({
+      'firstName': new FormControl(null, [Validators.required]),
+      'lastName': new FormControl(null, [Validators.required]),
+      'phone': new FormControl(null),
+      'email': new FormControl(null, [Validators.required]),
+      'massage': new FormControl(null, [Validators.required]),
+    })
+
   }
+  get firstName() { return this.form.get('firstName'); }
+  get lastName() { return this.form.get('lastName');}
+  get phone() { return this.form.get('phone'); }
+  get email() { return this.form.get('email'); }
+  get massage() { return this.form.get('massage');}
+
+
+
+  onSubmit()
+  {
+    let formData = this.form.value;
+    let EdData={
+      "name": formData.firstName+' '+formData.lastName,
+      "phone": formData.phone,
+      "email": formData.email,
+      "massage": formData.massage
+ }
+
+ this.userservice.userContact(EdData).subscribe(
+   res =>
+   {
+  this.isValid=true;
+  this.submitMassage="Thank you for contact us. we will connect you soon";       
+  setTimeout(() => {
+    this.isValid=false;
+  },2000) 
+     console.log('Conatct Submit',res);
+   }
+ )
+
+  console.log('Contact Submit',EdData);
+
+}
 
 }

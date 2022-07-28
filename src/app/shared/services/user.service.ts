@@ -32,6 +32,12 @@ export class UserService {
   userLogin(data){
     return this.http.post(environment.baseUrl+'user/login',data);
   }
+
+  userContact(data){
+    return this.http.post(environment.baseUrl+'user/contact',data);
+  }
+
+
   getAllAddress()
   {
     let token = localStorage.getItem('user_token') // Will return if it is not set 

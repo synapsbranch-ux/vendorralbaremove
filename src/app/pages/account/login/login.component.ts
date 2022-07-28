@@ -37,10 +37,9 @@ constructor(private formBuilder: FormBuilder, public userService: UserService, p
 ngOnInit(): void {
 
   console.log('Cart Item From Login',state.cart)
+  this.cartproducts=state.cart;
 
-
-
-
+// if login then redirect dashboard
   const currentUser = localStorage.getItem("user_id");
   if (currentUser) {
     this.router.navigate(['/dashboard'])
@@ -91,11 +90,9 @@ get login_password(){ return this.form.get('login_password');}
 
 //Cart Details
 ///////////////////////////////////////////////////////////
-const currentUser = localStorage.getItem("user_id");
 
-if (currentUser) {
   console.log('User Login');
-  console.log('Cart Item From Login',state.cart)
+  console.log('Cart Item before Add From Login',this.cartproducts)
 
     this.product_service.allCartProducts().subscribe(
       res =>{
@@ -106,20 +103,12 @@ if (currentUser) {
           if(bodydata.hasOwnProperty('products'))
           {
           for (const element of res['data'].products) {   
-
-            console.log('cart Product slug',element.pro_slug);
-            
-            this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
-
-              console.log('cart Product Image',product['data']);
-
-                this.product_img=product['data'].product_image[0].pro_image;
                 let data = 
                 {
                   "_id": element.pro_id,
                   "product_image": [
                     {
-                        "pro_image": this.product_img,
+                        "pro_image": element.pro_image,
                         "status": "active"
                     },
                   ],
@@ -137,8 +126,7 @@ if (currentUser) {
               this.products=this.cartproducts;     
               localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
               console.log('Return LocalStorage',localStorage.getItem("cartItems"));
-              
-            })                          
+                                     
           
       }
     }
@@ -239,11 +227,6 @@ else
 
 }
 
-}
-else
-{
-  console.log('User Not Login');
-}
 
 
 

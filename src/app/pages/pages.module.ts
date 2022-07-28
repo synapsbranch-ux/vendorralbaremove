@@ -20,7 +20,6 @@ import { ForgetPasswordComponent } from './account/forget-password/forget-passwo
 import { ProfileComponent } from './account/profile/profile.component';
 
 import { ContactComponent } from './account/contact/contact.component';
-import { AboutUsComponent } from './about-us/about-us.component';
 import { SearchComponent } from './search/search.component';
 import { TypographyComponent } from './typography/typography.component';
 import { ReviewComponent } from './review/review.component';
@@ -56,7 +55,6 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     RegisterVendorComponent,
     ForgetPasswordComponent,
     ContactComponent,
-    AboutUsComponent,
     SearchComponent,
     TypographyComponent,
     ReviewComponent,

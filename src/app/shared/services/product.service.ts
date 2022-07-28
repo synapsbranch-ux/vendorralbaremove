@@ -365,11 +365,14 @@ export class ProductService {
   // Remove Cart items
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
-    console.log('Befor Structure Delete Cart',product);
-    state.cart.splice(index, 1);
-    localStorage.setItem("cartItems", JSON.stringify(state.cart));
+    // console.log('Befor Structure Delete Cart',product);
     if(localStorage.getItem('user_id'))
     {
+      const index2 = state.cart.indexOf(product);
+      console.log('Remove Cart User Login :',index2);
+
+      state.cart.splice(index2, 1);
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
 
       let dcDAta=
       {
@@ -383,11 +386,15 @@ export class ProductService {
         res =>
         {
           console.log('Delete Cart From DB Return',res);
+          this
+          .router.navigateByUrl('/cart')
         }
       )
     }
       else
       {
+        console.log('Remove Cart User Without Login :',index);
+
         state.cart.splice(index, 1);
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
       }

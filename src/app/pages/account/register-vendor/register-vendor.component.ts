@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl, Validator} from '@angular/forms';
@@ -21,7 +22,7 @@ export class RegisterVendorComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
-  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router) { }
+  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router, private toastr: ToastrService) { }
   
   showOtpComponent = true;
 
@@ -73,31 +74,27 @@ export class RegisterVendorComponent implements OnInit {
 
           console.log(' Signup Success',res);
           this.isValid = true;
-          this.signupMassage="Your Registration sucessfull";
-
-          // setTimeout(() => {
-          //   this.router.navigate(['/login'])
-          //   .then(() => {
-          //     window.location.reload();
-          //   });
-          // },3000)          
+          // this.signupMassage="Your Registration sucessfull";
+          this.toastr.success('Your Registration sucessfull')
+          setTimeout(() => {
+            window.location.href = 'https://admin.ralbatech.com/'
+          },3000)          
         },
         error => {
           // .... HANDLE ERROR HERE 
           console.log(error.message);
           this.phValid=false;
-          this.signupMassage="Your Phone Or Email Already Register";
+          this.toastr.error('Your Phone Or Email Already Register');
+          // this.signupMassage="Your Phone Or Email Already Register";
       }
       );
-
     }
     else
     {
       this.phValid=false;
-      this.signupMassage="Please check Terms & Conditions";
-    }
-
-      
+      this.toastr.error('Please check Terms & Conditions');
+      //this.signupMassage="Please check Terms & Conditions";
+    } 
     }
   }
 
