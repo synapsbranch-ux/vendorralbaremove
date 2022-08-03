@@ -1,114 +1,109 @@
 <!-- breadcrumb start -->
 <div class="breadcrumb-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-6">
+    <div class="container">
         <div class="row">
-          <div class="col-sm-6">
-            <nav aria-label="breadcrumb" class="theme-breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a [routerLink]="'/'">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Search</li>
-              </ol>
-            </nav>
-          </div>
-          <div class="col-sm-6">
-            <div class="breadcrumb">{{this.productList.length}} Results</div>
-          </div>
-        </div>
-        
-      </div>
-      <!--<div class="col-sm-6">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a [routerLink]="'/'">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Search</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="breadcrumb">{{this.productList.length}} Results</div>
+                    </div>
+                </div>
+
+            </div>
+            <!--<div class="col-sm-6">
         <div class="page-title">
           <h2>{{ title }}</h2>
         </div>
       </div>-->
-      
+
+        </div>
     </div>
-  </div>
 </div>
 <!-- section start -->
 <section class="authentication-page section-b-space">
     <div class="container">
-      <section class="search-block">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6 offset-lg-3">
-              <form class="form-header" [formGroup]="form" (ngSubmit)="onSubmit()">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" [(ngModel)]="searchva" formControlName="searchkey" placeholder="Search a Product">
-                  <div *ngIf="searchkey.errors" class="text text-danger mt-1 pb-3">
-                    <div *ngIf="searchkey.errors">
-                       To search product you must have enter 3 letter
+        <section class="search-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3">
+                        <form class="form-header" [formGroup]="form" (ngSubmit)="onSubmit()">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputPassword1" [(ngModel)]="searchva" formControlName="searchkey" placeholder="Search a Product">
+                                <div *ngIf="searchkey.errors" class="text text-danger mt-1 pb-3">
+                                    <div *ngIf="searchkey.errors">
+                                        To search product you must have enter 3 letter
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                        </form>
                     </div>
                 </div>
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-              </form>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
         <div class="col-sm-12 text-center" *ngIf="oproductfount">
-          <img src="assets/images/empty-search.jpg" class="img-fluid mb-4">
-            <h3>Sorry! Couldn't find the product you were looking For!!!    </h3>
+            <img src="assets/images/empty-search.jpg" class="img-fluid mb-4">
+            <h3>Sorry! Not results found </h3>
             <p>Please check if you have misspelt something or try searching with other words.</p>
             <a [routerLink]="['/']" class="btn btn-solid">continue shopping</a>
         </div>
         <div class="row" *ngIf="this.productList.length > 0">
-        <div class="col-sm-12 col-md-3 text-center" *ngFor="let product of productList" >
-          <div class="img-wrapper">
-            <!-- <div class="lable-block">
+            <div class="col-sm-12 col-md-3 text-center" *ngFor="let product of productList">
+                <div class="img-wrapper">
+                    <!-- <div class="lable-block">
               <span class="lable3" *ngIf="product.new">new</span>
               <span class="lable4" *ngIf="product.sale">on sale</span>
             </div> -->
-            <div class="front">
-              <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
-                <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                <img 
-                  [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'" 
-                  [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" 
-                  [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                  class="img-fluid lazy-loading" 
-                  alt="{{ product.product_name }}" />
-              </a>
+                    <div class="front">
+                        <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
+                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'" [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" class="img-fluid lazy-loading" alt="{{ product.product_name }}"
+                            />
+                        </a>
+                    </div>
+                    <div class="back" *ngIf="onHowerChangeImage">
+                        <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+                            <img [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" class="img-fluid lazy-loading" alt="{{ product.product_name}}">
+                        </a>
+                    </div>
+                    <ul class="product-thumb-list" *ngIf="thumbnail">
+                        <li class="grid_thumb_img" [class.active]="ImageSrc == image.pro_image" *ngFor="let image of product.product_image">
+                            <a href="javascript:void(0)" (mouseover)="ChangeVariantsImage(image.pro_image)">
+                                <img [lazyLoad]="image.pro_image">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="product-detail">
+                    <div class="mt-4">
+                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
+                        <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
+                            <h6>{{ product?.product_name | titlecase }}</h6>
+                        </a>
+                        <!-- <p>{{ product?.description }}</p> -->
+                        <h4>
+                            {{ product?.product_sale_price | currency:currency?.currency:'symbol' }}
+                            <!-- <del *ngIf="product?.discount"><span class="money"> {{ product?.price * currency?.price | currency:currency?.currency:'symbol' }}</span></del> -->
+                        </h4>
+                        <div *ngIf="product?.product_varient_options[1]">
+                            <ul class="color-variant" *ngIf="Color(product?.product_varient_options[1].color_options).length">
+                                <li [class]="color" *ngFor="let color of Color(product?.product_varient_options[1].color_options)" [ngStyle]="{'background-color': color}" (click)="ChangeVariants(color, product)">
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="back" *ngIf="onHowerChangeImage">
-               <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
-                <img [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" class="img-fluid lazy-loading" alt="{{ product.product_name}}">
-              </a>
-            </div>
-            <ul class="product-thumb-list" *ngIf="thumbnail">
-              <li class="grid_thumb_img" [class.active]="ImageSrc == image.pro_image" *ngFor="let image of product.product_image">
-                <a href="javascript:void(0)" (mouseover)="ChangeVariantsImage(image.pro_image)">
-                  <img [lazyLoad]="image.pro_image">
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="product-detail">
-            <div class="mt-4">
-              <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-               <a [routerLink]="['/stores/',product?.product_store.store_slug,product?.product_department.department_slug, product.product_slug]">
-                <h6>{{ product?.product_name | titlecase }}</h6>
-              </a>
-              <!-- <p>{{ product?.description }}</p> -->
-              <h4>
-                {{ product?.product_sale_price  | currency:currency?.currency:'symbol' }}
-                <!-- <del *ngIf="product?.discount"><span class="money"> {{ product?.price * currency?.price | currency:currency?.currency:'symbol' }}</span></del> -->
-              </h4>
-              <div *ngIf="product?.product_varient_options[1]">
-                <ul class="color-variant" *ngIf="Color(product?.product_varient_options[1].color_options).length">
-                  <li [class]="color" *ngFor="let color of Color(product?.product_varient_options[1].color_options)" [ngStyle]="{'background-color': color}"
-                    (click)="ChangeVariants(color, product)">
-                  </li>
-                </ul>
-              </div>
-        
-            </div>
-          </div>
         </div>
-      </div>
     </div>
- </section>
+</section>
 <!-- section end -->

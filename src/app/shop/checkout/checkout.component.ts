@@ -37,6 +37,17 @@ export class CheckoutComponent implements OnInit {
   transactionId=0;
   isUserLogin:boolean=true;
   paypalreurnData=[];
+  local_checkout_obj={};
+  email_:any;
+  phone_:any;
+  country_:any;
+  first_name_:any;
+  last_name_:any;
+  street_address_:any
+  street_address2_:any;
+  city_name_:any;
+  state_name_:any;
+  zip_code_:any;
 
   constructor(private fb: FormBuilder,
     public productService: ProductService,private userservice: UserService,
@@ -45,6 +56,23 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.local_checkout_obj=JSON.parse(localStorage.getItem('checkoutform'));
+    if(this.local_checkout_obj)
+    {
+      this.email_=this.local_checkout_obj['email_address'];
+      this.phone_=this.local_checkout_obj['phone_no'];
+      this.country_=this.local_checkout_obj['country_name'];
+      this.first_name_=this.local_checkout_obj['first_name'];
+      this.last_name_=this.local_checkout_obj['last_name'];
+      this.street_address_=this.local_checkout_obj['street_address'];
+      this.street_address2_=this.local_checkout_obj['street_address2'];
+      this.city_name_=this.local_checkout_obj['city_name'];
+      this.state_name_=this.local_checkout_obj['state_name'];
+      this.zip_code_=this.local_checkout_obj['zip_code'];
+      
+
+    }
+
     console.log('Cart Products',state.cart)
   if(localStorage.getItem('user_id'))
   {
@@ -59,7 +87,7 @@ export class CheckoutComponent implements OnInit {
       'lastname': new FormControl(null, [Validators.required]),
       'phone': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required]),
-      'address1': new FormControl(null, [Validators.required]),
+      'address1': new FormControl(null),
       'address2': new FormControl(null),
       'country': new FormControl(null, [Validators.required]),
       'town': new FormControl(null, [Validators.required]),
@@ -125,6 +153,25 @@ export class CheckoutComponent implements OnInit {
   checkoutLogin()
   {
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});
+  }
+  checkaddress()
+  {
+let address_arr={
+  email_address: (<HTMLInputElement>document.getElementById('email_address')).value,
+  phone_no: (<HTMLInputElement>document.getElementById('email_address')).value,
+  country_name: (<HTMLInputElement>document.getElementById('country_name')).value,
+  first_name: (<HTMLInputElement>document.getElementById('first_name')).value,
+  last_name: (<HTMLInputElement>document.getElementById('last_name')).value,
+  street_address: (<HTMLInputElement>document.getElementById('street_address')).value,  
+  street_address2: (<HTMLInputElement>document.getElementById('street_address2')).value,
+  city_name: (<HTMLInputElement>document.getElementById('city_name')).value,
+  state_name: (<HTMLInputElement>document.getElementById('state_name')).value,
+  zip_code: (<HTMLInputElement>document.getElementById('zip_code')).value,
+}
+
+    localStorage.setItem('checkoutform',JSON.stringify(address_arr))
+
+    this.router.navigate(['/address'], { queryParams: { returnUrl: '/checkout' }});
   }
 
   // // Stripe Payment Gateway
@@ -240,11 +287,14 @@ export class CheckoutComponent implements OnInit {
 
   getpaymentoption(event)
   {
+
     if(event.target.value == 'COD')
     {
       this.paypalstatus=false;
     }
-    if(event.target.value == 'paypal')
+    let formData = this.checkoutForm.value;
+    console.log('Check Address check ',formData.userAddressId)
+    if(event.target.value == 'paypal' && this.useraddressslist.length > 0 && formData.firstname !="" && formData.lastname !="" && formData.phone !="" && formData.email !="" && formData.address1 !="" && formData.country !="" && formData.town !="" && formData.state !=""  && formData.postalcode !=""  && formData.userAddressId != null )
     {
       this.paypalstatus=true;
     }
@@ -310,21 +360,50 @@ if(this.products.length > 0)
 
 console.log('orderProducts',orderProducts)
 
-console.log('Paypal return Arr',this.paypalreurnData);
-console.log('Paypal return Cuntry Code',this.paypalreurnData[0].country_code);
+let orderData={}
 
-let orderData=
+if(formData.paymentOption == 'paypal')
+{
+  orderData=
+  {
+    total_order_amount: orderTotal,
+    order_status: 'initiated',
+    payment_status: paymentStatus,
+    payment_method: formData.paymentOption,
+    transaction_id: this.transactionId,
+    country_code: this.paypalreurnData[0].country_code,
+    email_address: this.paypalreurnData[0].email_address,
+    name: this.paypalreurnData[0].name,
+    customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
+    paypal_status: this.paypalreurnData[0].paypal_status,
+    shipping_address_id: formData.userAddressId,
+    billing_email: formData.email,
+    billing_phone: formData.phone,
+    billing_country: formData.country,
+    billing_first_name: formData.firstname,
+    billing_last_name: formData.lastname,
+    billing_address1: formData.address1,
+    billing_address2: formData.address2,
+    billing_city: formData.town,
+    billing_state: formData.state,
+    billing_zip: formData.postalcode,
+    order_details: orderProducts,
+  }
+}
+else
+{
+  orderData=
 {
   total_order_amount: orderTotal,
   order_status: 'initiated',
   payment_status: paymentStatus,
   payment_method: formData.paymentOption,
   transaction_id: this.transactionId,
-  country_code: this.paypalreurnData[0].country_code,
-  email_address: this.paypalreurnData[0].email_address,
-  name: this.paypalreurnData[0].name,
-  customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
-  paypal_status: this.paypalreurnData[0].paypal_status,
+  country_code: "",
+  email_address: formData.email,
+  name: formData.firstname+' '+formData.lastname,
+  customer_id_paypal: "",
+  paypal_status: "",
   shipping_address_id: formData.userAddressId,
   billing_email: formData.email,
   billing_phone: formData.phone,
@@ -338,6 +417,8 @@ let orderData=
   billing_zip: formData.postalcode,
   order_details: orderProducts,
 }
+}
+
 // console.log('Order Generate STR 1',orderData);
 // console.log('Order Generate STR 2',JSON.stringify(orderData));
 

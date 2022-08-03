@@ -1,175 +1,161 @@
 <!-- <app-breadcrumb [title]="product?.title" [breadcrumb]="'Product'"></app-breadcrumb> -->
 <!-- section start -->
 <section class="section-b-space">
-  <div class="collection-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar  class="product-slick1">
-                    <ng-container *ngFor="let image of product.product_image; index as i">
-                        <ng-template carouselSlide [id]="i">
-                            <div>
-                                <lib-ngx-image-zoom class="img-fluid"
-                                    [thumbImage]="image.pro_image"
-                                    [fullImage]="image.pro_image"
-                                    [magnification]="1.5"
-                                    [enableLens]="true"
-                                    [lensWidth]="300"
-                                    [lensHeight]="300"
-                                ></lib-ngx-image-zoom>
-                               
-                                <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
+    <div class="collection-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar class="product-slick1">
+                        <ng-container *ngFor="let image of product.product_image; index as i">
+                            <ng-template carouselSlide [id]="i">
+                                <div>
+                                    <lib-ngx-image-zoom class="img-fluid" [thumbImage]="image.pro_image" [fullImage]="image.pro_image" [magnification]="1.5" [enableLens]="true" [lensWidth]="300" [lensHeight]="300"></lib-ngx-image-zoom>
+
+                                    <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
                                    [lazyLoad]="image.src" 
                                    [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                    </owl-carousel-o>
+                    <div class="row align-items-center">
+                        <div class="col-10 p-0">
+                            <div class="slider-nav small-slider-product">
+                                <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
+                                    <ng-container *ngFor="let image of product.product_image; index as i ">
+                                        <ng-template carouselSlide [id]="i">
+                                            <div class="owl-thumb" [class.active]="i == activeSlide">
+                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'" [lazyLoad]="image.pro_image" [alt]="product.product_name" class="img-fluid" [src]="image.pro_image" (click)="owlCar.to(activeSlide = i.toString())">
+                                            </div>
+                                        </ng-template>
+                                    </ng-container>
+
+                                </owl-carousel-o>
+
                             </div>
-                        </ng-template>
-                    </ng-container>
-                </owl-carousel-o>
-                <div class="row align-items-center" >
-                    <div class="col-10 p-0">
-                        <div class="slider-nav small-slider-product">
-                            <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
-                                <ng-container *ngFor="let image of product.product_image; index as i ">
-                                    <ng-template carouselSlide [id]="i">
-                                        <div class="owl-thumb" [class.active]="i == activeSlide">
-                                        <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
-                                           [lazyLoad]="image.pro_image" 
-                                           [alt]="product.product_name" class="img-fluid" [src]="image.pro_image" (click)="owlCar.to(activeSlide = i.toString())">
-                                        </div>
-                                    </ng-template>
-                                </ng-container>
-                                
-                            </owl-carousel-o>
+                        </div>
+                        <div class="col-2 p-0">
+                            <div class="d-flex">
+                                <a title="360 View" class="text-center" href="javascrip:void(0)" (click)="view3D.openModal()">
+                                    <span *ngFor="let image of product.product_image; index as i"><img *ngIf="i == 0" style="width:100px; height: 70px; object-fit: contain;" width="100" class="img-fluid" [src]="image.pro_image" alt=""></span><br>
+                                    <img width="60" class="img-fluid" src="assets/images/rotate-360.svg" alt="360 View"></a>
+                            </div>
 
                         </div>
-                    </div>
-                    <div class="col-2 p-0">
-                        <div class="d-flex">
-                            <a title="360 View" class="text-center" href="javascrip:void(0)"  (click)="view3D.openModal()">
-                                <span *ngFor="let image of product.product_image; index as i"><img *ngIf="i == 0" style="width:100px; height: 70px; object-fit: contain;" width="100" class="img-fluid" [src]="image.pro_image" alt=""></span><br>
-                                <img width="60" class="img-fluid" src="assets/images/rotate-360.svg" alt="360 View"></a>
-                        </div>
-
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 rtl-text">
-                
+                <div class="col-lg-6 rtl-text">
 
-<div class="product-right">
-                    <h2>{{ product?.product_name }}</h2>
-                    <!-- <h4>
+
+                    <div class="product-right">
+                        <h2>{{ product?.product_name }}</h2>
+                        <!-- <h4>
                         <del *ngIf="product?.discount">{{ product?.product_sale_price * productService.Currency?.price | currency: productService.Currency?.currency:'symbol' }}</del>
                         <span>{{ product?.discount }}% off</span>
                     </h4> -->
-                    <h3>
-                        {{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol' }}
-                    </h3>
-                    <!-- <div class="rating">
+                        <h3>
+                            {{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol' }}
+                        </h3>
+                        <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
-                    <p class="mb-2">{{ product?.product_description}}</p>
-                    <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
-                    
-                    <div *ngIf="product?.product_varient_options">
-                    <ul class="color-variant border-product">
-                        <li [class]="productColor" [class.active]="selectedColor == productColor" 
-                            [ngStyle]="{'background-color': productColor}"
-                            (click)="selectColor(productColor)">
-                        </li>
-                    </ul>
-                    </div>
+                        <p class="mb-2">{{ product?.product_description}}</p>
+                        <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
 
-                    <div class="product-description pb-4">
                         <div *ngIf="product?.product_varient_options">
-                        <h6 class="product-title size-text" >
-                            select size
-                            <!-- <span>
-                              <a href="javascrip:void(0)" (click)="SizeChart.openModal()">size chart</a>
-                            </span> -->
-                        </h6>
-                        <div class="size-box">
-                            <ul>
-                                <li [class.active]="selectedSize == size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
-                                    <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | uppercase}}</a>
+                            <ul class="color-variant border-product">
+                                <li [class]="productColor" [class.active]="productColor" [ngStyle]="{'background-color': productColor}" (click)="selectColor(productColor)">
                                 </li>
                             </ul>
                         </div>
-                        </div>
-                        <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
-                        <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
-                        <div *ngIf="quentityStatus == 'inactive'">
-                        <div *ngIf="product_external_link.length < 12">
-                        <h6 class="product-title">quantity</h6>
-                        <div class="qty-box">
-                            <div class="input-group">
-                            <span class="input-group-prepend">
+
+                        <div class="product-description pb-4">
+                            <div *ngIf="product?.product_varient_options">
+                                <h6 class="product-title size-text">
+                                    select size
+                                    <!-- <span>
+                              <a href="javascrip:void(0)" (click)="SizeChart.openModal()">size chart</a>
+                            </span> -->
+                                </h6>
+                                <div class="size-box">
+                                    <ul>
+                                        <li [class.active]="size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
+                                            <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | uppercase}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
+                            <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
+                            <div *ngIf="quentityStatus == 'inactive'">
+                                <div *ngIf="product_external_link.length < 12">
+                                    <h6 class="product-title">quantity</h6>
+                                    <div class="qty-box">
+                                        <div class="input-group">
+                                            <span class="input-group-prepend">
                                 <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement()">
                                     <i class="ti-minus"></i>
                                 </button>
                             </span>
-                            <input type="text" name="quantity" class="form-control input-number" [value]="counter" disabled/>
-                            <span class="input-group-prepend">
+                                            <input type="text" name="quantity" class="form-control input-number" [value]="counter" disabled/>
+                                            <span class="input-group-prepend">
                                 <button type="button" class="btn quantity-right-plus" data-type="plus" (click)="increment()">
                                     <i class="ti-plus"></i>
                                 </button>
                             </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="cartbuttonhideStatus == 'inactive'">
+                            <div class="product-buttons" *ngIf="product_external_link.length < 12">
+                                <a class="btn btn-solid rounded-lg virtual_btn" [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to cart</a>
+                                <!-- <a class="btn btn-solid rounded-lg virtual_btn ml-3" [class.disabled]="counter > product.stock" (click)="buyNow(product)">buy now</a>
+                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3">360 view</a> -->
+                            </div>
+                            <div class="product-buttons" *ngIf="product_external_link.length > 12">
+                                <a class="btn btn-solid rounded-lg virtual_btn" (click)="externalLInk(product_external_link)">Buy Now </a>
+                            </div>
+                        </div>
+                        <!--<div class="border-product">
+                        <h6 class="product-title">product details</h6>
+                        <p>{{ product.description.substring(0, 200)+'...' }}</p>
+                    </div>-->
+                        <div class="border-product">
+                            <h6 class="product-title">share it</h6>
+                            <div class="product-icon">
+                                <app-social></app-social>
+                                <form class="d-inline-block">
+                                    <button class="wishlist-btn" (click)="addToWishlist(product)">
+                                    <i class="fa fa-heart-o"></i>
+                                    <span class="title-font">Wishlist</span>
+                                </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                    </div>
-                    <div *ngIf="cartbuttonhideStatus == 'inactive'">
-                    <div class="product-buttons" *ngIf="product_external_link.length < 12">
-                        <a class="btn btn-solid rounded-lg virtual_btn" [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to cart</a>
-                        <!-- <a class="btn btn-solid rounded-lg virtual_btn ml-3" [class.disabled]="counter > product.stock" (click)="buyNow(product)">buy now</a>
-                        <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3">360 view</a> -->
-                    </div>
-                    <div class="product-buttons" *ngIf="product_external_link.length > 12" >
-                        <a class="btn btn-solid rounded-lg virtual_btn" (click)="externalLInk(product_external_link)">Buy Now </a>
-                    </div>
-                </div>
-                    <!--<div class="border-product">
-                        <h6 class="product-title">product details</h6>
-                        <p>{{ product.description.substring(0, 200)+'...' }}</p>
-                    </div>-->
-                    <div class="border-product">
-                        <h6 class="product-title">share it</h6>
-                        <div class="product-icon">
-                            <app-social></app-social>
-                            <form class="d-inline-block">
-                                <button class="wishlist-btn" (click)="addToWishlist(product)">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span class="title-font">Wishlist</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-  </div>
-  <section class="section-b-space">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 product-related">
-                <h2>Related Products</h2>
+    <section class="section-b-space">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 product-related">
+                    <h2>Related Products</h2>
+                </div>
             </div>
-        </div>
-        <div class="row search-product">
-            <div class="col-xl-2 col-md-4 col-sm-6" *ngFor="let product of products | slice:0:6">
-                <div class="product-box">
-                   <app-product-box-one 
-	                  [product]="product" 
-	                  [currency]="productService?.Currency"
-	                  [cartModal]="true">
-	                </app-product-box-one>
+            <div class="row search-product">
+                <div class="col-xl-2 col-md-4 col-sm-6" *ngFor="let product of products | slice:0:6">
+                    <div class="product-box">
+                        <app-product-box-one [product]="product" [currency]="productService?.Currency" [cartModal]="true">
+                        </app-product-box-one>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 </section>
 <app-product-view3D #view3D [image3d]="image3d"></app-product-view3D>
 <!-- Section ends -->

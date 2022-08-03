@@ -5,6 +5,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ProductNew } from 'src/app/shared/classes/product';
+import { ToastrService } from 'ngx-toastr';
 
 const state = {
 
@@ -32,7 +33,7 @@ cartproducts=[];
 product_img:any;
 public products: ProductNew[] = [];
 
-constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router,private route: ActivatedRoute, public product_service: ProductService) { }
+constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router,private route: ActivatedRoute, public product_service: ProductService, private toaster: ToastrService) { }
 
 ngOnInit(): void {
 
@@ -84,7 +85,8 @@ get login_password(){ return this.form.get('login_password');}
 
       this.loginValid=true;
       this.loginInValid=false;
-      this.loginMassage="Login sucessfull";
+      // this.loginMassage="Login sucessfull";
+      this.toaster.success('Login sucessfull')
 /////////////////////////////////////////////////////////
 
 
@@ -238,7 +240,8 @@ else
       console.log(error.message);
       this.loginValid=false;
       this.loginInValid=true;
-      this.loginMassage="Username and Password does not match";
+      // this.loginMassage="Username and Password does not match";
+      this.toaster.error('Username and Password does not match');
   }
   );
   

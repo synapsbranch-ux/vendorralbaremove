@@ -29,12 +29,12 @@
                             </div>
                         </div>
                         <p class="m-0 float-right"><a [routerLink]="['/forget-password']">Forget Password</a></p>
-                        <button type="submit" class="btn btn-solid rounded-lg">Login</button>
-                    
+                        <button type="submit" class="btn btn-solid rounded-lg" [disabled]="form.invalid">Login</button>
+                        <!-- 
                         <div [className]="loginValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="loginValid || loginInValid">
                             <div class="d-flex align-items-center"><span *ngIf="loginValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{loginMassage}}</div>
-                        </div>
-                    
+                        </div> -->
+
                     </form>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     <h6 class="title-font">Create A Account</h6>
                     <p>Sign up for a free account at our store. Registration is quick and easy. It allows you to be able to order from our shop. To start shopping click register.</p>
                     <a [routerLink]="['/register']"><button class="btn btn-solid rounded-lg">Create an Account</button></a>
-                    <p class="pt-3">Buying for work? <a [routerLink]="['/register-vendor']" >Create a free business account</a></p>
+                    <p class="pt-3">Buying for work? <a [routerLink]="['/register-vendor']">Create a free business account</a></p>
                 </div>
             </div>
         </div>

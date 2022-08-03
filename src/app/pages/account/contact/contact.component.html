@@ -68,7 +68,7 @@
                             <textarea class="form-control" placeholder="Write Your Message" formControlName="massage" rows="6"></textarea>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-solid mr-4" type="submit">Send Your Message</button>
+                            <button class="btn btn-solid mr-4" type="submit" [disabled]="form.invalid">Send Your Message</button>
                             <button class="btn btn-solid" type="reset">Reset</button>
                         </div>
                         <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid">

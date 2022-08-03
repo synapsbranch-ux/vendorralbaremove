@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -13,9 +14,18 @@ export class FooterOneComponent implements OnInit {
 
   public today: number = Date.now();
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+
+  }
+
+  redirectcat(url:any)
+  {
+    this.router.navigate([url])
+    .then(() => {
+        window.location.reload();
+    });
   }
 
 }

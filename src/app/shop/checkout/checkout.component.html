@@ -3,32 +3,32 @@
     <div class="container padding-cls">
         <div class="checkout-page">
 
-            <div class="checkout-form" >
-                <form [formGroup]="checkoutForm" (ngSubmit)="placeorder()" >
+            <div class="checkout-form">
+                <form [formGroup]="checkoutForm" (ngSubmit)="placeorder()">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="title1 section-b-space">
-                              <h2>Checkout</h2>
+                                <h2>Checkout</h2>
                             </div>
                         </div>
                         <div class="login-sec col-sm-12 pb-4" *ngIf="isUserLogin">
                             <p>You need to login, to continue.. </p>
                             <button type="button" (click)="checkoutLogin()" class="btn btn-solid rounded-lg">Login</button>
                         </div>
-                        <div class="col-lg-7 col-sm-12 col-xs-12" [class.desabledform] = "isUserLogin" >
+                        <div class="col-lg-7 col-sm-12 col-xs-12" [class.desabledform]="isUserLogin">
                             <div class="checkout-title">
                                 <h3>Billing Details</h3>
                                 <p class="mb-1">Contact Information</p>
                                 <p class="m-0">We'll use these details to keep you inform on your delivery.</p>
                             </div>
                             <div class="row">
-                              <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Email Address</div>
-                                    <input type="text" formControlName="email"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="email_" id="email_address" type="text" formControlName="email" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Phone</div>
-                                    <input type="text"  formControlName="phone"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="phone_" id="phone_no" type="text" formControlName="phone" placeholder="" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Country</div>
-                                    <select formControlName="country">
+                                    <select formControlName="country" id="country_name" [(ngModel)]="country_">
                                         <option  selected>Select Country</option>
                                         <option value="India">India</option>
                                         <option value="USA">USA</option>
@@ -50,36 +50,36 @@
                             <div class="row check-out">
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">First Name</div>
-                                    <input type="text"  formControlName="firstname"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="first_name_" id="first_name" type="text" formControlName="firstname" placeholder="" autocomplete="off">
 
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Last Name </div>
-                                    <input type="text"   formControlName="lastname"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="last_name_" id="last_name" type="text" formControlName="lastname" placeholder="" autocomplete="off">
                                 </div>
-                                
-                                
-                                
+
+
+
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Street Address</div>
-                                    <input type="text" formControlName="address1"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="street_address_" id="street_address" type="text" formControlName="address1" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">Street Address 2 <span class="font-12 text-muted float-right">Optional</span></div>
-                                    <input type="text"   formControlName="address2" placeholder="Street address" >
+                                    <input [(ngModel)]="street_address2_" id="street_address2" type="text" formControlName="address2" placeholder="Street address">
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <div class="field-label">City</div>
-                                    <input type="text"  formControlName="town"  placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="city_name_" id="city_name" type="text" formControlName="town" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                                     <div class="field-label">State</div>
-                                    <input type="text"   formControlName="state"   placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="state_name_" id="state_name" type="text" formControlName="state" placeholder="" autocomplete="off">
 
                                 </div>
                                 <div class="form-group col-md-2 col-sm-6 col-xs-12">
                                     <div class="field-label">ZIP</div>
-                                    <input type="text"  formControlName="postalcode"   placeholder="" autocomplete="off" >
+                                    <input [(ngModel)]="zip_code_" id="zip_code" type="text" formControlName="postalcode" placeholder="" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -92,10 +92,15 @@
                                                 </div>
                                             </ng-template>
                                             <ng-template ngbPanelContent>
-                                                <div class="row" >
+                                                <div class="row">
+                                                    <div class="col-sm-6 linkaddress" *ngIf="useraddressslist.length < 1">
+                                                        <a class="add_address" (click)="checkaddress();">Add adress</a><br>
+                                                        <small class="text-danger">Plase add address to process order complete</small>
+                                                    </div>
                                                     <div class="col-sm-6" *ngFor="let address of useraddressslist">
+
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input type="radio" class="user_address_id" name="userAddress" value="{{address._id}}" [checked]="address.is_default == 1" formControlName="userAddressId" >
+                                                            <input type="radio" class="user_address_id" name="userAddress" value="{{address._id}}" [checked]="address.is_default == 1" formControlName="userAddressId">
                                                             <address>
                                                                 <h4> {{address.user_full_name}} </h4>
                                                                 <p>{{address.addressline1}}, {{address.addressline2}}</p>
@@ -113,16 +118,16 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-5 col-sm-12 col-xs-12" [class.desabledform] = "isUserLogin">
-                            <div class="checkout-details">
+                        <div class="col-lg-5 col-sm-12 col-xs-12" [class.desabledform]="isUserLogin">
+                            <div class="checkout-details" [class.desabledform]="useraddressslist.length < 1">
                                 <div class="order-box">
                                     <div class="title-box">
                                         <div>Product <span> Total</span></div>
                                     </div>
                                     <ul class="qty" *ngIf='products.length'>
                                         <li *ngFor="let product of products">
-                                        	 {{ product.product_name }} × {{ product.quantity }}
-                                        	<span>
+                                            {{ product.product_name }} × {{ product.quantity }}
+                                            <span>
                                                 {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
                                             </span>
                                         </li>
@@ -132,7 +137,7 @@
                                     </ul>
                                     <ul class="sub-total">
                                         <li>
-                                        	Subtotal <span class="count">{{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</span>
+                                            Subtotal <span class="count">{{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</span>
                                         </li>
                                         <!-- <li>Coupon <span class="count">-$77.60</span></li>
                                         <li>Gift Card <span class="count">-$100.00</span></li>
@@ -144,22 +149,21 @@
                                     </ul>
                                 </div>
 
-                            <div class="payment-box" >
-                                <div class="upper-box">
-                                    <div class="payment-options">
+                                <div class="payment-box">
+                                    <div class="upper-box">
+                                        <div class="payment-options">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
                                             </div>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)" [disabled]="checkoutForm.invalid">
                                                 <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
                                                 <img class="image d-block" src="assets/images/paypal.png" alt="" />
                                             </div>
-                                            <ngx-paypal *ngIf="paypalstatus"  
-                                            [config]="payPalConfig">
+                                            <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
                                             </ngx-paypal>
-                                        <!-- <ul>
+                                            <!-- <ul>
                                             <li>
                                                 <div class="radio-option">
                                                     <input type="radio" value="COD"  checked >
@@ -174,19 +178,19 @@
                                                 </div>
                                             </li>
                                         </ul> -->
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="text-right">
-                                        <button type="submit" *ngIf="!paypalstatus"  [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
+                                    <div class="text-right">
+                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>
-                                    
+
                                         <div [className]="orderValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="orderValid">
                                             <div class="d-flex align-items-center"><span *ngIf="orderValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{orderMassage}}</div>
-                                    <!-- <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal> -->
+                                            <!-- <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal> -->
                                         </div>
-                            </div>
-                            </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,4 +199,3 @@
         </div>
     </div>
 </section>
-

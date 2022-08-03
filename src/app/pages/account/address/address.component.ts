@@ -2,7 +2,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Userlogin } from './../../../shared/classes/userslogin';
 import { UserAddress } from './../../../shared/classes/user';
 import { UserService } from 'src/app/shared/services/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { json } from 'express';
 
@@ -23,9 +23,10 @@ export class AddressComponent implements OnInit {
   form: FormGroup;
   isValid: boolean = false;
   submitMassage:any;
+  returnUrl:string;
 
 
-  constructor( private router: Router, private userservice: UserService) { 
+  constructor( private router: Router, private userservice: UserService, private route: ActivatedRoute) { 
     
   }
 
@@ -41,6 +42,9 @@ export class AddressComponent implements OnInit {
       'postalCode': new FormControl(null, [Validators.required]),
       'telephone': new FormControl(null, [Validators.required]),
     })
+
+      // get return url from route parameters or default to '/'
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
   getallAddressList()
   {
@@ -57,7 +61,6 @@ export class AddressComponent implements OnInit {
     //this.useraddressclass['id']= address_id;
     //console.log('Address Edit', this.useraddressclass['id'])
     this.userservice.setUserAddressid(address_id);
-    this.router.navigate(['/edit-address'])
   }
 
   ToggleDashboard() {
@@ -113,11 +116,20 @@ export class AddressComponent implements OnInit {
     this.submitMassage="Address Sucessfully Added";            
     this.getallAddressList();
     setTimeout(() => {
-      this.router.navigate(['/address'])
-      .then(() => {
-        this.form.reset();
-        this.isValid=false;
-      });
+      if(this.returnUrl)
+      {
+      // login successful so redirect to return url
+      this.router.navigateByUrl(this.returnUrl)
+      }
+      else
+      {
+        this.router.navigate(['/address'])
+        .then(() => {
+          this.form.reset();
+          this.isValid=false;
+        });
+      }
+
     },2000) 
     console.log('User Address Update',res);
   }

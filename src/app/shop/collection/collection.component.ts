@@ -70,6 +70,8 @@ let catdata=
           // Get Query params..
           this.route.queryParams.subscribe(params => {
 
+            console.log('Param Details in collection page',params);
+
             this.colors = params.color ? params.color.split(",") : [];
             this.size  = params.size ? params.size.split(",")  : [];
             this.minPrice = params.minPrice ? params.minPrice : this.minPrice;

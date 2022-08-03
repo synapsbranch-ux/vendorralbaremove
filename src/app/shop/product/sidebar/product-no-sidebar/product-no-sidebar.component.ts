@@ -200,20 +200,20 @@ Size(product_varient_options) {
     product.quantity = this.counter || 1;
 
 
-   // console.log('Product Size Option ============',product.product_varient_options[0].size_options);
-   // console.log('Product Color Option ============',product.product_varient_options[1].color_options);
+   console.log('Product Size Option ============',product.product_varient_options[0].size_options);
+   console.log('Product Color Option ============',product.product_varient_options[1].color_options);
    //console.log('Product Quentity ============',product.quantity);
-    if(this.selectedSize && this.selectedColor)
-    {
-    if(this.selectedSize)
-    {
-      product.product_varient_options[0].size_options=this.selectedSize;
-    }
+  //   if(this.selectedSize && this.selectedColor)
+  //   {
+  //   if(this.selectedSize)
+  //   {
+  //     product.product_varient_options[0].size_options=this.selectedSize;
+  //   }
 
-    if(this.selectedColor)
-    {
-      product.product_varient_options[1].color_options=this.selectedColor;
-    }
+  //   if(this.selectedColor)
+  //   {
+  //     product.product_varient_options[1].color_options=this.selectedColor;
+  //   }
 
     const status = await this.productService.addToCart(product);
     if(status)
@@ -222,13 +222,13 @@ Size(product_varient_options) {
       // this.router.navigate(['/shop/cart']);
     }
     console.log('Add To CArt Status =======',status);
-   // console.log('Ready to Cart');
-    }
-    else
-    {
-      this.toastrService.warning('Please choose all veriation');
-    //  console.log('Not Ready Cart');
-    }
+  //  // console.log('Ready to Cart');
+  //   }
+  //   else
+  //   {
+  //     this.toastrService.warning('Please choose all veriation');
+  //   //  console.log('Not Ready Cart');
+  //   }
 
 
   }

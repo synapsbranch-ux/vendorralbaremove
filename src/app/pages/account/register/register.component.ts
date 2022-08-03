@@ -175,8 +175,8 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           // .... HANDLE ERROR HERE 
-          console.log(error.message);
-          this.toastr.error(error.message)
+          console.log(error);
+          this.toastr.error(error.error.message)
           //this.otpMassage=error.message;
           this.otpValid=false;
      }

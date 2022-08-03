@@ -266,7 +266,8 @@ export class ProductService {
         console.log('full Product Cart Data for Submit',cdata);
       
         this.addToCartDb(cdata).subscribe(
-        res =>  {   
+        res =>  {  
+          console.log('Product details cart page',product); 
           console.log('ADD TO CART DB',res['data']._id)
 
           state.cart.push({
