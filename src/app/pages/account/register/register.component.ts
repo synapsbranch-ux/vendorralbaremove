@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
   product_img:any;
   public products: ProductNew[] = [];
   countDown: Subscription;
-  counter = 75;
+  counter = 191;
   tick = 1000;
   otpTimerstatus:boolean=false;
 
@@ -101,7 +101,7 @@ export class RegisterComponent implements OnInit {
     let formData = this.form.value;
     let fullname=formData.fname+ ' '+formData.lname
     if(this.callForOtp==false){
-      this.counter = 75;
+      this.counter = 191;
       this.otpTimerstatus=true;
       this.otpTimer();
       let otpObj=
@@ -194,7 +194,7 @@ export class RegisterComponent implements OnInit {
     console.log('Resend OTP')
     let formData = this.form.value;
     let fullname=formData.fname+ ' '+formData.lname
-      this.counter = 75;
+      this.counter = 191;
       this.otpTimerstatus=true;
       this.otpTimer();
       let otpObj=
