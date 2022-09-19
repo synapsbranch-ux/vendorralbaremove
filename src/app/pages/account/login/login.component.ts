@@ -86,7 +86,7 @@ get login_password(){ return this.form.get('login_password');}
       this.loginValid=true;
       this.loginInValid=false;
       // this.loginMassage="Login sucessfull";
-      this.toaster.success('Login sucessfull')
+      this.toaster.success('Login sucessfull');
 /////////////////////////////////////////////////////////
 
 
@@ -119,6 +119,7 @@ get login_password(){ return this.form.get('login_password');}
                   "product_slug": element.pro_slug,
                   "quantity": element.qty,
                   "product_sale_price": element.price,
+                  "product_retail_price": element.price,
                   "product_varient_options":[
                       {"size_options": element.options[0].size},
                       {"color_options": element.options[1].color}
@@ -142,6 +143,15 @@ if(state.cart.length > 0)
 
     for(const csdata of state.cart)
 {
+  let product_price=0;
+  if(csdata.product_sale_price)
+  {
+    product_price=csdata.product_sale_price
+  }
+  else
+  {
+    product_price=csdata.product_retail_price
+  }
   let cdata=
   {
         "pro_id": csdata._id,
@@ -149,7 +159,7 @@ if(state.cart.length > 0)
         "pro_slug": csdata.product_slug,
         "pro_image": csdata.product_image[0].pro_image,
         "qty": csdata.quantity,
-        "price": csdata.product_sale_price,
+        "price": product_price,
         "options":[
             {"size": csdata.product_varient_options[0].size_options},
             {"color": csdata.product_varient_options[1].color_options}
@@ -163,6 +173,17 @@ if(state.cart.length > 0)
   res =>  {    
     csdata.cart_id = res['data']._id;
     console.log('Cart item added from login',res);
+
+    let product_price=0;
+    if(csdata.product_sale_price)
+    {
+      product_price=csdata.product_sale_price
+    }
+    else
+    {
+      product_price=csdata.product_retail_price
+    }
+
     let data = 
     {
       "_id": csdata.pro_id,
@@ -176,7 +197,7 @@ if(state.cart.length > 0)
       "product_name": csdata.product_name,
       "product_slug": csdata.product_slug,
       "quantity": csdata.quantity,
-      "product_sale_price": csdata.product_sale_price,
+      "product_sale_price": product_price,
       "product_varient_options":[
           {"size_options": csdata.product_varient_options[0].size_options},
           {"color_options": csdata.product_varient_options[1].color_options}
@@ -192,12 +213,16 @@ if(state.cart.length > 0)
     if(this.returnUrl)
     {
     // login successful so redirect to return url
-    this.router.navigateByUrl(this.returnUrl)
+    this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.returnUrl]);
+  }) 
     }
     else
     {
       
-    this.router.navigate(['/dashboard'])
+      this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/dashboard']);
+    }) 
     .then(() => {
         window.location.reload();
     });
@@ -219,8 +244,9 @@ else
     }
     else
     {
-      
-    this.router.navigate(['/dashboard'])
+      this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/dashboard']);
+    })  
     .then(() => {
         window.location.reload();
     });

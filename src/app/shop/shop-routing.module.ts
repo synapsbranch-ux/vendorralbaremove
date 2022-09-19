@@ -1,3 +1,4 @@
+import { SettingsComponent } from './../shared/components/settings/settings.component';
 import { AuthGuard } from './../shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -39,6 +40,10 @@ const routes: Routes = [
     path: 'checkout',
     component: CheckoutComponent,  canActivate: [AuthGuard]
   },
+  {
+    path: 'settings-header',
+    component: SettingsComponent
+  }
   // {
   //   path: 'checkout/success/:id',
   //   component: SuccessComponent

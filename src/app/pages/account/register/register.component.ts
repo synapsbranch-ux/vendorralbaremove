@@ -1,3 +1,4 @@
+import { PasswordStrengthValidator } from './../../../password-strength.validators';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from './../../../shared/services/product.service';
 import { ProductNew } from './../../../shared/classes/product';
@@ -49,7 +50,7 @@ export class RegisterComponent implements OnInit {
         'fname': new FormControl(null, [Validators.required]),
         'lname': new FormControl(null, [Validators.required]),
         'email': new FormControl(null, [Validators.required, Validators.email]),
-        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
+        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
         'repeat_password': new FormControl(null, [Validators.required]),
         'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
 

@@ -163,8 +163,9 @@ console.log(qty);
   public removeItem(product: any) {
 
     console.log('Remove Cart Item',product);
-
     this.product_service.removeCartItem(product);
+    this.product_service.cartItems.subscribe(response => this.products = response);
+
   }
 
 }

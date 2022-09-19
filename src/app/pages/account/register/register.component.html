@@ -53,6 +53,9 @@
                                     <div *ngIf="password.errors?.maxLength">
                                         Password will be miximum 16 character.
                                     </div>
+                                    <div class="text-danger" class="error-text" *ngIf="password.hasError('passwordStrength')">
+                                        {{password.errors['passwordStrength']}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4" *ngIf="showDiv.signUpDiv">

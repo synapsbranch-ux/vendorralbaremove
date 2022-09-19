@@ -238,7 +238,7 @@ export class ProductService {
    // Add to Cart
    public addToCart(product): any {
     const cartItem = state.cart.find(item => item._id === product._id);
-    const qty = product.quantity ? product.quantity : 1;
+    const qty = product.quantity ? product.quantity : 0;
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
     
@@ -249,6 +249,15 @@ export class ProductService {
     } else {
           if(localStorage.getItem('user_id'))
           {
+            let product_price=0;
+            if(product.product_sale_price == null)
+            {
+              product_price=product.product_retail_price
+            }
+            else
+            {
+              product_price=product.product_sale_price
+            }
             let cdata=
         {
               "pro_id": product._id,
@@ -256,7 +265,7 @@ export class ProductService {
               "pro_image": product.product_image[0].pro_image,
               "pro_slug": product.product_slug,
               "qty": product.quantity,
-              "price": product.product_sale_price,
+              "price": product_price,
               "options":[
                   {"size": product.product_varient_options[0].size_options},
                   {"color": product.product_varient_options[1].color_options}
@@ -323,6 +332,16 @@ export class ProductService {
         if(currentUser)
         {
 
+          let product_price=0;
+          if(product.product_sale_price == null)
+          {
+            product_price=product.product_retail_price
+          }
+          else
+          {
+            product_price=product.product_sale_price
+          }
+
           let cdata=
       {
             "pro_id": product._id,
@@ -330,7 +349,7 @@ export class ProductService {
             "pro_image": product.product_image[0].pro_image,
             "pro_slug": product.product_slug,
             "qty": product.quantity,
-            "price": product.product_sale_price,
+            "price": product_price,
             "options":[
                 {"size": product.product_varient_options[0].size_options},
                 {"color": product.product_varient_options[1].color_options}
@@ -356,7 +375,7 @@ export class ProductService {
   public calculateStockCounts(product, quantity) {
     const qty = product.quantity + quantity
     const stock = product.stock
-    if (stock < qty || stock == 0) {
+    if (stock <= 0) {
       this.toastrService.error('You can not add more items than available. In stock '+ stock +' items.');
       return false
     }
@@ -371,7 +390,6 @@ export class ProductService {
     {
       const index2 = state.cart.indexOf(product);
       console.log('Remove Cart User Login :',index2);
-
       state.cart.splice(index2, 1);
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
 
@@ -380,15 +398,10 @@ export class ProductService {
         "cart_id": product.cart_id,
         "pro_id": product._id,
       }
-      console.log('Ready to delete Cart Item',dcDAta);  
-
-      
       this.deleteToCartDb(dcDAta).subscribe(
         res =>
         {
           console.log('Delete Cart From DB Return',res);
-          this
-          .router.navigateByUrl('/cart')
         }
       )
     }
@@ -409,7 +422,16 @@ export class ProductService {
     return this.cartItems.pipe(map((product: ProductNew[]) => {
       // console.log('Total cart Item ==============> ',product);
       return product.reduce((prev, curr: ProductNew) => {
-        let price = curr.product_sale_price;
+        let product_price=0;
+        if(curr.product_sale_price == null)
+        {
+          product_price=curr.product_retail_price
+        }
+        else
+        {
+          product_price=curr.product_sale_price
+        }
+        let price = product_price;
         return prev + (price * curr.quantity) * this.Currency.price;
       }, 0);
     }));

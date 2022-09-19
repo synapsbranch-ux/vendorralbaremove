@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -9,6 +10,7 @@ import { OrderService } from "../../shared/services/order.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
 import { v4 as uuidv4 } from 'uuid';
+import { first } from 'rxjs/operators';
 const state = {
 
   products: JSON.parse(localStorage['products'] || '[]'),
@@ -48,14 +50,16 @@ export class CheckoutComponent implements OnInit {
   city_name_:any;
   state_name_:any;
   zip_code_:any;
+  product_not_available:any=[];
 
   constructor(private fb: FormBuilder,
     public productService: ProductService,private userservice: UserService,
-    private orderService: OrderService, private route: ActivatedRoute,private router: Router) { 
+    private orderService: OrderService, private route: ActivatedRoute,private router: Router, private toaster : ToastrService) { 
 
   }
 
   ngOnInit(): void {
+    console.log('product ',this.product_not_available.length);
     this.local_checkout_obj=JSON.parse(localStorage.getItem('checkoutform'));
     if(this.local_checkout_obj)
     {
@@ -80,6 +84,31 @@ export class CheckoutComponent implements OnInit {
   }
 
     this.productService.cartItems.subscribe(response => this.products = response);
+   for (const element of this.products) {
+            
+      this.productService.getproductsBySlugs(element.product_slug)
+      .pipe(first())
+      .subscribe({
+      next: (v) => {
+          console.log('Checkout product list',v.data);
+          let stock=(v.data.stock - element.quantity);
+
+          if(stock < 1)
+          {
+            if(v.data.product_name)
+            {
+              this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+              this.router.navigateByUrl(`stores/${v.data.product_store.store_slug}/${v.data.product_department.department_slug}/${v.data.product_slug}`)
+            }
+          }  
+        },
+        error: (e) => {
+          console.log(e);
+        },
+        complete: () => console.info('Complete') 
+        }
+        );
+  }
     this.getTotal.subscribe(amount => this.amount = amount);
     this.initConfig();
     this.checkoutForm = new FormGroup({
@@ -306,76 +335,101 @@ let address_arr={
     const currentUser = localStorage.getItem("user_id");
     if (currentUser) {
       
-if(this.products.length > 0)
-{
-      let orderTotal=0;
-      let paymentStatus="";
-      let formData = this.checkoutForm.value;
+    if(this.products.length > 0)
+  {
+        let orderTotal=0;
+        let paymentStatus="";
+        let formData = this.checkoutForm.value;
 
-      if(formData.paymentOption == 'COD')
-      {
-        paymentStatus="success";
-        this.transactionId=uuidv4();
-      }
-      else
-      {
-        this.initConfig();
-        paymentStatus="pending";
-      }
-      console.log('Payment Status',formData.paymentOption);
-
-      this.getTotal.subscribe(
-        res =>
+        if(formData.paymentOption == 'COD')
         {
-          orderTotal=res
-          
+          paymentStatus="success";
+          this.transactionId=uuidv4();
         }
-      )
-      
-     console.log('Cart Products',this.products)
+        else
+        {
+          this.initConfig();
+          paymentStatus="pending";
+        }
+        console.log('Payment Status',formData.paymentOption);
 
-     let orderProducts : Object[]=[];
+        this.getTotal.subscribe(
+          res =>
+          {
+            orderTotal=res
+            
+          }
+        )
+        
+      console.log('Cart Products',this.products)
 
-     for(const elem of this.products)
-     {
-       console.log('product Loop',elem);
-      let odetails= {
-        // store_id: elem.product_store,
-        // vendor_id: elem.product_owner,
-        // department_id: elem.product_department,
-        product_id: elem._id,
-        product_name: elem.product_name,
-        product_image: elem.product_image[0].pro_image,
-        product_slug: elem.product_slug,
-        qty: elem.quantity,
-        price: elem.product_sale_price,
-        options:[
-            {size: elem.product_varient_options[0].size_options},
-            {color: elem.product_varient_options[1].color_options}
-        ]
+      let orderProducts : Object[]=[];
+
+      for(const elem of this.products)
+      {
+        console.log('product Loop',elem);
+        let odetails= {
+          product_id: elem._id,
+          product_name: elem.product_name,
+          product_image: elem.product_image[0].pro_image,
+          product_slug: elem.product_slug,
+          qty: elem.quantity,
+          price: elem.product_sale_price,
+          options:[
+              {size: elem.product_varient_options[0].size_options},
+              {color: elem.product_varient_options[1].color_options}
+          ]
+        }
+        orderProducts.push(odetails);
       }
-      orderProducts.push(odetails);
-     }
 
 
-console.log('orderProducts',orderProducts)
+  console.log('orderProducts',orderProducts)
 
-let orderData={}
+  let orderData={}
 
-if(formData.paymentOption == 'paypal')
-{
-  orderData=
+  if(formData.paymentOption == 'paypal')
+  {
+    orderData=
+    {
+      total_order_amount: orderTotal,
+      order_status: 'initiated',
+      payment_status: paymentStatus,
+      payment_method: formData.paymentOption,
+      transaction_id: this.transactionId,
+      country_code: this.paypalreurnData[0].country_code,
+      email_address: this.paypalreurnData[0].email_address,
+      name: this.paypalreurnData[0].name,
+      customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
+      paypal_status: this.paypalreurnData[0].paypal_status,
+      shipping_address_id: formData.userAddressId,
+      billing_email: formData.email,
+      billing_phone: formData.phone,
+      billing_country: formData.country,
+      billing_first_name: formData.firstname,
+      billing_last_name: formData.lastname,
+      billing_address1: formData.address1,
+      billing_address2: formData.address2,
+      billing_city: formData.town,
+      billing_state: formData.state,
+      billing_zip: formData.postalcode,
+      order_details: orderProducts,
+    }
+  }
+  else
+  {
+    orderData=
   {
     total_order_amount: orderTotal,
     order_status: 'initiated',
     payment_status: paymentStatus,
     payment_method: formData.paymentOption,
     transaction_id: this.transactionId,
-    country_code: this.paypalreurnData[0].country_code,
-    email_address: this.paypalreurnData[0].email_address,
-    name: this.paypalreurnData[0].name,
-    customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
-    paypal_status: this.paypalreurnData[0].paypal_status,
+    country_code: "",
+    email_address: formData.email,
+    name: formData.firstname+' '+formData.lastname,
+    customer_id_paypal: "",
+    paypal_status: "",
     shipping_address_id: formData.userAddressId,
     billing_email: formData.email,
     billing_phone: formData.phone,
@@ -389,60 +443,32 @@ if(formData.paymentOption == 'paypal')
     billing_zip: formData.postalcode,
     order_details: orderProducts,
   }
-}
-else
-{
-  orderData=
-{
-  total_order_amount: orderTotal,
-  order_status: 'initiated',
-  payment_status: paymentStatus,
-  payment_method: formData.paymentOption,
-  transaction_id: this.transactionId,
-  country_code: "",
-  email_address: formData.email,
-  name: formData.firstname+' '+formData.lastname,
-  customer_id_paypal: "",
-  paypal_status: "",
-  shipping_address_id: formData.userAddressId,
-  billing_email: formData.email,
-  billing_phone: formData.phone,
-  billing_country: formData.country,
-  billing_first_name: formData.firstname,
-  billing_last_name: formData.lastname,
-  billing_address1: formData.address1,
-  billing_address2: formData.address2,
-  billing_city: formData.town,
-  billing_state: formData.state,
-  billing_zip: formData.postalcode,
-  order_details: orderProducts,
-}
-}
+  }
 
-// console.log('Order Generate STR 1',orderData);
-// console.log('Order Generate STR 2',JSON.stringify(orderData));
+  // console.log('Order Generate STR 1',orderData);
+  // console.log('Order Generate STR 2',JSON.stringify(orderData));
 
-this.orderService.userCreateOrder(orderData).subscribe(
+  this.orderService.userCreateOrder(orderData).subscribe(
 
-  res =>
-  {
-    this.orderValid=true;
-    this.orderMassage="Your Order Placed Sucessfully";
-    console.log('Order Created',res);
-    for(const elem of this.products)
+    res =>
     {
-      this.productService.removeCartItem(elem);
+      this.orderValid=true;
+      this.orderMassage="Your Order Placed Sucessfully";
+      console.log('Order Created',res);
+      for(const elem of this.products)
+      {
+        this.productService.removeCartItem(elem);
+      }
+      this.userservice.setUserOrderid(res['data']._id);
+      setTimeout(() => {
+        this.router.navigateByUrl('/order/success');
+      },1000) 
     }
-    this.userservice.setUserOrderid(res['data']._id);
-    setTimeout(() => {
-      this.router.navigateByUrl('/order/success');
-    },1000) 
-  }
 
-)
+  )
 
+      }
     }
-  }
     else
     {
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});

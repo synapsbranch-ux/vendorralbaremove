@@ -90,10 +90,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
     this.productService.getSettingsDetails().subscribe(
       res =>
       {
+        if(res.length)
+        {
         this.cartbuttonhideStatus=res['data'][0].addto_cart_status;
         this.quentityStatus=res['data'][0].quentity_status;
-
-    //    console.log('Product Settings',res);
+        }
       }
     )
     this.route.params.subscribe(
@@ -126,7 +127,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           this.productColor=this.product.product_varient_options[1].color_options;
           this.productSize=this.product.product_varient_options[0].size_options;
         });
-   //   console.log('response.data', this.product)
+       console.log('Current Product response.data', this.product)
       })
 
   }
@@ -197,7 +198,7 @@ Size(product_varient_options) {
 
   // Add to cart
   async addToCart(product: any) {
-    product.quantity = this.counter || 1;
+    product.quantity = this.counter || 0;
 
 
    console.log('Product Size Option ============',product.product_varient_options[0].size_options);

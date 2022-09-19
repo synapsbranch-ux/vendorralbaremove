@@ -37,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ElementsComponent,
     DepartmentComponent,
     AboutUsComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
   ],
 
   imports: [
@@ -48,7 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
     ToastrModule.forRoot({
-      timeOut: 3000,
+      timeOut: 60000,
       progressBar: false,
       enableHtml: true,
     }),

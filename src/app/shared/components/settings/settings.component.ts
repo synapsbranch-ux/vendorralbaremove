@@ -49,12 +49,12 @@ public currencies = [{
 constructor(@Inject(PLATFORM_ID) private platformId: Object,
   private translate: TranslateService,
   private router: Router , public product_service: ProductService) {
-  this.product_service.cartItems.subscribe(response => this.products = response);
+
 }
 
 ngOnInit(): void {
 this.user_id=localStorage.getItem("user_id");
-
+this.product_service.cartItems.subscribe(response => this.products = response);
 }
 
 

@@ -35,6 +35,8 @@ export interface ProductNew {
     product_sale_price?: number;
     status?: string;
     stock?: number;
+    width?: string;
+    height?: string;
     createdAt?: Date;
     updatedAt?: Date;
     quantity?: number;
@@ -57,6 +59,8 @@ export interface ProductNew2 {
     product_sale_price?: number;
     status?: string;
     stock?: number;
+    width?: string;
+    height?: string;
     createdAt?: Date;
     updatedAt?: Date;
     quantity?: number;

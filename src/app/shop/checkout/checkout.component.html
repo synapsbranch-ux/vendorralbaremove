@@ -127,8 +127,11 @@
                                     <ul class="qty" *ngIf='products.length'>
                                         <li *ngFor="let product of products">
                                             {{ product.product_name }} × {{ product.quantity }}
-                                            <span>
+                                            <span *ngIf="product.product_sale_price">
                                                 {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                            </span>
+                                            <span *ngIf="product.product_sale_price == null">
+                                                {{ (product.product_retail_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
                                             </span>
                                         </li>
                                     </ul>

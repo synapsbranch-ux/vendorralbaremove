@@ -1,3 +1,4 @@
+import { PasswordStrengthValidator } from './../../../password-strength.validators';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -30,7 +31,7 @@ export class RegisterVendorComponent implements OnInit {
      this.form =  new FormGroup({
         'fname': new FormControl(null, [Validators.required]),
         'email': new FormControl(null, [Validators.required, Validators.email]),
-        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
+        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
         'repeat_password': new FormControl(null, [Validators.required]),
         'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
 

@@ -34,6 +34,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
 import { CompareComponent } from './compare/compare.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { SuccessComponent } from './checkout/success/success.component';
+import { RandomOrderPipe } from '../random-order.pipe';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { SuccessComponent } from './checkout/success/success.component';
     WishlistComponent,
     CompareComponent,
     CheckoutComponent,
-    SuccessComponent
+    SuccessComponent,
+    RandomOrderPipe
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

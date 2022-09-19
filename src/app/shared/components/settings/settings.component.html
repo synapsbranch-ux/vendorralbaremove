@@ -1,6 +1,6 @@
 <div class="icon-nav">
-  <ul>
-    <!-- <li class="onhover-div mobile-search search-widgets" id="search-widgets">
+    <ul>
+        <!-- <li class="onhover-div mobile-search search-widgets" id="search-widgets">
       <div (click)="searchToggle()">
         <img src="assets/images/icon/search.png" class="img-fluid" alt="">
         <i class="ti-search"></i>
@@ -25,7 +25,7 @@
         </div>
       </div>
     </li> -->
-    <!-- <li class="onhover-div mobile-setting">
+        <!-- <li class="onhover-div mobile-setting">
       <div><img src="assets/images/icon/setting.png" class="img-fluid" alt="settong">
         <i class="ti-settings"></i></div>
       <div class="show-div setting">
@@ -43,88 +43,93 @@
         </ul>
       </div>
     </li> -->
-    <li class="onhover-dropdown mobile-account">
-      <a href="javascript:void(0)">
-        <i class="fa fa-user-o" aria-hidden="true"></i> My Account
-      </a>
-      <ul class="onhover-show-div">
-        <li *ngIf="!user_id">
-          <a [routerLink]="['/login']" data-lng="en">
+        <li class="onhover-dropdown mobile-account">
+            <a href="javascript:void(0)">
+                <i class="fa fa-user-o" aria-hidden="true"></i> My Account
+            </a>
+            <ul class="onhover-show-div">
+                <li *ngIf="!user_id">
+                    <a [routerLink]="['/login']" data-lng="en">
             Login
           </a>
-        </li>
-        <li *ngIf="user_id">
-          <a [routerLink]="['/dashboard']">
+                </li>
+                <li *ngIf="user_id">
+                    <a [routerLink]="['/dashboard']">
             Profile
           </a>
-        </li>
-        <li *ngIf="user_id" (click)="logout();">
-          <a data-lng="es">
+                </li>
+                <li *ngIf="user_id" (click)="logout();">
+                    <a data-lng="es">
             Logout
           </a>
+                </li>
+            </ul>
         </li>
-      </ul>
-    </li>
-    <li class="onhover-div mobile-wishlist">
-      <div>
-        <a [routerLink]="['/wishlist']">
-          <i class="fa fa-heart-o" aria-hidden="true"></i>Wishlist
-        </a>
-      </div>
-    </li>
-    <li class="onhover-div mobile-cart">
-      <div>
-        <a [routerLink]="['/cart']">
-          <!-- <img src="assets/images/icon/cart.png" class="img-fluid" alt=""> -->
-          <i class="fa fa-shopping-bag"></i> My Cart
-        </a>
-      </div>
-      <span class="cart_qty_cls">{{ products.length }}</span>
-      <ul class="show-div shopping-cart" *ngIf='!products.length'>
-        <h5>Your cart is currently empty.</h5>
-      </ul>
-      <ul class="show-div shopping-cart" *ngIf='products.length'>
-        <li *ngFor="let product of products">
-          <div class="media">
-            <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
-              <img class="mr-3" [src]="product?.product_image[0].pro_image" [alt]="product?.product_name">
-            <!-- </a> -->
-            <div class="media-body">
-              <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
-                <h4>{{ product?.product_name }}</h4>
-              <!-- </a> -->
-              <h4>
-                <span>
+        <li class="onhover-div mobile-wishlist">
+            <div>
+                <a [routerLink]="['/wishlist']">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i>Wishlist
+                </a>
+            </div>
+        </li>
+        <li class="onhover-div mobile-cart">
+            <div>
+                <a [routerLink]="['/cart']">
+                    <!-- <img src="assets/images/icon/cart.png" class="img-fluid" alt=""> -->
+                    <i class="fa fa-shopping-bag"></i> My Cart
+                </a>
+            </div>
+            <span class="cart_qty_cls">{{ products.length }}</span>
+            <ul class="show-div shopping-cart" *ngIf='!products.length'>
+                <h5>Your cart is currently empty.</h5>
+            </ul>
+            <ul class="show-div shopping-cart" *ngIf='products.length'>
+                <li *ngFor="let product of products">
+                    <div class="media">
+                        <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
+                        <img class="mr-3" [src]="product?.product_image[0].pro_image" [alt]="product?.product_name">
+                        <!-- </a> -->
+                        <div class="media-body">
+                            <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
+                            <h4>{{ product?.product_name }}</h4>
+                            <!-- </a> -->
+                            <h4>
+                                <span *ngIf="product?.product_sale_price">
                   {{ product?.quantity }} x 
                   {{ product?.product_sale_price | currency: product_service.Currency?.currency:'symbol'}}
           
                 </span>
-              </h4>
-            </div>
-          </div>
-          <div class="close-circle" (click)="removeItem(product)">
-            <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a>
-          </div>
+                                <span *ngIf="product?.product_sale_price == null">
+                  {{ product?.quantity }} x 
+                  {{ product?.product_retail_price | currency: product_service.Currency?.currency:'symbol'}}
+          
+                </span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="close-circle" (click)="removeItem(product)">
+                        <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    </div>
+                </li>
+                <li>
+                    <div class="total">
+                        <h5>subtotal : <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></h5>
+                    </div>
+                </li>
+                <li>
+                    <div class="buttons">
+                        <a [routerLink]="['/cart']" class="view-cart">view cart</a>
+                        <a [routerLink]="['/checkout']" class="checkout">checkout</a>
+                    </div>
+                </li>
+            </ul>
         </li>
-        <li>
-          <div class="total">
-            <h5>subtotal : <span>{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></h5>
-          </div>
-        </li>
-        <li>
-          <div class="buttons">
-            <a [routerLink]="['/cart']" class="view-cart">view cart</a>
-            <a [routerLink]="['/checkout']" class="checkout">checkout</a>
-          </div>
-        </li>
-      </ul>
-    </li>
-    <!-- <li class="onhover-div mobile-virtualstore">
+        <!-- <li class="onhover-div mobile-virtualstore">
       <div>
         <a href="https://store.ralbatech.com/puma-mumbai-store/puma-ladies-hand-bags" target="_blank">
           <i class="fa fa-cubes" aria-hidden="true"></i>Virtual Studio
         </a>
       </div>
     </li> -->
-  </ul>
+    </ul>
 </div>
