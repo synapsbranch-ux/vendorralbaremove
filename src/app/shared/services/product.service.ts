@@ -269,7 +269,9 @@ export class ProductService {
               "options":[
                   {"size": product.product_varient_options[0].size_options},
                   {"color": product.product_varient_options[1].color_options}
-              ]
+              ],
+              "width":product.width,
+              "height": product.height
       
         }
         console.log('full Product Cart Data for Submit',cdata);
@@ -353,7 +355,9 @@ export class ProductService {
             "options":[
                 {"size": product.product_varient_options[0].size_options},
                 {"color": product.product_varient_options[1].color_options}
-            ]
+            ],
+            "width":product.width,
+            "height": product.height
     
       }
       console.log('full Product Cart Data for Submit',cdata);

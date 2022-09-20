@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="product-description pb-4">
-                            <div *ngIf="product?.product_varient_options">
+                            <div *ngIf="productSize">
                                 <h6 class="product-title size-text">
                                     select size
                                     <!-- <span>
@@ -79,12 +79,18 @@
                                 </h6>
                                 <div class="size-box">
                                     <ul>
-                                        <li [class.active]="size" *ngFor="let size of Size(product.product_varient_options[0].size_options)">
-                                            <a href="javascript:void(0)" (click)="selectSize(size)">{{ size | uppercase}}</a>
+                                        <li [class.active]="productSize">
+                                            <a href="javascript:void(0)" (click)="selectSize(productSize)">{{ productSize | uppercase}}</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
+                            <div *ngIf="product?.width" class="product-size pb-3">
+                                <h4><strong>Width</strong> : {{product?.width}} </h4>
+                                <h4><strong>Height</strong> : {{product?.height}}</h4>
+
+                            </div>
+
                             <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
                             <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
                             <div *ngIf="quentityStatus == 'inactive'">

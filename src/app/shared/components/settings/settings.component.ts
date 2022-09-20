@@ -49,7 +49,6 @@ public currencies = [{
 constructor(@Inject(PLATFORM_ID) private platformId: Object,
   private translate: TranslateService,
   private router: Router , public product_service: ProductService) {
-
 }
 
 ngOnInit(): void {

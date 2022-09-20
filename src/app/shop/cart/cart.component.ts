@@ -71,7 +71,9 @@ export class CartComponent implements OnInit , OnChanges {
                   "product_varient_options":[
                       {"size_options": element.options[0].size},
                       {"color_options": element.options[1].color}
-                  ]
+                  ],
+                  "width": element.width,
+                  "height": element.height
                 }
               this.cartproducts.push(data);          
               this.products=this.cartproducts;     

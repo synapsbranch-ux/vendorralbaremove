@@ -1,17 +1,17 @@
- <!-- <app-breadcrumb [title]="'Cart'" [breadcrumb]="'Cart'"></app-breadcrumb> -->
+<!-- <app-breadcrumb [title]="'Cart'" [breadcrumb]="'Cart'"></app-breadcrumb> -->
 <!-- section start -->
 <section class="cart-section">
     <div class="container">
         <div class="col-sm-12 empty-cart-cls text-center" *ngIf="!products.length">
-        <img src="assets/images/icon-empty-cart.png" class="img-fluid mb-4">
-        <h3><strong>Your Cart is Empty</strong></h3>
-        <h4>Add something to make me happy :)</h4>
+            <img src="assets/images/icon-empty-cart.png" class="img-fluid mb-4">
+            <h3><strong>Your Cart is Empty</strong></h3>
+            <h4>Add something to make me happy :)</h4>
         </div>
 
         <div class="row cart_section" *ngIf="products.length">
             <div class="col-sm-12">
                 <div class="title1 section-b-space">
-                  <h2>Your shopping bag</h2>
+                    <h2>Your shopping bag</h2>
                 </div>
             </div>
             <div class="col-sm-12 col-lg-8 col-12">
@@ -19,16 +19,17 @@
                     <div class="col-sm-5 col-md-5 col-9 flex_item">
                         <div class="cart_product_img">
                             <!-- <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active"> -->
-                                <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
+                            <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
                             <!-- </a> -->
                         </div>
                         <div class="cart_product_info">
                             <p class="mb-2 product_title">
                                 <!-- <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active"> -->
-                                    {{ product.product_name | titlecase }}
+                                {{ product.product_name | titlecase }}
                                 <!-- </a> -->
                             </p>
-                            <p class="mb-2">Size:&nbsp;&nbsp; {{product.product_varient_options[0].size_options}}</p>
+                            <p *ngIf="product.product_varient_options[0].size_options" class="mb-2">Size:&nbsp;&nbsp; {{product.product_varient_options[0].size_options}}</p>
+                            <p *ngIf="product.width" class="mb-2">Size:&nbsp; <strong>width</strong> : {{product.width}}&nbsp; <strong>height</strong> : {{product.height}}</p>
                             <p class="mb-2 cart_procolor">Color:&nbsp;&nbsp; <span [ngStyle]="{'background-color': product.product_varient_options[1].color_options}"></span></p>
                             <p class="mb-2">{{ (product.price) * product_service?.Currency.price | currency:product_service?.Currency.currency:'symbol' }}</p>
                         </div>
@@ -116,30 +117,30 @@
             <!-- Product price box -->
             <div class="col-lg-4 col-sm-12 col-xs-12">
                 <div class="checkout-details">
-                  <div class="order-box">
-                    <div class="title-box">
-                      <div>Product <span> Total</span></div>
-                    </div>
-                    <ul class="qty" *ngFor="let product of products">
-                      <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ (product.product_sale_price) * (product.quantity) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
-                    </ul>
-                    <ul class="sub-total">
-                      <li>Subtotal <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
-                      <!-- <li>Coupon <span class="count">-$77.60</span></li>
+                    <div class="order-box">
+                        <div class="title-box">
+                            <div>Product <span> Total</span></div>
+                        </div>
+                        <ul class="qty" *ngFor="let product of products">
+                            <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ (product.product_sale_price) * (product.quantity) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
+                        </ul>
+                        <ul class="sub-total">
+                            <li>Subtotal <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                            <!-- <li>Coupon <span class="count">-$77.60</span></li>
                       <li>Gift Card <span class="count">-$100.00</span></li>
                       <li>Estimated Tax  <span class="count">$23.28</span></li>
                       <li>Estimated Shipping  <span class="count">FREE</span></li> -->
-                    </ul>
+                        </ul>
 
-                    <ul class="total">
-                      <li>Estimated Total <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
-                    </ul>
-                  </div>
-                  <div class="text-center">
-                    <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
-                      <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
-                  </div>
-                  <!-- <div class="text-center mt-3">
+                        <ul class="total">
+                            <li>Estimated Total <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                        </ul>
+                    </div>
+                    <div class="text-center">
+                        <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
+                        <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
+                    </div>
+                    <!-- <div class="text-center mt-3">
                       <a href="javascript:void(0)" class="btn rounded-lg paypal_btn w-100"><i class="fa fa-paypal mr-1"></i>Paypal</a>
                   </div> -->
                 </div>

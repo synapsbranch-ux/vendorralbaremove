@@ -30,6 +30,8 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   public selectedSize: any;
   public selectedColor: any;
   addtocartstatus: boolean = false;
+  colorarr=[];
+  sizearr=[];
 
   productColor:any;
   productSize:any;
@@ -145,37 +147,37 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
 
   // Get Product Color
-  Color(product_varient_options) {
-    // console.log('Color Function ====',product_varient_options);
-    if((product_varient_options).length >= 0)
-    {
-      const uniqColor = [];
-      for (let i = 0; i < (product_varient_options).length; i++) {
-        if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
-          uniqColor.push(product_varient_options[i]);
-        }
-      }
-      uniqColor.push(product_varient_options);
+  // Color(product_varient_options) {
+  //   // console.log('Color Function ====',product_varient_options);
+  //   if((product_varient_options).length >= 0)
+  //   {
+  //     const uniqColor = [];
+  //     for (let i = 0; i < (product_varient_options).length; i++) {
+  //       if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
+  //         uniqColor.push(product_varient_options[i]);
+  //       }
+  //     }
+  //     uniqColor.push(product_varient_options);
       
-      return uniqColor
-    }
-  }
+  //     return uniqColor
+  //   }
+  // }
 
   // Get Product Size
-Size(product_varient_options) {
+// Size(product_varient_options) {
  
-  if((product_varient_options).length >= 0)
-  {
-  const uniqSize = []
-  for (let i = 0; i < (product_varient_options).length; i++) {
+//   if((product_varient_options).length >= 0)
+//   {
+//   const uniqSize = []
+//   for (let i = 0; i < (product_varient_options).length; i++) {
 
-    if (!uniqSize.includes(product_varient_options) && product_varient_options) {
-      uniqSize.push(product_varient_options)
-    }
-  }
-  return uniqSize
-}
-}
+//     if (!uniqSize.includes(product_varient_options) && product_varient_options) {
+//       uniqSize.push(product_varient_options)
+//     }
+//   }
+//   return uniqSize
+// }
+// }
 
   selectSize(size) {
     this.selectedSize = size;

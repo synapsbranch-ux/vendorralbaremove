@@ -61,11 +61,7 @@ get phone_email(){ return this.form.get('phone_email');}
 get login_password(){ return this.form.get('login_password');}
 
   onSubmit(): void {
-
-    this.submitted = true;
-
-
-
+  this.submitted = true;
   if (this.form.invalid) {
     return;
   }
@@ -95,170 +91,80 @@ get login_password(){ return this.form.get('login_password');}
 
   console.log('User Login');
   console.log('Cart Item before Add From Login',this.cartproducts)
-
-    this.product_service.allCartProducts().subscribe(
-      res =>{
-        console.log('Return Cart',res);
-        if(res['data'])
+  this.product_service.allCartProducts().subscribe(
+    res =>{
+      console.log('Return Cart',res);
+      if(res['data'])
+      {
+        let bodydata=res['data'];
+        if(bodydata.hasOwnProperty('products'))
         {
-          let bodydata=res['data'];
-          if(bodydata.hasOwnProperty('products'))
-          {
-          for (const element of res['data'].products) {   
-                let data = 
-                {
-                  "_id": element.pro_id,
-                  "product_image": [
-                    {
-                        "pro_image": element.pro_image,
-                        "status": "active"
-                    },
-                  ],
-                  "cart_id": res['data']._id,
-                  "product_name": element.pro_name,
-                  "product_slug": element.pro_slug,
-                  "quantity": element.qty,
-                  "product_sale_price": element.price,
-                  "product_retail_price": element.price,
-                  "product_varient_options":[
-                      {"size_options": element.options[0].size},
-                      {"color_options": element.options[1].color}
-                  ]
-                }
-              this.cartproducts.push(data);          
-              this.products=this.cartproducts;     
-              localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-              console.log('Return LocalStorage',localStorage.getItem("cartItems"));
-                                     
+        for (const element of res['data'].products) {   
+
+          console.log('cart Product slug',element.pro_slug);
           
-      }
-    }
-    }
-      
-    }
-    )
+          this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
 
-if(state.cart.length > 0)    
-{
+            console.log('cart Product Image',product['data']);
 
-    for(const csdata of state.cart)
-{
-  let product_price=0;
-  if(csdata.product_sale_price)
-  {
-    product_price=csdata.product_sale_price
+              this.product_img=product['data'].product_image[0].pro_image;
+              let data = 
+              {
+                "_id": element.pro_id,
+                "product_image": [
+                  {
+                      "pro_image": this.product_img,
+                      "status": "active"
+                  },
+                ],
+                "cart_id": res['data']._id,
+                "product_name": element.pro_name,
+                "product_slug": element.pro_slug,
+                "quantity": element.qty,
+                "product_sale_price": element.price,
+                "product_varient_options":[
+                    {"size_options": element.options[0].size},
+                    {"color_options": element.options[1].color}
+                ],
+                "width": element.width,
+                "height": element.height
+              }
+            this.cartproducts.push(data);          
+            this.products=this.cartproducts;     
+            localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+            console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+            
+          })                          
+        
+    }
   }
-  else
-  {
-    product_price=csdata.product_retail_price
   }
-  let cdata=
-  {
-        "pro_id": csdata._id,
-        "pro_name": csdata.product_name,
-        "pro_slug": csdata.product_slug,
-        "pro_image": csdata.product_image[0].pro_image,
-        "qty": csdata.quantity,
-        "price": product_price,
-        "options":[
-            {"size": csdata.product_varient_options[0].size_options},
-            {"color": csdata.product_varient_options[1].color_options}
-        ]
-
+    
   }
+  )
 
-  console.log('Ready to submit cart data',cdata);
-
-  this.product_service.addToCartDb(cdata).subscribe(
-  res =>  {    
-    csdata.cart_id = res['data']._id;
-    console.log('Cart item added from login',res);
-
-    let product_price=0;
-    if(csdata.product_sale_price)
+    setTimeout(() => {
+    if(this.returnUrl != '/')
     {
-      product_price=csdata.product_sale_price
-    }
-    else
-    {
-      product_price=csdata.product_retail_price
-    }
-
-    let data = 
-    {
-      "_id": csdata.pro_id,
-      "product_image": [
-        {
-            "pro_image": csdata.product_image[0].pro_image,
-            "status": "active"
-        },
-      ],
-      "cart_id": csdata._id,
-      "product_name": csdata.product_name,
-      "product_slug": csdata.product_slug,
-      "quantity": csdata.quantity,
-      "product_sale_price": product_price,
-      "product_varient_options":[
-          {"size_options": csdata.product_varient_options[0].size_options},
-          {"color_options": csdata.product_varient_options[1].color_options}
-      ]
-    }
-    console.log('Cart item added Update After Login',data);
-  this.cartproducts.push(data);          
-  this.products=this.cartproducts;     
-  localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-  console.log('Return LocalStorage',localStorage.getItem("cartItems"));
-
-  setTimeout(() => {
-    if(this.returnUrl)
-    {
+      console.log('this.returnUrl Yes==========>',this.returnUrl);
     // login successful so redirect to return url
-    this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
+    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([this.returnUrl]);
   }) 
     }
     else
     {
-      
-      this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/dashboard']);
+      console.log('this.returnUrl No==========>',this.returnUrl);
+      this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['dashboard']);
     }) 
     .then(() => {
         window.location.reload();
     });
   }
-  },2000)  
-
-    }
-  )
-}
-}
-else
-{
-
-  setTimeout(() => {
-    if(this.returnUrl)
-    {
-    // login successful so redirect to return url
-    this.router.navigateByUrl(this.returnUrl)
-    }
-    else
-    {
-      this.router.navigateByUrl('/settings-header', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/dashboard']);
-    })  
-    .then(() => {
-        window.location.reload();
-    });
-  }
-  },2000)  
-
-}
-
-
-
-
-/////////////////////////////////////////////////////////   
+  console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+  console.log('state.cart After Login',state.cart)
+  },2500) 
 
     },
     error => {

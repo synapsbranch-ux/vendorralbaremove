@@ -93,7 +93,7 @@ export class CheckoutComponent implements OnInit {
           console.log('Checkout product list',v.data);
           let stock=(v.data.stock - element.quantity);
 
-          if(stock < 1)
+          if(stock < 0)
           {
             if(v.data.product_name)
             {
