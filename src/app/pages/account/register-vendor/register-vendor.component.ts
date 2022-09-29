@@ -1,3 +1,6 @@
+import { take } from 'rxjs/operators';
+import { ProductService } from './../../../shared/services/product.service';
+import { Subscription, timer } from 'rxjs';
 import { PasswordStrengthValidator } from './../../../password-strength.validators';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
@@ -22,8 +25,22 @@ export class RegisterVendorComponent implements OnInit {
   isValid: boolean = false;
   form: FormGroup;
   submitted = false;
+  callForOtp = false;
+  userOtp:any;
+  getOtpVal:any;
+  otpValid:Boolean=false;
+  public otp: Otp[] = [];
+  catagoriesLists=[];
+  countDown: Subscription;
+  counter = 191;
+  tick = 1000;
+  otpTimerstatus:boolean=false;
+  selectcat="1";
+  selectCatagorries:any;
+  othersstatus:boolean=false;
+  vendorOTPStatus:boolean=false;
 
-  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router, private toastr: ToastrService) { }
+  constructor(private fromBuilder: FormBuilder, public userService: UserService, private router: Router, private toastr: ToastrService, private productservice: ProductService) { }
   
   showOtpComponent = true;
 
@@ -34,12 +51,20 @@ export class RegisterVendorComponent implements OnInit {
         'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
         'repeat_password': new FormControl(null, [Validators.required]),
         'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
+        'catagories_name': new FormControl(null, [Validators.required]),
+        'other_categories': new FormControl(null),
 
       },
        {
         validators: [Validation.match('password', 'repeat_password')]
        }
       );
+
+      this.productservice.getallCategories().subscribe(
+        res =>{
+          this.catagoriesLists=res['data'];
+        }
+      )
   }
 
   get fname() { return this.form.get('fname'); }
@@ -47,6 +72,8 @@ export class RegisterVendorComponent implements OnInit {
   get password() { return this.form.get('password');}
   get repeat_password() { return this.form.get('repeat_password'); }
   get phone() { return this.form.get('phone');}
+  get catagories_name() { return this.form.get('catagories_name');}
+  get other_categories() { return this.form.get('othercategories');}
 
   onSubmit(): void {
     this.submitted = true;
@@ -68,24 +95,18 @@ export class RegisterVendorComponent implements OnInit {
         'repeat_password': formData.repeat_password,
         'phone': formData.phone,
       }
-      this.userService.vendorSignUp(data).subscribe(
+      this.userService.vendorgenerateOTP(data).subscribe(
         res => {
-
-
-
-          console.log(' Signup Success',res);
-          this.isValid = true;
-          // this.signupMassage="Your Registration sucessfull";
-          this.toastr.success('Your Registration sucessfull')
-          setTimeout(() => {
-            window.location.href = 'https://admin.ralbatech.com/'
-          },3000)          
+          this.getOtpVal = res['data'].otpValue;
+          console.log(res);
+          this.toastr.success('OTP have been send to your register Email please Check');
+          this.vendorOTPStatus=true; 
         },
         error => {
           // .... HANDLE ERROR HERE 
           console.log(error.message);
           this.phValid=false;
-          this.toastr.error('Your Phone Or Email Already Register');
+          this.toastr.error(error.error.message);
           // this.signupMassage="Your Phone Or Email Already Register";
       }
       );
@@ -97,5 +118,122 @@ export class RegisterVendorComponent implements OnInit {
       //this.signupMassage="Please check Terms & Conditions";
     } 
     }
+
+    getcatval(catname:any)
+    {
+      catname == 'others'? this.othersstatus=true : this.othersstatus=false;
+      this.selectCatagorries=catname;
+    }
+
+    otpTimer()
+    {
+      this.countDown = timer(0, this.tick)
+      .pipe(take(this.counter))
+      .subscribe(() => {
+        --this.counter;
+        // console.log(this.counter);
+        if (this.counter == 0) {
+          this.countDown.unsubscribe();
+        }
+      });
+    }
+  
+    transform(value: number): string {
+      const minutes: number = Math.floor(value / 60);
+      return (
+        ('00' + minutes).slice(-2) +
+        ':' +
+        ('00' + Math.floor(value - minutes * 60)).slice(-2)
+      );
+    }
+  
+    otpverify()
+    {
+      if(this.userOtp == this.getOtpVal){
+        let formData = this.form.value;
+  let catname="";
+  if(this.selectCatagorries != 'others')
+  {
+    catname=formData.catagories_name
+  }
+  else
+  {
+    catname=formData.other_categories
+  }
+  let data = {
+          'name': formData.vendor_name,
+          'email': formData.vendor_email,
+          'phone': formData.vendor_phone,
+          'password': formData.password,
+          'repeat_password': formData.repeat_password,
+          'otp': this.userOtp,
+          'catagories': catname,
+        }
+        this.userService.vendorSignUp(data).subscribe(
+          res => {
+            console.log(' Signup Success',res);       
+            this.toastr.success('Your Registration sucessfull');
+            setTimeout(() => {
+              window.location.href = 'https://admin.ralbatech.com/'
+            },3000) 
+          },
+          error => {
+            // .... HANDLE ERROR HERE 
+            console.log(error.message);
+            this.toastr.error(error.error.message);
+       }
+        );
+   
+  
+      }else{
+          console.log('Please enter OTP first');
+          this.toastr.error('Please enter OTP first')
+         // this.otpMassage="Please enter OTP first";
+          this.otpValid=false;
+      }
+  
+      this.vendorOTPStatus=false;
+    }
+  
+    otpresend()
+    {
+        this.counter = 191;
+        this.otpTimerstatus=true;
+        this.otpTimer();
+      let formData = this.form.value;
+  
+      let data = {
+        'name': formData.vendor_name,
+        'email': formData.vendor_email,
+        'phone': formData.vendor_phone,
+        'type': 'VendorSignUp'
+      }
+      console.log(data);
+      
+      this.userService.vendorgenerateOTP(data).subscribe(
+        res => {
+          this.getOtpVal = res['data'].otpValue;
+          console.log(res);
+          this.toastr.success('OTP have been send to your register Email please Check');
+          this.vendorOTPStatus=true;      
+        },
+        error => {
+          // .... HANDLE ERROR HERE 
+          console.log(error.message);
+          // this.phValid=false;
+          // this.signupMassage="Phone number already exist";
+  
+          this.toastr.error(error.error.message);
+     }
+      );
+  
+    }
+
+    onOtpChange(ele){
+    this.userOtp = ele;
+    }
+
+
+    
   }
 
