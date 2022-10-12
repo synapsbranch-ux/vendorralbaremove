@@ -88,12 +88,15 @@ export class RegisterVendorComponent implements OnInit {
     let element = <HTMLInputElement> document.getElementById("customControlAutosizing1");  
     if (element.checked) { 
 
+      this.counter = 191;
+      this.otpTimerstatus=true;
+      this.otpTimer();
+
       let data = {
         'name': formData.fname,
         'email': formData.email,
-        'password': formData.password,
-        'repeat_password': formData.repeat_password,
         'phone': formData.phone,
+        'type': 'VendorSignUp'
       }
       this.userService.vendorgenerateOTP(data).subscribe(
         res => {
@@ -161,9 +164,9 @@ export class RegisterVendorComponent implements OnInit {
     catname=formData.other_categories
   }
   let data = {
-          'name': formData.vendor_name,
-          'email': formData.vendor_email,
-          'phone': formData.vendor_phone,
+          'name': formData.fname,
+          'email': formData.email,
+          'phone': formData.phone,
           'password': formData.password,
           'repeat_password': formData.repeat_password,
           'otp': this.userOtp,
@@ -191,8 +194,6 @@ export class RegisterVendorComponent implements OnInit {
          // this.otpMassage="Please enter OTP first";
           this.otpValid=false;
       }
-  
-      this.vendorOTPStatus=false;
     }
   
     otpresend()

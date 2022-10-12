@@ -41,6 +41,11 @@ export class UserService {
     return this.http.post(environment.baseUrl+'user/contact',data);
   }
 
+  userVendorRoomCount(data){
+    return this.http.post(environment.baseUrl+'user/vendor-roomcheck',data);
+  }
+
+
 
   getAllAddress()
   {

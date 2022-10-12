@@ -74,6 +74,15 @@ export class FashionOneComponent implements OnInit {
         this.homeslider=res.data;
         this.sliders=res.data;
         console.log('Banner Slider',res.data);
+
+        this.homesliderservice.getallVendorSliderData().subscribe(
+          res =>
+          {
+            this.sliders.push(res.data[0]);
+          }
+        )
+
+        console.log('Banner Slider this.sliders' ,this.sliders);
       }
     )
 
