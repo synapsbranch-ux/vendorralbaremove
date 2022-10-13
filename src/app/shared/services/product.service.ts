@@ -42,7 +42,7 @@ export class ProductService {
 
     
 //  resolve(route: ActivatedRouteSnapshot){
-//   console.log('Current Slug Products ===== ',route.params.slug);
+//   //console.log('Current Slug Products ===== ',route.params.slug);
 // }
 
 
@@ -65,10 +65,10 @@ export class ProductService {
         this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
           res =>
           {
-          //  console.log('Product Service Product Cat search Slug ===>',res);
+          //  //console.log('Product Service Product Cat search Slug ===>',res);
  
            this.catagoriesalt = res['data'].product_category.category_slug;
-          //  console.log('product Slug catagories ======', res['data'].product_category.category_slug)
+          //  //console.log('product Slug catagories ======', res['data'].product_category.category_slug)
            this.catarr = {     
              'category': this.catagoriesalt,
          };
@@ -87,10 +87,10 @@ export class ProductService {
 
 
 
-    // console.log('Product Category Name arr === ',this.catarr);
+    // //console.log('Product Category Name arr === ',this.catarr);
 
     this.Products = this.http.post<ProductNew[]>(environment.baseUrl+'product/list',this.catarr).pipe(map((data:any)=>{
-      // console.log('Product Data === ',data.data);
+      // //console.log('Product Data === ',data.data);
       
       return data.data;
     }));
@@ -172,7 +172,7 @@ export class ProductService {
     }
     this.toastrService.success('Product has been added in wishlist.');
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
-    console.log('Wishlist added Localstorage',localStorage.getItem('wishlistItems'));
+    //console.log('Wishlist added Localstorage',localStorage.getItem('wishlistItems'));
     return true
   }
 
@@ -274,12 +274,12 @@ export class ProductService {
               "height": product.height
       
         }
-        console.log('full Product Cart Data for Submit',cdata);
+        //console.log('full Product Cart Data for Submit',cdata);
       
         this.addToCartDb(cdata).subscribe(
         res =>  {  
-          console.log('Product details cart page',product); 
-          console.log('ADD TO CART DB',res['data']._id)
+          //console.log('Product details cart page',product); 
+          //console.log('ADD TO CART DB',res['data']._id)
 
           state.cart.push({
             ...product,
@@ -290,7 +290,7 @@ export class ProductService {
             product_owner: product.product_owner._id
           })
 
-      console.log('Cart item added from login Retain local ',state.cart);
+      //console.log('Cart item added from login Retain local ',state.cart);
           }
         )
       }
@@ -304,7 +304,7 @@ export class ProductService {
           product_owner: product.product_owner._id
         })
 
-        console.log('Cart item added from Without login Retain local ',state.cart);
+        //console.log('Cart item added from Without login Retain local ',state.cart);
       }
 
 
@@ -312,7 +312,7 @@ export class ProductService {
 
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
-    console.log('Local Storage Cart Item',state.cart);
+    //console.log('Local Storage Cart Item',state.cart);
 
     return true;
   }
@@ -360,12 +360,12 @@ export class ProductService {
             "height": product.height
     
       }
-      console.log('full Product Cart Data for Submit',cdata);
+      //console.log('full Product Cart Data for Submit',cdata);
     
       this.addToCartDb(cdata).subscribe(
       res =>  {   
-        console.log('ADD TO CART DB',res['data']._id)
-        console.log('Cart item Updated from login Retain local ',state.cart);
+        //console.log('ADD TO CART DB',res['data']._id)
+        //console.log('Cart item Updated from login Retain local ',state.cart);
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
         }
       )
@@ -389,11 +389,11 @@ export class ProductService {
   // Remove Cart items
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
-    // console.log('Befor Structure Delete Cart',product);
+    // //console.log('Befor Structure Delete Cart',product);
     if(localStorage.getItem('user_id'))
     {
       const index2 = state.cart.indexOf(product);
-      console.log('Remove Cart User Login :',index2);
+      //console.log('Remove Cart User Login :',index2);
       state.cart.splice(index2, 1);
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
 
@@ -405,13 +405,13 @@ export class ProductService {
       this.deleteToCartDb(dcDAta).subscribe(
         res =>
         {
-          console.log('Delete Cart From DB Return',res);
+          //console.log('Delete Cart From DB Return',res);
         }
       )
     }
       else
       {
-        console.log('Remove Cart User Without Login :',index);
+        //console.log('Remove Cart User Without Login :',index);
 
         state.cart.splice(index, 1);
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
@@ -424,7 +424,7 @@ export class ProductService {
   // Total amount 
   public cartTotalAmount(): Observable<number> {
     return this.cartItems.pipe(map((product: ProductNew[]) => {
-      // console.log('Total cart Item ==============> ',product);
+      // //console.log('Total cart Item ==============> ',product);
       return product.reduce((prev, curr: ProductNew) => {
         let product_price=0;
         if(curr.product_sale_price == null)
@@ -456,7 +456,7 @@ export class ProductService {
         if (!filter.length) return true
         const Tags = filter.some((prev) => { // Match Tags
           if (item) {
-            console.log('Product Service YTags',item)
+            //console.log('Product Service YTags',item)
             
             if (item.product_varient_options[0].size_options.includes(prev) || item.product_varient_options[1].color_options.includes(prev)) {
               return prev

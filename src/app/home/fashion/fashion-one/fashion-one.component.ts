@@ -22,10 +22,10 @@ export class FashionOneComponent implements OnInit {
   
   constructor(public productService: ProductService,public storeService: StoreService, public homesliderservice: HomesliderService) {
     // this.productService.getProducts.subscribe(response => {
-    //   console.log('Product Received!.....', response['data']);
+    //   //console.log('Product Received!.....', response['data']);
 
     //   // this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
-    //   // console.log('Items ==>',this.products);
+    //   // //console.log('Items ==>',this.products);
       
     //   // Get Product Collection
     //   this.products.filter((item) => {
@@ -56,36 +56,53 @@ export class FashionOneComponent implements OnInit {
 
       if(response["error"] === 0){
         this.stores = response["data"];
-        console.log(this.stores);
+        //console.log(this.stores);
       }
     });
   }
 
-  single_store()
-  {
-    
-  }
 
   ngOnInit(): void {
     this.get();
+    this.getvendorlist();
     this.homesliderservice.getallSliderData().subscribe(
       res =>
       {
-        this.homeslider=res.data;
         this.sliders=res.data;
-        console.log('Banner Slider',res.data);
-
-        this.homesliderservice.getallVendorSliderData().subscribe(
-          res =>
-          {
-            this.sliders.push(res.data[0]);
-          }
-        )
-
+        //console.log('Banner Slider',res.data);
         console.log('Banner Slider this.sliders' ,this.sliders);
       }
     )
 
+  }
+
+  getvendorlist()
+  {
+    this.homesliderservice.getallvendorlist().subscribe(
+      res =>
+      {
+        let vendors = res['data']
+        vendors.map( (vid) =>
+        {
+          let SData=
+          {
+            vendor_id : vid._id
+          }
+          this.homesliderservice.getallVendorSliderData(SData).subscribe(
+            res =>
+            {
+  
+              for (const element of res.data) {
+                this.sliders.push(element)
+              }
+              // this.homeslider = this.sliders.sort( () => Math.random() - 0.5);
+            }
+          )
+        });
+
+        console.log('vendors--------',vendors)
+      }
+    )
   }
 
   // Product Tab collection

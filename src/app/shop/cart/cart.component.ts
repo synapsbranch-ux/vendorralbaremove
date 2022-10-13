@@ -39,7 +39,7 @@ export class CartComponent implements OnInit , OnChanges {
     this.product_service.cartItems.subscribe(response => this.products = response);
     this.product_service.allCartProducts().subscribe(
       res =>{
-        console.log('Return Cart',res);
+        //console.log('Return Cart',res);
         if(res['data'])
         {
           let bodydata=res['data'];
@@ -47,11 +47,11 @@ export class CartComponent implements OnInit , OnChanges {
           {
           for (const element of res['data'].products) {   
 
-            console.log('cart Product slug',element.pro_slug);
+            //console.log('cart Product slug',element.pro_slug);
             
             this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
 
-              console.log('cart Product Image',product['data']);
+              //console.log('cart Product Image',product['data']);
 
                 this.product_img=product['data'].product_image[0].pro_image;
                 let data = 
@@ -78,7 +78,7 @@ export class CartComponent implements OnInit , OnChanges {
               this.cartproducts.push(data);          
               this.products=this.cartproducts;     
               localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-              console.log('Return LocalStorage',localStorage.getItem("cartItems"));
+              //console.log('Return LocalStorage',localStorage.getItem("cartItems"));
               
             })                          
           
@@ -93,7 +93,7 @@ export class CartComponent implements OnInit , OnChanges {
   {
     this.product_service.cartItems.subscribe(response => this.products = response);    
     localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-    console.log('Return LocalStorage',localStorage.getItem("cartItems"));                            
+    //console.log('Return LocalStorage',localStorage.getItem("cartItems"));                            
           
   }
 
@@ -101,7 +101,7 @@ export class CartComponent implements OnInit , OnChanges {
   
 
   ngOnChanges(changes) {
-    console.log('change detected',changes);
+    //console.log('change detected',changes);
   }
 
   public get getTotal(): Observable<number> {
@@ -122,12 +122,12 @@ export class CartComponent implements OnInit , OnChanges {
     }
 
 
-console.log(qty);    
+//console.log(qty);    
     this.product_service.updateCartQuantity(product, qty);
     this.getTotal.subscribe(
       res =>
       {
-        console.log('Increment Total',res);
+        //console.log('Increment Total',res);
       }
     );
 
@@ -146,12 +146,12 @@ console.log(qty);
       this.desableincrement=true;
     }
 
-    console.log(qty); 
+    //console.log(qty); 
     this.product_service.updateCartQuantity(product, qty);
     this.getTotal.subscribe(
       res =>
       {
-        console.log('Decrement Total',res);
+        //console.log('Decrement Total',res);
       }
     );
     
@@ -164,7 +164,7 @@ console.log(qty);
 
   public removeItem(product: any) {
 
-    console.log('Remove Cart Item',product);
+    //console.log('Remove Cart Item',product);
     this.product_service.removeCartItem(product);
     this.product_service.cartItems.subscribe(response => this.products = response);
 

@@ -63,14 +63,14 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
       //     this.product_external_link="#"
       //   }
         
-      //   console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
-      //   console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
+      //   //console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
+      //   //console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
       //   this.productCategory=response.data.product_category.category_slug;
       //   localStorage.setItem("product_slug",this.route.snapshot.paramMap.get('slug'));
       //   localStorage.setItem("product_catg",response.data.product_category.category_slug);
-      //   console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
+      //   //console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
       //   this.image3d=this.product.product_3d_image[0].pro_3d_image;
-      //   console.log('Product 3D image =====', this.image3d);
+      //   //console.log('Product 3D image =====', this.image3d);
       //   this.productColor=this.product.product_varient_options[1].color_options;
       //   this.productSize=this.product.product_varient_options[0].size_options;
       // });
@@ -78,7 +78,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   // this.route.data.subscribe(response =>
   //   {
-  //     console.log('response.data', response.data)
+  //     //console.log('response.data', response.data)
   //     if(response.data)
   //     {
   //       this.product = response.data 
@@ -116,10 +116,10 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           {
             'category': this.productCategory
           }
-      //    console.log('Related cat   ',catdata);
+      //    //console.log('Related cat   ',catdata);
           this.productService.getProductscat(catdata).subscribe(response => 
             {      
-           //   console.log('Related Products ==== >>>',response)
+           //   //console.log('Related Products ==== >>>',response)
               this.products=response['data'];
             
             }
@@ -129,7 +129,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           this.productColor=this.product.product_varient_options[1].color_options;
           this.productSize=this.product.product_varient_options[0].size_options;
         });
-       console.log('Current Product response.data', this.product)
+       //console.log('Current Product response.data', this.product)
       })
 
   }
@@ -137,7 +137,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   externalLInk(link:any)
   {
     window.open( link , "_blank");
-  //  console.log('Redirect Other Website')
+  //  //console.log('Redirect Other Website')
   }
 
   ngOnChanges()
@@ -148,7 +148,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   // Get Product Color
   // Color(product_varient_options) {
-  //   // console.log('Color Function ====',product_varient_options);
+  //   // //console.log('Color Function ====',product_varient_options);
   //   if((product_varient_options).length >= 0)
   //   {
   //     const uniqColor = [];
@@ -181,11 +181,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   selectSize(size) {
     this.selectedSize = size;
-    console.log('Selected Size : ', this.selectedSize );
+    //console.log('Selected Size : ', this.selectedSize );
   }
   selectColor(color) {
     this.selectedColor = color;
-    console.log('Selected Color : ', this.selectedColor );
+    //console.log('Selected Color : ', this.selectedColor );
   }
   
   // Increament
@@ -203,9 +203,9 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
     product.quantity = this.counter || 0;
 
 
-   console.log('Product Size Option ============',product.product_varient_options[0].size_options);
-   console.log('Product Color Option ============',product.product_varient_options[1].color_options);
-   //console.log('Product Quentity ============',product.quantity);
+   //console.log('Product Size Option ============',product.product_varient_options[0].size_options);
+   //console.log('Product Color Option ============',product.product_varient_options[1].color_options);
+   ////console.log('Product Quentity ============',product.quantity);
   //   if(this.selectedSize && this.selectedColor)
   //   {
   //   if(this.selectedSize)
@@ -224,13 +224,13 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
       this.toastrService.success('Product has been added in Cart.');
       // this.router.navigate(['/shop/cart']);
     }
-    console.log('Add To CArt Status =======',status);
-  //  // console.log('Ready to Cart');
+    //console.log('Add To CArt Status =======',status);
+  //  // //console.log('Ready to Cart');
   //   }
   //   else
   //   {
   //     this.toastrService.warning('Please choose all veriation');
-  //   //  console.log('Not Ready Cart');
+  //   //  //console.log('Not Ready Cart');
   //   }
 
 

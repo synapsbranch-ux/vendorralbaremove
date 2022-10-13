@@ -14,8 +14,12 @@ export class HomesliderService {
     return this.http.get(environment.baseUrl+'banner/list');
   } 
 
-  getallVendorSliderData(): Observable<any>{
-    return this.http.get(environment.baseUrl+'vendorbanner/list');
+  getallVendorSliderData(data): Observable<any>{
+    return this.http.post(environment.baseUrl+'vendorbanner/list',data);
+  } 
+
+  getallvendorlist(): Observable<any>{
+    return this.http.get(environment.baseUrl+'vendorlist');
   } 
 
 }
