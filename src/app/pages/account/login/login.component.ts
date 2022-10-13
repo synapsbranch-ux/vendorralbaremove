@@ -33,6 +33,10 @@ cartproducts=[];
 product_img:any;
 public products: ProductNew[] = [];
 
+passworfieldtype='password';
+passwordicon='fa-fw fa-eye';
+pstatus:boolean=false;
+
 constructor(private formBuilder: FormBuilder, public userService: UserService, private router: Router,private route: ActivatedRoute, public product_service: ProductService, private toaster: ToastrService) { }
 
 ngOnInit(): void {
@@ -177,6 +181,22 @@ get login_password(){ return this.form.get('login_password');}
   }
   );
   
+  }
+
+  changeIcon()
+  {
+    this.pstatus = !this.pstatus
+
+    if(this.pstatus)
+    {
+      this.passworfieldtype='text';
+      this.passwordicon='fa-eye fa-eye-slash';
+    }
+    else
+    {
+      this.passworfieldtype='password';
+      this.passwordicon='fa-fw fa-eye';
+    }
   }
 
 }

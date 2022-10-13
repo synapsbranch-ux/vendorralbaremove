@@ -3,3 +3,19 @@
 .cart_product_info {
     width: 55%;
 }
+
+.password_sec {
+    position: relative;
+}
+
+.field-icon {
+    position: absolute;
+    right: 15px;
+    bottom: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+    .field-icon {
+        bottom: 18px;
+    }
+}
