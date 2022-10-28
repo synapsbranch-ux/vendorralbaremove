@@ -116,7 +116,7 @@ export class CheckoutComponent implements OnInit {
       'lastname': new FormControl(null, [Validators.required]),
       'phone': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required]),
-      'address1': new FormControl(null),
+      'address1': new FormControl(null, [Validators.required]),
       'address2': new FormControl(null),
       'country': new FormControl(null, [Validators.required]),
       'town': new FormControl(null, [Validators.required]),
@@ -337,6 +337,9 @@ let address_arr={
       
     if(this.products.length > 0)
   {
+
+
+
         let orderTotal=0;
         let paymentStatus="";
         let formData = this.checkoutForm.value;
@@ -448,24 +451,71 @@ let address_arr={
   // //console.log('Order Generate STR 1',orderData);
   // //console.log('Order Generate STR 2',JSON.stringify(orderData));
 
-  this.orderService.userCreateOrder(orderData).subscribe(
 
-    res =>
-    {
-      this.orderValid=true;
-      this.orderMassage="Your Order Placed Sucessfully";
-      //console.log('Order Created',res);
-      for(const elem of this.products)
-      {
-        this.productService.removeCartItem(elem);
+  for (const element of this.products) {
+            
+    this.productService.getproductsBySlugs(element.product_slug)
+    .pipe(first())
+    .subscribe({
+    next: (v) => {
+        //console.log('Checkout product list',v.data);
+        let stock=(v.data.stock - element.quantity);
+
+        if(stock < 0)
+        {
+          if(v.data.product_name)
+          {
+            this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+            this.router.navigateByUrl(`stores/${v.data.product_store.store_slug}/${v.data.product_department.department_slug}/${v.data.product_slug}`)
+          }
+        }
+        else
+        {
+
+          let address_arr={
+            email_address: formData.email,
+            phone_no: formData.phone,
+            country_name: formData.country,
+            first_name: formData.firstname,
+            last_name: formData.lastname,
+            street_address: formData.address1, 
+            street_address2: formData.address2,
+            city_name: formData.town,
+            state_name: formData.state,
+            zip_code: formData.postalcode,
+          }
+          localStorage.setItem('checkoutform',JSON.stringify(address_arr))
+          this.orderService.userCreateOrder(orderData).subscribe(
+
+            res =>
+            {
+              this.orderValid=true;
+              this.orderMassage="Your Order Placed Sucessfully";
+              //console.log('Order Created',res);
+              for(const elem of this.products)
+              {
+                this.productService.removeCartItem(elem);
+              }
+              this.userservice.setUserOrderid(res['data']._id);
+              setTimeout(() => {
+                this.router.navigateByUrl('/order/success');
+              },1000) 
+            },
+            error => {
+              // .... HANDLE ERROR HERE 
+              this.toaster.error(error.error.message);
+         });
+        }  
+      },
+      error: (e) => {
+        //console.log(e);
+      },
+      complete: () => console.info('Complete') 
       }
-      this.userservice.setUserOrderid(res['data']._id);
-      setTimeout(() => {
-        this.router.navigateByUrl('/order/success');
-      },1000) 
-    }
+      );
+}
 
-  )
+
 
       }
     }

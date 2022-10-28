@@ -200,6 +200,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   // Add to cart
   async addToCart(product: any) {
+    product.stock= (product.stock - this.counter);
     product.quantity = this.counter || 0;
 
 

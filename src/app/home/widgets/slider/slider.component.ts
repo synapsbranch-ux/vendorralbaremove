@@ -101,7 +101,7 @@ export class SliderComponent implements OnInit {
         }
         else
         {
-          window.open("https://store.ralbatech.com/"+this.storeslug+"/"+this.DepartmentsList[0].department_slug ,"_self");
+          window.open("https://store.ralbatech.com/banner/"+this.storeslug+"/"+this.DepartmentsList[0].department_slug ,"_self");
           //console.log('this.storeslug ==>',this.storeslug)
           //console.log('this.DepartmentsList[department_slug] ==>',this.DepartmentsList[0].department_slug)
         }

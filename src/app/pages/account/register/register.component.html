@@ -30,7 +30,7 @@
                         <div class="form-row" *ngIf="showDiv.signUpDiv">
                             <div class="col-md-6 mb-4">
                                 <label for="email">email</label>
-                                <input type="text" class="form-control m-0" id="email" placeholder="Email" required="" formControlName="email">
+                                <input type="email" class="form-control m-0" placeholder="Email" formControlName="email">
                                 <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger mt-1">
                                     <div *ngIf="email.errors?.required">
                                         Email is required.

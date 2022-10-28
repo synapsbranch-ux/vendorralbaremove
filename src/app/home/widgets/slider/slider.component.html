@@ -9,7 +9,7 @@
                                 <div class="text-left">
                                     <h1 [style.color]="slider.banner_title_color">{{slider.banner_title}}</h1>
                                     <p [style.color]="slider.banner_subtitle_color">{{slider.banner_subtitle}}</p>
-                                    <a *ngIf="slider.banner_department" href="https://store.ralbatech.com/{{slider.banner_store}}/{{slider.banner_department}}" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
+                                    <a *ngIf="slider.banner_department" href="https://store.ralbatech.com/banner/{{slider.banner_store}}/{{slider.banner_department}}" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
 	                   {{buttonText}}
 	                </a>
                                     <a *ngIf="slider.vendor_id" (click)="vandorbannerClick(slider.vendor_id)" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">

@@ -117,7 +117,7 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
     if(room_status == 'false')
     {
       console.log('Department Slug',department_slug);
-      window.open("https://store.ralbatech.com/"+this.storeslug+"/"+department_slug ,"_self");
+      window.open("https://store.ralbatech.com/store/"+this.storeslug+"/"+department_slug ,"_self");
       // window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
     }
 

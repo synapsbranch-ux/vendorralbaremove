@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { element } from 'protractor';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -29,7 +30,7 @@ export class CartComponent implements OnInit , OnChanges {
   cartproductlist=[];
   desableincrement:boolean=true;
 
-  constructor(public product_service: ProductService) {
+  constructor(public product_service: ProductService, private toaster: ToastrService) {
 
   }
 
@@ -110,8 +111,17 @@ export class CartComponent implements OnInit , OnChanges {
 
   // Increament
   increment(product, qty = 1) {
-    product.quantity +=1;
-
+    product.stock= (product.stock - 1);
+    console.log('product.stock',product.stock)
+    if(product.stock >=0)
+    {
+      product.quantity +=1;
+    }
+    else
+    {
+      this.toaster.error('Your product out of stock');
+    }
+    
     if(product.quantity > 1)
     {
       this.desableincrement=true;
@@ -135,8 +145,9 @@ export class CartComponent implements OnInit , OnChanges {
 
   // Decrement
   decrement(product, qty = -1) {
-    product.quantity -=1;
 
+    product.stock= (product.stock + 1);
+    product.quantity -=1;
     if(product.quantity < 2 )
     {
       this.desableincrement=false;
