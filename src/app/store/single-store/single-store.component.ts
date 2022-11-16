@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { StoreService } from 'src/app/shared/services/store.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 
 @Component({
   selector: 'app-product-box-one',
@@ -30,7 +31,7 @@ export class SingleStoreComponent implements OnInit {
   roomavailablity=[];
 
 
-  constructor( private storeService: StoreService , private route: ActivatedRoute ) { 
+  constructor( private storeService: StoreService , private route: ActivatedRoute, private homesliderservice: HomesliderService ) { 
     this.storeService.getStoresMore.subscribe(response => {
       console.log('Single Store response  =>', response);
       this.StoreLists=response['data'];
@@ -38,9 +39,9 @@ export class SingleStoreComponent implements OnInit {
         if(store_l.store_slug == this.store_slug){    
           this.storename=store_l.store_name;
           this.storeslug=store_l.store_slug;
-          this.storeimgUrl=store_l.store_image;
           this.vendor_id=store_l.store_owner._id;
           this.store_id=store_l._id;
+          this.storeImageBanner(this.vendor_id);
           return store_l.store_department;
         }
       });
@@ -121,6 +122,20 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
       // window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
     }
 
+  }
+
+  storeImageBanner(v_id)
+  {
+    let SData=
+    {
+      vendor_id : v_id
+    }
+    this.homesliderservice.getallVendorSliderData(SData).subscribe(
+      res =>
+      {
+         this.storeimgUrl= res.data[0].banner_background_image;
+      }
+    )
   }
 
 
