@@ -1,3 +1,4 @@
+import { PasswordStrengthValidator } from './../../../password-strength.validators';
 import { UserService } from 'src/app/shared/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,7 +30,7 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit(): void {
     this.form =  new FormGroup({
       'oldPassword': new FormControl(null, [Validators.required]),
-      'newPassword': new FormControl(null, [Validators.required]),
+      'newPassword': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
       'confirmPassword': new FormControl(null, [Validators.required]),
     },
        {

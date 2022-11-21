@@ -379,7 +379,7 @@ export class ProductService {
   public calculateStockCounts(product, quantity) {
     const qty = product.quantity + quantity
     const stock = product.stock
-    if (stock <= 0) {
+    if (stock < 0) {
       this.toastrService.error('You can not add more items than available. In stock '+ stock +' items.');
       return false
     }
