@@ -240,6 +240,78 @@ let address_arr={
     orderProductspaypal.push(odetailsobj);
     }
 
+    // this.payPalConfig = {
+    //   currency: this.productService.Currency.currency,
+    //   clientId: environment.paypal_token,
+    //   createOrderOnClient: (data) => <ICreateOrderRequest>{
+    //     intent: 'CAPTURE',
+    //     purchase_units: [
+    //       {
+    //         amount: {
+    //           currency_code: this.productService.Currency.currency,
+    //           value: this.amount,
+    //           breakdown: {
+    //             item_total: {
+    //               currency_code: this.productService.Currency.currency,
+    //               value: this.amount
+    //             }
+    //           }
+    //         },
+    //         items: orderProductspaypal
+    //       }
+    //     ]
+    //   },
+    //   advanced: {
+    //     commit: 'true'
+    //   },
+    //   style: {
+    //     label: 'paypal',
+    //     layout: 'vertical'
+    //   },
+    //   onApprove: (data, actions) => {
+    //     //console.log('onApprove - transaction was approved, but not authorized', data, actions);
+    //     actions.order.get().then(details => {
+    //       this.transactionId=details['id'];
+          
+    //       setTimeout(() => {
+    //        this.placeorder();
+    //       },1500) 
+    //       this.paypalreurnData=[
+    //         {
+    //           transaction_id: details.id,
+    //           country_code: details.payer.address.country_code,
+    //           email_address: details.payer.email_address,
+    //           name:  `${details.payer.name.given_name} ${details.payer.name.surname}`,
+    //           customer_id_paypal: details.payer.payer_id,
+    //           paypal_status: details.status,
+    //         }
+    //       //   {
+    //       //   transaction_id: "703dc5d2-3dc3-4671-afaa-d20a773f738c",
+    //       //   country_code: "IN",
+    //       //   email_address: "test@yopmail.com",
+    //       //   name: "test",
+    //       //   customer_id_paypal: "620ca08597d509ecd22e6aa8",
+    //       //   paypal_status: "APPROVE",
+    //       // }
+    //       ];
+          
+    //       //console.log('onApprove - you can get full order details inside onApprove: ', details);
+    //     });
+    //   },
+    //   onClientAuthorization: (data) => {
+    //     //console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+    //   },
+    //   onCancel: (data, actions) => {
+    //     //console.log('OnCancel', data, actions);
+    //   },
+    //   onError: err => {
+    //     //console.log('OnError', err);
+    //   },
+    //   onClick: (data, actions) => {
+    //     //console.log('onClick', data, actions);
+    //   },
+    // };
+  
     this.payPalConfig = {
       currency: this.productService.Currency.currency,
       clientId: environment.paypal_token,
@@ -253,7 +325,7 @@ let address_arr={
               breakdown: {
                 item_total: {
                   currency_code: this.productService.Currency.currency,
-                  value: this.amount
+                  value: this.amount,
                 }
               }
             },
@@ -285,33 +357,25 @@ let address_arr={
               customer_id_paypal: details.payer.payer_id,
               paypal_status: details.status,
             }
-          //   {
-          //   transaction_id: "703dc5d2-3dc3-4671-afaa-d20a773f738c",
-          //   country_code: "IN",
-          //   email_address: "test@yopmail.com",
-          //   name: "test",
-          //   customer_id_paypal: "620ca08597d509ecd22e6aa8",
-          //   paypal_status: "APPROVE",
-          // }
           ];
           
           //console.log('onApprove - you can get full order details inside onApprove: ', details);
         });
       },
       onClientAuthorization: (data) => {
-        //console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
       },
       onCancel: (data, actions) => {
-        //console.log('OnCancel', data, actions);
+        console.log('OnCancel', data, actions);
       },
       onError: err => {
-        //console.log('OnError', err);
+        console.log('OnError', err);
       },
       onClick: (data, actions) => {
-        //console.log('onClick', data, actions);
+        console.log('onClick', data, actions);
       },
     };
-  
+
   }
 
   getpaymentoption(event)
