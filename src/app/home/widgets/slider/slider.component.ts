@@ -70,11 +70,11 @@ export class SliderComponent implements OnInit {
   storeclick(vendorid:any,roomno:any)
   {
     this.storeService.getStoresMore.subscribe(response => {
-      //console.log('Single Store response  =>', response);
+      console.log('Single Store response  =>', response);
       this.StoreLists=response['data'];
       const child = this.StoreLists.map((store_l) => {
-        //console.log('Store Vendor id API',store_l.store_owner._id)
-        //console.log('Store Vendor id',vendorid)
+        console.log('Store Vendor id API',store_l.store_owner._id);
+        console.log('Store Vendor id',vendorid);
         if(store_l.store_owner._id == vendorid){    
           this.storename=store_l.store_name;
           this.storeslug=store_l.store_slug;

@@ -40,7 +40,7 @@ export class CartComponent implements OnInit , OnChanges {
     this.product_service.cartItems.subscribe(response => this.products = response);
     this.product_service.allCartProducts().subscribe(
       res =>{
-        //console.log('Return Cart',res);
+        console.log('Return Cart ===>',res);
         if(res['data'])
         {
           let bodydata=res['data'];
@@ -68,6 +68,7 @@ export class CartComponent implements OnInit , OnChanges {
                   "product_name": element.pro_name,
                   "product_slug": element.pro_slug,
                   "quantity": element.qty,
+                  "stock":(product['data'].stock - element.qty),
                   "product_sale_price": element.price,
                   "product_varient_options":[
                       {"size_options": element.options[0].size},
@@ -112,7 +113,7 @@ export class CartComponent implements OnInit , OnChanges {
   // Increament
   increment(product, qty = 1) {
     product.stock= (product.stock - 1);
-    console.log('product.stock',product.stock)
+    console.log('product.stock',product)
     if(product.stock >=0)
     {
       product.quantity +=1;

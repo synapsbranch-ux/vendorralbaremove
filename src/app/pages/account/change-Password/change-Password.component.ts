@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { PasswordStrengthValidator } from './../../../password-strength.validators';
 import { UserService } from 'src/app/shared/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -23,7 +24,7 @@ export class ChangePasswordComponent implements OnInit {
   signupMassage:string="";
 
 
-  constructor( private router: Router, private userservice: UserService) { 
+  constructor( private router: Router, private userservice: UserService, private toastr:ToastrService) { 
     
   }
 
@@ -64,13 +65,17 @@ export class ChangePasswordComponent implements OnInit {
  this.userservice.changePassword(EdData).subscribe(
    res =>
    {
-     this.isValid=true;
-     this.signupMassage="Password Changing ...";            
+     this.toastr.success('Your Password has been Changed sucessfully')           
      setTimeout(() => {
       this.router.navigate(['/dashboard'])
     },2000)  
      console.log('User Update',res);
-   }
+   },
+   error => {
+     // .... HANDLE ERROR HERE 
+     this.toastr.error(error.error.message)
+     console.log('Forgot Password Error',error);
+}
  )
   }
 

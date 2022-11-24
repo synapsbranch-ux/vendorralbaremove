@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UserService } from './../../../shared/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -13,7 +14,7 @@ export class ForgetPasswordComponent implements OnInit {
   isValid:boolean=false;
   submitMassage:any;
 
-  constructor(private userservice: UserService, private router: Router) { }
+  constructor(private userservice: UserService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.form =  new FormGroup({
@@ -35,8 +36,7 @@ export class ForgetPasswordComponent implements OnInit {
     this.userservice.forgotPassword(fData).subscribe(
       res =>
       {
-        this.isValid=true;
-        this.submitMassage="Your Password han been changed. Please Check Your Mail."
+        this.toastr.success("Your Password han been changed. Please Check Your Mail.");
         setTimeout(() => {
           this.router.navigate(['/login'])
           .then(() => {
@@ -44,7 +44,12 @@ export class ForgetPasswordComponent implements OnInit {
           });
         },2000) 
         console.log('Submit Forgot Password',res);
-      }
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+        console.log('Forgot Password Error',error);
+   }
     )
 
 

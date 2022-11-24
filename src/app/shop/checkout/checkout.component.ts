@@ -115,14 +115,14 @@ export class CheckoutComponent implements OnInit {
       'firstname': new FormControl(null, [Validators.required]),
       'lastname': new FormControl(null, [Validators.required]),
       'phone': new FormControl(null, [Validators.required]),
-      'email': new FormControl(null, [Validators.required]),
+      'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
       'address1': new FormControl(null, [Validators.required]),
       'address2': new FormControl(null),
       'country': new FormControl(null, [Validators.required]),
       'town': new FormControl(null, [Validators.required]),
       'state': new FormControl(null, [Validators.required]),
       'postalcode': new FormControl(null, [Validators.required]),
-      'paymentOption': new FormControl(null, [Validators.required]),
+      'paymentOption': new FormControl(null),
       'userAddressId': new FormControl(null, [Validators.required]),
     })
 

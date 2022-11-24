@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserAddress } from './../../../shared/classes/user';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -28,7 +29,7 @@ export class EditAddressComponent implements OnInit {
   isValid: boolean = false;
   submitMassage:any;
 
-  constructor( private router: Router, private userservice: UserService) { 
+  constructor( private router: Router, private userservice: UserService, private toastr: ToastrService) { 
     if(!this.userservice.getUserAddressid())
     {
       this.router.navigate(['/address'])
@@ -131,8 +132,7 @@ console.log('Address Details ',res['data'][0].user_full_name)
  this.userservice.userUpdateAddress(EdData).subscribe(
    res =>
    {
-     this.isValid=true;
-     this.submitMassage="Address Sucessfully Updated";            
+     this.toastr.success("Address Sucessfully Updated");            
      setTimeout(() => {
       this.router.navigate(['/address'])
       .then(() => {
@@ -140,7 +140,12 @@ console.log('Address Details ',res['data'][0].user_full_name)
       });
     },2000)  
      console.log('User Address Update',res);
-   }
+   },
+   error => {
+     // .... HANDLE ERROR HERE 
+     this.toastr.error(error.error.message)
+     console.log('Edit Address Error',error);
+}
  )
 
   }

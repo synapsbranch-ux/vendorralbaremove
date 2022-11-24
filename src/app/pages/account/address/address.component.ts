@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Userlogin } from './../../../shared/classes/userslogin';
 import { UserAddress } from './../../../shared/classes/user';
@@ -26,7 +27,7 @@ export class AddressComponent implements OnInit {
   returnUrl:string;
 
 
-  constructor( private router: Router, private userservice: UserService, private route: ActivatedRoute) { 
+  constructor( private router: Router, private userservice: UserService, private route: ActivatedRoute, private toastr:ToastrService) { 
     
   }
 
@@ -61,6 +62,7 @@ export class AddressComponent implements OnInit {
     //this.useraddressclass['id']= address_id;
     //console.log('Address Edit', this.useraddressclass['id'])
     this.userservice.setUserAddressid(address_id);
+    this.router.navigateByUrl('edit-address');
   }
 
   ToggleDashboard() {
@@ -112,8 +114,7 @@ export class AddressComponent implements OnInit {
  this.userservice.addNewAddress(EdData).subscribe(
   res =>
   {
-    this.isValid=true;
-    this.submitMassage="Address Sucessfully Added";            
+    this.toastr.success("Address Sucessfully Added");            
     this.getallAddressList();
     setTimeout(() => {
       if(this.returnUrl)
@@ -131,8 +132,12 @@ export class AddressComponent implements OnInit {
       }
 
     },2000) 
-    console.log('User Address Update',res);
-  }
+  },
+  error => {
+    // .... HANDLE ERROR HERE 
+    this.toastr.error(error.error.message)
+    console.log('Add Address Error',error);
+}
 )
 
   }

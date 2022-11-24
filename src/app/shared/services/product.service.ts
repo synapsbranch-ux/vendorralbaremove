@@ -284,6 +284,7 @@ export class ProductService {
           state.cart.push({
             ...product,
             quantity: qty,
+            stock:product.stock,
             cart_id: res['data']._id,
             product_department: product.product_department._id,
             product_store: product.product_store._id,

@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/shared/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -20,7 +21,7 @@ export class EditProfileComponent implements OnInit {
   isValid: boolean = false;
   signupMassage:string="";
 
-  constructor( private router: Router, private userservice: UserService) { 
+  constructor( private router: Router, private userservice: UserService, private toastr: ToastrService) { 
     
   }
 
@@ -72,13 +73,17 @@ export class EditProfileComponent implements OnInit {
  this.userservice.userUpdateProdile(EdData).subscribe(
    res =>
    {
-     this.isValid=true;
-     this.signupMassage="User Sucessfully Updated";            
+     this.toastr.success('User profile update sucessfully')         
      setTimeout(() => {
       this.router.navigate(['/dashboard'])
     },2000)  
      console.log('User Update',res);
-   }
+   },
+   error => {
+     // .... HANDLE ERROR HERE 
+     this.toastr.error(error.error.message)
+     console.log('Edit Profile Error',error);
+}
  )
   }
 

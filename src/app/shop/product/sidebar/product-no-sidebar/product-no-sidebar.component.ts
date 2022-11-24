@@ -218,7 +218,7 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   //   {
   //     product.product_varient_options[1].color_options=this.selectedColor;
   //   }
-
+console.log('=================>',product)
     const status = await this.productService.addToCart(product);
     if(status)
     {

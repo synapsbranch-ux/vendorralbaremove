@@ -26,11 +26,11 @@
                     </div>
                 </div>
             </div>
-<!-- MANAGE ADDRESS -->
+            <!-- MANAGE ADDRESS -->
             <div class="col-lg-9">
                 <div class="dashboard-right">
                     <div class="dashboard">
-                        <div class="box-account box-info">                          
+                        <div class="box-account box-info">
                             <div>
                                 <div class="box mt-3">
                                     <div class="box-title">
@@ -41,12 +41,12 @@
                                             <input type="hidden" formControlName="defaultstatus" [(ngModel)]="is_defaultval">
                                             <div class="form-row">
                                                 <div class="col-md-12">
-                                                    <label for="addressline1">Name</label>
+                                                    <label for="addressline1">Name *</label>
                                                     <input type="text" class="form-control" id="name" [(ngModel)]="fullname" placeholder="Name" formControlName="userfullname">
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="addressline1">Address Line 1 *</label>
-                                                    <input type="text" class="form-control" id="addressline1" [(ngModel)]="address1"  placeholder="Address" formControlName="addressline1">
+                                                    <input type="text" class="form-control" id="addressline1" [(ngModel)]="address1" placeholder="Address" formControlName="addressline1">
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="addressline2">Address Line 2</label>
@@ -65,7 +65,7 @@
                                                     <input type="text" class="form-control" id="postal_code" placeholder="Postal code" [(ngModel)]="postal_code" formControlName="postalCode">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="telephone">Telephone *</label>
+                                                    <label for="telephone">Telephone </label>
                                                     <input type="text" class="form-control" id="telephone" placeholder="Telephone" [(ngModel)]="telephone_num" formControlName="telephone">
                                                 </div>
                                                 <div class="col-md-12">

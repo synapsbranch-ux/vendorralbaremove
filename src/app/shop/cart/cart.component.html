@@ -122,7 +122,7 @@
                             <div>Product <span> Total</span></div>
                         </div>
                         <ul class="qty" *ngFor="let product of products">
-                            <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ (product.product_sale_price) * (product.quantity) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
+                            <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ ((product.product_sale_price)? product.product_sale_price: product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
                         </ul>
                         <ul class="sub-total">
                             <li>Subtotal <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
