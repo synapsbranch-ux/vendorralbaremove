@@ -67,7 +67,6 @@ export class RegisterComponent implements OnInit {
     .pipe(take(this.counter))
     .subscribe(() => {
       --this.counter;
-      // console.log(this.counter);
       if (this.counter == 0) {
         this.countDown.unsubscribe();
       }
@@ -120,14 +119,12 @@ export class RegisterComponent implements OnInit {
             this.phValid=true;
             this.showDiv.signUpDiv = false;
             this.getOtpVal = res['data'].otpValue;
-            console.log(res);
             this.toastr.success('OTP have been send to your register Email please Check');
           }
         },
         error => {
           // .... HANDLE ERROR HERE 
           this.toastr.error(error.error.message)
-          console.log('OTP validate Error',error);
           this.phValid=false;
           // this.signupMassage=error.error.message;
           this.showDiv.signUpDiv = true;
@@ -160,8 +157,6 @@ export class RegisterComponent implements OnInit {
         res => {
 
           this.loginfn(formData.email,formData.password);
-
-          console.log(' Signup Success',res);
           this.toastr.success('OTP sucessfully Verified. Loging...')
           this.otpValid=true;
           this.isValid = true;
@@ -176,14 +171,12 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           // .... HANDLE ERROR HERE 
-          console.log(error);
           this.toastr.error(error.error.message)
           //this.otpMassage=error.message;
           this.otpValid=false;
      }
       );
     }else{
-        console.log('Please enter OTP first');
         this.toastr.error('Please enter OTP first')
        // this.otpMassage="Please enter OTP first";
         this.otpValid=false;
@@ -192,7 +185,6 @@ export class RegisterComponent implements OnInit {
 
   otpresend()
   {
-    console.log('Resend OTP')
     let formData = this.form.value;
     let fullname=formData.fname+ ' '+formData.lname
       this.counter = 191;
@@ -213,14 +205,12 @@ export class RegisterComponent implements OnInit {
             this.phValid=true;
             this.showDiv.signUpDiv = false;
             this.getOtpVal = res['data'].otpValue;
-            console.log(res);
             this.toastr.success('OTP have been send to your register Email please Check');
           }
         },
         error => {
           // .... HANDLE ERROR HERE 
           this.toastr.error('Phone number already exist')
-          console.log('OTP validate Error',error.message);
           this.phValid=false;
           this.signupMassage="Phone number already exist";
           this.showDiv.signUpDiv = true;
@@ -236,8 +226,6 @@ export class RegisterComponent implements OnInit {
     }
     this.userService.userLogin(data).subscribe(
       res => {
-  
-        console.log(' Login Success',res);
         localStorage.setItem('user_id', res['data'].user_id);
         localStorage.setItem('user_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
@@ -250,25 +238,15 @@ export class RegisterComponent implements OnInit {
   const currentUser = localStorage.getItem("user_id");
   
   if (currentUser) {
-    console.log('User Login');
-  
   const cartItems_local = localStorage.getItem('cartItems');
-  
-  console.log('Local storage check',cartItems_local);
-  
       this.product_service.allCartProducts().subscribe(
         res =>{
-          console.log('Return Cart',res);
   
           if(res['data'] != null)
         {
             for (const element of res['data'].products) {   
-  
-              console.log('cart Product slug',element.pro_slug);
               
               this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
-  
-                console.log('cart Product Image',product['data']);
   
                   this.product_img=product['data'].product_image[0].pro_image;
                   let data = 
@@ -291,9 +269,7 @@ export class RegisterComponent implements OnInit {
                 }
                 this.cartproducts.push(data);          
                 this.products=this.cartproducts;     
-                localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-                console.log('Return LocalStorage',localStorage.getItem("cartItems"));
-                
+                localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));              
               })                          
             
         }
@@ -303,14 +279,10 @@ export class RegisterComponent implements OnInit {
       )
   
   }
-  else
-  {
-    console.log('User Not Login');
-  }
       },
       error => {
         // .... HANDLE ERROR HERE 
-        console.log(error.message);
+        this.toastr.error(error.error.message)
     }
     );
   }

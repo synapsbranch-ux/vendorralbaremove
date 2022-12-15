@@ -32,8 +32,11 @@ export class SingleStoreComponent implements OnInit {
 
 
   constructor( private storeService: StoreService , private route: ActivatedRoute, private homesliderservice: HomesliderService ) { 
+
+// in this API call first we get all store thn match particular store which we have visit then we are call for visit count API then we filter department and room availablity condtion
+
+
     this.storeService.getStoresMore.subscribe(response => {
-      console.log('Single Store response  =>', response);
       this.StoreLists=response['data'];
       const child = this.StoreLists.map((store_l) => {
         if(store_l.store_slug == this.store_slug){    
@@ -45,23 +48,20 @@ export class SingleStoreComponent implements OnInit {
           return store_l.store_department;
         }
       });
-
-      console.log('Store ID ======>',this.store_id);
-
       let sdata={
         "store_id": this.store_id,
         "vendor_id": this.vendor_id
       }
-      console.log('Sending Store Data',sdata);
+
+   // store view count 
+
       this.storeService.storeviewcount(sdata).subscribe(
         res =>
         {
-          console.log('Store View API ==',res['data']);
         }
       )
 
       const filterItem = child.filter(item => item != undefined);
-      console.log('Department List Filter ==',filterItem);
       if(filterItem.length > 0){
         this.DepartmentsList=filterItem[0];
 
@@ -72,31 +72,24 @@ export class SingleStoreComponent implements OnInit {
 
         for(let [index, element] of this.DepartmentsList.entries())
         {
-
-console.log('For Department -==',index);
-let rdata={
-  "department_id": element._id,
-  "vendor_id": this.vendor_id
-}
-this.storeService.roomAvailableCheck(rdata).subscribe(
-  res =>
-  {
-    console.log('room API ==',res['data']);
-    if(res['data'].room_name)
-    {
-      this.roomavailablity[index] = 'false';
-    console.log('false ===', res['data'].room_name);
-    }
-    else
-    {
-      this.roomavailablity[index] = 'true';
-    }
-  }
-)
-
+            let rdata={
+              "department_id": element._id,
+              "vendor_id": this.vendor_id
+            }
+              this.storeService.roomAvailableCheck(rdata).subscribe(
+              res =>
+              {
+                if(res['data'].room_name)
+                {
+                  this.roomavailablity[index] = 'false';
+                }
+                else
+                {
+                  this.roomavailablity[index] = 'true';
+                }
+              }
+            )
         }
-      console.log('Department list ====',this.DepartmentsList);
-      console.log('Room Availble === ',this.roomavailablity);
       }
 
     });
@@ -112,17 +105,19 @@ this.storeService.roomAvailableCheck(rdata).subscribe(
 
 
   }
+// for visit of particular store room
 
   stordepartment(department_slug,room_status)
   {
     if(room_status == 'false')
     {
-      console.log('Department Slug',department_slug);
       window.open("https://store.ralbatech.com/store/"+this.storeslug+"/"+department_slug ,"_self");
-      // window.open("https://store.ralbatech.com/?d_id="+department_slug+"&v_id="+this.vendor_id , "_blank");
     }
 
   }
+
+
+  //vendor wise banner date from API
 
   storeImageBanner(v_id)
   {

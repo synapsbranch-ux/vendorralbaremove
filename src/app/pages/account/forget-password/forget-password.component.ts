@@ -43,12 +43,10 @@ export class ForgetPasswordComponent implements OnInit {
             // window.location.reload();
           });
         },2000) 
-        console.log('Submit Forgot Password',res);
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
-        console.log('Forgot Password Error',error);
    }
     )
 

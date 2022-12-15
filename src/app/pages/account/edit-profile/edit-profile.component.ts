@@ -27,9 +27,6 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit(): void {
     let obj = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(obj);
-
-
     this.form =  new FormGroup({
       'fname': new FormControl(null, [Validators.required]),
       'emailid': new FormControl(null, [Validators.required, Validators.email]),
@@ -43,7 +40,6 @@ export class EditProfileComponent implements OnInit {
       this.userName= res['data'][0].name;
       this.userEmail= res['data'][0].email;
       this.userPhone= res['data'][0].phone;
-       console.log('User Details ',res['data'][0]);
      }
    )
 
@@ -69,7 +65,6 @@ export class EditProfileComponent implements OnInit {
       "name": formData.fname,
       "phone": formData.phonenum
  }
- console.log('Send Update',EdData)
  this.userservice.userUpdateProdile(EdData).subscribe(
    res =>
    {
@@ -77,12 +72,10 @@ export class EditProfileComponent implements OnInit {
      setTimeout(() => {
       this.router.navigate(['/dashboard'])
     },2000)  
-     console.log('User Update',res);
    },
    error => {
      // .... HANDLE ERROR HERE 
      this.toastr.error(error.error.message)
-     console.log('Edit Profile Error',error);
 }
  )
   }

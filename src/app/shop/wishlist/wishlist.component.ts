@@ -17,7 +17,6 @@ export class WishlistComponent implements OnInit {
     this.productService.wishlistItems.subscribe(
       response => {
         this.products = response
-        console.log('WishList Products ======= ',this.products);
       }
       
       
@@ -26,7 +25,6 @@ export class WishlistComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.products);
   }
 
   async addToCart(product: any) {

@@ -73,6 +73,7 @@ get getTotal(): Observable<number> {
 
 removeItem(product: any) {
   this.product_service.removeCartItem(product);
+  this.product_service.cartItems.subscribe(response => this.products = response);
 }
 
 changeCurrency(currency: any) {

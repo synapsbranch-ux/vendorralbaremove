@@ -54,12 +54,8 @@ export class ContactComponent implements OnInit {
   setTimeout(() => {
     this.isValid=false;
   },2000) 
-     console.log('Conatct Submit',res);
    }
  )
-
-  console.log('Contact Submit',EdData);
-
 }
 
 }

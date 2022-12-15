@@ -51,40 +51,6 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   constructor(private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService) {
-    
-    
-      // this.productService.getproductsBySlugs(this.route.snapshot.paramMap.get('slug')).subscribe(response =>{ 
-      //   this.product = response.data;
-      //   if(response.data.product_external_link){
-      //     this.product_external_link=response.data.product_external_link;
-      //   }
-      //   else
-      //   {
-      //     this.product_external_link="#"
-      //   }
-        
-      //   //console.log('product Slug ', this.route.snapshot.paramMap.get('slug'));
-      //   //console.log('Product Deatils ===== >>>>>>>>>>>', this.product);
-      //   this.productCategory=response.data.product_category.category_slug;
-      //   localStorage.setItem("product_slug",this.route.snapshot.paramMap.get('slug'));
-      //   localStorage.setItem("product_catg",response.data.product_category.category_slug);
-      //   //console.log('Product Categories ===== >>>>>>>>>>>', this.productCategory);
-      //   this.image3d=this.product.product_3d_image[0].pro_3d_image;
-      //   //console.log('Product 3D image =====', this.image3d);
-      //   this.productColor=this.product.product_varient_options[1].color_options;
-      //   this.productSize=this.product.product_varient_options[0].size_options;
-      // });
-      
-
-  // this.route.data.subscribe(response =>
-  //   {
-  //     //console.log('response.data', response.data)
-  //     if(response.data)
-  //     {
-  //       this.product = response.data 
-  //     }    
-  //   });
-
     }
 
   ngOnInit(): void {
@@ -116,10 +82,8 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           {
             'category': this.productCategory
           }
-      //    //console.log('Related cat   ',catdata);
           this.productService.getProductscat(catdata).subscribe(response => 
             {      
-           //   //console.log('Related Products ==== >>>',response)
               this.products=response['data'];
             
             }
@@ -129,7 +93,6 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
           this.productColor=this.product.product_varient_options[1].color_options;
           this.productSize=this.product.product_varient_options[0].size_options;
         });
-       //console.log('Current Product response.data', this.product)
       })
 
   }
@@ -137,7 +100,6 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   externalLInk(link:any)
   {
     window.open( link , "_blank");
-  //  //console.log('Redirect Other Website')
   }
 
   ngOnChanges()
@@ -145,47 +107,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
 
   }
 
-
-  // Get Product Color
-  // Color(product_varient_options) {
-  //   // //console.log('Color Function ====',product_varient_options);
-  //   if((product_varient_options).length >= 0)
-  //   {
-  //     const uniqColor = [];
-  //     for (let i = 0; i < (product_varient_options).length; i++) {
-  //       if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
-  //         uniqColor.push(product_varient_options[i]);
-  //       }
-  //     }
-  //     uniqColor.push(product_varient_options);
-      
-  //     return uniqColor
-  //   }
-  // }
-
-  // Get Product Size
-// Size(product_varient_options) {
- 
-//   if((product_varient_options).length >= 0)
-//   {
-//   const uniqSize = []
-//   for (let i = 0; i < (product_varient_options).length; i++) {
-
-//     if (!uniqSize.includes(product_varient_options) && product_varient_options) {
-//       uniqSize.push(product_varient_options)
-//     }
-//   }
-//   return uniqSize
-// }
-// }
-
   selectSize(size) {
     this.selectedSize = size;
-    //console.log('Selected Size : ', this.selectedSize );
   }
   selectColor(color) {
     this.selectedColor = color;
-    //console.log('Selected Color : ', this.selectedColor );
   }
   
   // Increament
@@ -202,37 +128,11 @@ export class ProductNoSidebarComponent implements OnInit,OnChanges {
   async addToCart(product: any) {
     product.stock= (product.stock - this.counter);
     product.quantity = this.counter || 0;
-
-
-   //console.log('Product Size Option ============',product.product_varient_options[0].size_options);
-   //console.log('Product Color Option ============',product.product_varient_options[1].color_options);
-   ////console.log('Product Quentity ============',product.quantity);
-  //   if(this.selectedSize && this.selectedColor)
-  //   {
-  //   if(this.selectedSize)
-  //   {
-  //     product.product_varient_options[0].size_options=this.selectedSize;
-  //   }
-
-  //   if(this.selectedColor)
-  //   {
-  //     product.product_varient_options[1].color_options=this.selectedColor;
-  //   }
-console.log('=================>',product)
     const status = await this.productService.addToCart(product);
     if(status)
     {
       this.toastrService.success('Product has been added in Cart.');
-      // this.router.navigate(['/shop/cart']);
     }
-    //console.log('Add To CArt Status =======',status);
-  //  // //console.log('Ready to Cart');
-  //   }
-  //   else
-  //   {
-  //     this.toastrService.warning('Please choose all veriation');
-  //   //  //console.log('Not Ready Cart');
-  //   }
 
 
   }

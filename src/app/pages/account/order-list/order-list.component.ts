@@ -32,8 +32,6 @@ export class OrderListComponent implements OnInit {
        this.userName= res['data'][0].name;
        this.userEmail= res['data'][0].email;
        this.userPhone= res['data'][0].phone;
-        console.log('User Details ',res['data'][0]);
-        
       }
     )
     this.userservice.getAllOrderList().subscribe(
@@ -44,8 +42,6 @@ export class OrderListComponent implements OnInit {
         {
 this.orderliststatus=false;
         }
-
-        console.log('Get all Order List',res['data'])
       }
       
       )

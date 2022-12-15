@@ -61,7 +61,6 @@ export class ChangePasswordComponent implements OnInit {
       "new_Password": formData.newPassword,
       "confirm_Password": formData.confirmPassword
  }
- console.log('Send Update',EdData)
  this.userservice.changePassword(EdData).subscribe(
    res =>
    {
@@ -69,12 +68,10 @@ export class ChangePasswordComponent implements OnInit {
      setTimeout(() => {
       this.router.navigate(['/dashboard'])
     },2000)  
-     console.log('User Update',res);
    },
    error => {
      // .... HANDLE ERROR HERE 
      this.toastr.error(error.error.message)
-     console.log('Forgot Password Error',error);
 }
  )
   }

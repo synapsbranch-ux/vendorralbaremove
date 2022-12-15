@@ -53,14 +53,11 @@ export class AddressComponent implements OnInit {
       res =>
       {
         this.useraddressslist=res['data'];
-        console.log('User Address List', res['data']);
       }
     )
   }
   editAddress(address_id:any)
   {
-    //this.useraddressclass['id']= address_id;
-    //console.log('Address Edit', this.useraddressclass['id'])
     this.userservice.setUserAddressid(address_id);
     this.router.navigateByUrl('edit-address');
   }
@@ -84,7 +81,6 @@ export class AddressComponent implements OnInit {
     this.userservice.setDefaultAddress(Ddata).subscribe(
       res =>
       {
-        console.log('Default Set',res['data']);
         this.getallAddressList();
       }
     )
@@ -110,7 +106,6 @@ export class AddressComponent implements OnInit {
       "mobile": formData.telephone,
       "state": formData.state,
  }
- console.log('Send Updaate Address',EdData)
  this.userservice.addNewAddress(EdData).subscribe(
   res =>
   {
@@ -136,7 +131,6 @@ export class AddressComponent implements OnInit {
   error => {
     // .... HANDLE ERROR HERE 
     this.toastr.error(error.error.message)
-    console.log('Add Address Error',error);
 }
 )
 

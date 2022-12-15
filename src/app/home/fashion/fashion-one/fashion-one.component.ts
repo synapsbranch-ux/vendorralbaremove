@@ -21,42 +21,18 @@ export class FashionOneComponent implements OnInit {
   public homeslider:any=[];
   
   constructor(public productService: ProductService,public storeService: StoreService, public homesliderservice: HomesliderService) {
-    // this.productService.getProducts.subscribe(response => {
-    //   //console.log('Product Received!.....', response['data']);
 
-    //   // this.products = response['data'].filter(item => item.product_category.category_slug == 'apparels');
-    //   // //console.log('Items ==>',this.products);
-      
-    //   // Get Product Collection
-    //   this.products.filter((item) => {
-    //     item.collection.filter((collection) => {
-    //       const index = this.productCollections.indexOf(collection);
-    //       if (index === -1) this.productCollections.push(collection);
-    //     })
-    //   })
-    // });
   }
   public ProductSliderConfig: any = ProductSlider;
-
-  // public sliders = [{
-  //   title: 'Shop The New Signature Collection',
-  //   subTitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-  //   image: 'assets/images/slider/facade_1.png'
-  // }, 
-  // {
-  //   title: 'Welcome to fashion Women fashion',
-  //   subTitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non porttitor leo, a.',
-  //   image: 'assets/images/slider/facade_2.png'
-  // }]
-
   public sliders = [];
+
+// Get store Data
 
   get(): void {
     this.storeService.getStores.subscribe(response => {
 
       if(response["error"] === 0){
         this.stores = response["data"];
-        //console.log(this.stores);
       }
     });
   }
@@ -65,16 +41,17 @@ export class FashionOneComponent implements OnInit {
   ngOnInit(): void {
     this.get();
     this.getvendorlist();
+    // get all home slider date from API
     this.homesliderservice.getallSliderData().subscribe(
       res =>
       {
         this.sliders=res.data;
-        //console.log('Banner Slider',res.data);
-        console.log('Banner Slider this.sliders' ,this.sliders);
       }
     )
 
   }
+
+// Vendor list, with matching slider on particular vendor 
 
   getvendorlist()
   {
@@ -95,12 +72,9 @@ export class FashionOneComponent implements OnInit {
               for (const element of res.data) {
                 this.sliders.push(element)
               }
-              // this.homeslider = this.sliders.sort( () => Math.random() - 0.5);
             }
           )
         });
-
-        console.log('vendors--------',vendors)
       }
     )
   }
@@ -113,7 +87,4 @@ export class FashionOneComponent implements OnInit {
       }
     })
   }
-
-
-  
 }

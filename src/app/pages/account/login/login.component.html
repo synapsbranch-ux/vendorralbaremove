@@ -1,5 +1,4 @@
-<!-- <app-breadcrumb [title]="'Login'" [breadcrumb]="'Login'"></app-breadcrumb> -->
-<!-- section start -->
+<!--Section start-->
 <section class="login-page section-b-space">
     <div class="container">
         <div class="row">
@@ -33,11 +32,6 @@
                         </div>
                         <p class="m-0 float-right"><a [routerLink]="['/forget-password']">Forget Password</a></p>
                         <button type="submit" class="btn btn-solid rounded-lg" [disabled]="form.invalid">Login</button>
-                        <!-- 
-                        <div [className]="loginValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="loginValid || loginInValid">
-                            <div class="d-flex align-items-center"><span *ngIf="loginValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{loginMassage}}</div>
-                        </div> -->
-
                     </form>
                 </div>
             </div>

@@ -76,7 +76,6 @@ if(this.userservice.getUserOrderid())
       this.createdAt =res['data'][0].createdAt;
       this.payment_method =res['data'][0].payment_method;
       this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 10)); 
-      console.log('Order Deatils',this.expected_delivery);
     }
   )
 }
@@ -84,9 +83,6 @@ else
 {
  this.router.navigateByUrl('/order-list')
 }
-
-console.log('this.userservice.getUserOrderid()',this.userservice.getUserOrderid())
-
   }
 
   public get getTotal(): Observable<number> {

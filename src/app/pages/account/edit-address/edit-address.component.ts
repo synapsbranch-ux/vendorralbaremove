@@ -65,12 +65,8 @@ this.userservice.getSingleAddressDetails(lData).subscribe(
     this.postal_code=res['data'][0].postal_code;
     this.telephone_num=res['data'][0].mobile;
     this.is_defaultval=res['data'][0].is_default;
-
-console.log('Address Details ',res['data'][0].user_full_name)
   }
 )
-
-    console.log('Address Id : ',this.userservice.getUserAddressid());
   }
   getAddressDetails()
   {
@@ -82,7 +78,6 @@ console.log('Address Details ',res['data'][0].user_full_name)
       res =>
       {
         this.useraddressslist=res['data'];
-        console.log('User Address List', res['data']);
       }
     )
   }
@@ -99,9 +94,7 @@ console.log('Address Details ',res['data'][0].user_full_name)
 
   editAddress(address_id:any)
   {
-    //this.useraddressclass['id']= address_id;
     UserAddress.setID(address_id)
-    console.log('Address Edit', address_id)
     this.router.navigate(['/login'])
   }
 
@@ -128,7 +121,6 @@ console.log('Address Details ',res['data'][0].user_full_name)
       "state": formData.state,
       "is_default": formData.defaultstatus
  }
- console.log('Send Updaate Address',EdData)
  this.userservice.userUpdateAddress(EdData).subscribe(
    res =>
    {
@@ -139,12 +131,10 @@ console.log('Address Details ',res['data'][0].user_full_name)
         window.location.reload();
       });
     },2000)  
-     console.log('User Address Update',res);
    },
    error => {
      // .... HANDLE ERROR HERE 
      this.toastr.error(error.error.message)
-     console.log('Edit Address Error',error);
 }
  )
 

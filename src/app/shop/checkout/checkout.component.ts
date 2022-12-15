@@ -59,7 +59,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //console.log('product ',this.product_not_available.length);
     this.local_checkout_obj=JSON.parse(localStorage.getItem('checkoutform'));
     if(this.local_checkout_obj)
     {
@@ -76,8 +75,6 @@ export class CheckoutComponent implements OnInit {
       
 
     }
-
-    //console.log('Cart Products',state.cart)
   if(localStorage.getItem('user_id'))
   {
     this.isUserLogin=false;
@@ -90,9 +87,7 @@ export class CheckoutComponent implements OnInit {
       .pipe(first())
       .subscribe({
       next: (v) => {
-          //console.log('Checkout product list',v.data);
           let stock=(v.data.stock - element.quantity);
-
           if(stock < 0)
           {
             if(v.data.product_name)
@@ -103,7 +98,6 @@ export class CheckoutComponent implements OnInit {
           }  
         },
         error: (e) => {
-          //console.log(e);
         },
         complete: () => console.info('Complete') 
         }
@@ -125,10 +119,6 @@ export class CheckoutComponent implements OnInit {
       'paymentOption': new FormControl(null),
       'userAddressId': new FormControl(null, [Validators.required]),
     })
-
-    // get return url from route parameters or default to '/'
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     if(this.isUserLogin)
     {
       this.checkoutForm.controls['phone'].disable();
@@ -171,7 +161,6 @@ export class CheckoutComponent implements OnInit {
       res =>
       {
         this.useraddressslist=res['data'];
-        //console.log('User Address List', res['data']);
       }
     )
   }
@@ -203,31 +192,12 @@ let address_arr={
     this.router.navigate(['/address'], { queryParams: { returnUrl: '/checkout' }});
   }
 
-  // // Stripe Payment Gateway
-  // stripeCheckout() {
-  //   var handler = (<any>window).StripeCheckout.configure({
-  //     key: environment.stripe_token, // publishble key
-  //     locale: 'auto',
-  //     token: (token: any) => {
-  //       // You can access the token ID with `token.id`.
-  //       // Get the token ID to your server-side code for use.
-  //       this.orderService.createOrder(this.products, this.checkoutForm.value, token.id, this.amount);
-  //     }
-  //   });
-  //   handler.open({
-  //     name: 'Multikart',
-  //     description: 'Online Fashion Store',
-  //     amount: this.amount * 100
-  //   }) 
-  // }
-
   // Paypal Payment Gateway
   private initConfig(): void {
     let orderProductspaypal : Object[]=[];
 
     for(const elem of this.products)
     {
-      //console.log('product Loop',elem);
      let odetailsobj= 
      {
       name: elem.product_name,
@@ -239,78 +209,6 @@ let address_arr={
     }
     orderProductspaypal.push(odetailsobj);
     }
-
-    // this.payPalConfig = {
-    //   currency: this.productService.Currency.currency,
-    //   clientId: environment.paypal_token,
-    //   createOrderOnClient: (data) => <ICreateOrderRequest>{
-    //     intent: 'CAPTURE',
-    //     purchase_units: [
-    //       {
-    //         amount: {
-    //           currency_code: this.productService.Currency.currency,
-    //           value: this.amount,
-    //           breakdown: {
-    //             item_total: {
-    //               currency_code: this.productService.Currency.currency,
-    //               value: this.amount
-    //             }
-    //           }
-    //         },
-    //         items: orderProductspaypal
-    //       }
-    //     ]
-    //   },
-    //   advanced: {
-    //     commit: 'true'
-    //   },
-    //   style: {
-    //     label: 'paypal',
-    //     layout: 'vertical'
-    //   },
-    //   onApprove: (data, actions) => {
-    //     //console.log('onApprove - transaction was approved, but not authorized', data, actions);
-    //     actions.order.get().then(details => {
-    //       this.transactionId=details['id'];
-          
-    //       setTimeout(() => {
-    //        this.placeorder();
-    //       },1500) 
-    //       this.paypalreurnData=[
-    //         {
-    //           transaction_id: details.id,
-    //           country_code: details.payer.address.country_code,
-    //           email_address: details.payer.email_address,
-    //           name:  `${details.payer.name.given_name} ${details.payer.name.surname}`,
-    //           customer_id_paypal: details.payer.payer_id,
-    //           paypal_status: details.status,
-    //         }
-    //       //   {
-    //       //   transaction_id: "703dc5d2-3dc3-4671-afaa-d20a773f738c",
-    //       //   country_code: "IN",
-    //       //   email_address: "test@yopmail.com",
-    //       //   name: "test",
-    //       //   customer_id_paypal: "620ca08597d509ecd22e6aa8",
-    //       //   paypal_status: "APPROVE",
-    //       // }
-    //       ];
-          
-    //       //console.log('onApprove - you can get full order details inside onApprove: ', details);
-    //     });
-    //   },
-    //   onClientAuthorization: (data) => {
-    //     //console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-    //   },
-    //   onCancel: (data, actions) => {
-    //     //console.log('OnCancel', data, actions);
-    //   },
-    //   onError: err => {
-    //     //console.log('OnError', err);
-    //   },
-    //   onClick: (data, actions) => {
-    //     //console.log('onClick', data, actions);
-    //   },
-    // };
   
     this.payPalConfig = {
       currency: this.productService.Currency.currency,
@@ -341,7 +239,6 @@ let address_arr={
         layout: 'vertical'
       },
       onApprove: (data, actions) => {
-        //console.log('onApprove - transaction was approved, but not authorized', data, actions);
         actions.order.get().then(details => {
           this.transactionId=details['id'];
           
@@ -358,21 +255,19 @@ let address_arr={
               paypal_status: details.status,
             }
           ];
-          
-          //console.log('onApprove - you can get full order details inside onApprove: ', details);
         });
       },
       onClientAuthorization: (data) => {
-        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+       // console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
       },
       onCancel: (data, actions) => {
-        console.log('OnCancel', data, actions);
+      //  console.log('OnCancel', data, actions);
       },
       onError: err => {
-        console.log('OnError', err);
+      //  console.log('OnError', err);
       },
       onClick: (data, actions) => {
-        console.log('onClick', data, actions);
+       // console.log('onClick', data, actions);
       },
     };
 
@@ -386,12 +281,10 @@ let address_arr={
       this.paypalstatus=false;
     }
     let formData = this.checkoutForm.value;
-    //console.log('Check Address check ',formData.userAddressId)
     if(event.target.value == 'paypal' && this.useraddressslist.length > 0 && formData.firstname !="" && formData.lastname !="" && formData.phone !="" && formData.email !="" && formData.address1 !="" && formData.country !="" && formData.town !="" && formData.state !=""  && formData.postalcode !=""  && formData.userAddressId != null )
     {
       this.paypalstatus=true;
     }
-    //console.log(event.target.value);
   }
 
   placeorder()
@@ -418,8 +311,6 @@ let address_arr={
           this.initConfig();
           paymentStatus="pending";
         }
-        //console.log('Payment Status',formData.paymentOption);
-
         this.getTotal.subscribe(
           res =>
           {
@@ -427,14 +318,11 @@ let address_arr={
             
           }
         )
-        
-      //console.log('Cart Products',this.products)
 
       let orderProducts : Object[]=[];
 
       for(const elem of this.products)
       {
-        //console.log('product Loop',elem);
         let odetails= {
           product_id: elem._id,
           product_name: elem.product_name,
@@ -449,9 +337,6 @@ let address_arr={
         }
         orderProducts.push(odetails);
       }
-
-
-  //console.log('orderProducts',orderProducts)
 
   let orderData={}
 
@@ -512,17 +397,12 @@ let address_arr={
   }
   }
 
-  // //console.log('Order Generate STR 1',orderData);
-  // //console.log('Order Generate STR 2',JSON.stringify(orderData));
-
-
   for (const element of this.products) {
             
     this.productService.getproductsBySlugs(element.product_slug)
     .pipe(first())
     .subscribe({
     next: (v) => {
-        //console.log('Checkout product list',v.data);
         let stock=(v.data.stock - element.quantity);
 
         if(stock < 0)
@@ -555,7 +435,6 @@ let address_arr={
             {
               this.orderValid=true;
               this.orderMassage="Your Order Placed Sucessfully";
-              //console.log('Order Created',res);
               for(const elem of this.products)
               {
                 this.productService.removeCartItem(elem);
@@ -572,7 +451,6 @@ let address_arr={
         }  
       },
       error: (e) => {
-        //console.log(e);
       },
       complete: () => console.info('Complete') 
       }
@@ -586,7 +464,6 @@ let address_arr={
     else
     {
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' }});
-    //console.log(this.returnUrl);
     }
 
   }

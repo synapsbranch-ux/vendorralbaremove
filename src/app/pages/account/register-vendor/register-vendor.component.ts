@@ -101,13 +101,11 @@ export class RegisterVendorComponent implements OnInit {
       this.userService.vendorgenerateOTP(data).subscribe(
         res => {
           this.getOtpVal = res['data'].otpValue;
-          console.log(res);
           this.toastr.success('OTP have been send to your register Email please Check');
           this.vendorOTPStatus=true; 
         },
         error => {
           // .... HANDLE ERROR HERE 
-          console.log(error.message);
           this.phValid=false;
           this.toastr.error(error.error.message);
           // this.signupMassage="Your Phone Or Email Already Register";
@@ -134,7 +132,6 @@ export class RegisterVendorComponent implements OnInit {
       .pipe(take(this.counter))
       .subscribe(() => {
         --this.counter;
-        // console.log(this.counter);
         if (this.counter == 0) {
           this.countDown.unsubscribe();
         }
@@ -173,8 +170,7 @@ export class RegisterVendorComponent implements OnInit {
           'catagories': catname,
         }
         this.userService.vendorSignUp(data).subscribe(
-          res => {
-            console.log(' Signup Success',res);       
+          res => {      
             this.toastr.success('Your Registration sucessfull');
             setTimeout(() => {
               window.location.href = 'https://admin.ralbatech.com/'
@@ -182,16 +178,13 @@ export class RegisterVendorComponent implements OnInit {
           },
           error => {
             // .... HANDLE ERROR HERE 
-            console.log(error.message);
             this.toastr.error(error.error.message);
        }
         );
    
   
       }else{
-          console.log('Please enter OTP first');
           this.toastr.error('Please enter OTP first')
-         // this.otpMassage="Please enter OTP first";
           this.otpValid=false;
       }
     }
@@ -209,21 +202,15 @@ export class RegisterVendorComponent implements OnInit {
         'phone': formData.vendor_phone,
         'type': 'VendorSignUp'
       }
-      console.log(data);
       
       this.userService.vendorgenerateOTP(data).subscribe(
         res => {
           this.getOtpVal = res['data'].otpValue;
-          console.log(res);
           this.toastr.success('OTP have been send to your register Email please Check');
           this.vendorOTPStatus=true;      
         },
         error => {
           // .... HANDLE ERROR HERE 
-          console.log(error.message);
-          // this.phValid=false;
-          // this.signupMassage="Phone number already exist";
-  
           this.toastr.error(error.error.message);
      }
       );

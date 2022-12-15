@@ -260,7 +260,7 @@ export class ProductService {
             }
             let cdata=
         {
-              "pro_id": product._id,
+          products:[{  "pro_id": product._id,
               "pro_name": product.product_name,
               "pro_image": product.product_image[0].pro_image,
               "pro_slug": product.product_slug,
@@ -272,26 +272,60 @@ export class ProductService {
               ],
               "width":product.width,
               "height": product.height
-      
+            }]
         }
         //console.log('full Product Cart Data for Submit',cdata);
       
-        this.addToCartDb(cdata).subscribe(
+        this.addToCartDbBulk(cdata).subscribe(
         res =>  {  
-          //console.log('Product details cart page',product); 
-          //console.log('ADD TO CART DB',res['data']._id)
-
-          state.cart.push({
-            ...product,
-            quantity: qty,
-            stock:product.stock,
-            cart_id: res['data']._id,
-            product_department: product.product_department._id,
-            product_store: product.product_store._id,
-            product_owner: product.product_owner._id
-          })
-
-      //console.log('Cart item added from login Retain local ',state.cart);
+          let bodydata=res['data'];
+          if(bodydata.hasOwnProperty('products'))
+          {
+           let cartproducts=[];
+           let product_img
+          for (const element of res['data'].products) {   
+            this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                product_img=product['data'].product_image[0].pro_image;
+                let data = 
+                {
+                  "_id": element.pro_id,
+                  "product_image": [
+                    {
+                        "pro_image": product_img,
+                        "status": "active"
+                    },
+                  ],
+                  "cart_id": res['data']._id,
+                  "product_name": element.pro_name,
+                  "product_slug": element.pro_slug,
+                  "quantity": element.qty,
+                  "stock":(product['data'].stock - element.qty),
+                  "product_sale_price": element.price,
+                  "product_varient_options":[
+                      {"size_options": element.options[0].size},
+                      {"color_options": element.options[1].color}
+                  ],
+                  "width": element.width,
+                  "height": element.height
+                }
+              cartproducts.push(data);
+              localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+              console.log('Return LocalStorage Product Service',localStorage.getItem("cartItems"));
+              
+            })    
+            
+            state.cart.push({
+              ...product,
+              quantity: qty,
+              stock:product.stock,
+              cart_id: res['data']._id,
+              product_department: product.product_department._id,
+              product_store: product.product_store._id,
+              product_owner: product.product_owner._id
+            })
+          
+      }
+    }
           }
         )
       }
@@ -320,7 +354,6 @@ export class ProductService {
 
   // Update Cart Quantity
   public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
-
     return state.cart.find((items, index) => {
       if (items._id === product._id) {
         
@@ -347,11 +380,12 @@ export class ProductService {
 
           let cdata=
       {
-            "pro_id": product._id,
+        products: [{
+           "pro_id": product._id,
             "pro_name": product.product_name,
             "pro_image": product.product_image[0].pro_image,
             "pro_slug": product.product_slug,
-            "qty": product.quantity,
+            "qty": quantity,
             "price": product_price,
             "options":[
                 {"size": product.product_varient_options[0].size_options},
@@ -359,19 +393,54 @@ export class ProductService {
             ],
             "width":product.width,
             "height": product.height
-    
+          }]
       }
       //console.log('full Product Cart Data for Submit',cdata);
     
-      this.addToCartDb(cdata).subscribe(
+      this.addToCartDbBulk(cdata).subscribe(
       res =>  {   
-        //console.log('ADD TO CART DB',res['data']._id)
-        //console.log('Cart item Updated from login Retain local ',state.cart);
-        localStorage.setItem("cartItems", JSON.stringify(state.cart));
+        let bodydata=res['data'];
+        if(bodydata.hasOwnProperty('products'))
+        {
+         let cartproducts=[];
+         let product_img
+        for (const element of res['data'].products) {   
+          this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+              product_img=product['data'].product_image[0].pro_image;
+              let data = 
+              {
+                "_id": element.pro_id,
+                "product_image": [
+                  {
+                      "pro_image": product_img,
+                      "status": "active"
+                  },
+                ],
+                "cart_id": res['data']._id,
+                "product_name": element.pro_name,
+                "product_slug": element.pro_slug,
+                "quantity": element.qty,
+                "stock":(product['data'].stock - element.qty),
+                "product_sale_price": element.price,
+                "product_varient_options":[
+                    {"size_options": element.options[0].size},
+                    {"color_options": element.options[1].color}
+                ],
+                "width": element.width,
+                "height": element.height
+              }
+            cartproducts.push(data);         
+            localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+            console.log('Return LocalStorage Product Service',localStorage.getItem("cartItems"));
+            
+          })                          
+        
+    }
+  }
         }
       )
     }
-        return true
+    return true;
       }
     })
   }
@@ -406,7 +475,7 @@ export class ProductService {
       this.deleteToCartDb(dcDAta).subscribe(
         res =>
         {
-          //console.log('Delete Cart From DB Return',res);
+          console.log('Delete Cart From DB Return',res);
         }
       )
     }
@@ -587,6 +656,19 @@ headers: new HttpHeaders({
 }
 
   return this.http.post(environment.baseUrl+'cart/add',data,httpOptions);
+}
+
+addToCartDbBulk(data: any): Observable<any>{
+  this.token = localStorage.getItem('user_token') // Will return if it is not set 
+
+this.token = "Bearer " + this.token
+let httpOptions = {
+headers: new HttpHeaders({
+  'Authorization': this.token
+})
+}
+
+  return this.http.post(environment.baseUrl+'cart/bulkadd',data,httpOptions);
 }
 
 deleteToCartDb(data: any): Observable<any>{
