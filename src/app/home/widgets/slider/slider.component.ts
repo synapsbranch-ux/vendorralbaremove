@@ -3,6 +3,7 @@ import { StoreService } from 'src/app/shared/services/store.service';
 import { UserService } from './../../../shared/services/user.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { HomeSlider } from '../../../shared/data/slider';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-slider',
@@ -101,8 +102,9 @@ export class SliderComponent implements OnInit {
         }
         else
         {
-          window.open("https://store.ralbatech.com/banner/"+this.storeslug+"/"+this.DepartmentsList[0].department_slug ,"_self");
-          //console.log('this.storeslug ==>',this.storeslug)
+          // console.log('this.storeslug ==>',`${environment.storeUrl}/banner/${this.storeslug}/${this.DepartmentsList[0].department_slug}`)
+
+          window.open(`${environment.storeUrl}/banner/${this.storeslug}/${this.DepartmentsList[0].department_slug}`,"_self");
           //console.log('this.DepartmentsList[department_slug] ==>',this.DepartmentsList[0].department_slug)
         }
       //console.log('Department list ====',this.DepartmentsList);

@@ -3,6 +3,7 @@ import { StoreService } from 'src/app/shared/services/store.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { HomesliderService } from 'src/app/shared/services/homeslider.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-product-box-one',
@@ -111,7 +112,8 @@ export class SingleStoreComponent implements OnInit {
   {
     if(room_status == 'false')
     {
-      window.open("https://store.ralbatech.com/store/"+this.storeslug+"/"+department_slug ,"_self");
+      // window.open("https://store.ralbatech.com/store/"+this.storeslug+"/"+department_slug ,"_self");
+      window.open(`${environment.storeUrl}/store/${this.storeslug}/${department_slug}`,"_self");
     }
 
   }
