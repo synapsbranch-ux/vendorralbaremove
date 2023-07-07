@@ -147,6 +147,13 @@ export class ProductService {
     return this.http.get(environment.baseUrl+'product/'+data);
   }
 
+  uploadImage(fileToUpload: File): Observable<any>
+  {
+    const formData: FormData = new FormData();
+    formData.append('image', fileToUpload, fileToUpload.name);
+    return this.http.post(environment.baseUrl+'user/upload',formData);
+  }
+
   /*
     ---------------------------------------------
     ---------------  Wish List  -----------------

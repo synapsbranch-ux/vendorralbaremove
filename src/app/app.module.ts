@@ -37,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ElementsComponent,
     DepartmentComponent,
     AboutUsComponent,
-    PrivacyPolicyComponent,
+    PrivacyPolicyComponent
   ],
 
   imports: [

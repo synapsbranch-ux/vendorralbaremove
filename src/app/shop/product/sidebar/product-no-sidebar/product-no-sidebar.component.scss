@@ -6,3 +6,21 @@ object-fit: contain;
 .product-right .color-variant li.active {
     border: 2px solid #9d9999 !important;
 }
+.addons-price select, .addons-price div:first-child
+{
+    margin-right: 15px;
+flex-basis: 60%;
+}
+.addons-price div:first-child
+{
+flex-basis: 35%;
+}
+.price-section
+{
+    display: flex;
+}
+.price-section input
+{
+    border: none;
+    box-shadow: none;
+}

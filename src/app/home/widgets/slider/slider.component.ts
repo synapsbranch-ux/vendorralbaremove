@@ -85,30 +85,8 @@ export class SliderComponent implements OnInit {
           return store_l.store_department;
         }
       });
-
-      const filterItem = child.filter(item => item != undefined);
-      //console.log('Department List Filter ==',filterItem);
-      if(filterItem.length > 0){
-        this.DepartmentsList=filterItem[0];
-
-        if(!this.DepartmentsList.length)
-        {
-          this.departmentmsg="No Department Register Here";
-        }
-        if(roomno > 1)
-        {
-            this.router.navigateByUrl(`/stores/${this.storeslug}`)
-            //console.log('this.storeslug ==>',this.storeslug)
-        }
-        else
-        {
-          // console.log('this.storeslug ==>',`${environment.storeUrl}/banner/${this.storeslug}/${this.DepartmentsList[0].department_slug}`)
-
-          window.open(`${environment.storeUrl}/banner/${this.storeslug}/${this.DepartmentsList[0].department_slug}`,"_self");
+          window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`,"_self");
           //console.log('this.DepartmentsList[department_slug] ==>',this.DepartmentsList[0].department_slug)
-        }
-      //console.log('Department list ====',this.DepartmentsList);
-      }
 
     });
 
