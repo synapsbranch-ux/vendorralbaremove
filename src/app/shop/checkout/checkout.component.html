@@ -136,11 +136,12 @@
                                         <li *ngFor="let product of products">
                                             {{ product.product_name }} × {{ product.quantity }}
                                             <span *ngIf="product.product_sale_price">
-                                                {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                                {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }} +  {{ (product.addonsprice) | currency:productService?.Currency.currency:'symbol' }}
                                             </span>
                                             <span *ngIf="product.product_sale_price == null">
-                                                {{ (product.product_retail_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }}
+                                                {{ (product.product_retail_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }} +  {{ (product.addonsprice) | currency:productService?.Currency.currency:'symbol' }}
                                             </span>
+                                    
                                         </li>
                                     </ul>
                                     <ul class="qty" *ngIf='!products.length'>
@@ -163,10 +164,10 @@
                                 <div class="payment-box">
                                     <div class="upper-box">
                                         <div class="payment-options">
-                                            <!-- <div class="custom-control custom-radio">
+                                            <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
-                                            </div> -->
+                                            </div>
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)" [disabled]="checkoutForm.invalid">
                                                 <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
@@ -174,21 +175,6 @@
                                             </div>
                                             <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
                                             </ngx-paypal>
-                                            <!-- <ul>
-                                            <li>
-                                                <div class="radio-option">
-                                                    <input type="radio" value="COD"  checked >
-                                                    <label for="payment-2">Cash On Delivery
-                                                        <span class="small-text">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span></label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="radio-option paypal">
-                                                    <input type="radio" value="COD"  >
-                                                    <label for="payment-3">PayPal<span class="image"><img src="assets/images/paypal.png" alt="" /></span></label>
-                                                </div>
-                                            </li>
-                                        </ul> -->
                                         </div>
                                     </div>
                                     <div class="text-right">

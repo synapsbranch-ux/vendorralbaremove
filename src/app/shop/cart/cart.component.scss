@@ -3,3 +3,17 @@
     height: 16px;
     position: absolute;
 }
+.cart_product_info
+{
+    width: 40%;
+}
+.cart_product_info p {
+    color: black;
+}
+.cart_product_info p:first-child {
+    font-weight: 700;
+}
+.flex_item {
+    align-items: center;
+    justify-content: space-evenly;
+}

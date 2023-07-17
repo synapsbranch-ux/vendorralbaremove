@@ -39,7 +39,11 @@
             "styles": [
               "node_modules/font-awesome/scss/font-awesome.scss",
               "src/assets/scss/app.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css",
+              {
+                  "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              }
             ],
             "scripts": [
               "node_modules/isotope-layout/dist/isotope.pkgd.min.js"

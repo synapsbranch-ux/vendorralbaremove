@@ -45,6 +45,7 @@ import { MasonryGridFourComponent } from './portfolio/masonry-grid-four/masonry-
 import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonry-full-width.component';
 import { Room3Dstore } from './room-3dstore/room-3dstore.component';
 import { RegisterVendorComponent } from './account/register-vendor/register-vendor.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
     GalleryModule.forRoot(),
     SharedModule,
     PagesRoutingModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    MatDialogModule
   ]
 })
 export class PagesModule { }

@@ -43,27 +43,34 @@
                                             <h5>{{ product.product_name | titlecase }}</h5>
                                         </div>
                                     </div>
-                                    <div class="col-3 order_detail">
+                                    <div class="col-2 order_detail">
                                         <div>
                                             <h4>quantity</h4>
                                             <h5>{{product.qty}}</h5>
                                         </div>
                                     </div>
-                                    <div class="col-3 order_detail">
+                                    <div class="col-2 order_detail">
                                         <div>
-                                            <h4>price</h4>
-                                            <h5>{{product.price}}</h5>
+                                            <h4>Product price</h4>
+                                            <h5>{{product.price | currency:product_service?.Currency.currency:'symbol'}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 order_detail">
+                                        <div>
+                                            <h4>Addons price</h4>
+                                            <h5>{{(product.addonsprice ? product.addonsprice: 0) | currency:product_service?.Currency.currency:'symbol'}}</h5>
+                                            <a class="pe-auto" (click)="viewAddonsDetails(product.addons)">View Addons</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="total-sec">
                                     <ul>
-                                        <li>subtotal <span>{{total_order_amount}}</span></li>
+                                        <li>subtotal <span>{{total_order_amount | currency:product_service?.Currency.currency:'symbol'}}</span></li>
                                     </ul>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <ul class="final-total pb-4">
-                                        <li>Total: <h3 class="text-black">{{total_order_amount | currency}}</h3></li>
+                                        <li>Total: <h3 class="text-black">{{total_order_amount | currency:product_service?.Currency.currency:'symbol'}}</h3></li>
                                     </ul>
                                     <ul class="order-detail">
                                         <li>Order Status: <h3 class="text-black">{{ order_status | uppercase }}</h3></li>
@@ -112,4 +119,41 @@
             </div>
         </div>
     </div>
+
+    
 </section>
+
+
+        <!-- Dialog template -->
+
+        <ng-template #addonsDetails>
+            <div class="modal-content warning_popup ">
+                <h3 class="modal-title text-center"><span>Addons Details</span></h3>
+                <div class="warning_msg">
+                    <div class="modal-header">
+                    </div>
+                    <div class="modal-body">
+                       <div>
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Addons Name</th>
+                                <th scope="col">Addons Value</th>
+                                <th scope="col">Price</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let addon of addonsjson">
+                                <td *ngIf="addon.key">{{capitalizeString(addon.key)}}</td>
+                                <td *ngIf="addon.extra_document"><div *ngFor="let adn of addon.extra_document">{{capitalizeString(adn.keyname)}}<span class="img-addons"><a href="{{adn.fileUrl}}" target="_blank"><img src="assets/images/fileicon.png" alt="{{capitalizeString(adn.keyname)}}" ></a> </span></div></td>
+                                <td>{{capitalizeString(addon.value)}}</td>
+                                <td>{{addon.price | currency:product_service?.Currency.currency:'symbol'}}</td>
+                              </tr>                   
+                            </tbody>
+                          </table>
+                       </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-template>

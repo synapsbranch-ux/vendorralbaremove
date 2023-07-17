@@ -32,31 +32,6 @@ Z
   // console.log('product-list page products ============>',this.product);
     
   }
-
-  // Get Product Color
-  Color(product_varient_options) {
-    const uniqColor = [];
-    for (let i = 0; i < (product_varient_options).length; i++) {
-      if (!uniqColor.includes(product_varient_options[i]) && product_varient_options[i]) {
-        uniqColor.push(product_varient_options[i]);
-      }
-    }
-    
-    return uniqColor
-  }
-
-
-  // Change Variants
-  ChangeVariants(color, product) {
-    product.product_varient_options.map((item) => {
-      if (item.color_options === color) {
-        product.product_image.map((img) => {
-            this.ImageSrc = img.pro_image;
-        })
-      }
-    })
-  }
-
   // Change Variants Image
   ChangeVariantsImage(src) {
     this.ImageSrc = src;

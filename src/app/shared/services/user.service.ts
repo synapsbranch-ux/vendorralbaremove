@@ -149,6 +149,18 @@ export class UserService {
     return this.http.post(environment.baseUrl+'user/updateAddress',data,httpOptionsroom);
   }
 
+  deleteAddress(data:any)
+  {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/deleteAddress',data,httpOptionsroom);
+  }
+
   userUpdateProdile(data:any)
   {
     let token = localStorage.getItem('user_token') // Will return if it is not set 

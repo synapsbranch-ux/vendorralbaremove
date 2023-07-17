@@ -6,10 +6,26 @@
             <div class="row">
                 <div class="col-lg-6">
                     <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar class="product-slick1">
-                        <ng-container *ngFor="let image of product.product_image; index as i">
-                            <ng-template carouselSlide [id]="i">
+
+                        <ng-container *ngFor="let image of productImages; index as i">
+                            <ng-template carouselSlide [id]="i" *ngIf="i==0">
                                 <div>
-                                    <lib-ngx-image-zoom class="img-fluid" [thumbImage]="image.pro_image" [fullImage]="image.pro_image" [magnification]="1.5" [enableLens]="true" [lensWidth]="300" [lensHeight]="300"></lib-ngx-image-zoom>
+                                    <model-viewer class="model-viewer"
+                                    camera-controls
+                                    camera-orbit="75deg 75deg 20m"
+                                    src="{{image.pro_3d_image}}"
+                                    alt="A 3D model Product"
+                                    data-js-focus-visible=""
+                                    ar-status="not-presenting"
+                                  >
+                                  </model-viewer>
+                                </div>
+                            </ng-template>
+                            <ng-template carouselSlide [id]="i" *ngIf="i > 0">
+                                <div>
+                                    <lib-ngx-image-zoom class="img-fluid" [thumbImage]="image.pro_image"
+                                        [fullImage]="image.pro_image" [magnification]="1.5" [enableLens]="true"
+                                        [lensWidth]="300" [lensHeight]="300"></lib-ngx-image-zoom>
 
                                     <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
                                    [lazyLoad]="image.src" 
@@ -19,13 +35,24 @@
                         </ng-container>
                     </owl-carousel-o>
                     <div class="row align-items-center">
-                        <div class="col-10 p-0">
+                        <div class="col-12 p-0">
                             <div class="slider-nav small-slider-product">
                                 <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
-                                    <ng-container *ngFor="let image of product.product_image; index as i ">
-                                        <ng-template carouselSlide [id]="i">
+                                    <ng-container *ngFor="let image of productImages; index as i ">
+                                        <ng-template carouselSlide [id]="i" *ngIf="i==0">
                                             <div class="owl-thumb" [class.active]="i == activeSlide">
-                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'" [lazyLoad]="image.pro_image" [alt]="product.product_name" class="img-fluid" [src]="image.pro_image" (click)="owlCar.to(activeSlide = i.toString())">
+                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'"
+                                                    [lazyLoad]="'assets/images/rotate-360.svg'" [alt]="product.product_name"
+                                                    class="img-fluid" [src]="'assets/images/rotate-360.svg'"
+                                                    (click)="owlCar.to(activeSlide = i.toString())">
+                                            </div>
+                                        </ng-template>
+                                        <ng-template carouselSlide [id]="i" *ngIf="i > 0">
+                                            <div class="owl-thumb" [class.active]="i == activeSlide">
+                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'"
+                                                    [lazyLoad]="image.pro_image" [alt]="product.product_name"
+                                                    class="img-fluid" [src]="image.pro_image"
+                                                    (click)="owlCar.to(activeSlide = i.toString())">
                                             </div>
                                         </ng-template>
                                     </ng-container>
@@ -34,30 +61,23 @@
 
                             </div>
                         </div>
-                        <div class="col-2 p-0">
-                            <div class="d-flex">
-                                <a title="360 View" class="text-center" href="javascrip:void(0)" (click)="view3D.openModal()">
-                                    <span *ngFor="let image of product.product_image; index as i"><img *ngIf="i == 0" style="width:100px; height: 70px; object-fit: contain;" width="100" class="img-fluid" [src]="image.pro_image" alt=""></span><br>
-                                    <img width="60" class="img-fluid" src="assets/images/rotate-360.svg" alt="360 View"></a>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 rtl-text">
-
-
                     <div class="product-right">
                         <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
                         <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
 
                         <h2>{{ product?.product_name }}</h2>
                         <h3 *ngIf="product?.product_sale_price">
-                            <del>{{ product?.product_retail_price | currency: productService.Currency?.currency:'symbol' }}</del>
-                            <span>{{ product?.product_sale_price  | currency: productService.Currency?.currency:'symbol' }}</span>
+                            <del>{{ product?.product_retail_price | currency: productService.Currency?.currency:'symbol'
+                                }}</del>
+                            <span>{{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'
+                                }}</span>
                         </h3>
                         <h3 *ngIf="product?.product_sale_price == null">
-                            <span>{{ product?.product_retail_price  | currency: productService.Currency?.currency:'symbol'}}</span>
+                            <span>{{ product?.product_retail_price | currency:
+                                productService.Currency?.currency:'symbol'}}</span>
                         </h3>
                         <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
@@ -65,66 +85,135 @@
                         <p class="mb-2">{{ product?.product_description}}</p>
                         <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
                         <div class="product-attributes pb-4">
-                        <div *ngIf="productAttributeArr">
-                        <div *ngFor="let attribute of productAttributeArr">
-                            <div *ngIf="attribute.value && !stingURLCheck(attribute.value)" class="py-2">
-                                <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
-                                <p>{{attribute.value}}</p>
-                            </div>
-                            <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'img'" class="py-2">
-                                <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
-                                
-                                <img src="{{attribute.value | safe: 'resourceUrl'}}" alt="">
-                            </div>
-                            <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'pdf'" class="py-2">
-                                <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
-                                <iframe [src]="attribute.value | safe: 'resourceUrl'"  width="100%"></iframe>
-                            </div>
-                        </div>
-                        </div>
+                            <div *ngIf="productAttributeArr">
+                                <div *ngFor="let attribute of productAttributeArr">
+                                    <div *ngIf="attribute.value && !stingURLCheck(attribute.value)" class="py-2">
+                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
+                                        <p>{{attribute.value}}</p>
+                                    </div>
+                                    <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'img'"
+                                        class="py-2">
+                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
 
-                        <div *ngIf="productAddons" class="border-product">
-                            <div class="form-group">
-                                <div class="m-checkbox-inline custom-checkbox-ml d-flex checkbox-animated">
-                                    <label class="d-block" for="edo-ani">
-                                        <input class="checkbox_animated" id="edo-ani"  type="checkbox"
-                                            formControlName="is_addons_required">
-                                        Are Want Buy Addons ?
-                                    </label>
-                                </div>
-                            </div>
-                            <div *ngIf="productAddons">
-                                <div *ngFor="let addon of productAddons">
-                                        <div class="form-group">
-                                        <label> <span *ngIf="addon.is_mandatory">*</span> {{ addon.add_ons_name }}</label>
-                                        <img *ngIf="addon.add_ons_image" [src]="addon.add_ons_image" alt="Addon Image">
-                                        <ng-container [ngSwitch]="addon.add_ons_input">
-                                            <div *ngSwitchCase="'range-input'">
-                                                <input class="form-control" *ngSwitchCase="'input'" type="text" >
-                                                <input class="form-control" *ngSwitchCase="'range'" type="range" value="0" #ranger (change)="onAngleChange(ranger.value,addon.addon_slug)" [disabled]="addon.add_ons_value[0].value < 1 && range" >
-                                            </div>
-                                            <input class="form-control" *ngSwitchCase="'input'" type="text" >
-                                            <input class="form-control" *ngSwitchCase="'range'" type="range" value="0" #ranger (change)="onAngleChange(ranger.value,addon.addon_slug)" [disabled]="addon.add_ons_value[0].value < 1 && range" >
-                                            <input class="form-control" *ngSwitchCase="'file'" type="file"  accept=".pdf,image/png, image/jpg, image/jpeg"
-                                            (change)="uploadFiles($event.target.files,getFormControlName(addon.add_ons_name+'_addons'))">
-                                            <textarea class="form-control" *ngSwitchCase="'textarea'"></textarea>
-                                            <div *ngSwitchCase="'select' || 'multiselect'" class="d-flex justify-content-start align-items-center addons-price" >
-                                                <select class="form-control" *ngSwitchCase="'select' || 'multiselect'" [(ngModel)]="selectedOptions[addon.addon_slug]" (change)="updatePrice(addon.addon_slug)" >
-                                                    <option *ngFor="let option of addon.add_ons_value" [value]="option.value_slug">
-                                                        <img *ngIf="option.value_image" [src]="option.value_image" class="Addon-image" />
-                                                         {{ capitalizeString(option.value_slug) }}</option>
-                                                  </select>
-                                                  <div class="price-section">
-                                                   <p>Seleted Price : <input type="text" [(ngModel)]="value[addon.addon_slug]"></p> 
-                                                  </div>
-                                            </div>
-
-
-        
-                                        </ng-container>
+                                        <img src="{{attribute.value | safe: 'resourceUrl'}}" alt="">
+                                    </div>
+                                    <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'pdf'"
+                                        class="py-2">
+                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
+                                        <iframe [src]="attribute.value | safe: 'resourceUrl'" width="100%"></iframe>
                                     </div>
                                 </div>
                             </div>
+
+                            <div *ngIf="productAddons" >
+
+                                <div class="form-check form-switch pb-2">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                        [(ngModel)]="AddonService">
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">Want To Buy Addons
+                                        ?</label>
+                                </div>
+
+
+                                <div *ngIf="AddonService" class="border-product">
+                                    <div *ngFor="let addon of productAddons">
+                                        <div class="form-group">
+                                            <label> <span *ngIf="addon.is_mandatory">*</span> {{ addon.add_ons_name
+                                                }}</label>
+                                            <img *ngIf="addon.add_ons_image" [src]="addon.add_ons_image"
+                                                alt="Addon Image">
+                                            <ng-container [ngSwitch]="addon.add_ons_input">
+
+                                                <div *ngSwitchCase="'range-input'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <div>
+                                                        <input class="form-control" type="color" #otherInput
+                                                            (change)="onMultiInputChange(otherInput.value,addon.addon_slug,addon)"
+                                                            [disabled]="(addon.add_ons_value[0].values < 1 && range)">
+                                                        <input class="form-control" type="range" value="0" #ranger
+                                                            (change)="onInputChange(ranger.value,addon.addon_slug,addon)"
+                                                            [disabled]="addon.add_ons_value[0].values < 1 && range">
+                                                    </div>
+                                                    <div class="price-section" *ngIf="addon.add_ons_value[0].values > 0 && range">
+                                                        <p>Seleted Price : <input type="text" [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+
+                                                <div *ngSwitchCase="'input'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <input class="form-control" type="text" #ranger
+                                                        (change)="onInputChange(ranger.value,addon.addon_slug,addon)">
+                                                    <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <p>Seleted Price : <input type="text"
+                                                                [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngSwitchCase="'range'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <input class="form-control" type="range" value="0" #ranger
+                                                        (change)="onInputChange(ranger.value,addon.addon_slug,addon)"
+                                                        [disabled]="addon.add_ons_value[0].values < 1 && range">
+
+                                                    <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <p>Seleted Price : <input
+                                                                *ngIf="addon.add_ons_value[0].values > 0 && range"
+                                                                type="text" [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngSwitchCase="'file'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <input class="form-control" type="file"
+                                                        accept=".pdf,image/png, image/jpg, image/jpeg"
+                                                        (change)="uploadFiles($event.target.files,getFormControlName(addon.add_ons_name),addon)">
+
+                                                    <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <p>Seleted Price : <input type="text"
+                                                                [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- This section for textarea options -->
+                                                <div *ngSwitchCase="'textarea'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <textarea class="form-control" #ranger
+                                                        (change)="onInputChange(ranger.value,addon.addon_slug,addon)"></textarea>
+                                                    <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <p>Seleted Price : <input type="text"
+                                                                [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- This section for select and Multiselet options -->
+                                                <div *ngSwitchCase="'select' || 'multiselect'"
+                                                    class="d-flex justify-content-start align-items-center addons-price">
+                                                    <select class="form-control"
+                                                        [(ngModel)]="selectedOptions[addon.addon_slug]"
+                                                        (change)="updatePrice(addon.addon_slug)">
+                                                        <option *ngFor="let option of addon.add_ons_value"
+                                                            [value]="option.value_slug">
+                                                            <img *ngIf="option.value_image" [src]="option.value_image"
+                                                                class="Addon-image" />
+                                                            {{ capitalizeString(option.value_slug) }}
+                                                        </option>
+                                                    </select>
+                                                    <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <p>Seleted Price : <input type="text"
+                                                                [(ngModel)]="value[addon.addon_slug]"></p>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p *ngIf="AddonService">Product Additional Cost ::  <span style="font-weight: 700;">{{productAddonsPrice}}</span></p>
                             </div>
 
                         </div>
@@ -135,16 +224,19 @@
                                     <div class="qty-box">
                                         <div class="input-group">
                                             <span class="input-group-prepend">
-                                <button type="button" class="btn quantity-left-minus" data-type="minus" (click)="decrement()">
-                                    <i class="ti-minus"></i>
-                                </button>
-                            </span>
-                                            <input type="text" name="quantity" class="form-control input-number" [value]="counter" disabled/>
+                                                <button type="button" class="btn quantity-left-minus" data-type="minus"
+                                                    (click)="decrement()">
+                                                    <i class="ti-minus"></i>
+                                                </button>
+                                            </span>
+                                            <input type="text" name="quantity" class="form-control input-number"
+                                                [value]="counter" disabled />
                                             <span class="input-group-prepend">
-                                <button type="button" class="btn quantity-right-plus" data-type="plus" (click)="increment()">
-                                    <i class="ti-plus"></i>
-                                </button>
-                            </span>
+                                                <button type="button" class="btn quantity-right-plus" data-type="plus"
+                                                    (click)="increment()">
+                                                    <i class="ti-plus"></i>
+                                                </button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -152,12 +244,15 @@
                         </div>
                         <div *ngIf="cartbuttonhideStatus == 'inactive'">
                             <div class="product-buttons" *ngIf="product_external_link.length < 12">
-                                <a class="btn btn-solid rounded-lg virtual_btn" [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to cart</a>
+                                <a class="btn btn-solid rounded-lg virtual_btn"
+                                    [class.disabled]="counter > product.stock" (click)="addToCart(product)">add to
+                                    cart</a>
                                 <!-- <a class="btn btn-solid rounded-lg virtual_btn ml-3" [class.disabled]="counter > product.stock" (click)="buyNow(product)">buy now</a>
                         <a href="javascrip:void(0)" class="btn btn-solid rounded-lg virtual_btn ml-3">360 view</a> -->
                             </div>
                             <div class="product-buttons" *ngIf="product_external_link.length > 12">
-                                <a class="btn btn-solid rounded-lg virtual_btn" (click)="externalLInk(product_external_link)">Buy Now </a>
+                                <a class="btn btn-solid rounded-lg virtual_btn"
+                                    (click)="externalLInk(product_external_link)">Buy Now </a>
                             </div>
                         </div>
                         <!--<div class="border-product">
@@ -170,9 +265,9 @@
                                 <!-- <app-social></app-social> -->
                                 <form class="d-inline-block" *ngIf="product_external_link.length < 12">
                                     <button class="wishlist-btn" (click)="addToWishlist(product)">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span class="title-font">Wishlist</span>
-                                </button>
+                                        <i class="fa fa-heart-o"></i>
+                                        <span class="title-font">Wishlist</span>
+                                    </button>
                                 </form>
                             </div>
                         </div>

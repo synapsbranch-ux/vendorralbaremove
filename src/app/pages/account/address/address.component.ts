@@ -45,7 +45,7 @@ export class AddressComponent implements OnInit {
     })
 
       // get return url from route parameters or default to '/'
-  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
   getallAddressList()
   {
@@ -61,7 +61,26 @@ export class AddressComponent implements OnInit {
     this.userservice.setUserAddressid(address_id);
     this.router.navigateByUrl('edit-address');
   }
+  deleteAddress(address_id:any)
+  {
+    let Ddata=
+    {
+      "address_id": address_id
+    }
 
+    this.userservice.deleteAddress(Ddata).subscribe(
+      res =>
+      {
+        this.getallAddressList();
+      }
+      ,
+  error => {
+    // .... HANDLE ERROR HERE 
+    this.toastr.error(error.error.message)
+}
+    )
+
+  }
   ToggleDashboard() {
     this.openDashboard = !this.openDashboard;
   }
@@ -70,11 +89,18 @@ export class AddressComponent implements OnInit {
   {
     this.userservice.logout();
   }
-  setDefaultAddress(val:any, address_id:any)
+  setDefaultAddress(val:any, address_id:any,address)
   {
     let Ddata=
     {
       "address_id": address_id,
+      "user_full_name": address.user_full_name,
+      "addressline1": address.addressline1,
+      "addressline2": address.addressline2,
+      "city": address.city,
+      "postal_code": address.postal_code,
+      "mobile": address.mobile,
+      "state": address.state,
       "is_default": String(val)
     }
 
@@ -114,12 +140,14 @@ export class AddressComponent implements OnInit {
     setTimeout(() => {
       if(this.returnUrl)
       {
+        console.log('Return URL found',this.returnUrl)
       // login successful so redirect to return url
       this.router.navigateByUrl(this.returnUrl)
       }
       else
       {
-        this.router.navigate(['/address'])
+        console.log('Return URL Not found')
+        this.router.navigate(['address'])
         .then(() => {
           this.form.reset();
           this.isValid=false;

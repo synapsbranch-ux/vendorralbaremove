@@ -2,6 +2,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { json } from 'express';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-order-list',
@@ -19,7 +20,7 @@ export class OrderListComponent implements OnInit {
   orderliststatus:boolean=true;
 
 
-  constructor( private router: Router, private userservice: UserService) { 
+  constructor( private router: Router, private userservice: UserService, public productService: ProductService) { 
     
   }
 

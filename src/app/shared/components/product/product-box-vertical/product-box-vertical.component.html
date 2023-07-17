@@ -12,12 +12,5 @@
             <h6>{{ product.title | titlecase }}</h6>
         </a>
 		<h4>{{ product?.price * currency?.price | discount:product | currency:currency?.currency:'symbol' }}</h4>
-        <ul class="color-variant">
-            <li [class]="color" 
-                *ngFor="let color of Color(product?.variants)" 
-                [ngStyle]="{'background-color': color}"
-                (click)="ChangeVariants(color, product)">
-            </li>
-        </ul>
 	</div>
 </div>

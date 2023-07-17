@@ -16,23 +16,11 @@
                         <h3>{{ product.price * currency?.price | discount:product | currency:currency?.currency:'symbol' }}
                             <del *ngIf="product?.discount"><span class="money">{{ product.price * currency?.price | currency:currency?.currency:'symbol' }}</span></del>
                         </h3>
-                        <ul class="color-variant" *ngIf="Color(product.variants).length">
-                            <li [class]="color" *ngFor="let color of Color(product.variants)"
-                                [ngStyle]="{'background-color': color}" (click)="ChangeVariants(color, product)">
-                            </li>
-                        </ul>
                         <div class="border-product">
                             <h6 class="product-title">product details</h6>
                             <p>{{ product.description.substring(0, 200)+'...' }}</p>
                         </div>
                         <div class="product-description border-product">
-                            <div class="size-box" *ngIf="Size(product.variants).length">
-                                <ul>
-                                    <li *ngFor="let size of Size(product.variants)">
-                                        <a href="javascript:void(0)">{{ size | titlecase }}</a>
-                                    </li>
-                                </ul>
-                            </div>
                             <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
                             <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
                             <h6 class="product-title">quantity</h6>

@@ -26,3 +26,14 @@ address img{
     width: 200px;
     height: 200px;
 }
+.order-btn{
+    border: solid 1px;
+    padding: 7px;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #003e94;
+}
+.order-btn:hover{
+    color: #003e94;
+    background-color: #fff;
+}

@@ -117,13 +117,8 @@ this.cartproducts=JSON.parse(localStorage.getItem('cartItems'))
           "pro_slug": element.product_slug,
           "qty": element.quantity,
           "price": product_price,
-          "options":[
-              {"size": element.product_varient_options[0].size_options},
-              {"color": element.product_varient_options[1].color_options}
-          ],
-          "width":element.width,
-          "height": element.height
-  
+          "addons": element.addons,
+          "addonsprice": element.addonsprice
     }
 
     productArr.push(cdata);
@@ -159,12 +154,8 @@ let prodsendObj=
               "quantity": element.qty,
               "stock":(product['data'].stock - element.qty),
               "product_sale_price": element.price,
-              "product_varient_options":[
-                  {"size_options": element.options[0].size},
-                  {"color_options": element.options[1].color}
-              ],
-              "width": element.width,
-              "height": element.height
+              "addons": element.addons,
+              "addonsprice": element.addonsprice
             }
           this.cartproducts.push(data);          
           this.products=this.cartproducts;     
@@ -209,12 +200,8 @@ else
               "quantity": element.qty,
               "stock":(product['data'].stock - element.qty),
               "product_sale_price": element.price,
-              "product_varient_options":[
-                  {"size_options": element.options[0].size},
-                  {"color_options": element.options[1].color}
-              ],
-              "width": element.width,
-              "height": element.height
+              "addons": element.addons,
+              "addonsprice": element.addonsprice
             }
           this.cartproducts.push(data);          
           this.products=this.cartproducts;   
@@ -235,18 +222,19 @@ else
     // login successful so redirect to return url
     this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([this.returnUrl]);
-  }) .then(() => {
-    window.location.reload();
-});
+  }) 
+//   .then(() => {
+//     window.location.reload();
+// });
     }
     else
     {
       this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate(['dashboard']);
     }) 
-    .then(() => {
-        window.location.reload();
-    });
+    // .then(() => {
+    //     window.location.reload();
+    // });
   }
   },2500) 
 

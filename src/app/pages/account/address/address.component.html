@@ -54,7 +54,8 @@
                                                         <h5>Ph: {{address.mobile}}</h5>
                                                         <a (click)="editAddress(address._id)">Edit Address</a>
                                                     </address>
-                                                    <input type="radio" [checked]="address.is_default == 1" (click)="setDefaultAddress('1',address._id)" >
+                                                    <input type="radio" [checked]="address.is_default == 1" (click)="setDefaultAddress('1',address._id,address)" >
+                                                    <a (click)="deleteAddress(address._id)"><i class="fa fa-trash" style="font-size:14px"></i> Delete</a>
                                                 </div>
                                             </div>
                                             

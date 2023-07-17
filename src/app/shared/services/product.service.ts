@@ -251,9 +251,12 @@ export class ProductService {
     
     if(!stock) return false
 
+    console.log('Cart Item Alredy Exist Check',cartItem);
+
     if (cartItem) {
         cartItem.quantity += qty    
     } else {
+      console.log('user Login')
           if(localStorage.getItem('user_id'))
           {
             let product_price=0;
@@ -273,12 +276,8 @@ export class ProductService {
               "pro_slug": product.product_slug,
               "qty": product.quantity,
               "price": product_price,
-              "options":[
-                  {"size": product.product_varient_options[0].size_options},
-                  {"color": product.product_varient_options[1].color_options}
-              ],
-              "width":product.width,
-              "height": product.height
+              "addons": product.addons,
+              "addonsprice": product.addonsprice
             }]
         }
         //console.log('full Product Cart Data for Submit',cdata);
@@ -308,14 +307,12 @@ export class ProductService {
                   "quantity": element.qty,
                   "stock":(product['data'].stock - element.qty),
                   "product_sale_price": element.price,
-                  "product_varient_options":[
-                      {"size_options": element.options[0].size},
-                      {"color_options": element.options[1].color}
-                  ],
-                  "width": element.width,
-                  "height": element.height
+                  "addons": element.addons,
+                  "addonsprice": element.addonsprice
                 }
+              console.log('Before Push Cart Items List',cartproducts)
               cartproducts.push(data);
+              console.log('After Push Cart Items List',cartproducts)
               localStorage.setItem("cartItems", JSON.stringify(cartproducts));
               console.log('Return LocalStorage Product Service',localStorage.getItem("cartItems"));
               
@@ -326,8 +323,6 @@ export class ProductService {
               quantity: qty,
               stock:product.stock,
               cart_id: res['data']._id,
-              product_department: product.product_department._id,
-              product_store: product.product_store._id,
               product_owner: product.product_owner._id
             })
           
@@ -338,15 +333,16 @@ export class ProductService {
       }
       else
       {
+
+        console.log('user Not Login')
+
         state.cart.push({
           ...product,
           quantity: qty,
-          product_department: product.product_department._id,
-          product_store: product.product_store._id,
-          product_owner: product.product_owner._id
+          product_owner: product.product_owner._id,
         })
 
-        //console.log('Cart item added from Without login Retain local ',state.cart);
+        console.log('Cart item added from Without login Retain local ',state.cart);
       }
 
 
@@ -394,12 +390,8 @@ export class ProductService {
             "pro_slug": product.product_slug,
             "qty": quantity,
             "price": product_price,
-            "options":[
-                {"size": product.product_varient_options[0].size_options},
-                {"color": product.product_varient_options[1].color_options}
-            ],
-            "width":product.width,
-            "height": product.height
+            "addons": product.addons
+
           }]
       }
       //console.log('full Product Cart Data for Submit',cdata);
@@ -407,6 +399,7 @@ export class ProductService {
       this.addToCartDbBulk(cdata).subscribe(
       res =>  {   
         let bodydata=res['data'];
+        console.log('bodydata Cart Return',bodydata);
         if(bodydata.hasOwnProperty('products'))
         {
          let cartproducts=[];
@@ -429,12 +422,6 @@ export class ProductService {
                 "quantity": element.qty,
                 "stock":(product['data'].stock - element.qty),
                 "product_sale_price": element.price,
-                "product_varient_options":[
-                    {"size_options": element.options[0].size},
-                    {"color_options": element.options[1].color}
-                ],
-                "width": element.width,
-                "height": element.height
               }
             cartproducts.push(data);         
             localStorage.setItem("cartItems", JSON.stringify(cartproducts));
@@ -506,11 +493,11 @@ export class ProductService {
         let product_price=0;
         if(curr.product_sale_price == null)
         {
-          product_price=curr.product_retail_price
+          product_price=curr.product_retail_price + curr.addonsprice
         }
         else
         {
-          product_price=curr.product_sale_price
+          product_price=curr.product_sale_price + curr.addonsprice
         }
         let price = product_price;
         return prev + (price * curr.quantity) * this.Currency.price;
@@ -534,10 +521,7 @@ export class ProductService {
         const Tags = filter.some((prev) => { // Match Tags
           if (item) {
             //console.log('Product Service YTags',item)
-            
-            if (item.product_varient_options[0].size_options.includes(prev) || item.product_varient_options[1].color_options.includes(prev)) {
-              return prev
-            }
+            return prev
           }
         })
         return Tags

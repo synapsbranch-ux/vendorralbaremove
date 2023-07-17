@@ -1,11 +1,12 @@
 import { UserService } from 'src/app/shared/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from './../../../shared/services/order.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductNew } from 'src/app/shared/classes/product';
 import { ProductSlider } from 'src/app/shared/data/slider';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-order-details',
@@ -13,6 +14,11 @@ import { ProductService } from 'src/app/shared/services/product.service';
   styleUrls: ['./order-details.component.scss']
 })
 export class OrderDetailsComponent implements OnInit {
+
+
+@ViewChild('addonsDetails', { static: true })
+addonsDetails!: TemplateRef<any>;
+
   public openDashboard: boolean = false;
   public today: number = Date.now();
   public products: ProductNew[] = [];
@@ -40,9 +46,11 @@ export class OrderDetailsComponent implements OnInit {
   order_id:any;
   expected_delivery:any
 
+  addonsjson=[];
 
 
-  constructor(public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
+
+  constructor(private dialog: MatDialog, public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
 
   }
 
@@ -97,5 +105,31 @@ else
   {
     this.userservice.logout();
   }
+
+  viewAddonsDetails(addonsjsondata)
+  {
+    this.addonsjson = addonsjsondata;
+    this.dialog.open(this.addonsDetails,{ disableClose: false });
+    console.log('addonsjson =========>',this.addonsjson);
+  }
+
+    // key value to text convert with capitalize format
+    capitalizeString(str) {
+      console.log('str =============?',str)
+      if(str)
+      {
+        let words = str.split(/[_-]/);
+      console.log('str =============?',words)
+        let capitalizedWords = words.map(function (word) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        });
+        let capitalizedString = capitalizedWords.join(' ');
+        return capitalizedString;
+      }
+      else
+      {
+        return str
+      }
+    }
 
 }

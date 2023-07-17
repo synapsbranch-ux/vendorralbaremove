@@ -54,9 +54,11 @@
                                                 <div>
                                                     <h4>{{order.order_details[0].product_name}}</h4>
                                                     <p>No Items : {{order.order_details[0].qty}}</p>
-                                                    <p>Total Amount : {{order.order_details[0].price}}</p>
-                                                    <h5>Ph: {{order.billing_phone}}</h5>
-                                                    <a (click)="viewOrder(order._id)">View Order</a>
+                                                    <p>Product Price : {{order.order_details[0].price | currency:productService?.Currency.currency:'symbol'}}</p>
+                                                    <p>Addons Price : {{order.order_details[0].addonsprice | currency:productService?.Currency.currency:'symbol'}}</p>
+                                                    <p>Total Amount : {{(order.order_details[0].price + order.order_details[0].addonsprice) * (order.order_details[0].qty) | currency:productService?.Currency.currency:'symbol' }}</p>
+                                                    <h5 class="pb-3">Ph: {{order.billing_phone}}</h5>
+                                                    <a class="order-btn" (click)="viewOrder(order._id)">View Order</a>
                                                 </div>
 
                                             </address>

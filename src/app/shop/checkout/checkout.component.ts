@@ -330,10 +330,8 @@ let address_arr={
           product_slug: elem.product_slug,
           qty: elem.quantity,
           price: elem.product_sale_price,
-          options:[
-              {size: elem.product_varient_options[0].size_options},
-              {color: elem.product_varient_options[1].color_options}
-          ]
+          addons: elem.addons,
+          addonsprice: elem.addonsprice
         }
         orderProducts.push(odetails);
       }

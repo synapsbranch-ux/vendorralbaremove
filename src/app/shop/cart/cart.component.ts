@@ -38,6 +38,7 @@ export class CartComponent implements OnInit , OnChanges {
   ngOnInit(): void {
     // this.products=JSON.parse(localStorage.getItem('cartItems'));
     this.product_service.cartItems.subscribe(response => this.products = response);
+    console.log('this.products ==========> Cart page :::',this.products);
   }
   
 

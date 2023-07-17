@@ -96,12 +96,12 @@
                             <h4>
                                 <span *ngIf="product?.product_sale_price">
                   {{ product?.quantity }} x 
-                  {{ product?.product_sale_price | currency: product_service.Currency?.currency:'symbol'}}
+                  {{ (product?.product_sale_price + product.addonsprice) | currency: product_service.Currency?.currency:'symbol'}}
           
                 </span>
                                 <span *ngIf="product?.product_sale_price == null">
                   {{ product?.quantity }} x 
-                  {{ product?.product_retail_price | currency: product_service.Currency?.currency:'symbol'}}
+                  {{ (product?.product_retail_price + product.addonsprice) | currency: product_service.Currency?.currency:'symbol'}}
           
                 </span>
                             </h4>
