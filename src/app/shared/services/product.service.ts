@@ -185,10 +185,30 @@ export class ProductService {
 
   // Remove Wishlist items
   public removeWishlistItem(product: ProductNew): any {
+    console.log('removeWishlistItem    product ==========================================>',product);
+    console.log('removeWishlistItem     state.wishlist ==========================================>',state.wishlist);
     const index = state.wishlist.indexOf(product);
+    console.log('removeWishlistItem    index ==========================================>',index);
     state.wishlist.splice(index, 1);
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
     return true
+  }
+
+  public wishlistProductCheck(product: ProductNew): any
+  {
+    const wishlistItem = state.wishlist.find(item => item._id === product._id);
+
+    console.log('wishlistProductCheck     product ==========================================>',product);
+    console.log('wishlistProductCheck     state.wishlist ==========================================>',state.wishlist);
+    console.log('wishlistProductCheck    wishlistItem ==========================================>',wishlistItem);
+    if(wishlistItem)
+    {
+      return true
+    }
+    else
+    {
+      return false
+    }
   }
 
   /*

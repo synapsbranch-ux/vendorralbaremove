@@ -46,6 +46,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   desableInput: boolean = false;
   AddonService: boolean = false;
   productImages=[];
+  productWishliststatus:boolean=false;
 
   @ViewChild("view3D") view3D: view3DModalComponent;
 
@@ -69,6 +70,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     let product_slug = this.route.snapshot.paramMap.get('slug');
     this.productService.getproductsBySlugs(product_slug).subscribe(response => {
       this.product = response.data;
+      this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
       this.productAttributeArr = response.data.attributes;
       this.productAddons = response.data.add_ons;
       this.productImages.push(...response.data.product_3d_image)
@@ -83,6 +85,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       }
       this.image3d = this.product.product_3d_image[0].pro_3d_image;
     });
+
+    
   }
 
   ceateForm() {
@@ -379,6 +383,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   // Add to Wishlist
   addToWishlist(product: any) {
     this.productService.addToWishlist(product);
+    this.productWishliststatus = this.productService.wishlistProductCheck(product)
   }
 
 }

@@ -66,6 +66,7 @@ get login_password(){ return this.form.get('login_password');}
   onSubmit(): void {
   this.submitted = true;
   if (this.form.invalid) {
+    this.form.markAllAsTouched();
     return;
   }
   let formData = this.form.value;

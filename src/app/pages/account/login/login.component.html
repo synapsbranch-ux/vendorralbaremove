@@ -11,10 +11,7 @@
                             <input type="text" class="form-control" id="phone_email" placeholder="Email Or Phone" required="" formControlName="phone_email">
                             <div *ngIf="phone_email.invalid && (phone_email.dirty || phone_email.touched)" class="text text-danger">
                                 <div *ngIf="phone_email.errors?.required">
-                                    Email is required.
-                                </div>
-                                <div *ngIf="phone_email.errors?.email">
-                                    Please enter a valid email.
+                                    Email or Phone is required.
                                 </div>
                             </div>
                         </div>
@@ -31,7 +28,7 @@
                             </div>
                         </div>
                         <p class="m-0 float-right"><a [routerLink]="['/forget-password']">Forget Password</a></p>
-                        <button type="submit" class="btn btn-solid rounded-lg" [disabled]="form.invalid">Login</button>
+                        <button type="submit" class="btn btn-solid rounded-lg" >Login</button>
                     </form>
                 </div>
             </div>

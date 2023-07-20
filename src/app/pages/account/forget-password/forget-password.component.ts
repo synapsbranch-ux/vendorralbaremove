@@ -27,6 +27,11 @@ export class ForgetPasswordComponent implements OnInit {
 
   onSubmit()
   {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     let formData = this.form.value;
 
     let fData={

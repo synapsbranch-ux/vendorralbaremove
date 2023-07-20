@@ -264,8 +264,8 @@
                             <div class="product-icon">
                                 <!-- <app-social></app-social> -->
                                 <form class="d-inline-block" *ngIf="product_external_link.length < 12">
-                                    <button class="wishlist-btn" (click)="addToWishlist(product)">
-                                        <i class="fa fa-heart-o"></i>
+                                    <button class="wishlist-btn" (click)="addToWishlist(product)" [disabled]="productWishliststatus">
+                                        <i [ngClass]="productWishliststatus? 'fa fa-heart' : 'fa fa-heart-o'" class=""></i>
                                         <span class="title-font">Wishlist</span>
                                     </button>
                                 </form>

@@ -73,12 +73,22 @@
                                         <form class="theme-form"  [formGroup]="form" (ngSubmit)="onSubmit()">
                                             <div class="form-row">
                                                 <div class="col-md-12">
-                                                    <label for="addressline1">Name</label>
+                                                    <label for="addressline1">Name *</label>
                                                     <input type="text" class="form-control" id="name" placeholder="Name" formControlName="userfullname">
+                                                    <div *ngIf="userfullname.invalid && (userfullname.dirty || userfullname.touched) && userfullname.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="userfullname.errors?.required">
+                                                            Name is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="addressline1">Address Line 1 *</label>
                                                     <input type="text" class="form-control" id="addressline1" placeholder="Address" formControlName="addressline1">
+                                                    <div *ngIf="addressline1.invalid && (addressline1.dirty || addressline1.touched) && addressline1.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="addressline1.errors?.required">
+                                                            Address 1 is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="addressline2">Address Line 2</label>
@@ -87,21 +97,41 @@
                                                 <div class="col-md-6">
                                                     <label for="city">City *</label>
                                                     <input type="text" class="form-control" id="city" placeholder="City" formControlName="city">
+                                                    <div *ngIf="city.invalid && (city.dirty || city.touched) && city.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="city.errors?.required">
+                                                            City is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="state">State *</label>
                                                     <input type="text" class="form-control" id="state" placeholder="State" formControlName="state">
+                                                    <div *ngIf="state.invalid && (state.dirty || state.touched) && state.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="state.errors?.required">
+                                                            State is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="postal_code">Postal Code *</label>
                                                     <input type="text" class="form-control" id="postal_code" placeholder="Postal code" formControlName="postalCode">
+                                                    <div *ngIf="postalCode.invalid && (postalCode.dirty || postalCode.touched) && postalCode.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="postalCode.errors?.required">
+                                                            Posta Code is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="telephone">Telephone *</label>
                                                     <input type="text" class="form-control" id="telephone" placeholder="Telephone" formControlName="telephone">
+                                                    <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors" class="text text-danger mt-1">
+                                                        <div *ngIf="telephone.errors?.required">
+                                                            Telephone is Required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-sm btn-solid rounded-lg" type="submit">Save Address</button>
+                                                    <button class="btn btn-sm btn-solid rounded-lg"  type="submit">Save Address</button>
                                                 </div>
                                                 <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid">
                                                     <div class="d-flex align-items-center"><span *ngIf="isValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{submitMassage}}</div>

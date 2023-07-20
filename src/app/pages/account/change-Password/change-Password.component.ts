@@ -15,28 +15,28 @@ import Validation from '../utils/validation';
 export class ChangePasswordComponent implements OnInit {
 
   public openDashboard: boolean = false;
-  userName:string="";
-  userEmail:string="";
-  userPhone:string="";
+  userName: string = "";
+  userEmail: string = "";
+  userPhone: string = "";
   userData: JSON;
   form: FormGroup;
   isValid: boolean = false;
-  signupMassage:string="";
+  signupMassage: string = "";
 
 
-  constructor( private router: Router, private userservice: UserService, private toastr:ToastrService) { 
-    
+  constructor(private router: Router, private userservice: UserService, private toastr: ToastrService) {
+
   }
 
   ngOnInit(): void {
-    this.form =  new FormGroup({
+    this.form = new FormGroup({
       'oldPassword': new FormControl(null, [Validators.required]),
-      'newPassword': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
+      'newPassword': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16), PasswordStrengthValidator]),
       'confirmPassword': new FormControl(null, [Validators.required]),
     },
-       {
+      {
         validators: [Validation.match('newPassword', 'confirmPassword')]
-       }
+      }
     )
   }
 
@@ -45,35 +45,38 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   get oldPassword() { return this.form.get('oldPassword'); }
-  get newPassword() { return this.form.get('newPassword');}
+  get newPassword() { return this.form.get('newPassword'); }
   get confirmPassword() { return this.form.get('confirmPassword'); }
-  
-  logout()
-  {
+
+  logout() {
     this.userservice.logout();
   }
 
   onSubmit(): void {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+    }
+    else {
+      let formData = this.form.value;
+      let EdData = {
+        "old_Password": formData.oldPassword,
+        "new_Password": formData.newPassword,
+        "confirm_Password": formData.confirmPassword
+      }
+      this.userservice.changePassword(EdData).subscribe(
+        res => {
+          this.toastr.success('Your Password has been Changed sucessfully')
+          setTimeout(() => {
+            this.router.navigate(['/dashboard'])
+          }, 2000)
+        },
+        error => {
+          // .... HANDLE ERROR HERE 
+          this.toastr.error(error.error.message)
+        }
+      )
+    }
 
-    let formData = this.form.value;
-    let EdData={
-      "old_Password": formData.oldPassword,
-      "new_Password": formData.newPassword,
-      "confirm_Password": formData.confirmPassword
- }
- this.userservice.changePassword(EdData).subscribe(
-   res =>
-   {
-     this.toastr.success('Your Password has been Changed sucessfully')           
-     setTimeout(() => {
-      this.router.navigate(['/dashboard'])
-    },2000)  
-   },
-   error => {
-     // .... HANDLE ERROR HERE 
-     this.toastr.error(error.error.message)
-}
- )
   }
 
 }

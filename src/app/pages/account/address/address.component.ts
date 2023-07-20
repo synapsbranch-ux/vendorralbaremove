@@ -122,46 +122,53 @@ export class AddressComponent implements OnInit {
 
   onSubmit()
   {
-    let formData = this.form.value;
-    let EdData={
-      "user_full_name": formData.userfullname,
-      "addressline1": formData.addressline1,
-      "addressline2": formData.addressline2,
-      "city": formData.city,
-      "postal_code": formData.postalCode,
-      "mobile": formData.telephone,
-      "state": formData.state,
- }
- this.userservice.addNewAddress(EdData).subscribe(
-  res =>
-  {
-    this.toastr.success("Address Sucessfully Added");            
-    this.getallAddressList();
-    setTimeout(() => {
-      if(this.returnUrl)
-      {
-        console.log('Return URL found',this.returnUrl)
-      // login successful so redirect to return url
-      this.router.navigateByUrl(this.returnUrl)
-      }
-      else
-      {
-        console.log('Return URL Not found')
-        this.router.navigate(['address'])
-        .then(() => {
-          this.form.reset();
-          this.isValid=false;
-        });
-      }
 
-    },2000) 
-  },
-  error => {
-    // .... HANDLE ERROR HERE 
-    this.toastr.error(error.error.message)
-}
-)
-
+    if(this.form.invalid) {
+      this.form.markAllAsTouched();
+    }
+    else
+    {
+      let formData = this.form.value;
+      let EdData={
+        "user_full_name": formData.userfullname,
+        "addressline1": formData.addressline1,
+        "addressline2": formData.addressline2,
+        "city": formData.city,
+        "postal_code": formData.postalCode,
+        "mobile": formData.telephone,
+        "state": formData.state,
+   }
+   this.userservice.addNewAddress(EdData).subscribe(
+    res =>
+    {
+      this.toastr.success("Address Sucessfully Added");            
+      this.getallAddressList();
+      setTimeout(() => {
+        if(this.returnUrl)
+        {
+          console.log('Return URL found',this.returnUrl)
+        // login successful so redirect to return url
+        this.router.navigateByUrl(this.returnUrl)
+        }
+        else
+        {
+          console.log('Return URL Not found')
+          this.router.navigate(['address'])
+          .then(() => {
+            this.form.reset();
+            this.isValid=false;
+          });
+        }
+  
+      },2000) 
+    },
+    error => {
+      // .... HANDLE ERROR HERE 
+      this.toastr.error(error.error.message)
+  }
+  )
+  
+    }
   }
 
 }
