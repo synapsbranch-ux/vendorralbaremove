@@ -50,11 +50,21 @@
                         <div class="col-md-6">
                             <label for="name">First Name</label>
                             <input type="text" class="form-control" formControlName="firstName" placeholder="First name" required="">
+                            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text text-danger">
+                                <div *ngIf="firstName.errors?.required">
+                                    First Name is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="email">Last Name</label>
                             <input type="text" class="form-control" formControlName="lastName" placeholder="Last name" required="">
-                        </div>
+                            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text text-danger">
+                                <div *ngIf="lastName.errors?.required">
+                                    Last Name is required.
+                                </div>
+                            </div>
+                         </div>
                         <div class="col-md-6">
                             <label for="review">Phone number</label>
                             <input type="text" class="form-control" formControlName="phone" placeholder="Enter your number" required="" maxlength="15">
@@ -62,13 +72,23 @@
                         <div class="col-md-6">
                             <label for="email">Email</label>
                             <input type="text" class="form-control" formControlName="email" placeholder="Email" required="">
+                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger">
+                                <div *ngIf="email.errors?.required">
+                                    Email is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <label for="review">Write Your Message</label>
                             <textarea class="form-control" placeholder="Write Your Message" formControlName="massage" rows="6"></textarea>
+                            <div *ngIf="massage.invalid && (massage.dirty || massage.touched)" class="text text-danger">
+                                <div *ngIf="massage.errors?.required">
+                                    Message is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-solid mr-4" type="submit" [disabled]="form.invalid">Send Your Message</button>
+                            <button class="btn btn-solid mr-4" type="submit" >Send Your Message</button>
                             <button class="btn btn-solid" type="reset">Reset</button>
                         </div>
                         <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid">

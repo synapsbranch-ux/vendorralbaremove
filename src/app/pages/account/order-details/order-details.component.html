@@ -86,7 +86,7 @@
                                     <ul class="order-detail">
                                         <li>order ID: {{order_id}}</li>
                                         <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
-                                        <li>Order Total: {{total_order_amount}}</li>
+                                        <li>Order Total: {{total_order_amount | currency:product_service?.Currency.currency:'symbol'}}</li>
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">

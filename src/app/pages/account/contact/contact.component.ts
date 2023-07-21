@@ -38,6 +38,11 @@ export class ContactComponent implements OnInit {
 
   onSubmit()
   {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
     let formData = this.form.value;
     let EdData={
       "name": formData.firstName+' '+formData.lastName,
