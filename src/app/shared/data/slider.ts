@@ -7,8 +7,8 @@ export let HomeSlider: any = {
     autoplaySpeed: 1500,
     slideTransition: 'linear',
     navContainerClass: 'owl-nav',
-    navClass: [ 'owl-prev', 'owl-next' ],
-    navText: [ '<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>' ],
+    navClass: ['owl-prev', 'owl-next'],
+    navText: ['<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>'],
     responsive: {
         0: {
             items: 1
@@ -95,10 +95,10 @@ export let CollectionSlider: any = {
     navSpeed: 300,
     responsive: {
         991: {
-            items: 4 
+            items: 4
         },
         767: {
-            items: 3    
+            items: 3
         },
         586: {
             items: 2
@@ -170,7 +170,7 @@ export let TeamSlider: any = {
 }
 
 // Compare Slider
-export let  CompareSlider: any = {
+export let CompareSlider: any = {
     loop: false,
     dots: false,
     navSpeed: 300,
@@ -204,7 +204,7 @@ export let ProductSlider: any = {
         },
         420: {
             items: 2
-        }, 
+        },
         0: {
             items: 1
         }
@@ -224,17 +224,17 @@ export let NewProductSlider: any = {
     items: 1,
     loop: false,
     nav: false,
-    dots:false,
+    dots: false,
     navContainerClass: 'owl-nav',
-    navClass: [ 'owl-prev', 'owl-next' ],
-    navText: [ '<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>' ],
+    navClass: ['owl-prev', 'owl-next'],
+    navText: ['<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>'],
 }
 
 // Product Details Main Slider
 export let ProductDetailsMainSlider: any = {
     items: 1,
     nav: false,
-    dots:false,
+    dots: false,
     autoplay: false,
     loop: false
 }
@@ -243,6 +243,6 @@ export let ProductDetailsMainSlider: any = {
 export let ProductDetailsThumbSlider: any = {
     items: 4,
     loop: false,
-    margin: 5,
-    dots:false
+    margin: 25,
+    dots: false
 }
