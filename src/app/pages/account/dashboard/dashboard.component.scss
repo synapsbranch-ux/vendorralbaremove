@@ -10,15 +10,46 @@ a {
     cursor: pointer;
 }
 
-.dashboard-left .block-content ul li {
-    border-bottom: 1px solid #e5e5e5;
-    align-items: center;
+.dashboard-left {
+    .block-content {
+        padding: 0;
+
+        ul li {
+            border-bottom: 1px solid #e5e5e5;
+            align-items: center;
+
+            &:hover {
+                background-color: #003e94;
+                color: #fff;
+
+                a {
+                    color: #fff;
+                }
+            }
+
+            &:last-child {
+                border: none;
+            }
+
+            &:before {
+                margin-top: 14px;
+            }
+        }
+
+        ul li.active {
+            padding-left: 15px;
+            background-color: #003e94;
+            color: #fff;
+
+            a {
+                color: #fff;
+            }
+        }
+    }
 }
 
-.dashboard-left .block-content ul li:last-child {
-    border: none;
-}
-
-.dashboard-left .block-content ul li:before {
-    margin-top: 14px;
+.account-sidebar {
+    a {
+        color: #fff;
+    }
 }
