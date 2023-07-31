@@ -2816,8 +2816,9 @@ background-color: $black;*/
         left: -350px;
         background-color: white;
         z-index: 99;
-        padding: 0 15px 15px;
-        max-width: 350px;
+        padding: 0 0 0 15px;
+        // max-width: 350px;
+        width: 190px;
         transition: all 0.5s ease;
         box-shadow: 0 0 8px 0 $round-border;
 
@@ -3832,10 +3833,11 @@ background-color: $black;*/
     }
 
     .footer-title {
-        margin-top: 10px;
+        margin-top: 20px;
         text-align: left;
         border-bottom: 1px solid $round-border;
         position: relative;
+        padding-bottom: 15px;
 
         &.footer-mobile-title {
             margin-top: 0;
