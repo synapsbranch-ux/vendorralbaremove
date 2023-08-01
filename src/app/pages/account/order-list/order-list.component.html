@@ -17,7 +17,7 @@
                     </div>
                     <div class="block-content">
                         <ul>
-                            <li ><a [routerLink]="['/dashboard']">My Account</a></li>
+                            <li><a [routerLink]="['/dashboard']">My Account</a></li>
                             <li><a [routerLink]="['/address']">Address Book</a></li>
                             <li class="active"><a [routerLink]="['/order-list']">Order List</a></li>
                             <li><a [routerLink]="['/change-password']">Change Password</a></li>
@@ -47,25 +47,32 @@
                                 <div class="col-sm-6" *ngFor="let order of orderList">
                                     <div class="card">
                                         <div class="card-body">
-                                            <address (click)="viewOrder(order._id)">
+                                            <address class="mb-1" (click)="viewOrder(order._id)">
                                                 <div>
-                                                        <img src="{{order.order_details[0].product_image}}" alt="{{order.order_details[0].product_name}}" class="img-fluid">
+                                                    <img src="{{order.order_details[0].product_image}}"
+                                                        alt="{{order.order_details[0].product_name}}" class="img-fluid">
                                                 </div>
                                                 <div>
                                                     <h4>{{order.order_details[0].product_name}}</h4>
                                                     <p>No Items : {{order.order_details[0].qty}}</p>
-                                                    <p>Product Price : {{order.order_details[0].price | currency:productService?.Currency.currency:'symbol'}}</p>
-                                                    <p>Addons Price : {{order.order_details[0].addonsprice | currency:productService?.Currency.currency:'symbol'}}</p>
-                                                    <p>Total Amount : {{(order.order_details[0].price + order.order_details[0].addonsprice) * (order.order_details[0].qty) | currency:productService?.Currency.currency:'symbol' }}</p>
-                                                    <h5 class="pb-3">Ph: {{order.billing_phone}}</h5>
-                                                    <a class="order-btn" (click)="viewOrder(order._id)">View Order</a>
+                                                    <p>Product Price : {{order.order_details[0].price |
+                                                        currency:productService?.Currency.currency:'symbol'}}</p>
+                                                    <p>Addons Price : {{order.order_details[0].addonsprice |
+                                                        currency:productService?.Currency.currency:'symbol'}}</p>
+                                                    <p>Total Amount : {{(order.order_details[0].price +
+                                                        order.order_details[0].addonsprice) *
+                                                        (order.order_details[0].qty) |
+                                                        currency:productService?.Currency.currency:'symbol' }}</p>
+                                                    <p class="pb-3 weight-600">Ph: {{order.billing_phone}}</p>
+                                                    <a class="btn btn-xs btn-solid rounded-lg"
+                                                        (click)="viewOrder(order._id)">View Order</a>
                                                 </div>
 
                                             </address>
-                                          
+
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>

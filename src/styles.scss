@@ -15,8 +15,25 @@
     cursor: pointer;
 }
 
+.ngxImageZoomFullContainer.ngxImageZoomLensEnabled {
+    background-color: #fff;
+}
+
 @media only screen and (max-width: 600px) {
     .field-icon {
         bottom: 18px;
+    }
+}
+
+@media only screen and (max-width: 577px) {
+    .onhover-dropdown.mobile-account {
+        .onhover-show-div {
+            bottom: 19px;
+            top: unset;
+
+            li a {
+                font-size: 14px !important;
+            }
+        }
     }
 }
