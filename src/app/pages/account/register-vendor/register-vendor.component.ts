@@ -171,7 +171,7 @@ export class RegisterVendorComponent implements OnInit {
         }
         this.userService.vendorSignUp(data).subscribe(
           res => {      
-            this.toastr.success('Your Registration sucessfull');
+            this.toastr.success('Your Registration successful');
             setTimeout(() => {
               window.location.href = 'https://admin.ralbatech.com/'
             },3000) 

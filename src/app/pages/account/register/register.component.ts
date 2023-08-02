@@ -158,10 +158,10 @@ export class RegisterComponent implements OnInit {
         res => {
 
           this.loginfn(formData.email,formData.password);
-          this.toastr.success('OTP sucessfully Verified. Loging...')
+          this.toastr.success('OTP successfully Verified. Loging...')
           this.otpValid=true;
           this.isValid = true;
-          // this.signupMassage="Your Registration sucessfull";
+          // this.signupMassage="Your Registration successful";
 
           setTimeout(() => {
             this.router.navigate(['/dashboard'])

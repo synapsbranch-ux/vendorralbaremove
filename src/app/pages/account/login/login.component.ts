@@ -88,8 +88,8 @@ login= async (data) =>
 
       this.loginValid=true;
       this.loginInValid=false;
-      // this.loginMassage="Login sucessfull";
-      this.toaster.success('Login sucessfull');
+      // this.loginMassage="Login successful";
+      this.toaster.success('Login successful');
 /////////////////////////////////////////////////////////
 
 

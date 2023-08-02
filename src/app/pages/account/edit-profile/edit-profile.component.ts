@@ -68,7 +68,7 @@ export class EditProfileComponent implements OnInit {
  this.userservice.userUpdateProdile(EdData).subscribe(
    res =>
    {
-     this.toastr.success('User profile update sucessfully')         
+     this.toastr.success('User profile update successfully')         
      setTimeout(() => {
       this.router.navigate(['/dashboard'])
     },2000)  

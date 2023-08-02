@@ -65,7 +65,7 @@ export class ChangePasswordComponent implements OnInit {
       }
       this.userservice.changePassword(EdData).subscribe(
         res => {
-          this.toastr.success('Your Password has been Changed sucessfully')
+          this.toastr.success('Your Password has been Changed successfully')
           setTimeout(() => {
             this.router.navigate(['/dashboard'])
           }, 2000)

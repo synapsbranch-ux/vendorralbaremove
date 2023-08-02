@@ -124,7 +124,7 @@ this.userservice.getSingleAddressDetails(lData).subscribe(
  this.userservice.userUpdateAddress(EdData).subscribe(
    res =>
    {
-     this.toastr.success("Address Sucessfully Updated");            
+     this.toastr.success("Address successfully Updated");            
      setTimeout(() => {
       this.router.navigate(['/address'])
       .then(() => {

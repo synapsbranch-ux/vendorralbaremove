@@ -432,7 +432,7 @@ let address_arr={
             res =>
             {
               this.orderValid=true;
-              this.orderMassage="Your Order Placed Sucessfully";
+              this.orderMassage="Your Order Placed successfully";
               for(const elem of this.products)
               {
                 this.productService.removeCartItem(elem);

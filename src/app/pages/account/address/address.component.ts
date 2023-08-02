@@ -141,7 +141,7 @@ export class AddressComponent implements OnInit {
    this.userservice.addNewAddress(EdData).subscribe(
     res =>
     {
-      this.toastr.success("Address Sucessfully Added");            
+      this.toastr.success("Address successfully Added");            
       this.getallAddressList();
       setTimeout(() => {
         if(this.returnUrl)
