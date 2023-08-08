@@ -60,11 +60,8 @@ export class SliderComponent implements OnInit {
       res =>
       {
         this.storeclick(vendorid,res['data']);
-        //console.log('Vendor Room Count',res['data'])
       }
     )
-
-      //console.log('Vendor Banner Click',vendorid)
   }
 
 
@@ -82,12 +79,19 @@ export class SliderComponent implements OnInit {
           this.storeimgUrl=store_l.store_image;
           this.vendor_id=store_l.store_owner._id;
           this.store_id=store_l._id;
+          let sdata = {
+            "store_id": this.store_id,
+            "vendor_id": this.vendor_id
+          }
+          // store view count 
+          this.storeService.storeviewcount(sdata).subscribe(
+            res => {
+              window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`,"_self");
+            }
+          )
           return store_l.store_department;
         }
       });
-          window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`,"_self");
-          //console.log('this.DepartmentsList[department_slug] ==>',this.DepartmentsList[0].department_slug)
-
     });
 
   }
