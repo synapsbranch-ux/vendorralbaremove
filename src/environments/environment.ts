@@ -8,8 +8,8 @@ export const environment = {
   stripe_token: 'STRIPE_TOKEN',
   paypal_token: 'AQxkANdcrLuPoNov76SLsKkJjk955jXj3tYlhsm0BcRFuNylKDzRpINlaY2V9zKZioziBatf2D6OSw3_',
   //baseUrl: 'https://api.ralbatech.com/api/v1/',
-  baseUrl: 'http://staging.ralbatech.com:5005/api/v1/',
-  //baseUrl: 'http://localhost:5000/api/v1/',
+  // baseUrl: 'http://staging.ralbatech.com:5005/api/v1/',
+  baseUrl: 'http://localhost:5000/api/v1/',
 
   //storeUrl: 'https://store.ralbatech.com',
   storeUrl: 'http://staging.ralbatech.com:5003'
