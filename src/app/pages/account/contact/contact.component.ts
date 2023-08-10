@@ -54,6 +54,7 @@ export class ContactComponent implements OnInit {
  this.userservice.userContact(EdData).subscribe(
    res =>
    {
+    this.form.reset();
   this.isValid=true;
   this.submitMassage="Thank you for contact us. we will connect you soon";       
   setTimeout(() => {
