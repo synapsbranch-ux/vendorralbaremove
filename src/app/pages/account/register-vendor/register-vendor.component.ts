@@ -76,6 +76,10 @@ export class RegisterVendorComponent implements OnInit {
   get other_categories() { return this.form.get('othercategories');}
 
   onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.submitted = true;
 
     if (this.form.invalid) {
