@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod && npm run clean-old-build && npm run upload-build -y",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -12,7 +12,9 @@
     "serve:ssr": "node dist/multikart/server/main.js",
     "build:ssr": "ng build --prod && ng run multikart:server:production",
     "prerender": "ng run multikart:prerender",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
+    "clean-old-build":"ssh -i /home/ratpc-013/Desktop/Projects/3D-Ecoommerce-Ralbatech/assets/3D-PEM-File/ralbakeypair.pem ubuntu@3.137.128.230 'sudo rm -rf /var/www/html/website/*'",
+    "upload-build":"scp -i /home/ratpc-013/Desktop/Projects/3D-Ecoommerce-Ralbatech/assets/3D-PEM-File/ralbakeypair.pem -r ./dist/multikart/browser/* ubuntu@3.137.128.230:/var/www/html/website"
   },
   "private": true,
   "dependencies": {

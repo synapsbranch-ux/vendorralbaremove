@@ -35,13 +35,13 @@ export class AddressComponent implements OnInit {
     this.addressMassage="Add New Address";
     this.getallAddressList();
     this.form =  new FormGroup({
-      'userfullname': new FormControl(null, [Validators.required]),
+      'userfullname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'addressline1': new FormControl(null, [Validators.required]),
       'addressline2': new FormControl(null),
-      'city': new FormControl(null, [Validators.required]),
-      'state': new FormControl(null, [Validators.required]),
-      'postalCode': new FormControl(null, [Validators.required]),
-      'telephone': new FormControl(null, [Validators.required]),
+      'city': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+      'state': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+      'postalCode': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(10)]),
+      'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
     })
 
       // get return url from route parameters or default to '/'

@@ -15,6 +15,9 @@
                                     <div *ngIf="fname.errors?.required">
                                         Name is required.
                                     </div>
+                                    <div *ngIf="fname.errors?.pattern">
+                                        Name Only Contain Letter with space
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
@@ -62,13 +65,16 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone">
+                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone"  maxlength="12">
                                 <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text text-danger mt-1">
                                     <div *ngIf="phone.errors?.required">
                                         Phone number is required.
                                     </div>
                                     <div *ngIf="phone.errors?.pattern">
                                         Only number is allowed.
+                                    </div>
+                                    <div *ngIf="phone.errors?.maxLength">
+                                        Phone number only allow 12 digits.
                                     </div>
                                 </div>
                             </div>

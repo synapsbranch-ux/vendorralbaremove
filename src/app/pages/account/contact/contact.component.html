@@ -54,6 +54,9 @@
                                 <div *ngIf="firstName.errors?.required">
                                     First Name is required.
                                 </div>
+                                <div *ngIf="firstName.errors?.pattern">
+                                    First Name Only Contain Letter with space
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -63,18 +66,33 @@
                                 <div *ngIf="lastName.errors?.required">
                                     Last Name is required.
                                 </div>
+                                <div *ngIf="lastName.errors?.pattern">
+                                    Last Name Only Contain Letter with space
+                                </div>
                             </div>
                          </div>
                         <div class="col-md-6">
                             <label for="review">Phone number</label>
-                            <input type="text" class="form-control" formControlName="phone" placeholder="Enter your number" required="" maxlength="15">
+                            <input type="text" class="form-control" formControlName="phone" placeholder="Enter your number" required="" maxlength="12">
+                      
+                            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text text-danger mt-1">
+                                <div *ngIf="phone.errors?.pattern">
+                                    Only number is allowed.
+                                </div>
+                                <div *ngIf="phone.errors?.maxLength">
+                                    Phone number only allow 12 digits.
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="email">Email</label>
                             <input type="text" class="form-control" formControlName="email" placeholder="Email" required="">
-                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger">
+                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger mt-1">
                                 <div *ngIf="email.errors?.required">
                                     Email is required.
+                                </div>
+                                <div *ngIf="email.errors?.email || email.errors?.pattern">
+                                    Please enter a valid email.
                                 </div>
                             </div>
                         </div>

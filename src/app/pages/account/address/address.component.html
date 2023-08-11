@@ -86,6 +86,9 @@
                                                         <div *ngIf="userfullname.errors?.required">
                                                             Name is Required
                                                         </div>
+                                                        <div *ngIf="userfullname.errors?.pattern">
+                                                            Name Only Contain Letter with space
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -113,6 +116,9 @@
                                                         <div *ngIf="city.errors?.required">
                                                             City is Required
                                                         </div>
+                                                        <div *ngIf="city.errors?.pattern">
+                                                            City Only Contain Letter with space
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -124,27 +130,41 @@
                                                         <div *ngIf="state.errors?.required">
                                                             State is Required
                                                         </div>
+                                                        <div *ngIf="state.errors?.pattern">
+                                                            State Only Contain Letter with space
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="postal_code">Postal Code *</label>
                                                     <input type="text" class="form-control" id="postal_code"
-                                                        placeholder="Postal code" formControlName="postalCode">
+                                                        placeholder="Postal code" formControlName="postalCode"
+                                                        maxlength="10">
                                                     <div *ngIf="postalCode.invalid && (postalCode.dirty || postalCode.touched) && postalCode.errors"
                                                         class="text text-danger mt-1">
                                                         <div *ngIf="postalCode.errors?.required">
-                                                            Posta Code is Required
+                                                            Postal Code is Required
+                                                        </div>
+                                                        <div *ngIf="telephone.errors?.maxLength">
+                                                            Postal Code only allow 10 digits.
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="telephone">Telephone *</label>
                                                     <input type="text" class="form-control" id="telephone"
-                                                        placeholder="Telephone" formControlName="telephone">
+                                                        placeholder="Telephone" formControlName="telephone"
+                                                        maxlength="12">
                                                     <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors"
                                                         class="text text-danger mt-1">
                                                         <div *ngIf="telephone.errors?.required">
-                                                            Telephone is Required
+                                                            Telephone number is Required
+                                                        </div>
+                                                        <div *ngIf="telephone.errors?.pattern">
+                                                            Only number is allowed.
+                                                        </div>
+                                                        <div *ngIf="telephone.errors?.maxLength">
+                                                            Telephone number only allow 12 digits.
                                                         </div>
                                                     </div>
                                                 </div>

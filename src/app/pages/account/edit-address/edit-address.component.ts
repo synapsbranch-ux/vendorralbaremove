@@ -41,14 +41,15 @@ export class EditAddressComponent implements OnInit {
     this.getAddressDetails();
 
     this.form =  new FormGroup({
-      'userfullname': new FormControl(null, [Validators.required]),
-      'addressline1': new FormControl(null, [Validators.required]),
-      'addressline2': new FormControl(null),
-      'city': new FormControl(null, [Validators.required]),
-      'state': new FormControl(null, [Validators.required]),
-      'postalCode': new FormControl(null, [Validators.required]),
-      'telephone': new FormControl(null, [Validators.required]),
-      'defaultstatus': new FormControl(null, [Validators.required]),
+
+        'userfullname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+        'addressline1': new FormControl(null, [Validators.required]),
+        'addressline2': new FormControl(null),
+        'city': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+        'state': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+        'postalCode': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(10)]),
+        'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+        'defaultstatus': new FormControl(null, [Validators.required]),
     })
 let lData=
 {

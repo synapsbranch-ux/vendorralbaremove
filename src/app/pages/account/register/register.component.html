@@ -13,7 +13,10 @@
                                 <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname">
                                 <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="text text-danger mt-1">
                                     <div *ngIf="fname.errors?.required">
-                                        First name is required.
+                                        First Name is required.
+                                    </div>
+                                    <div *ngIf="fname.errors?.pattern">
+                                        First Name Only Contain Letter with space
                                     </div>
                                 </div>
                             </div>
@@ -23,6 +26,9 @@
                                 <div *ngIf="lname.invalid && (lname.dirty || lname.touched)" class="text text-danger mt-1">
                                     <div *ngIf="lname.errors?.required">
                                         Last name is required.
+                                    </div>
+                                    <div *ngIf="lname.errors?.pattern">
+                                        Last Name Only Contain Letter with space
                                     </div>
                                 </div>
                             </div>
