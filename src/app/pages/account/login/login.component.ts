@@ -245,7 +245,7 @@ else
       this.loginValid=false;
       this.loginInValid=true;
       // this.loginMassage="Username and Password does not match";
-      this.toaster.error('Username and Password does not match');
+      this.toaster.error(error.error.message);
   }
   );
 }
