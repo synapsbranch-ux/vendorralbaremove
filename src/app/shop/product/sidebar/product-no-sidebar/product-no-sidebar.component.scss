@@ -51,9 +51,17 @@ model-viewer {
     margin: 0 auto;
     height: 130px;
 }
-.add_ons_level{
+.add_ons_level {
     width: 100%;
+
+    h4 {
+        border-bottom: 1px solid #9d9999;
+    }
 }
-.add_ons_level h4 {
-    border-bottom: solid 1px;
+
+.border-product {
+    .col-sm-6:nth-child(6) {
+        max-width: 100% !important;
+        flex: 100%;
+    }
 }
