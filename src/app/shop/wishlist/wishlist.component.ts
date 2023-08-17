@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-wishlist',
@@ -27,9 +28,14 @@ export class WishlistComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public get getTotal(): Observable<number> {
+    return this.productService.cartTotalAmount();
+  }
+
   async addToCart(product: any) {
     product.quantity = 1;
     const status = await this.productService.addToCart(product);
+    this.getTotal.subscribe();
     if(status) {
       this.router.navigate(['/cart']);
       this.removeItem(product);

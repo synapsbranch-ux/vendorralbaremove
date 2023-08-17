@@ -271,7 +271,7 @@ export class ProductService {
     
     if(!stock) return false
 
-    console.log('Cart Item Alredy Exist Check',cartItem);
+    console.log('Cart Product',product);
 
     if (cartItem) {
         cartItem.quantity += qty    
@@ -307,10 +307,13 @@ export class ProductService {
           let bodydata=res['data'];
           if(bodydata.hasOwnProperty('products'))
           {
+            console.log('element.products ======================>',res['data'].products)
            let cartproducts=[];
            let product_img
           for (const element of res['data'].products) {   
+            console.log('element.pro_slug ======================>',element.pro_slug)
             this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+              console.log('product[data].product_image',product)
                 product_img=product['data'].product_image[0].pro_image;
                 let data = 
                 {
@@ -508,17 +511,31 @@ export class ProductService {
   // Total amount 
   public cartTotalAmount(): Observable<number> {
     return this.cartItems.pipe(map((product: ProductNew[]) => {
-      // //console.log('Total cart Item ==============> ',product);
+
       return product.reduce((prev, curr: ProductNew) => {
         let product_price=0;
-        if(curr.product_sale_price == null)
+        if(curr.addonsprice)
         {
-          product_price=curr.product_retail_price + curr.addonsprice
-        }
-        else
+          if(curr.product_sale_price == null)
+          {
+            product_price=curr.product_retail_price + curr.addonsprice
+          }
+          else
+          {
+            product_price=curr.product_sale_price + curr.addonsprice
+          }
+        }else
         {
-          product_price=curr.product_sale_price + curr.addonsprice
+          if(curr.product_sale_price == null)
+          {
+            product_price=curr.product_retail_price
+          }
+          else
+          {
+            product_price=curr.product_sale_price
+          }
         }
+        
         let price = product_price;
         return prev + (price * curr.quantity) * this.Currency.price;
       }, 0);

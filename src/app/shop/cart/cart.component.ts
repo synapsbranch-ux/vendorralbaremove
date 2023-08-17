@@ -28,7 +28,8 @@ export class CartComponent implements OnInit , OnChanges {
   cartproducts=[];
   product_img:any;
   cartproductlist=[];
-  desableincrement:boolean=true;
+  desableincrement:boolean=false;
+  desabledecrement:boolean=false
   delay:boolean=false;
 
   constructor(public product_service: ProductService, private toaster: ToastrService) {
@@ -55,30 +56,28 @@ export class CartComponent implements OnInit , OnChanges {
     setTimeout(() => {
       this.delay = false
       }, 1000);
-    if(product.stock > 0)
+    if(product.stock >= 1)
     {
       product.quantity +=1;
       product.stock= (product.stock - 1);
 
       let incremtstatus= this.product_service.updateCartQuantity(product, qty);
-        this.getTotal.subscribe(
-          res =>
-          {
-          }
-        );
+        this.getTotal.subscribe();
+        this.desableincrement=false;
     }
     else
     {
       this.toaster.error('Your product out of stock');
+      this.desableincrement=true;
     }
     
-    if(product.quantity > 1)
+    if(product.quantity >= 1)
     {
-      this.desableincrement=true;
+      this.desableincrement=false;
     }
     else
     {
-      this.desableincrement=false;
+      this.desableincrement=true;
     }
 
   }
@@ -89,22 +88,21 @@ export class CartComponent implements OnInit , OnChanges {
     setTimeout(() => {
       this.delay = false
       }, 1000);
-    product.stock= (product.stock + 1);
-    product.quantity -=1;
-    if(product.quantity < 2 )
+   
+    
+    if(product.quantity == 1 )
     {
-      this.desableincrement=false;
+      this.desabledecrement=true;
     }
     else
     {
-      this.desableincrement=true;
+      product.stock= (product.stock + 1);
+      product.quantity -=1;
+      this.desabledecrement=false;
+      this.product_service.updateCartQuantity(product, qty);
+      this.getTotal.subscribe();
     }
-    this.product_service.updateCartQuantity(product, qty);
-    this.getTotal.subscribe(
-      res =>
-      {
-      }
-    );
+
     
   }
 

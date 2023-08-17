@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ProductNew } from 'src/app/shared/classes/product';
 import { ToastrService } from 'ngx-toastr';
+import { PasswordStrengthValidator } from 'src/app/password-strength.validators';
 
 const state = {
 
@@ -48,7 +49,7 @@ ngOnInit(): void {
   // form initialization
   this.form = new FormGroup({
     'phone_email': new FormControl(null, [Validators.required]),
-    'login_password': new FormControl(null, [Validators.required])
+    'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
   });
 
   // store current return URL
