@@ -105,17 +105,21 @@
                                                         <a class="add_address" (click)="checkaddress();">Add adress</a><br>
                                                         <small class="text-danger">Plase add address to process order complete</small>
                                                     </div>
-                                                    <div class="col-sm-6" *ngFor="let address of useraddressslist">
+                                                    <div class="col-sm-6" *ngFor="let address of useraddressslist let i = index">
 
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input type="radio" class="user_address_id" name="userAddress" value="{{address._id}}" [checked]="address.is_default == 1" formControlName="userAddressId">
-                                                            <address>
-                                                                <h4> {{address.user_full_name}} </h4>
-                                                                <p>{{address.addressline1}}, {{address.addressline2}}</p>
-                                                                <p>{{address.city}} - {{address.postal_code}}</p>
-                                                                <p>{{address.state}}</p>
-                                                                <h5>Ph: {{address.mobile}}</h5>
-                                                            </address>
+                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userAddressId{{i}}" ngModel="{{address._id}}" name="userAddressId"  value="{{address._id}}" formControlName="userAddressId">
+                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userAddressId{{i}}" name="userAddressId"  value="{{address._id}}" formControlName="userAddressId">
+                                                            <label for="userAddressId{{i}}">
+                                                                <address >
+                                                                    <h4> {{address.user_full_name}} </h4>
+                                                                    <p>{{address.addressline1}}, {{address.addressline2}}</p>
+                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                    <p>{{address.state}}</p>
+                                                                    <h5>Ph: {{address.mobile}}</h5>
+                                                                </address>
+                                                            </label>
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
@@ -165,11 +169,11 @@
                                     <div class="upper-box">
                                         <div class="payment-options">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="paymentOption" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
                                             </div>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)" [disabled]="checkoutForm.invalid">
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="paymentOption" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)" [disabled]="checkoutForm.invalid">
                                                 <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
                                                 <img class="image d-block" src="assets/images/paypal.png" alt="" />
                                             </div>

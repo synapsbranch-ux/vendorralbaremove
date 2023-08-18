@@ -51,7 +51,8 @@
                         <ul class="cart_item_action mt-2">
                             <!-- <li><i class="ti-pencil"></i>Edit Item</li> -->
                             <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
-                            <li><a (click)="addwishlist(product)"><i class="ti-heart"></i>Wishlist</a></li>
+                            <li><a (click)="addwishlist(product)">  <i [ngClass]="checkwishlist(product)? 'fa fa-heart' : 'fa fa-heart-o'"
+                                class=""></i>Wishlist</a></li>
                         </ul>
                     </div>
                 </div>

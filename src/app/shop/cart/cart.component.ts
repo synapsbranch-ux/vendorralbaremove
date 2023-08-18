@@ -31,13 +31,14 @@ export class CartComponent implements OnInit , OnChanges {
   desableincrement:boolean=false;
   desabledecrement:boolean=false
   delay:boolean=false;
-
+  productWishliststatus:boolean=false;
   constructor(public product_service: ProductService, private toaster: ToastrService) {
 
   }
 
   ngOnInit(): void {
-    // this.products=JSON.parse(localStorage.getItem('cartItems'));
+    console.log('Cart')
+    this.products=JSON.parse(localStorage.getItem('cartItems'));
     this.product_service.cartItems.subscribe(response => this.products = response);
     console.log('this.products ==========> Cart page :::',this.products);
   }
@@ -52,6 +53,9 @@ export class CartComponent implements OnInit , OnChanges {
 
   // Increament
   increment(product, qty = 1) {
+    console.log('product.stock',product.stock);
+
+    this.desabledecrement=false;
     this.delay = true;
     setTimeout(() => {
       this.delay = false
@@ -84,6 +88,9 @@ export class CartComponent implements OnInit , OnChanges {
 
   // Decrement
   decrement(product, qty = -1) {
+    console.log('product.stock',product.stock);
+    
+    this.desableincrement=false;
     this.delay = true;
     setTimeout(() => {
       this.delay = false
@@ -105,10 +112,19 @@ export class CartComponent implements OnInit , OnChanges {
 
     
   }
+  public checkwishlist(product)
+  {
+    return this.product_service.wishlistProductCheck(product)
+  }
 
   public addwishlist(product)
   {
-    this.product_service.addToWishlist(product);
+    this.productWishliststatus = this.product_service.wishlistProductCheck(product)
+    if(!this.productWishliststatus)
+    {
+      this.product_service.addToWishlist(product);
+    }
+
   }
 
   public removeItem(product: any) {

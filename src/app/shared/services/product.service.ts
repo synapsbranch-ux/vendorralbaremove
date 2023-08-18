@@ -185,10 +185,10 @@ export class ProductService {
 
   // Remove Wishlist items
   public removeWishlistItem(product: ProductNew): any {
-    console.log('removeWishlistItem    product ==========================================>',product);
-    console.log('removeWishlistItem     state.wishlist ==========================================>',state.wishlist);
+    // console.log('removeWishlistItem    product ==========================================>',product);
+    // console.log('removeWishlistItem     state.wishlist ==========================================>',state.wishlist);
     const index = state.wishlist.indexOf(product);
-    console.log('removeWishlistItem    index ==========================================>',index);
+    // console.log('removeWishlistItem    index ==========================================>',index);
     state.wishlist.splice(index, 1);
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
     return true
@@ -198,9 +198,9 @@ export class ProductService {
   {
     const wishlistItem = state.wishlist.find(item => item._id === product._id);
 
-    console.log('wishlistProductCheck     product ==========================================>',product);
-    console.log('wishlistProductCheck     state.wishlist ==========================================>',state.wishlist);
-    console.log('wishlistProductCheck    wishlistItem ==========================================>',wishlistItem);
+    // console.log('wishlistProductCheck     product ==========================================>',product);
+    // console.log('wishlistProductCheck     state.wishlist ==========================================>',state.wishlist);
+    // console.log('wishlistProductCheck    wishlistItem ==========================================>',wishlistItem);
     if(wishlistItem)
     {
       return true
@@ -268,7 +268,7 @@ export class ProductService {
     const qty = product.quantity ? product.quantity : 0;
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
-    
+    console.log('stock =========================',stock);
     if(!stock) return false
 
     console.log('Cart Product',product);
@@ -307,11 +307,11 @@ export class ProductService {
           let bodydata=res['data'];
           if(bodydata.hasOwnProperty('products'))
           {
-            console.log('element.products ======================>',res['data'].products)
+            // console.log('element.products ======================>',res['data'].products)
            let cartproducts=[];
            let product_img
           for (const element of res['data'].products) {   
-            console.log('element.pro_slug ======================>',element.pro_slug)
+            // console.log('element.pro_slug ======================>',element.pro_slug)
             this.getproductsBySlugs(element.pro_slug).subscribe(product => {
               console.log('product[data].product_image',product)
                 product_img=product['data'].product_image[0].pro_image;
@@ -464,11 +464,19 @@ export class ProductService {
 
     // Calculate Stock Counts
   public calculateStockCounts(product, quantity) {
-    const qty = product.quantity + quantity
+    
+    console.log('product===============',product);
+    console.log('product===============',quantity);
+
     const stock = product.stock
-    if (stock < 0) {
-      this.toastrService.error('You can not add more items than available. In stock '+ stock +' items.');
+    if (stock <= 0) {
+      this.toastrService.error('You can not add more items than available. In stock 0 items.');
       return false
+    }
+    else
+    {
+      const qty = product.quantity + quantity
+      product.stock=product.stock - 1
     }
     return true
   }
@@ -537,6 +545,7 @@ export class ProductService {
         }
         
         let price = product_price;
+        // console.log('prev + (price * curr.quantity) * this.Currency.price',prev + (price * curr.quantity) * this.Currency.price)
         return prev + (price * curr.quantity) * this.Currency.price;
       }, 0);
     }));
@@ -710,7 +719,7 @@ headers: new HttpHeaders({
   return this.http.post(environment.baseUrl+'cart/delete',data,httpOptions);
 } 
 
-allCartProducts(){
+allCartProducts(): Observable<any>{
   this.token = localStorage.getItem('user_token') // Will return if it is not set 
   
   let httpOptionsroom = {

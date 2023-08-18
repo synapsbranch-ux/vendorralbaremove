@@ -32,7 +32,7 @@ cartproducts=[];
 product_img:any;
 public products: ProductNew[] = [];
 passworfieldtype='password';
-passwordicon='fa-fw fa-eye';
+passwordicon='fa-eye fa-eye-slash';
 pstatus:boolean=false;
 
 constructor(private formBuilder: FormBuilder,public userService: UserService, private router: Router,private route: ActivatedRoute, public product_service: ProductService, private toaster: ToastrService) { }
@@ -100,6 +100,8 @@ this.cartproducts=JSON.parse(localStorage.getItem('cartItems'))
   let productArr=[];
   if(this.cartproducts != null)
   {
+    console.log('Primary Cart Not Empty');
+
   for (const element of this.cartproducts) {
     let product_price=0;
     if(element.product_sale_price == null)
@@ -171,13 +173,8 @@ let prodsendObj=
 }
 else
 {
-
-  let prodsendObj=
-{
-  products: []
-}
-
-    this.product_service.addToCartDbBulk(prodsendObj).subscribe(
+  console.log('Primary Cart Empty');
+    this.product_service.allCartProducts().subscribe(
     res =>  {   
       
       let bodydata=res['data'];
@@ -209,6 +206,7 @@ else
           this.products=this.cartproducts;   
           state.cart.push(this.cartproducts);  
           localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+          console.log('this.cartproducts',this.cartproducts);
           
         })                          
       
@@ -225,18 +223,18 @@ else
     this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([this.returnUrl]);
   }) 
-//   .then(() => {
-//     window.location.reload();
-// });
+  .then(() => {
+    window.location.reload();
+});
     }
     else
     {
       this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate(['dashboard']);
     }) 
-    // .then(() => {
-    //     window.location.reload();
-    // });
+    .then(() => {
+        window.location.reload();
+    });
   }
   },2500) 
 
@@ -258,12 +256,13 @@ else
     if(this.pstatus)
     {
       this.passworfieldtype='text';
-      this.passwordicon='fa-eye fa-eye-slash';
+      this.passwordicon='fa-fw fa-eye';
+      
     }
     else
     {
       this.passworfieldtype='password';
-      this.passwordicon='fa-fw fa-eye';
+      this.passwordicon='fa-eye fa-eye-slash';
     }
   }
 

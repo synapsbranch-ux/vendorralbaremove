@@ -366,7 +366,7 @@ let address_arr={
       order_details: orderProducts,
     }
   }
-  else
+  else if(formData.paymentOption == 'COD')
   {
     orderData=
   {
@@ -393,6 +393,11 @@ let address_arr={
     billing_zip: formData.postalcode,
     order_details: orderProducts,
   }
+  }
+  else
+  {
+    this.toaster.error('Please select a payment method')
+    return;
   }
 
   for (const element of this.products) {
@@ -427,8 +432,9 @@ let address_arr={
             zip_code: formData.postalcode,
           }
           localStorage.setItem('checkoutform',JSON.stringify(address_arr))
-          this.orderService.userCreateOrder(orderData).subscribe(
 
+
+          this.orderService.userCreateOrder(orderData).subscribe(
             res =>
             {
               this.orderValid=true;
