@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
   product_img:any;
   public products: ProductNew[] = [];
   countDown: Subscription;
-  counter = 191;
+  counter = 196;
   tick = 1000;
   otpTimerstatus:boolean=false;
 
@@ -102,9 +102,6 @@ export class RegisterComponent implements OnInit {
     let formData = this.form.value;
     let fullname=formData.fname+ ' '+formData.lname
     if(this.callForOtp==false){
-      this.counter = 191;
-      this.otpTimerstatus=true;
-      this.otpTimer();
       let otpObj=
       {'phone':formData.phone,
       'name':fullname,
@@ -115,6 +112,10 @@ export class RegisterComponent implements OnInit {
       this.userService.genOtp(otpObj).subscribe(
         res => {
           if(res['error'] == 0){
+            this.counter = 196;
+            this.otpTimerstatus=true;
+            this.otpTimer();
+
             this.callForOtp = true;
             this.showDiv.otp = true;
             this.phValid=true;
@@ -188,9 +189,7 @@ export class RegisterComponent implements OnInit {
   {
     let formData = this.form.value;
     let fullname=formData.fname+ ' '+formData.lname
-      this.counter = 191;
-      this.otpTimerstatus=true;
-      this.otpTimer();
+
       let otpObj=
       {'phone':formData.phone,
       'name':fullname,
@@ -201,6 +200,10 @@ export class RegisterComponent implements OnInit {
       this.userService.genOtp(otpObj).subscribe(
         res => {
           if(res['error'] == 0){
+            this.counter = 196;
+            this.otpTimerstatus=true;
+            this.otpTimer();
+            
             this.callForOtp = true;
             this.showDiv.otp = true;
             this.phValid=true;

@@ -20,13 +20,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of products">
-                            <td>
-                                <a [routerLink]="['/shop/product/', product.product_slug]">
-                                    <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
-                                </a>
+                            <td>    
+                                <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
                             </td>
                             <td>
-                                <a [routerLink]="['/shop/product/', product.product_slug]">{{ product.product_name | titlecase }}</a>
+                                {{ product.product_name | titlecase }}
                                 <div class="mobile-cart-content row">
                                     <div class="col-xs-3">
                                         <h2 class="td-color">

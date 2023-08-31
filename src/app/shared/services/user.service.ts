@@ -11,212 +11,205 @@ import { Usersignup } from '../classes/usersignup';
 })
 export class UserService {
 
-  useraddressid:any
-  userorderid:any
+  useraddressid: any
+  userorderid: any
   public Otp;
   public Usersignup;
   constructor(private http: HttpClient, private router: Router,) { }
 
-  genOtp(data: any): Observable<Otp>{
-    return this.http.post(environment.baseUrl+'user/generateOTP',data);
-  }  
-  
-  userSignUp(data: any): Observable<Usersignup>{
-    return this.http.post(environment.baseUrl+'user/signup',data);
-  } 
-
-  vendorSignUp(data: any): Observable<Usersignup>{
-    return this.http.post(environment.baseUrl+'vendor/signup',data);
-  } 
-
-  vendorgenerateOTP(data: any): Observable<any>{
-    return this.http.post(environment.baseUrl+'vendor/generateOTP',data);
-  } 
-
-  userLogin(data){
-    return this.http.post(environment.baseUrl+'user/login',data);
+  genOtp(data: any): Observable<Otp> {
+    return this.http.post(environment.baseUrl + 'user/generateOTP', data);
   }
 
-  userContact(data){
-    return this.http.post(environment.baseUrl+'user/contact',data);
+  userSignUp(data: any): Observable<Usersignup> {
+    return this.http.post(environment.baseUrl + 'user/signup', data);
   }
 
-  userVendorRoomCount(data){
-    return this.http.post(environment.baseUrl+'user/vendor-roomcheck',data);
+  vendorSignUp(data: any): Observable<Usersignup> {
+    return this.http.post(environment.baseUrl + 'vendor/signup', data);
+  }
+
+  vendorgenerateOTP(data: any): Observable<any> {
+    return this.http.post(environment.baseUrl + 'vendor/generateOTP', data);
+  }
+
+  userLogin(data) {
+    return this.http.post(environment.baseUrl + 'user/login', data);
+  }
+
+  userContact(data) {
+    return this.http.post(environment.baseUrl + 'user/contact', data);
+  }
+
+  userVendorRoomCount(data) {
+    return this.http.post(environment.baseUrl + 'user/vendor-roomcheck', data);
   }
 
 
 
-  getAllAddress()
-  {
+  getAllAddress() {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.get(environment.baseUrl+'user/addressList',httpOptionsroom);
+    return this.http.get(environment.baseUrl + 'user/addressList', httpOptionsroom);
   }
-  getAllOrderList()
-  {
+  getAllOrderList() {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.get(environment.baseUrl+'user/orderList',httpOptionsroom);
+    return this.http.get(environment.baseUrl + 'user/orderList', httpOptionsroom);
   }
-  getAllOrderDetailsList(data)
-  {
+  getAllOrderDetailsList(data) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/orderList',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/orderList', data, httpOptionsroom);
   }
-  getSingleAddress(data:any)
-  {
+  getSingleAddress(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/updateAddress',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
   }
-  getUserDetails()
-  {
+  getUserDetails() {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.get(environment.baseUrl+'user/details',httpOptionsroom);
+    return this.http.get(environment.baseUrl + 'user/details', httpOptionsroom);
   }
-  userUpdateAddress(data:any)
-  {
+  userUpdateAddress(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/updateAddress',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
   }
 
-  addNewAddress(data:any)
-  {
+  addNewAddress(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/addAddress',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/addAddress', data, httpOptionsroom);
   }
 
-  getSingleAddressDetails(data:any)
-  {
+  getSingleAddressDetails(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/addressDetails',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/addressDetails', data, httpOptionsroom);
   }
-  setDefaultAddress(data:any)
-  {
+  setDefaultAddress(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/updateAddress',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
   }
 
-  deleteAddress(data:any)
-  {
+  deleteAddress(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/deleteAddress',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/deleteAddress', data, httpOptionsroom);
   }
 
-  userUpdateProdile(data:any)
-  {
+  userUpdateProdile(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/update',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/update', data, httpOptionsroom);
   }
 
-  changePassword(data:any)
-  {
+  changePassword(data: any) {
     let token = localStorage.getItem('user_token') // Will return if it is not set 
-  
+
     let httpOptionsroom = {
       headers: new HttpHeaders({
         'Authorization': "Bearer " + token
       })
     }
-    return this.http.post(environment.baseUrl+'user/changepassword',data,httpOptionsroom);
+    return this.http.post(environment.baseUrl + 'user/changepassword', data, httpOptionsroom);
   }
 
-  forgotPassword(data:any)
-  {
-    return this.http.post(environment.baseUrl+'user/forgotpassword',data);
+  samepasswordcheck(data: any) {
+    let token = localStorage.getItem('user_token') // Will return if it is not set 
+
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl + 'user/checkSamePassword', data, httpOptionsroom);
   }
 
-  setUserAddressid(userAddtrss:any)
-  {
-    this.useraddressid=userAddtrss;
+  forgotPassword(data: any) {
+    return this.http.post(environment.baseUrl + 'user/forgotpassword', data);
   }
 
-  getUserAddressid()
-  {
+  setUserAddressid(userAddtrss: any) {
+    this.useraddressid = userAddtrss;
+  }
+
+  getUserAddressid() {
     return this.useraddressid;
   }
 
-  setUserOrderid(userOrderId:any)
-  {
-    this.userorderid=userOrderId;
+  setUserOrderid(userOrderId: any) {
+    this.userorderid = userOrderId;
   }
 
-  getUserOrderid()
-  {
+  getUserOrderid() {
     return this.userorderid;
   }
 
-  logout()
-  {
+  logout() {
     localStorage.clear();
     this.router.navigate(['/login'])
-    .then(() => {
+      .then(() => {
         window.location.reload();
-    });
+      });
   }
 
 }

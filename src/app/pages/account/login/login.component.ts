@@ -49,7 +49,7 @@ ngOnInit(): void {
   // form initialization
   this.form = new FormGroup({
     'phone_email': new FormControl(null, [Validators.required]),
-    'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
+    'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
   });
 
   // store current return URL

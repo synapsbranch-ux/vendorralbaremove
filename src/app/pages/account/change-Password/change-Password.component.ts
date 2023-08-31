@@ -3,9 +3,11 @@ import { PasswordStrengthValidator } from './../../../password-strength.validato
 import { UserService } from 'src/app/shared/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { json } from 'express';
 import Validation from '../utils/validation';
+import { fromEvent } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +24,8 @@ export class ChangePasswordComponent implements OnInit {
   form: FormGroup;
   isValid: boolean = false;
   signupMassage: string = "";
-
+  changePasswordFormStatus: boolean = true;
+  @ViewChild('userPassword', { static: true }) userPassword: ElementRef;
 
   constructor(private router: Router, private userservice: UserService, private toastr: ToastrService) {
 
@@ -38,6 +41,12 @@ export class ChangePasswordComponent implements OnInit {
         validators: [Validation.match('newPassword', 'confirmPassword')]
       }
     )
+
+    this.debounce(this.userPassword.nativeElement, 'keyup').subscribe(val => {
+      this.samepasswordcheck(val);
+      // console.log(`Debounced Input: ${val}`);
+    });
+
   }
 
   ToggleDashboard() {
@@ -55,14 +64,15 @@ export class ChangePasswordComponent implements OnInit {
   onSubmit(): void {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
+      return;
     }
-    else {
-      let formData = this.form.value;
-      let EdData = {
-        "old_Password": formData.oldPassword,
-        "new_Password": formData.newPassword,
-        "confirm_Password": formData.confirmPassword
-      }
+    let formData = this.form.value;
+    let EdData = {
+      "old_Password": formData.oldPassword,
+      "new_Password": formData.newPassword,
+      "confirm_Password": formData.confirmPassword
+    }
+    if (this.changePasswordFormStatus) {
       this.userservice.changePassword(EdData).subscribe(
         res => {
           this.toastr.success('Your Password has been Changed successfully')
@@ -75,8 +85,36 @@ export class ChangePasswordComponent implements OnInit {
           this.toastr.error(error.error.message)
         }
       )
+    } else {
+      this.toastr.error('Please use different password . This password is already being used earlier.')
+    }
+  }
+
+
+
+
+  samepasswordcheck(data: any) {
+    let passwordObj =
+    {
+      current_Password: data
     }
 
+    this.userservice.samepasswordcheck(passwordObj).subscribe(
+      res => {
+        this.changePasswordFormStatus = true;
+      },
+      error => {
+        this.changePasswordFormStatus = false;
+        this.toastr.error(error.error.message)
+      }
+    )
+
+  }
+
+  debounce(element, event, time = 800) {
+    const eventObserver = fromEvent(this.userPassword.nativeElement, 'keyup')
+      .pipe(map((i: any) => i.currentTarget.value));
+    return eventObserver.pipe(debounceTime(800));
   }
 
 }

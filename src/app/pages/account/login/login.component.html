@@ -34,9 +34,6 @@
                                 <div *ngIf="login_password.errors?.maxLength">
                                     Password will be miximum 16 character.
                                 </div>
-                                <div class="text-danger" class="error-text" *ngIf="login_password.hasError('passwordStrength')">
-                                    {{login_password.errors['passwordStrength']}}
-                                </div>
                             </div>
                         </div>
                         <p class="m-0 float-right"><a [routerLink]="['/forget-password']">Forget Password</a></p>

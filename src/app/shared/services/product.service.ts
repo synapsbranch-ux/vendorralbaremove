@@ -256,6 +256,7 @@ export class ProductService {
   // Get Cart Items
   public get cartItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
+      console.log('state.cart =======================>',state.cart);
       observer.next(state.cart);
       observer.complete();
     });
@@ -314,7 +315,7 @@ export class ProductService {
             // console.log('element.pro_slug ======================>',element.pro_slug)
             this.getproductsBySlugs(element.pro_slug).subscribe(product => {
               console.log('product[data].product_image',product)
-                product_img=product['data'].product_image[0].pro_image;
+                product_img=product['data'].product_image.length > 0 ? product['data'].product_image[0].pro_image : '';
                 let data = 
                 {
                   "_id": element.pro_id,
@@ -429,7 +430,7 @@ export class ProductService {
          let product_img
         for (const element of res['data'].products) {   
           this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-              product_img=product['data'].product_image[0].pro_image;
+              product_img=product['data'].product_image.length > 0 ? product['data'].product_image[0].pro_image : '' ;
               let data = 
               {
                 "_id": element.pro_id,
@@ -484,7 +485,7 @@ export class ProductService {
   // Remove Cart items
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
-    // //console.log('Befor Structure Delete Cart',product);
+    console.log('Befor Structure Delete Cart',product);
     if(localStorage.getItem('user_id'))
     {
       const index2 = state.cart.indexOf(product);
@@ -506,7 +507,7 @@ export class ProductService {
     }
       else
       {
-        //console.log('Remove Cart User Without Login :',index);
+        console.log('Remove Cart User Without Login :',state.cart);
 
         state.cart.splice(index, 1);
         localStorage.setItem("cartItems", JSON.stringify(state.cart));
