@@ -273,7 +273,7 @@ export class ProductService {
     if(!stock) return false
 
     console.log('Cart Product',product);
-
+  console.log('addToCart function check cartItem available ? =',cartItem)
     if (cartItem) {
         cartItem.quantity += qty    
     } else {
@@ -308,14 +308,14 @@ export class ProductService {
           let bodydata=res['data'];
           if(bodydata.hasOwnProperty('products'))
           {
-            // console.log('element.products ======================>',res['data'].products)
+            console.log('element.products ======================>',res['data'].products)
            let cartproducts=[];
            let product_img
           for (const element of res['data'].products) {   
-            // console.log('element.pro_slug ======================>',element.pro_slug)
+            console.log('element.pro_slug ======================>',element.pro_slug)
             this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-              console.log('product[data].product_image',product)
-                product_img=product['data'].product_image.length > 0 ? product['data'].product_image[0].pro_image : '';
+              console.log('product[data].product_image',product['data'].product_image)
+                product_img=product['data'].product_image? product['data'].product_image[0].pro_image : '';
                 let data = 
                 {
                   "_id": element.pro_id,
@@ -342,14 +342,20 @@ export class ProductService {
               
             })    
             
-            state.cart.push({
-              ...product,
-              quantity: qty,
-              stock:product.stock,
-              cart_id: res['data']._id,
-              product_owner: product.product_owner._id
-            })
-          
+            const cartItem = state.cart.find(item => item._id === product._id);
+            if(!cartItem)
+            {
+              console.log('addToCart function check state.cart Before push',state.cart)
+              state.cart.push({
+                ...product,
+                quantity: qty,
+                stock:product.stock,
+                cart_id: res['data']._id,
+                product_owner: product.product_owner._id
+              })
+              console.log('addToCart function check state.cart After push',state.cart)
+            }
+
       }
     }
           }
@@ -430,7 +436,7 @@ export class ProductService {
          let product_img
         for (const element of res['data'].products) {   
           this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-              product_img=product['data'].product_image.length > 0 ? product['data'].product_image[0].pro_image : '' ;
+              product_img=product['data'].product_image ? product['data'].product_image[0].pro_image : '' ;
               let data = 
               {
                 "_id": element.pro_id,

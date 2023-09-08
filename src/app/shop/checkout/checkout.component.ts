@@ -51,6 +51,7 @@ export class CheckoutComponent implements OnInit {
   state_name_:any;
   zip_code_:any;
   product_not_available:any=[];
+  userFuyllName:any
 
   constructor(private fb: FormBuilder,
     public productService: ProductService,private userservice: UserService,
@@ -59,21 +60,16 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let currentUserDetails=JSON.parse(localStorage.getItem('currentUser'));
+    this.email_=currentUserDetails.data.email;
+    this.phone_=currentUserDetails.data.phone;
+    this.userFuyllName = currentUserDetails.data.name;
+
     this.local_checkout_obj=JSON.parse(localStorage.getItem('checkoutform'));
     if(this.local_checkout_obj)
     {
       this.email_=this.local_checkout_obj['email_address'];
       this.phone_=this.local_checkout_obj['phone_no'];
-      this.country_=this.local_checkout_obj['country_name'];
-      this.first_name_=this.local_checkout_obj['first_name'];
-      this.last_name_=this.local_checkout_obj['last_name'];
-      this.street_address_=this.local_checkout_obj['street_address'];
-      this.street_address2_=this.local_checkout_obj['street_address2'];
-      this.city_name_=this.local_checkout_obj['city_name'];
-      this.state_name_=this.local_checkout_obj['state_name'];
-      this.zip_code_=this.local_checkout_obj['zip_code'];
-      
-
     }
   if(localStorage.getItem('user_id'))
   {
@@ -106,31 +102,16 @@ export class CheckoutComponent implements OnInit {
     this.getTotal.subscribe(amount => this.amount = amount);
     this.initConfig();
     this.checkoutForm = new FormGroup({
-      'firstname': new FormControl(null, [Validators.required]),
-      'lastname': new FormControl(null, [Validators.required]),
       'phone': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
-      'address1': new FormControl(null, [Validators.required]),
-      'address2': new FormControl(null),
-      'country': new FormControl(null, [Validators.required]),
-      'town': new FormControl(null, [Validators.required]),
-      'state': new FormControl(null, [Validators.required]),
-      'postalcode': new FormControl(null, [Validators.required]),
       'paymentOption': new FormControl(null),
-      'userAddressId': new FormControl(null, [Validators.required]),
+      'userShippingAddressId': new FormControl(null, [Validators.required]),
+      'userBillingAddressId': new FormControl(null, [Validators.required]),
     })
     if(this.isUserLogin)
     {
       this.checkoutForm.controls['phone'].disable();
       this.checkoutForm.controls['email'].disable();
-      this.checkoutForm.controls['firstname'].disable();
-      this.checkoutForm.controls['lastname'].disable();
-      this.checkoutForm.controls['address1'].disable();
-      this.checkoutForm.controls['address2'].disable();
-      this.checkoutForm.controls['country'].disable();
-      this.checkoutForm.controls['town'].disable();
-      this.checkoutForm.controls['state'].disable();
-      this.checkoutForm.controls['postalcode'].disable();
       this.checkoutForm.controls['paymentOption'].disable();
      
     }
@@ -141,18 +122,11 @@ export class CheckoutComponent implements OnInit {
 
   }
 
-  get firstname() { return this.checkoutForm.get('firstname'); }
-  get lastname() { return this.checkoutForm.get('lastname');}
   get phone() { return this.checkoutForm.get('phone'); }
   get email() { return this.checkoutForm.get('email');}
-  get address1() { return this.checkoutForm.get('address1');}
-  get address2() { return this.checkoutForm.get('address2');}
-  get country() { return this.checkoutForm.get('country');}
-  get town() { return this.checkoutForm.get('town');}
-  get state() { return this.checkoutForm.get('state');}
-  get postalcode() { return this.checkoutForm.get('postalcode');}
   get paymentOption() { return this.checkoutForm.get('paymentOption');}
-  get userAddressId() { return this.checkoutForm.get('userAddressId');}
+  get userShippingAddressId() { return this.checkoutForm.get('userShippingAddressId');}
+  get userBillingAddressId() { return this.checkoutForm.get('userBillingAddressId');}
 
 
   getuserallAddressList()
@@ -177,14 +151,6 @@ export class CheckoutComponent implements OnInit {
 let address_arr={
   email_address: (<HTMLInputElement>document.getElementById('email_address')).value,
   phone_no: (<HTMLInputElement>document.getElementById('email_address')).value,
-  country_name: (<HTMLInputElement>document.getElementById('country_name')).value,
-  first_name: (<HTMLInputElement>document.getElementById('first_name')).value,
-  last_name: (<HTMLInputElement>document.getElementById('last_name')).value,
-  street_address: (<HTMLInputElement>document.getElementById('street_address')).value,  
-  street_address2: (<HTMLInputElement>document.getElementById('street_address2')).value,
-  city_name: (<HTMLInputElement>document.getElementById('city_name')).value,
-  state_name: (<HTMLInputElement>document.getElementById('state_name')).value,
-  zip_code: (<HTMLInputElement>document.getElementById('zip_code')).value,
 }
 
     localStorage.setItem('checkoutform',JSON.stringify(address_arr))
@@ -281,7 +247,7 @@ let address_arr={
       this.paypalstatus=false;
     }
     let formData = this.checkoutForm.value;
-    if(event.target.value == 'paypal' && this.useraddressslist.length > 0 && formData.firstname !="" && formData.lastname !="" && formData.phone !="" && formData.email !="" && formData.address1 !="" && formData.country !="" && formData.town !="" && formData.state !=""  && formData.postalcode !=""  && formData.userAddressId != null )
+    if(event.target.value == 'paypal' && this.useraddressslist.length > 0  && formData.userShippingAddressId != null  && formData.userBillingAddressId != null  )
     {
       this.paypalstatus=true;
     }
@@ -352,17 +318,10 @@ let address_arr={
       name: this.paypalreurnData[0].name,
       customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
       paypal_status: this.paypalreurnData[0].paypal_status,
-      shipping_address_id: formData.userAddressId,
+      shipping_address_id: formData.userShippingAddressId,
+      billing_address_id: formData.userBillingAddressId,
       billing_email: formData.email,
       billing_phone: formData.phone,
-      billing_country: formData.country,
-      billing_first_name: formData.firstname,
-      billing_last_name: formData.lastname,
-      billing_address1: formData.address1,
-      billing_address2: formData.address2,
-      billing_city: formData.town,
-      billing_state: formData.state,
-      billing_zip: formData.postalcode,
       order_details: orderProducts,
     }
   }
@@ -377,20 +336,13 @@ let address_arr={
     transaction_id: this.transactionId,
     country_code: "",
     email_address: formData.email,
-    name: formData.firstname+' '+formData.lastname,
+    name: this.userFuyllName,
     customer_id_paypal: "",
     paypal_status: "",
-    shipping_address_id: formData.userAddressId,
+    shipping_address_id: formData.userShippingAddressId,
+    billing_address_id: formData.userBillingAddressId,
     billing_email: formData.email,
     billing_phone: formData.phone,
-    billing_country: formData.country,
-    billing_first_name: formData.firstname,
-    billing_last_name: formData.lastname,
-    billing_address1: formData.address1,
-    billing_address2: formData.address2,
-    billing_city: formData.town,
-    billing_state: formData.state,
-    billing_zip: formData.postalcode,
     order_details: orderProducts,
   }
   }
@@ -418,21 +370,6 @@ let address_arr={
         }
         else
         {
-
-          let address_arr={
-            email_address: formData.email,
-            phone_no: formData.phone,
-            country_name: formData.country,
-            first_name: formData.firstname,
-            last_name: formData.lastname,
-            street_address: formData.address1, 
-            street_address2: formData.address2,
-            city_name: formData.town,
-            state_name: formData.state,
-            zip_code: formData.postalcode,
-          }
-          localStorage.setItem('checkoutform',JSON.stringify(address_arr))
-
 
           this.orderService.userCreateOrder(orderData).subscribe(
             res =>

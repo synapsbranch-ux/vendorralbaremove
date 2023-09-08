@@ -41,76 +41,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <h4>1. Shipping Information</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <div class="field-label">Country</div>
-                                    <select formControlName="country" id="country_name" [(ngModel)]="country_">
-                                        <option  selected>Select Country</option>
-                                        <option value="India">India</option>
-                                        <option value="USA">USA</option>
-                                        <option value="Australia">Australia</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row check-out">
-                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                    <div class="field-label">First Name</div>
-                                    <input [(ngModel)]="first_name_" id="first_name" type="text" formControlName="firstname" placeholder="" autocomplete="off">
-
-                                </div>
-                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                    <div class="field-label">Last Name </div>
-                                    <input [(ngModel)]="last_name_" id="last_name" type="text" formControlName="lastname" placeholder="" autocomplete="off">
-                                </div>
-
-
-
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <div class="field-label">Street Address</div>
-                                    <input [(ngModel)]="street_address_" id="street_address" type="text" formControlName="address1" placeholder="" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <div class="field-label">Street Address 2 <span class="font-12 text-muted float-right">Optional</span></div>
-                                    <input [(ngModel)]="street_address2_" id="street_address2" type="text" formControlName="address2" placeholder="Street address">
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <div class="field-label">City</div>
-                                    <input [(ngModel)]="city_name_" id="city_name" type="text" formControlName="town" placeholder="" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                                    <div class="field-label">State</div>
-                                    <input [(ngModel)]="state_name_" id="state_name" type="text" formControlName="state" placeholder="" autocomplete="off">
-
-                                </div>
-                                <div class="form-group col-md-2 col-sm-6 col-xs-12">
-                                    <div class="field-label">ZIP</div>
-                                    <input [(ngModel)]="zip_code_" id="zip_code" type="text" formControlName="postalcode" placeholder="" autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
                                     <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
                                         <ngb-panel id="custom-panel-1">
                                             <ng-template ngbPanelTitle let-closed="closed">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <h5 class="m-0">2. Shipping Method</h5>
+                                                    <h5 class="m-0">1. Shipping Address </h5>
                                                 </div>
                                             </ng-template>
                                             <ng-template ngbPanelContent>
                                                 <div class="row">
-                                                    <div class="col-sm-6 linkaddress" *ngIf="useraddressslist.length < 1">
-                                                        <a class="add_address" (click)="checkaddress();">Add adress</a><br>
-                                                        <small class="text-danger">Plase add address to process order complete</small>
-                                                    </div>
+
                                                     <div class="col-sm-6" *ngFor="let address of useraddressslist let i = index">
 
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userAddressId{{i}}" ngModel="{{address._id}}" name="userAddressId"  value="{{address._id}}" formControlName="userAddressId">
-                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userAddressId{{i}}" name="userAddressId"  value="{{address._id}}" formControlName="userAddressId">
-                                                            <label for="userAddressId{{i}}">
+                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userShippingAddressId{{i}}" ngModel="{{address._id}}" name="userShippingAddressId"  value="{{address._id}}" formControlName="userShippingAddressId">
+                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userShippingAddressId{{i}}" name="userShippingAddressId"  value="{{address._id}}" formControlName="userShippingAddressId">
+                                                            <label for="userShippingAddressId{{i}}">
                                                                 <address >
                                                                     <h4> {{address.user_full_name}} </h4>
                                                                     <p>{{address.addressline1}}, {{address.addressline2}}</p>
@@ -121,6 +67,46 @@
                                                             </label>
                                                            
                                                         </div>
+                                                    </div>
+                                                    <div class="linkaddress">
+                                                        <a class="add_address" (click)="checkaddress();">Add New adress</a><br>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ngb-panel>
+                                    </ngb-accordion>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+                                        <ngb-panel id="custom-panel-1">
+                                            <ng-template ngbPanelTitle let-closed="closed">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5 class="m-0">2. Billing Address</h5>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template ngbPanelContent>
+                                                <div class="row">
+                                                    <div class="col-sm-6" *ngFor="let address of useraddressslist let i = index">
+
+                                                        <div class="radio-option d-flex align-items-start">
+                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userBillingAddressId{{i}}" ngModel="{{address._id}}" name="userBillingAddressId"  value="{{address._id}}" formControlName="userBillingAddressId">
+                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userBillingAddressId{{i}}" name="userBillingAddressId"  value="{{address._id}}" formControlName="userBillingAddressId">
+                                                            <label for="userBillingAddressId{{i}}">
+                                                                <address >
+                                                                    <h4> {{address.user_full_name}} </h4>
+                                                                    <p>{{address.addressline1}}, {{address.addressline2}}</p>
+                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                    <p>{{address.state}}</p>
+                                                                    <h5>Ph: {{address.mobile}}</h5>
+                                                                </address>
+                                                            </label>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <div class="linkaddress">
+                                                        <a class="add_address" (click)="checkaddress();">Add New adress</a><br>
                                                     </div>
                                                 </div>
                                             </ng-template>
