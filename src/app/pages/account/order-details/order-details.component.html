@@ -31,8 +31,58 @@
                     <div class="dashboard row">
                         <div class="col-lg-12">
                             <div class="product-order">
-                                <h3>your order details</h3>
-                                <div class="row product-order-detail" *ngFor="let product of oderProducts">
+                                <h3 class="mb-4">your order details</h3>
+                                <div class="row">
+                                    <div class="col-lg-12 table-responsive">
+                                        <table class="w-100 table">
+                                            <tr>
+                                                <th class="pb-3">Product Image</th>
+                                                <th class="pb-3">Product Name</th>
+                                                <th class="pb-3">Quantity</th>
+                                                <th class="pb-3">Product Price</th>
+                                                <th class="pb-3 text-right">Addons Price</th>
+                                            </tr>
+                                            <tr *ngFor="let product of oderProducts">
+                                                <td>
+                                                    <img class="img-fluid product_img" [src]="product.product_image"
+                                                        [alt]="product.product_name">
+                                                </td>
+                                                <td>{{ product.product_name | titlecase }}</td>
+                                                <td>{{product.qty}}</td>
+                                                <td>{{product.price |
+                                                    currency:product_service?.Currency.currency:'symbol'}}</td>
+                                                <td class="text-right">
+                                                    {{(product.addonsprice ? product.addonsprice: 0) |
+                                                    currency:product_service?.Currency.currency:'symbol'}}
+                                                    <p class="m-0">
+                                                        <a class="pe-auto"
+                                                            (click)="viewAddonsDetails(product.addons)">View
+                                                            Addons</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tfoot class="table">
+                                                <tr>
+                                                    <td colspan="5" class="text-right"><strong>Subtotal:</strong>
+                                                        {{total_order_amount |
+                                                        currency:product_service?.Currency.currency:'symbol'}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" class="text-right"><strong>Total:</strong>
+                                                        {{total_order_amount |
+                                                        currency:product_service?.Currency.currency:'symbol'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" class="text-right"><strong>Order Status:</strong> {{
+                                                        order_status | uppercase }}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- <div class="row product-order-detail" *ngFor="let product of oderProducts">
                                     <div class="col-3">
                                         <img class="img-fluid" [src]="product.product_image"
                                             [alt]="product.product_name">
@@ -82,23 +132,25 @@
                                         <li>Order Status: <h3 class="text-black">{{ order_status | uppercase }}</h3>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> -->
 
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="row order-success-sec">
                                 <div class="col-sm-6">
-                                    <h4>summery</h4>
+                                    <h4>summary</h4>
+                                    <hr>
                                     <ul class="order-detail">
-                                        <li>order ID: {{order_id}}</li>
-                                        <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
-                                        <li>Order Total: {{total_order_amount |
+                                        <li><span>Order ID:</span> {{order_id}}</li>
+                                        <li><span>Order Date:</span> {{ createdAt | date:'MMMM d, y'}}</li>
+                                        <li><span>Order Total:</span> {{total_order_amount |
                                             currency:product_service?.Currency.currency:'symbol'}}</li>
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">
                                     <h4>shipping address</h4>
+                                    <hr>
                                     <ul class="order-detail">
                                         <li>{{orderAddress?.user_full_name}}</li>
                                         <li>{{orderAddress?.addressline1}}</li>
@@ -111,7 +163,8 @@
 
                                 <div class="col-sm-12 payment-mode">
                                     <h4>payment method</h4>
-                                    <p>{{payment_method}}</p>
+                                    <hr>
+                                    <p><span>{{payment_method}}</span></p>
                                     <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery
                                         (COD) available. Card/Net banking acceptance subject to device availability.</p>
                                 </div>
