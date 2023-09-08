@@ -28,10 +28,9 @@ export class EditProfileComponent implements OnInit {
   ngOnInit(): void {
     let obj = JSON.parse(localStorage.getItem('currentUser'));
     this.form =  new FormGroup({
-      'fname': new FormControl(null, [Validators.required]),
-      'emailid': new FormControl(null, [Validators.required, Validators.email]),
-      'phonenum': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-
+      'fname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+      'emailid':  new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+      'phonenum': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
     })
 
    this.userservice.getUserDetails().subscribe(
@@ -50,8 +49,8 @@ export class EditProfileComponent implements OnInit {
   }
 
   get fname() { return this.form.get('fname'); }
-  get emailid() { return this.form.get('email'); }
-  get phonenum() { return this.form.get('phone');}
+  get emailid() { return this.form.get('emailid'); }
+  get phonenum() { return this.form.get('phonenum');}
 
   logout()
   {
@@ -59,6 +58,10 @@ export class EditProfileComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     let formData = this.form.value;
     let EdData={
