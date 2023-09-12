@@ -256,7 +256,7 @@ export class ProductService {
   // Get Cart Items
   public get cartItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
-      console.log('state.cart =======================>',state.cart);
+      // console.log('state.cart =======================>',state.cart);
       observer.next(state.cart);
       observer.complete();
     });
@@ -264,9 +264,9 @@ export class ProductService {
   }
 
    // Add to Cart
-   public addToCart(product): any {
+   public addToCart(product,prod_qty): any {
     const cartItem = state.cart.find(item => item._id === product._id);
-    const qty = product.quantity ? product.quantity : 0;
+    const qty = prod_qty
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
     console.log('stock =========================',stock);
@@ -277,6 +277,12 @@ export class ProductService {
     if (cartItem) {
         cartItem.quantity += qty    
     } else {
+      product.quantity=qty;
+    }
+      if(product.stock > qty)
+      {
+        product.stock -= qty;
+      }
       console.log('user Login')
           if(localStorage.getItem('user_id'))
           {
@@ -375,9 +381,6 @@ export class ProductService {
         console.log('Cart item added from Without login Retain local ',state.cart);
       }
 
-
-    }
-
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
     //console.log('Local Storage Cart Item',state.cart);
@@ -389,11 +392,10 @@ export class ProductService {
   public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
     return state.cart.find((items, index) => {
       if (items._id === product._id) {
-        
         const qty = product.quantity
         const stock = this.calculateStockCounts(state.cart[index], quantity)
         if (qty !== 0 && stock) { 
-          state.cart[index].quantity = qty
+          state.cart[index].quantity += quantity
         }
 
         const currentUser = localStorage.getItem("user_id");
@@ -418,7 +420,7 @@ export class ProductService {
             "pro_name": product.product_name,
             "pro_image": product.product_image[0].pro_image,
             "pro_slug": product.product_slug,
-            "qty": quantity,
+            "qty": qty + quantity,
             "price": product_price,
             "addons": product.addons
 
@@ -449,8 +451,8 @@ export class ProductService {
                 "cart_id": res['data']._id,
                 "product_name": element.pro_name,
                 "product_slug": element.pro_slug,
-                "quantity": element.qty,
-                "stock":(product['data'].stock - element.qty),
+                "quantity": qty + quantity,
+                "stock":(product['data'].stock - (qty + quantity)),
                 "product_sale_price": element.price,
               }
             cartproducts.push(data);         
@@ -479,11 +481,6 @@ export class ProductService {
     if (stock <= 0) {
       this.toastrService.error('You can not add more items than available. In stock 0 items.');
       return false
-    }
-    else
-    {
-      const qty = product.quantity + quantity
-      product.stock=product.stock - 1
     }
     return true
   }

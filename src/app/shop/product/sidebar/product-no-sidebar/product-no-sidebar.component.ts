@@ -159,7 +159,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   // Add to cart
   async addToCart(product: any) {
 
-    product.quantity = this.counter || 0;
     product.addonsprice=this.productAddonsPrice;
     let extraObj=
     {
@@ -168,7 +167,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     this.addonSelectedResult.push(extraObj);
     product.addons= this.addonSelectedResult
     console.log('Final Cart Product ==================>',product)
-    const status = await this.productService.addToCart(product);
+    const status = await this.productService.addToCart(product,this.counter);
     if (status) {
       product.stock = (product.stock - this.counter);
       this.toastrService.success('Product has been added in Cart.');
@@ -373,11 +372,10 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   // Buy Now
   async buyNow(product: any) {
     console.log('Before Cart Product ==================>',product)
-    product.quantity = this.counter || 1;
     this.addonSelectedResult[this.addonSelectedResult.length + 1].extra_document=this.uploadAddonsImage;
     product.addons= this.addonSelectedResult
     console.log('Final Cart Product ==================>',product)
-    const status = await this.productService.addToCart(product);
+    const status = await this.productService.addToCart(product,this.counter);
     if (status)
       this.router.navigate(['/checkout']);
   }

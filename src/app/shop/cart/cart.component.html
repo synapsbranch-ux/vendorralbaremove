@@ -34,13 +34,13 @@
                         <div class="qty-box">
                             <div class="input-group">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-left-minus"   [disabled]="desableincrement" data-type="minus" (click)="decrement(product)">
+                                    <button type="button" class="btn quantity-left-minus"   [disabled]="desabledecrement" data-type="minus" (click)="decrement(product)">
                                         <i class="ti-minus"></i>
                                     </button>
                                 </span>
                                 <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-right-plus"  [disabled]="desabledecrement"  data-type="plus"  (click)="increment(product)" >
+                                    <button type="button" class="btn quantity-right-plus"  [disabled]="desableincrement"  data-type="plus"  (click)="increment(product)" >
                                         <i class="ti-plus"></i>
                                     </button>
                                 </span>

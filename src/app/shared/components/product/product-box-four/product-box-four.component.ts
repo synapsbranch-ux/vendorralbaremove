@@ -56,7 +56,7 @@ export class ProductBoxFourComponent implements OnInit {
   }
 
   addToCart(product: any) {
-    this.productService.addToCart(product);
+    this.productService.addToCart(product,1);
   }
 
   addToWishlist(product: any) {

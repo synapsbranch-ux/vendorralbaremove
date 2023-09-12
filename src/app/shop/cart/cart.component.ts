@@ -60,21 +60,24 @@ export class CartComponent implements OnInit , OnChanges {
     setTimeout(() => {
       this.delay = false
       }, 1000);
-    if(product.stock >= 1)
+      console.log('product.quantity===============',product.quantity);
+    if(product.stock > 0)
     {
-      product.quantity +=1;
-      product.stock= (product.stock - 1);
-
+      if(product.stock > 0)
+      {
+        product.stock= (product.stock - 1)
+      }
+      
       let incremtstatus= this.product_service.updateCartQuantity(product, qty);
-        this.getTotal.subscribe();
-        this.desableincrement=false;
+      this.getTotal.subscribe();
+      this.desableincrement=false;
     }
     else
     {
       this.toaster.error('Your product out of stock');
       this.desableincrement=true;
     }
-    
+    console.log('product.quantity===============',product.quantity);
     if(product.quantity >= 1)
     {
       this.desableincrement=false;
@@ -104,7 +107,6 @@ export class CartComponent implements OnInit , OnChanges {
     else
     {
       product.stock= (product.stock + 1);
-      product.quantity -=1;
       this.desabledecrement=false;
       this.product_service.updateCartQuantity(product, qty);
       this.getTotal.subscribe();

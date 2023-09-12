@@ -370,25 +370,7 @@ let address_arr={
         }
         else
         {
-
-          this.orderService.userCreateOrder(orderData).subscribe(
-            res =>
-            {
-              this.orderValid=true;
-              this.orderMassage="Your Order Placed successfully";
-              for(const elem of this.products)
-              {
-                this.productService.removeCartItem(elem);
-              }
-              this.userservice.setUserOrderid(res['data']._id);
-              setTimeout(() => {
-                this.router.navigateByUrl('/order/success');
-              },1000) 
-            },
-            error => {
-              // .... HANDLE ERROR HERE 
-              this.toaster.error(error.error.message);
-         });
+            return;
         }  
       },
       error: (e) => {
@@ -398,7 +380,24 @@ let address_arr={
       );
 }
 
-
+this.orderService.userCreateOrder(orderData).subscribe(
+  res =>
+  {
+    this.orderValid=true;
+    this.orderMassage="Your Order Placed successfully";
+    for(const elem of this.products)
+    {
+      this.productService.removeCartItem(elem);
+    }
+    this.userservice.setUserOrderid(res['data']._id);
+    setTimeout(() => {
+      this.router.navigateByUrl('/order/success');
+    },1000) 
+  },
+  error => {
+    // .... HANDLE ERROR HERE 
+    this.toaster.error(error.error.message);
+});
 
       }
     }

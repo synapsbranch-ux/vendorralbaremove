@@ -33,10 +33,15 @@ export class WishlistComponent implements OnInit {
   }
 
   async addToCart(product: any) {
-    product.quantity = 1;
-    const status = await this.productService.addToCart(product);
+    let quantity = 1;
+    const status = await this.productService.addToCart(product,quantity);
     this.getTotal.subscribe();
     if(status) {
+      if(product.stock > 0)
+      {
+        product.stock = (product.stock - 1);
+      }
+      
       this.router.navigate(['/cart']);
       this.removeItem(product);
     }
