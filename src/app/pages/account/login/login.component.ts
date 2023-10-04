@@ -173,7 +173,6 @@ export class LoginComponent implements OnInit {
           console.log('Primary Cart Empty');
           this.product_service.allCartProducts().subscribe(
             res => {
-
               let bodydata = res['data'];
               console.log('bodydata=========================>', bodydata);
               if (bodydata) {
@@ -223,17 +222,17 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
               this.router.navigate([this.returnUrl]);
             })
-            //   .then(() => {
-            //     window.location.reload();
-            // });
+              .then(() => {
+                window.location.reload();
+            });
           }
           else {
             this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
               this.router.navigate(['dashboard']);
             })
-            // .then(() => {
-            //     window.location.reload();
-            // });
+            .then(() => {
+                window.location.reload();
+            });
           }
         }, 2500)
 
