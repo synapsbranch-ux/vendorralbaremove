@@ -23,16 +23,16 @@ export class ProductService {
   public Currency = { name: 'Dollar', currency: 'USD', price: 1 } // Default Currency
   public OpenCart: boolean = false;
   public Products
-  catagories:any="";
+  catagories: any = "";
   public catagoriesalt;
-  token:any;
-  catarr={};
-  
+  token: any;
+  catarr = {};
+
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
     private toastrService: ToastrService, private router: Router) {
-      
-     }
+
+  }
 
   /*
     ---------------------------------------------
@@ -40,46 +40,41 @@ export class ProductService {
     ---------------------------------------------
   */
 
-    
-//  resolve(route: ActivatedRouteSnapshot){
-//   //console.log('Current Slug Products ===== ',route.params.slug);
-// }
+
+  //  resolve(route: ActivatedRouteSnapshot){
+  //   //console.log('Current Slug Products ===== ',route.params.slug);
+  // }
 
 
   // Product
 
 
-   private get products(): Observable<ProductNew[]> {
+  private get products(): Observable<ProductNew[]> {
     this.catagories = this.route.snapshot.paramMap.get('slug');
 
-    if(this.catagories != null)
-    {
-        this.catarr = {     
-          'category': this.catagories,
+    if (this.catagories != null) {
+      this.catarr = {
+        'category': this.catagories,
       };
     }
-    if(this.catagories === null)
-    {
-      if(localStorage.getItem("product_slug"))
-      {
+    if (this.catagories === null) {
+      if (localStorage.getItem("product_slug")) {
         this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
-          res =>
-          {
-          //  //console.log('Product Service Product Cat search Slug ===>',res);
- 
-           this.catagoriesalt = res['data'].product_category.category_slug;
-          //  //console.log('product Slug catagories ======', res['data'].product_category.category_slug)
-           this.catarr = {     
-             'category': this.catagoriesalt,
-         };
+          res => {
+            //  //console.log('Product Service Product Cat search Slug ===>',res);
+
+            this.catagoriesalt = res['data'].product_category.category_slug;
+            //  //console.log('product Slug catagories ======', res['data'].product_category.category_slug)
+            this.catarr = {
+              'category': this.catagoriesalt,
+            };
           }
         )
       }
-      else
-      {
-        this.catarr = {     
+      else {
+        this.catarr = {
           'category': localStorage.getItem("cat_slug"),
-      };
+        };
       }
 
     }
@@ -89,69 +84,71 @@ export class ProductService {
 
     // //console.log('Product Category Name arr === ',this.catarr);
 
-    this.Products = this.http.post<ProductNew[]>(environment.baseUrl+'product/list',this.catarr).pipe(map((data:any)=>{
+    this.Products = this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', this.catarr).pipe(map((data: any) => {
       // //console.log('Product Data === ',data.data);
-      
+
       return data.data;
     }));
-    
 
 
-    this.Products.subscribe((next: any) => { 
-     
+
+    this.Products.subscribe((next: any) => {
+
       localStorage['products'] = JSON.stringify(next)
 
     });
     this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
-    return this.Products; 
+    return this.Products;
   }
 
-    //// Get all Categories List
+  //// Get all Categories List
 
-  getallCategories()
-  {
-    return this.http.get(environment.baseUrl+'category');
+  getallCategories() {
+    return this.http.get(environment.baseUrl + 'category');
   }
 
   // Get Products
   public get getProducts(): Observable<ProductNew[]> {
-    
+
     return this.products;
-  } 
+  }
 
   getProductsBycat(catdata: any): Observable<any> {
-      return this.http.post<ProductNew[]>(environment.baseUrl+'product/list',catdata);
-  } 
+    return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', catdata);
+  }
 
-    // Get Products BY categoriess
-   getProductscat(data: any): Observable<any> {
-    return this.http.post<ProductNew[]>(environment.baseUrl+'product/list',data);
-    } 
+  get2DProductList(storeSlug: any): Observable<any> {
+    return this.http.post(environment.baseUrl + 'stores/all-product-2d-list-by-vendor-for-user', storeSlug);
+  }
 
-    getSettingsDetails(): Observable<any> {
-      return this.http.get(environment.baseUrl+'settings');
-  } 
+  // Get Products BY categoriess
+  getProductscat(data: any): Observable<any> {
+    return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', data);
+  }
+
+  getSettingsDetails(): Observable<any> {
+    return this.http.get(environment.baseUrl + 'settings');
+  }
 
   // Get Products By Slug
 
   public getProductBySlug(slug: string): Observable<ProductNew> {
-    return this.products.pipe(map(items => { 
-      return items.find((item: any) => { 
-        return item.product_slug === slug; 
-      }); 
+    return this.products.pipe(map(items => {
+      return items.find((item: any) => {
+        return item.product_slug === slug;
+      });
     }));
   }
 
-  getproductsBySlugs(data: any): Observable<any>{
+  getproductsBySlugs(data: any): Observable<any> {
 
-    return this.http.get(environment.baseUrl+'product/'+data);
+    return this.http.get(environment.baseUrl + 'product/' + data);
   }
 
-  uploadImage(fileToUpload: File): Observable<any>
-  {
+  uploadImage(fileToUpload: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', fileToUpload, fileToUpload.name);
-    return this.http.post(environment.baseUrl+'user/upload',formData);
+    return this.http.post(environment.baseUrl + 'user/upload', formData);
   }
 
   /*
@@ -194,19 +191,16 @@ export class ProductService {
     return true
   }
 
-  public wishlistProductCheck(product: ProductNew): any
-  {
+  public wishlistProductCheck(product: ProductNew): any {
     const wishlistItem = state.wishlist.find(item => item._id === product._id);
 
     // console.log('wishlistProductCheck     product ==========================================>',product);
     // console.log('wishlistProductCheck     state.wishlist ==========================================>',state.wishlist);
     // console.log('wishlistProductCheck    wishlistItem ==========================================>',wishlistItem);
-    if(wishlistItem)
-    {
+    if (wishlistItem) {
       return true
     }
-    else
-    {
+    else {
       return false
     }
   }
@@ -263,123 +257,138 @@ export class ProductService {
     return <Observable<ProductNew[]>>itemsStream;
   }
 
-   // Add to Cart
-   public addToCart(product,prod_qty): any {
+  // Add to Cart
+  public addToCart(product, prod_qty): any {
+    console.log('product.product_owner', product.product_owner._id);
+    console.log('localStorage.getItem(vendor_id)', localStorage.getItem('vendor_id'))
+
+    let SinglevendorStatus = true;
+    if (localStorage.getItem('vendor_id')) {
+      if (localStorage.getItem('vendor_id') != product.product_owner._id) {
+        SinglevendorStatus = false
+        return false;
+      }
+      else
+      {
+        this.addToCartforSingleVendor(product,prod_qty);
+      }
+    }
+    else {
+      localStorage.setItem('vendor_id', product.product_owner._id);
+      this.addToCartforSingleVendor(product,prod_qty);
+    }
+  }
+
+  public addToCartforSingleVendor(product, prod_qty)
+  {
     const cartItem = state.cart.find(item => item._id === product._id);
     const qty = prod_qty
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
-    console.log('stock =========================',stock);
-    if(!stock) return false
-
-    console.log('Cart Product',product);
-  console.log('addToCart function check cartItem available ? =',cartItem)
+    console.log('stock =========================', stock);
+    if (!stock) return false
+    console.log('Cart Product', product);
+    console.log('addToCart function check cartItem available ? =', cartItem)
     if (cartItem) {
-        cartItem.quantity += qty    
+      cartItem.quantity += qty
     } else {
-      product.quantity=qty;
+      product.quantity = qty;
     }
-      if(product.stock > qty)
-      {
-        product.stock -= qty;
+    if (product.stock > qty) {
+      product.stock -= qty;
+    }
+    console.log('user Login')
+    if (localStorage.getItem('user_id')) {
+      let product_price = 0;
+      if (product.product_sale_price == null) {
+        product_price = product.product_retail_price
       }
-      console.log('user Login')
-          if(localStorage.getItem('user_id'))
-          {
-            let product_price=0;
-            if(product.product_sale_price == null)
-            {
-              product_price=product.product_retail_price
-            }
-            else
-            {
-              product_price=product.product_sale_price
-            }
-            let cdata=
-        {
-          products:[{  "pro_id": product._id,
-              "pro_name": product.product_name,
-              "pro_image": product.product_image[0].pro_image,
-              "pro_slug": product.product_slug,
-              "qty": product.quantity,
-              "price": product_price,
-              "addons": product.addons,
-              "addonsprice": product.addonsprice
-            }]
-        }
-        //console.log('full Product Cart Data for Submit',cdata);
-      
-        this.addToCartDbBulk(cdata).subscribe(
-        res =>  {  
-          let bodydata=res['data'];
-          if(bodydata.hasOwnProperty('products'))
-          {
-            console.log('element.products ======================>',res['data'].products)
-           let cartproducts=[];
-           let product_img
-          for (const element of res['data'].products) {   
-            console.log('element.pro_slug ======================>',element.pro_slug)
-            this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-              console.log('product[data].product_image',product['data'].product_image)
-                product_img=product['data'].product_image? product['data'].product_image[0].pro_image : '';
-                let data = 
+      else {
+        product_price = product.product_sale_price
+      }
+      let cdata =
+      {
+        products: [{
+          "pro_id": product._id,
+          "pro_name": product.product_name,
+          "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+          "pro_slug": product.product_slug,
+          "qty": product.quantity,
+          "price": product_price,
+          "addons": product.addons,
+          "addonsprice": product.addonsprice
+        }]
+      }
+      //console.log('full Product Cart Data for Submit',cdata);
+
+      this.addToCartDbBulk(cdata).subscribe(
+        res => {
+          let bodydata = res['data'];
+          if (bodydata.hasOwnProperty('products')) {
+            console.log('element.products ======================>', res['data'].products)
+            let cartproducts = [];
+            let product_img
+            for (const element of res['data'].products) {
+              console.log('element.pro_slug ======================>', element.pro_slug)
+              this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                console.log('product[data].product_image', product['data'].product_image)
+                product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                let data =
                 {
                   "_id": element.pro_id,
                   "product_image": [
                     {
-                        "pro_image": product_img,
-                        "status": "active"
+                      "pro_image": product_img,
+                      "status": "active"
                     },
                   ],
                   "cart_id": res['data']._id,
                   "product_name": element.pro_name,
                   "product_slug": element.pro_slug,
                   "quantity": element.qty,
-                  "stock":(product['data'].stock - element.qty),
+                  "stock": (product['data'].stock - element.qty),
                   "product_sale_price": element.price,
                   "addons": element.addons,
                   "addonsprice": element.addonsprice
                 }
-              console.log('Before Push Cart Items List',cartproducts)
-              cartproducts.push(data);
-              console.log('After Push Cart Items List',cartproducts)
-              localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-              console.log('Return LocalStorage Product Service',localStorage.getItem("cartItems"));
-              
-            })    
-            
-            const cartItem = state.cart.find(item => item._id === product._id);
-            if(!cartItem)
-            {
-              console.log('addToCart function check state.cart Before push',state.cart)
-              state.cart.push({
-                ...product,
-                quantity: qty,
-                stock:product.stock,
-                cart_id: res['data']._id,
-                product_owner: product.product_owner._id
+                console.log('Before Push Cart Items List', cartproducts)
+                cartproducts.push(data);
+                console.log('After Push Cart Items List', cartproducts)
+                localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+                console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
+
               })
-              console.log('addToCart function check state.cart After push',state.cart)
+
+              const cartItem = state.cart.find(item => item._id === product._id);
+              if (!cartItem) {
+                console.log('addToCart function check state.cart Before push', state.cart)
+                state.cart.push({
+                  ...product,
+                  quantity: qty,
+                  stock: product.stock,
+                  cart_id: res['data']._id,
+                  product_owner: product.product_owner._id
+                })
+                console.log('addToCart function check state.cart After push', state.cart)
+              }
+
             }
-
-      }
-    }
           }
-        )
-      }
-      else
-      {
+        }
+      )
+    }
+    else {
 
-        console.log('user Not Login')
+      console.log('user Not Login')
 
-        state.cart.push({
-          ...product,
-          quantity: qty,
-          product_owner: product.product_owner._id,
-        })
+      state.cart.push({
+        ...product,
+        quantity: qty,
+        product_owner: product.product_owner._id,
+      })
 
-        console.log('Cart item added from Without login Retain local ',state.cart);
-      }
+      console.log('Cart item added from Without login Retain local ', state.cart);
+    }
 
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
@@ -394,88 +403,84 @@ export class ProductService {
       if (items._id === product._id) {
         const qty = product.quantity
         const stock = this.calculateStockCounts(state.cart[index], quantity)
-        if (qty !== 0 && stock) { 
+        if (qty !== 0 && stock) {
           state.cart[index].quantity += quantity
         }
 
         const currentUser = localStorage.getItem("user_id");
-        
-        if(currentUser)
-        {
 
-          let product_price=0;
-          if(product.product_sale_price == null)
-          {
-            product_price=product.product_retail_price
+        if (currentUser) {
+
+          let product_price = 0;
+          if (product.product_sale_price == null) {
+            product_price = product.product_retail_price
           }
-          else
-          {
-            product_price=product.product_sale_price
+          else {
+            product_price = product.product_sale_price
           }
 
-          let cdata=
-      {
-        products: [{
-           "pro_id": product._id,
-            "pro_name": product.product_name,
-            "pro_image": product.product_image[0].pro_image,
-            "pro_slug": product.product_slug,
-            "qty": qty + quantity,
-            "price": product_price,
-            "addons": product.addons
+          let cdata =
+          {
+            products: [{
+              "pro_id": product._id,
+              "pro_name": product.product_name,
+              "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+              "pro_slug": product.product_slug,
+              "qty": qty + quantity,
+              "price": product_price,
+              "addons": product.addons
 
-          }]
-      }
-      //console.log('full Product Cart Data for Submit',cdata);
-    
-      this.addToCartDbBulk(cdata).subscribe(
-      res =>  {   
-        let bodydata=res['data'];
-        console.log('bodydata Cart Return',bodydata);
-        if(bodydata.hasOwnProperty('products'))
-        {
-         let cartproducts=[];
-         let product_img
-        for (const element of res['data'].products) {   
-          this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-              product_img=product['data'].product_image ? product['data'].product_image[0].pro_image : '' ;
-              let data = 
-              {
-                "_id": element.pro_id,
-                "product_image": [
-                  {
-                      "pro_image": product_img,
-                      "status": "active"
-                  },
-                ],
-                "cart_id": res['data']._id,
-                "product_name": element.pro_name,
-                "product_slug": element.pro_slug,
-                "quantity": qty + quantity,
-                "stock":(product['data'].stock - (qty + quantity)),
-                "product_sale_price": element.price,
+            }]
+          }
+          //console.log('full Product Cart Data for Submit',cdata);
+
+          this.addToCartDbBulk(cdata).subscribe(
+            res => {
+              let bodydata = res['data'];
+              console.log('bodydata Cart Return', bodydata);
+              if (bodydata.hasOwnProperty('products')) {
+                let cartproducts = [];
+                let product_img
+                for (const element of res['data'].products) {
+                  this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                    product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                    let data =
+                    {
+                      "_id": element.pro_id,
+                      "product_image": [
+                        {
+                          "pro_image": product_img,
+                          "status": "active"
+                        },
+                      ],
+                      "cart_id": res['data']._id,
+                      "product_name": element.pro_name,
+                      "product_slug": element.pro_slug,
+                      "quantity": qty + quantity,
+                      "stock": (product['data'].stock - (qty + quantity)),
+                      "product_sale_price": element.price,
+                    }
+                    cartproducts.push(data);
+                    localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+                    console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
+
+                  })
+
+                }
               }
-            cartproducts.push(data);         
-            localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-            console.log('Return LocalStorage Product Service',localStorage.getItem("cartItems"));
-            
-          })                          
-        
-    }
-  }
+            }
+          )
         }
-      )
-    }
-    return true;
+        return true;
       }
     })
   }
 
-    // Calculate Stock Counts
+  // Calculate Stock Counts
   public calculateStockCounts(product, quantity) {
-    
-    console.log('product===============',product);
-    console.log('product===============',quantity);
+
+    console.log('product===============', product);
+    console.log('product===============', quantity);
 
     const stock = product.stock
     if (stock <= 0) {
@@ -488,34 +493,31 @@ export class ProductService {
   // Remove Cart items
   public removeCartItem(product: ProductNew): any {
     const index = state.cart.indexOf(product);
-    console.log('Befor Structure Delete Cart',product);
-    if(localStorage.getItem('user_id'))
-    {
+    console.log('Befor Structure Delete Cart', product);
+    if (localStorage.getItem('user_id')) {
       const index2 = state.cart.indexOf(product);
       //console.log('Remove Cart User Login :',index2);
       state.cart.splice(index2, 1);
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
 
-      let dcDAta=
+      let dcDAta =
       {
         "cart_id": product.cart_id,
         "pro_id": product._id,
       }
       this.deleteToCartDb(dcDAta).subscribe(
-        res =>
-        {
-          console.log('Delete Cart From DB Return',res);
+        res => {
+          console.log('Delete Cart From DB Return', res);
         }
       )
     }
-      else
-      {
-        console.log('Remove Cart User Without Login :',state.cart);
+    else {
+      console.log('Remove Cart User Without Login :', state.cart);
 
-        state.cart.splice(index, 1);
-        localStorage.setItem("cartItems", JSON.stringify(state.cart));
-      }
-   
+      state.cart.splice(index, 1);
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+    }
+
 
     return true
   }
@@ -525,29 +527,23 @@ export class ProductService {
     return this.cartItems.pipe(map((product: ProductNew[]) => {
 
       return product.reduce((prev, curr: ProductNew) => {
-        let product_price=0;
-        if(curr.addonsprice)
-        {
-          if(curr.product_sale_price == null)
-          {
-            product_price=curr.product_retail_price + curr.addonsprice
+        let product_price = 0;
+        if (curr.addonsprice) {
+          if (curr.product_sale_price == null) {
+            product_price = curr.product_retail_price + curr.addonsprice
           }
-          else
-          {
-            product_price=curr.product_sale_price + curr.addonsprice
+          else {
+            product_price = curr.product_sale_price + curr.addonsprice
           }
-        }else
-        {
-          if(curr.product_sale_price == null)
-          {
-            product_price=curr.product_retail_price
+        } else {
+          if (curr.product_sale_price == null) {
+            product_price = curr.product_retail_price
           }
-          else
-          {
-            product_price=curr.product_sale_price
+          else {
+            product_price = curr.product_sale_price
           }
         }
-        
+
         let price = product_price;
         // console.log('prev + (price * curr.quantity) * this.Currency.price',prev + (price * curr.quantity) * this.Currency.price)
         return prev + (price * curr.quantity) * this.Currency.price;
@@ -565,7 +561,7 @@ export class ProductService {
 
   // Get Product Filter
   public filterProducts(filter: any): Observable<ProductNew[]> {
-    return this.products.pipe(map(product => 
+    return this.products.pipe(map(product =>
       product.filter((item: ProductNew) => {
         if (!filter.length) return true
         const Tags = filter.some((prev) => { // Match Tags
@@ -582,7 +578,7 @@ export class ProductService {
   // Sorting Filter
   public sortProducts(products: ProductNew[], payload: string): any {
 
-    if(payload === 'ascending') {
+    if (payload === 'ascending') {
       return products.sort((a, b) => {
         if (a._id < b._id) {
           return -1;
@@ -627,7 +623,7 @@ export class ProductService {
         }
         return 0;
       })
-    } 
+    }
   }
 
   /*
@@ -643,22 +639,22 @@ export class ProductService {
     let paginateRange = 3;
 
     // ensure current page isn't out of range
-    if (currentPage < 1) { 
-      currentPage = 1; 
-    } else if (currentPage > totalPages) { 
-      currentPage = totalPages; 
+    if (currentPage < 1) {
+      currentPage = 1;
+    } else if (currentPage > totalPages) {
+      currentPage = totalPages;
     }
-    
+
     let startPage: number, endPage: number;
     if (totalPages <= 5) {
       startPage = 1;
       endPage = totalPages;
-    } else if(currentPage < paginateRange - 1){
+    } else if (currentPage < paginateRange - 1) {
       startPage = 1;
       endPage = startPage + paginateRange - 1;
     } else {
       startPage = currentPage - 1;
-      endPage =  currentPage + 1;
+      endPage = currentPage + 1;
     }
 
     // calculate start and end item indexes
@@ -683,63 +679,62 @@ export class ProductService {
   }
 
   ////////////////////////////////////////
-// API Call For ADD TO CArt
-////////////////////////////////////////
+  // API Call For ADD TO CArt
+  ////////////////////////////////////////
 
-addToCartDb(data: any): Observable<any>{
-  this.token = localStorage.getItem('user_token') // Will return if it is not set 
+  addToCartDb(data: any): Observable<any> {
+    this.token = localStorage.getItem('user_token') // Will return if it is not set 
 
-this.token = "Bearer " + this.token
-let httpOptions = {
-headers: new HttpHeaders({
-  'Authorization': this.token
-})
-}
+    this.token = "Bearer " + this.token
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.token
+      })
+    }
 
-  return this.http.post(environment.baseUrl+'cart/add',data,httpOptions);
-}
-
-addToCartDbBulk(data: any): Observable<any>{
-  this.token = localStorage.getItem('user_token') // Will return if it is not set 
-
-this.token = "Bearer " + this.token
-let httpOptions = {
-headers: new HttpHeaders({
-  'Authorization': this.token
-})
-}
-
-  return this.http.post(environment.baseUrl+'cart/bulkadd',data,httpOptions);
-}
-
-deleteToCartDb(data: any): Observable<any>{
-this.token = localStorage.getItem('user_token') // Will return if it is not set 
-this.token = "Bearer " + this.token
-let httpOptions = {
-headers: new HttpHeaders({
-  'Authorization': this.token
-})
-}
-  return this.http.post(environment.baseUrl+'cart/delete',data,httpOptions);
-} 
-
-allCartProducts(): Observable<any>{
-  this.token = localStorage.getItem('user_token') // Will return if it is not set 
-  
-  let httpOptionsroom = {
-    headers: new HttpHeaders({
-      'Authorization': "Bearer " + this.token
-    })
+    return this.http.post(environment.baseUrl + 'cart/add', data, httpOptions);
   }
-  
-  return this.http.get(environment.baseUrl+'cart/list',httpOptionsroom);
 
-}
+  addToCartDbBulk(data: any): Observable<any> {
+    this.token = localStorage.getItem('user_token') // Will return if it is not set 
 
-productSearch(data:any)
-{
-  return this.http.post(environment.baseUrl+'productsearch',data);
-}
+    this.token = "Bearer " + this.token
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.token
+      })
+    }
+
+    return this.http.post(environment.baseUrl + 'cart/bulkadd', data, httpOptions);
+  }
+
+  deleteToCartDb(data: any): Observable<any> {
+    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = "Bearer " + this.token
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.token
+      })
+    }
+    return this.http.post(environment.baseUrl + 'cart/delete', data, httpOptions);
+  }
+
+  allCartProducts(): Observable<any> {
+    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + this.token
+      })
+    }
+
+    return this.http.get(environment.baseUrl + 'cart/list', httpOptionsroom);
+
+  }
+
+  productSearch(data: any) {
+    return this.http.post(environment.baseUrl + 'productsearch', data);
+  }
 
 }
 

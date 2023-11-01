@@ -87,25 +87,24 @@
         <li *ngFor="let product of products">
           <div class="media">
             <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
-            <img class="mr-3" [src]="product?.product_image[0].pro_image" [alt]="product?.product_name">
+            <img class="mr-3" [src]="product.product_image[0]? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg'" [alt]="product?.product_name">
             <!-- </a> -->
             <div class="media-body">
               <!-- <a [routerLink]="['/shop/product/', product.product_slug]"> -->
               <h4>{{ product?.product_name }}</h4>
               <!-- </a> -->
               <h4>
-                <span *ngIf="product?.product_sale_price">
+                <span>
                   {{ product?.quantity }} x
-                  {{ (product?.product_sale_price + product.addonsprice) | currency:
-                  product_service.Currency?.currency:'symbol'}}
+                  {{((product.product_sale_price)? product?.product_sale_price: product?.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}} + {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}
 
                 </span>
-                <span *ngIf="product?.product_sale_price == null">
+                <!-- <span *ngIf="product?.product_sale_price == null">
                   {{ product?.quantity }} x
                   {{ (product?.product_retail_price + product.addonsprice) | currency:
                   product_service.Currency?.currency:'symbol'}}
 
-                </span>
+                </span> -->
               </h4>
             </div>
           </div>

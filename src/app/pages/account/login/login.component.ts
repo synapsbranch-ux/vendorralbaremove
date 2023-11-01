@@ -139,7 +139,7 @@ export class LoginComponent implements OnInit {
                 for (const element of res['data'].products) {
                   this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
                     if (product['data']) {
-                      this.product_img = product['data'].product_image[0].pro_image;
+                      this.product_img = product['data'].product_image[0]? product['data'].product_image[0].pro_image:'assets/images/product/placeholder.jpg';
                       let data =
                       {
                         "_id": element.pro_id,
@@ -181,7 +181,7 @@ export class LoginComponent implements OnInit {
                   for (const element of res['data'].products) {
                     this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
                       if (product['data']) {
-                        this.product_img = product['data'].product_image[0].pro_image;
+                        this.product_img = product['data'].product_image[0]? product['data'].product_image[0].pro_image:'assets/images/product/placeholder.jpg';
                         let data =
                         {
                           "_id": element.pro_id,

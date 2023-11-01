@@ -8,7 +8,7 @@
                     <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar class="product-slick1">
 
                         <ng-container *ngFor="let image of productImages; index as i">
-                            <ng-template carouselSlide [id]="i" *ngIf="i==0">
+                            <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
                                 <div>
                                     <model-viewer class="model-viewer" camera-controls camera-orbit="75deg 75deg 20m"
                                         src="{{image.pro_3d_image}}" alt="A 3D model Product" data-js-focus-visible=""
@@ -34,7 +34,7 @@
                             <div class="slider-nav small-slider-product">
                                 <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
                                     <ng-container *ngFor="let image of productImages; index as i ">
-                                        <ng-template carouselSlide [id]="i" *ngIf="i==0">
+                                        <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
                                             <div class="owl-thumb" [class.active]="i == activeSlide">
                                                 <img [defaultImage]="'assets/images/product/placeholder.jpg'"
                                                     [lazyLoad]="'assets/images/rotate-360.svg'"

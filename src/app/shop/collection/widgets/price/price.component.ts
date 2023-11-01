@@ -34,20 +34,20 @@ export class PriceComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.isBrowser = true; // for ssr
     }
-    let catdata=
-    {
-    'category': this.route.snapshot.paramMap.get('slug'),
-    }
-    this.productservice.getProductsBycat(catdata).subscribe(
-    res =>
-    {
-    this.products=res['data'];
-    let maxprice =  this.products.reduce((prev, curr) => (prev['product_sale_price'] < curr['product_sale_price']) ? curr : prev)
-    this.maxdata=maxprice['product_sale_price'];
-    this.options.ceil=maxprice['product_sale_price'];
-    console.log('this.ceil_price this.ceil_price',this.max);
-    }
-    )
+    // let catdata=
+    // {
+    // 'category': this.route.snapshot.paramMap.get('slug'),
+    // }
+    // this.productservice.getProductsBycat(catdata).subscribe(
+    // res =>
+    // {
+    // this.products=res['data'];
+    // let maxprice =  this.products.reduce((prev, curr) => (prev['product_sale_price'] < curr['product_sale_price']) ? curr : prev)
+    // this.maxdata=maxprice['product_sale_price'];
+    // this.options.ceil=maxprice['product_sale_price'];
+    // console.log('this.ceil_price this.ceil_price',this.max);
+    // }
+    // )
 
   }
   

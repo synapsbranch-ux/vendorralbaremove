@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from '../../shared/classes/product';
+import { environment } from 'src/environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 const state = {
 
@@ -18,13 +20,11 @@ const state = {
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent implements OnInit {
-  
+
   public grid: string = 'col-xl-3 col-md-6';
   public layoutView: string = 'grid-view';
   public products: ProductNew[] = [];
-  public brands: any[] = [];
-  public colors: any[] = [];
-  public size: any[] = [];
+  public product_list: ProductNew[] = [];
   public minPrice: number = 0;
   public maxPrice: number = 120000;
   public tags: any[] = [];
@@ -34,92 +34,75 @@ export class CollectionComponent implements OnInit {
   public sortBy: string; // Sorting Order
   public mobileSidebar: boolean = false;
   public loader: boolean = true;
-  categories_image:any;
+  categories_image: any;
+  no_results: any = 0
+  storeurl: any;
+  store_slug:any
+  page_no:any
 
   constructor(private route: ActivatedRoute, private router: Router,
-    private viewScroller: ViewportScroller, public productService: ProductService) {   
+    private viewScroller: ViewportScroller, public productService: ProductService, private toastr : ToastrService) {
 
   }
 
   ngOnInit(): void {
-    localStorage.setItem('cat_slug',this.route.snapshot.paramMap.get('slug'));
+    this.route.paramMap.subscribe(params => {
+      // Extract the 'slug' and 'page' values from the route parameters
+      this.store_slug = params.get('slug');
+      this.page_no = params.get('page');
+    });
 
-    this.productService.getallCategories().subscribe(
-      res =>
-      {
+    let catdata =
+    {
+      'store_slug': this.store_slug,
+    }
+    this.productService.get2DProductList(catdata).subscribe(
+      res => {
+        this.products = res['data'].product_list;
+        this.product_list = res['data'].product_list;
+        this.no_results = res['data'].product_count;
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+   });
+    // Get Query params..
+    this.route.queryParams.subscribe(params => {
+      console.log('Param Details in collection page', params);
+      this.minPrice = params.minPrice ? params.minPrice : this.minPrice;
+      this.maxPrice = params.maxPrice ? params.maxPrice : this.maxPrice;
+      this.sortBy = params.sortBy ? params.sortBy : 'ascending';
+      this.pageNo = params.page ? params.page : this.pageNo;
+      // Sorting Filter
+      this.products = this.productService.sortProducts(this.product_list, this.sortBy);
+      // Price Filter
+      this.products = this.products.filter((item: any) => {
+        let product_price = 0;
+        if (item.product_sale_price == null) {
+          product_price = item.product_retail_price
+        }
+        else {
+          product_price = item.product_sale_price
+        }
+        return (product_price >= this.minPrice && product_price <= this.maxPrice)
+      });
 
-        const result = res['data'].filter(cat => cat.category_slug == this.route.snapshot.paramMap.get('slug'));
-        this.categories_image=result[0].category_image;
-        console.log('Current Catagories image  ====> ',this.categories_image)
-        console.log('All Catagories',res['data'])
-      }
-    )
+      console.log('Product Price Check', this.products);
 
-let catdata=
-{
-  'category': this.route.snapshot.paramMap.get('slug'),
-}
-    this.productService.getProductsBycat(catdata).subscribe(
-      res =>
-      {
-        console.log('collections >>>>>>>>>>>',res['data']);
-        this.products=res['data'];
-      }
-    )
+      // Paginate Products
+      this.paginate = this.productService.getPager(this.products.length, +this.pageNo);     // get paginate object from service
+      this.products = this.products.slice(this.paginate.startIndex, this.paginate.endIndex + 1); // get current page of items
+      console.log('Product Paginate Check', this.products);
+    })
 
-          // Get Query params..
-          this.route.queryParams.subscribe(params => {
-
-            console.log('Param Details in collection page',params);
-
-            this.colors = params.color ? params.color.split(",") : [];
-            this.size  = params.size ? params.size.split(",")  : [];
-            this.minPrice = params.minPrice ? params.minPrice : this.minPrice;
-            this.maxPrice = params.maxPrice ? params.maxPrice : this.maxPrice;
-            this.tags = [...this.colors, ...this.size]; // All Tags Array
-            
-            this.category = this.route.snapshot.paramMap.get('slug');
-            console.log('collection page catagories == ',this.category);
-            this.sortBy = params.sortBy ? params.sortBy : 'ascending';
-            this.pageNo = params.page ? params.page : this.pageNo;
-    
-            console.log('Collection page Tag Name',this.tags)
-
-            // Get Filtered Products..
-            this.productService.filterProducts(this.tags).subscribe(response => {      
-              // Sorting Filter
-              this.products = this.productService.sortProducts(response, this.sortBy);
-    
-              console.log('Collection page filter',response );
-
-              console.log('Product Catagories Check',this.route.snapshot.paramMap.get('slug'));
-              // Category Filter
-              if(this.route.snapshot.paramMap.get('slug'))
-    
-                this.products = this.products.filter((item: any) => item.product_category.category_slug == this.category);
-
-                console.log('Product Catagories Check',this.products );
-
-                // Price Filter
-              this.products = this.products.filter((item: any) => item.product_sale_price >= this.minPrice && item.product_sale_price <= this.maxPrice) 
-            
-              console.log('Product Price Check',this.products );
-
-              // Paginate Products
-              this.paginate = this.productService.getPager(this.products.length, +this.pageNo);     // get paginate object from service
-              this.products = this.products.slice(this.paginate.startIndex, this.paginate.endIndex + 1); // get current page of items
-    
-              console.log('Product Paginate Check',this.products );
-            })
-          })
-
+    this.storeurl =`${environment.storeUrl}/?s_slug=${this.store_slug}&page=${this.page_no}`;
   }
 
 
   // Append filter value to Url
   updateFilter(tags: any) {
     tags.page = null; // Reset Pagination
-    this.router.navigate([], { 
+    this.router.navigate([], {
       relativeTo: this.route,
       queryParams: tags,
       queryParamsHandling: 'merge', // preserve the existing query params in the route
@@ -132,43 +115,22 @@ let catdata=
 
   // SortBy Filter
   sortByFilter(value) {
-    console.log('================>>',this.products);
-    this.router.navigate([], { 
+    console.log('================>>', this.products);
+    this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { sortBy: value ? value : null},
+      queryParams: { sortBy: value ? value : null },
       queryParamsHandling: 'merge', // preserve the existing query params in the route
       skipLocationChange: false  // do trigger navigation
     }).finally(() => {
       this.viewScroller.setOffset([120, 120]);
       this.viewScroller.scrollToAnchor('products'); // Anchore Link
-      
-    });
-  }
 
-  // Remove Tag
-  removeTag(tag) {
-    this.colors = this.colors.filter(val => val !== tag);
-    this.size = this.size.filter(val => val !== tag );
-
-    let params = { 
-      color: this.colors.length ? this.colors.join(",") : null, 
-      size: this.size.length ? this.size.join(",") : null
-    }
-
-    this.router.navigate([], { 
-      relativeTo: this.route,
-      queryParams: params,
-      queryParamsHandling: 'merge', // preserve the existing query params in the route
-      skipLocationChange: false  // do trigger navigation
-    }).finally(() => {
-      this.viewScroller.setOffset([120, 120]);
-      this.viewScroller.scrollToAnchor('products'); // Anchore Link
     });
   }
 
   // Clear Tags
   removeAllTags() {
-    this.router.navigate([], { 
+    this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {},
       skipLocationChange: false  // do trigger navigation
@@ -180,7 +142,7 @@ let catdata=
 
   // product Pagination
   setPage(page: number) {
-    this.router.navigate([], { 
+    this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: page },
       queryParamsHandling: 'merge', // preserve the existing query params in the route
@@ -199,7 +161,7 @@ let catdata=
   // Change Layout View
   updateLayoutView(value: string) {
     this.layoutView = value;
-    if(value == 'list-view')
+    if (value == 'list-view')
       this.grid = 'col-lg-12';
     else
       this.grid = 'col-xl-3 col-md-6';

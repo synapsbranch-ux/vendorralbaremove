@@ -1,7 +1,33 @@
-<section class="p-0 category_banner">
+<!-- <section class="p-0 category_banner">
     <img src="{{categories_image}}" class="img-fluid" alt="banner">
-</section>
-<app-breadcrumb [title]="'Collection'" [breadcrumb]="'Collection'"></app-breadcrumb>
+</section> -->
+<!-- <app-breadcrumb [title]="'Collection'" [breadcrumb]="'Collection'"></app-breadcrumb> -->
+
+<!-- Custom Breadcrum for 3D store to 2D product List -->
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-6">
+              <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{storeurl}}">3D Store</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">2D Product List</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-sm-6">
+              <div class="breadcrumb">{{no_results}} Results</div>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+  <!-- breadcrumb End -->
+
 <!-- section start -->
 <section class="pt-0 section-b-space">
     <div class="collection-wrapper">
@@ -21,14 +47,6 @@
                                         Clear all
                                     </a></span></h3>
                             </div>
-
-                            <ul class="product-filter-tags">
-                                <li class="mr-1" *ngFor="let tag of tags">
-                                    <a href="javascript:void(0)" class="filter_tag">
-                                        {{tag}} <i class="ti-close" (click)="removeTag(tag)"></i>
-                                    </a>
-                                </li>
-                            </ul>
                             <!-- Category filter start -->
                             <!-- <app-categories></app-categories> -->
                         </div>
@@ -36,12 +54,6 @@
                         <!-- side-bar colleps block stat -->
                         <div class="collection-filter-block">
                             <!-- brand filter start -->
-                            <!-- color filter start here -->
-                            <app-colors [products]="products" [colors]="colors" (colorsFilter)="updateFilter($event)">
-                            </app-colors>
-                            <!-- size filter start here -->
-                            <app-size [products]="products" [size]="size" (sizeFilter)="updateFilter($event)">
-                            </app-size>
                             <!-- price filter start here -->
                             <app-price [min]="minPrice" [max]="50000" (priceFilter)="updateFilter($event)">
                             </app-price>

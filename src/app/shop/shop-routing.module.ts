@@ -21,7 +21,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'category/:slug',
+    path: '2d-products/:slug/:page',
     component: CollectionComponent
   },
   {
