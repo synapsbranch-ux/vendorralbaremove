@@ -12,6 +12,7 @@ import { FashionOneComponent } from './home/fashion/fashion-one/fashion-one.comp
 import { StoreComponent } from './store/store.component';
 import { DepartmentComponent } from './department/department.component';
 import { SingleStoreComponent } from './store/single-store/single-store.component';
+import { SingleStoreBannerComponent } from './store/single-store-banner/single-store-banner.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
     path: 'privacy-policy',
     component: PrivacyPolicyComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'vendor/:slug',
+    component: SingleStoreBannerComponent,
   },
   {
     path: 'stores',

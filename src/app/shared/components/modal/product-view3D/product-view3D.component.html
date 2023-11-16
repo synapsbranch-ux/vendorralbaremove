@@ -1,21 +1,29 @@
+
+
 <ng-template class="theme-modal" #view3D let-modal>
 	<div class="modal-content">
 	  <div class="modal-header">
-		  Product 3D View
-	    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
-	      <span aria-hidden="true">&times;</span>
-	    </button>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		  </button>
 	  </div>
 	  <div class="modal-body">
-		<model-viewer class="model-viewer"
-		camera-controls
-		camera-orbit="75deg 75deg 20m"
-		src="{{image3d}}"
-		alt="A 3D model Product"
-		data-js-focus-visible=""
-		ar-status="not-presenting"
-	  >
-	  </model-viewer>
+		<div class="example-container">
+			<a-scene mindar-face embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" >
+			  <a-assets>
+				<a-asset-item id="headModel" src="assets/images/headOccluder.glb"></a-asset-item>
+				<a-asset-item id="glassesModel" [attr.src]="modelSrc"></a-asset-item>
+			  </a-assets>
+			  <a-camera fov="80" active="false" position="0 0 0"></a-camera>
+			  <a-entity mindar-face-target="anchorIndex: 168">
+			<a-gltf-model mindar-face-occluder position="0 -0.3 0.05"rotation="0 0 0" scale="0.048 0.048 0.048" src="#headModel"></a-gltf-model>
+			  </a-entity>
+			  <a-entity mindar-face-target="anchorIndex: 168">
+				  <a-gltf-model rotation="0 0 0" position="0 -.06 -.05" scale=".70 .70 .70"
+				  src="#glassesModel" cursor-listener ></a-gltf-model>
+			  </a-entity>
+			</a-scene>
+		  </div>
 
 	   </div>
 	</div>

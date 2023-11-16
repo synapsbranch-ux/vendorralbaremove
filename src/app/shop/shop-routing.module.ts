@@ -2,16 +2,14 @@ import { SettingsComponent } from './../shared/components/settings/settings.comp
 import { AuthGuard } from './../shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { ProductNoSidebarComponent } from './product/sidebar/product-no-sidebar/product-no-sidebar.component';
 import { CollectionComponent } from './collection/collection.component';
 import { CartComponent } from './cart/cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CompareComponent } from './compare/compare.component';
 import { CheckoutComponent } from './checkout/checkout.component';
-import { SuccessComponent } from './checkout/success/success.component';
-
-import { Resolver } from '../shared/services/resolver.service';
+import { TryonComponent } from './tryon/tryon.component';
+import { VideoModeComponent } from './video-mode/video-mode.component';
 
 const routes: Routes = [
 
@@ -19,7 +17,14 @@ const routes: Routes = [
     path: 'product/:slug',
     component: ProductNoSidebarComponent,
   },
-
+  {
+    path: 'tryon',
+    component: TryonComponent,
+  },
+  {
+    path: 'live-video',
+    component: VideoModeComponent,
+  },
   {
     path: '2d-products/:slug/:page',
     component: CollectionComponent

@@ -65,3 +65,24 @@ model-viewer {
         flex: 100%;
     }
 }
+.try_on_btn{
+    border: 1px solid #007bff;
+    padding: 5px 15px;
+    font-size: 16px;
+    border-radius: 3px;
+    i{
+        margin-right: 5px;
+    }
+    
+}
+
+.try_on_btn:hover{
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-body
+{
+    padding-left: 1rem !important;
+    padding-bottom: 1rem !important;
+}

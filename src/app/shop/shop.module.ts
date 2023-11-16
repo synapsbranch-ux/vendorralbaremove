@@ -36,6 +36,9 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { SuccessComponent } from './checkout/success/success.component';
 import { RandomOrderPipe } from '../random-order.pipe';
 import { SafePipe } from '../safe.pipe';
+import { TryonComponent } from './tryon/tryon.component';
+import { VideoModeComponent } from './video-mode/video-mode.component';
+import { ImageModeComponent } from './image-mode/image-mode.component';
 
 
 @NgModule({
@@ -59,7 +62,10 @@ import { SafePipe } from '../safe.pipe';
     CheckoutComponent,
     SuccessComponent,
     RandomOrderPipe,
-    SafePipe
+    SafePipe,
+    TryonComponent,
+    VideoModeComponent,
+    ImageModeComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

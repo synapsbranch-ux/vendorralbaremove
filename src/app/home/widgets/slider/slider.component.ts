@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./slider.component.scss']
 })
 export class SliderComponent implements OnInit {
-  
+
   @Input() sliders: any[];
   @Input() class: string;
   @Input() textClass: string;
@@ -20,65 +20,62 @@ export class SliderComponent implements OnInit {
   @Input() buttonClass: string;
 
 
-  public ImageSrc : string
+  public ImageSrc: string
 
   public stores;
 
-  storename:string
-  storeslug:string
-  storeimgUrl:any
-  store_slug:any
-  vendor_id:any
-  store_id:any;
+  storename: string
+  storeslug: string
+  storeimgUrl: any
+  store_slug: any
+  vendor_id: any
+  store_id: any;
 
-  StoreLists=[];
+  StoreLists = [];
 
-  DepartmentsList=[];
+  DepartmentsList = [];
 
-  departmentmsg:any
+  departmentmsg: any
 
-  roomavailablity=[];
-
-  constructor(private userservice : UserService, private storeService: StoreService, private router: Router ) { }
+  roomavailablity = [];
+  envstore: any
+  constructor(private userservice: UserService, private storeService: StoreService, private router: Router) { }
 
   ngOnInit(): void {
 
-
+    this.envstore = environment.storeUrl;
 
   }
 
   public HomeSliderConfig: any = HomeSlider;
 
-  vandorbannerClick(vendorid:any)
-  {
-    let VData=
+  vandorbannerClick(vendorid: any) {
+    let VData =
     {
       vendor_id: vendorid
     }
 
     this.userservice.userVendorRoomCount(VData).subscribe(
-      res =>
-      {
-        this.storeclick(vendorid,res['data']);
+      res => {
+        this.storeclick(vendorid, res['data']);
       }
     )
   }
 
 
-  storeclick(vendorid:any,roomno:any)
-  {
+  storeclick(vendorid: any, roomno: any) {
     this.storeService.getStoresMore.subscribe(response => {
       console.log('Single Store response  =>', response);
-      this.StoreLists=response['data'];
+      this.StoreLists = response['data'];
       const child = this.StoreLists.map((store_l) => {
-        console.log('Store Vendor id API',store_l.store_owner._id);
-        console.log('Store Vendor id',vendorid);
-        if(store_l.store_owner._id == vendorid){    
-          this.storename=store_l.store_name;
-          this.storeslug=store_l.store_slug;
-          this.storeimgUrl=store_l.store_image;
-          this.vendor_id=store_l.store_owner._id;
-          this.store_id=store_l._id;
+        console.log('Store Vendor id API', store_l.store_owner._id);
+        console.log('Store Vendor id', vendorid);
+        if (store_l.store_owner._id == vendorid) {
+          this.storename = store_l.store_name;
+          this.storeslug = store_l.store_slug;
+          this.storeimgUrl = store_l.store_image;
+          this.vendor_id = store_l.store_owner._id;
+          this.store_id = store_l._id;
           let sdata = {
             "store_id": this.store_id,
             "vendor_id": this.vendor_id
@@ -86,7 +83,7 @@ export class SliderComponent implements OnInit {
           // store view count 
           this.storeService.storeviewcount(sdata).subscribe(
             res => {
-              window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`,"_self");
+              window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`, "_self");
             }
           )
           return store_l.store_department;

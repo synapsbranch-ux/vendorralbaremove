@@ -31,30 +31,37 @@
                     </owl-carousel-o>
                     <div class="row align-items-center">
                         <div class="col-12 p-0">
-                            <div class="slider-nav small-slider-product">
-                                <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
-                                    <ng-container *ngFor="let image of productImages; index as i ">
-                                        <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
-                                            <div class="owl-thumb" [class.active]="i == activeSlide">
-                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'"
-                                                    [lazyLoad]="'assets/images/rotate-360.svg'"
-                                                    [alt]="product.product_name" class="view_3d img-fluid"
-                                                    [src]="'assets/images/rotate-360.svg'"
-                                                    (click)="owlCar.to(activeSlide = i.toString())">
-                                            </div>
-                                        </ng-template>
-                                        <ng-template carouselSlide [id]="i" *ngIf="i > 0">
-                                            <div class="owl-thumb" [class.active]="i == activeSlide">
-                                                <img [defaultImage]="'assets/images/product/placeholder.jpg'"
-                                                    [lazyLoad]="image.pro_image" [alt]="product.product_name"
-                                                    class="img-fluid" [src]="image.pro_image"
-                                                    (click)="owlCar.to(activeSlide = i.toString())">
-                                            </div>
-                                        </ng-template>
-                                    </ng-container>
-
-                                </owl-carousel-o>
-
+                            <div class="slider-nav small-slider-product row">
+                                <div class="col-9">
+                                    <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
+                                        <ng-container *ngFor="let image of productImages; index as i ">
+                                            <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
+                                                <div class="owl-thumb" [class.active]="i == activeSlide">
+                                                    <img [defaultImage]="'assets/images/product/placeholder.jpg'"
+                                                        [lazyLoad]="'assets/images/rotate-360.svg'"
+                                                        [alt]="product.product_name" class="view_3d img-fluid"
+                                                        [src]="'assets/images/rotate-360.svg'"
+                                                        (click)="owlCar.to(activeSlide = i.toString())">
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide [id]="i" *ngIf="i > 0">
+                                                <div class="owl-thumb" [class.active]="i == activeSlide">
+                                                    <img [defaultImage]="'assets/images/product/placeholder.jpg'"
+                                                        [lazyLoad]="image.pro_image" [alt]="product.product_name"
+                                                        class="img-fluid" [src]="image.pro_image"
+                                                        (click)="owlCar.to(activeSlide = i.toString())">
+                                                </div>
+                                            </ng-template>
+                                           
+                                        </ng-container>
+    
+                                    </owl-carousel-o>
+                                </div>
+                                <div class="col-3 align-items-center justify-content-center d-flex">
+                                    <a class="try_on_btn" href="javascrip:void(0)" (click)="view3D.openModal()"><i class="fa fa-video-camera" aria-hidden="true"></i> Try On</a>
+                                </div>
+                                
+                                
                             </div>
                         </div>
                     </div>

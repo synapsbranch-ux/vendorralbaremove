@@ -40,7 +40,7 @@ export class FashionOneComponent implements OnInit {
 
   ngOnInit(): void {
     this.get();
-    this.getvendorlist();
+    // this.getvendorlist();
     // get all home slider date from API
     this.homesliderservice.getallSliderData().subscribe(
       res =>

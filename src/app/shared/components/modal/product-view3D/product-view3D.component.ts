@@ -15,32 +15,35 @@ export class view3DModalComponent implements OnInit, OnDestroy  {
   @Input() image3d
 
   @ViewChild("view3D", { static: false }) view3D: TemplateRef<any>;
-
+  modelSrc: string;
   public closeResult: string;
   public modalOpen: boolean = false;
-
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private modalService: NgbModal) { }
 
   ngOnInit(): void {
+
   }
 
   openModal() {
     this.modalOpen = true;
-    if (isPlatformBrowser(this.platformId)) { // For SSR 
+  
+    if (isPlatformBrowser(this.platformId)) {
+      this.modelSrc=this.image3d;
       this.modalService.open(this.view3D, { 
         size: 'md',
         ariaLabelledBy: 'view3d-modal',
         centered: true,
         windowClass: 'view3D' 
       }).result.then((result) => {
-        `Result ${result}`
+        console.log(`Result: ${result}`);
       }, (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
     }
   }
-
+  
+  
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';

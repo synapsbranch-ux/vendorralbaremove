@@ -13,6 +13,7 @@ import { ServicesComponent } from './widgets/services/services.component';
 import { CollectionComponent } from './widgets/collection/collection.component';
 import { StoreComponent } from '../store/store.component';
 import { SingleStoreComponent } from '../store/single-store/single-store.component';
+import { SingleStoreBannerComponent } from '../store/single-store-banner/single-store-banner.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SingleStoreComponent } from '../store/single-store/single-store.compone
     ServicesComponent,
     CollectionComponent,
     StoreComponent,
-    SingleStoreComponent
+    SingleStoreComponent,
+    SingleStoreBannerComponent
   ],
   imports: [
     CommonModule,

@@ -58,7 +58,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-
     this.productService.getSettingsDetails().subscribe(
       res => {
         if (res.length) {
@@ -75,6 +74,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       this.productAddons = response.data.add_ons;
       this.productImages.push(...response.data.product_3d_image)
       this.productImages.push(...response.data.product_image)
+      localStorage.setItem('productglb',response.data.product_3d_image[0].pro_3d_image)
+      console.log('response.data.product_3d_image.pro_3d_image =======================>', response.data.product_3d_image[0].pro_3d_image)
+
       console.log('this.productImages =======================>', this.productImages)
       this.ceateForm();
       if (response.data.product_external_link) {
