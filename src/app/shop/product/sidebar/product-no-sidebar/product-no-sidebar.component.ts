@@ -153,6 +153,11 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     this.counter++;
   }
 
+  tryonpage()
+  {
+    this.router.navigateByUrl('/tryon')
+  }
+
   // Decrement
   decrement() {
     if (this.counter > 1) this.counter--;
