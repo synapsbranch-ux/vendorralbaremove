@@ -72,10 +72,12 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
       this.productAttributeArr = response.data.attributes;
       this.productAddons = response.data.add_ons;
+      console.log('response.data.product_3d_image.pro_3d_image =======================>', response.data)
       this.productImages.push(...response.data.product_3d_image)
       this.productImages.push(...response.data.product_image)
-      localStorage.setItem('productglb',response.data.product_3d_image[0].pro_3d_image)
-      console.log('response.data.product_3d_image.pro_3d_image =======================>', response.data.product_3d_image[0].pro_3d_image)
+      localStorage.setItem('productglb',response.data.product_tryon_3d_image[0].pro_3d_image)
+      localStorage.setItem('product2d',response.data.product_tryon_2d_image[0].pro_2d_image)
+
 
       console.log('this.productImages =======================>', this.productImages)
       this.ceateForm();

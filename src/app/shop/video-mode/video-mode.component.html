@@ -1,16 +1,2 @@
-<div class="example-container" id="video-data">
-    <a-scene mindar-face embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-      <a-assets>
-        <a-asset-item id="headModel" src="assets/images/headOccluder.glb"></a-asset-item>
-        <a-asset-item id="glassesModel" src="assets/images/pro-1698997429.glb"></a-asset-item>
-      </a-assets>
-      <a-camera fov="80" position="0 1.6 0"></a-camera>
-  <!-- head occluder -->
-      <a-entity mindar-face-target="anchorIndex: 168">
-    <a-gltf-model mindar-face-occluder position="0 -0.3 0.15"rotation="0 0 0" scale="0.065 0.065 0.065" src="#headModel"></a-gltf-model>
-      </a-entity>
-      <a-entity mindar-face-target="anchorIndex: 168">
-    <a-gltf-model rotation="0 -0 0" position="0 -.1 0" scale=".80 .80 .80" src="#glassesModel" class="glasses1-entity" ></a-gltf-model>
-      </a-entity>
-    </a-scene>
-  </div>
+<div class="example-container" id="video-data" #contentContainer [innerHTML]="modelHTML">
+</div>

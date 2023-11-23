@@ -20,7 +20,7 @@ export class ImageModeComponent implements OnInit {
   maskOnImage: boolean = false;
   masks: any[] = []; // Replace 'any' with the appropriate type for your masks
   maskKeyPointIndexs: number[] = [10, 234, 152, 454]; // overhead, left Cheek, chin, right cheek
-
+seletedimage:any
   constructor() { }
 
   ngOnInit(): void {
@@ -28,6 +28,7 @@ export class ImageModeComponent implements OnInit {
     this.canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     this.imageElement = document.getElementById('faces') as HTMLImageElement;
     this.selectedMask = document.querySelector(".selected-mask img") as HTMLImageElement;
+    this.seletedimage=localStorage.getItem('product2d');
   }
 
   onFileSelected(event: any): void {

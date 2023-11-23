@@ -22,15 +22,23 @@
 video
 {
     z-index: 1 !important;
+    // height: 500px !important;
 }
 a-scene
 {
     z-index: 2 !important;
+    // height: 500px !important;
 }
 
 @media only screen and (max-width: 600px) {
     .field-icon {
         bottom: 18px;
+    }
+    a-scene{
+        height: 480px !important;
+    }
+    video{
+        height: 480px !important;
     }
 }
 
