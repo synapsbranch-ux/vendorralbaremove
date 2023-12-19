@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tryon',
@@ -7,14 +9,47 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TryonComponent implements OnInit {
   mode = 'video';
-  constructor() { }
+  videomodestatus: boolean = false;
+  imagemodestatus: boolean = false;
+
+  constructor(private toaster:ToastrService, private router:Router) { }
 
   ngOnInit(): void {
+    let video = localStorage.getItem('productglb');
+    let image = localStorage.getItem('product2d');
+    if (video == null) {
+      this.videomodestatus = false;
+    }
+
+    if (image == null) {
+      this.imagemodestatus = false;
+    }
+
+
+    if (video != null && image != null) {
+      this.videomodestatus = true;
+      this.imagemodestatus = true;
+      this.mode = 'video'
+    }
+
+    if (video == null && image != null) {
+      this.mode = 'image'
+    }
+
+
+    if(video == null && image == null)
+    {
+      this.toaster.error('You have no video or image for Tryon')
+      this.router.navigateByUrl('/')
+    }
+
+    console.log('video & Image',video,image);
+
   }
 
-  modeChage(modename:any) {
+  modeChage(modename: any) {
     this.mode = modename;
-    console.log('this.mode',this.mode)
+    console.log('this.mode', this.mode)
   }
 
 }

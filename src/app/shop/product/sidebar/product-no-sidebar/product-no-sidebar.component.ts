@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import '@google/model-viewer';
 import { view3DModalComponent } from 'src/app/shared/components/modal/product-view3D/product-view3D.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 const state = {
@@ -45,15 +46,16 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   productAddonsPrice: number = 0;
   desableInput: boolean = false;
   AddonService: boolean = false;
-  productImages=[];
-  productWishliststatus:boolean=false;
+  productImages = [];
+  productWishliststatus: boolean = false;
+  tryonenable: boolean = false;
 
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
 
-  constructor(private route: ActivatedRoute, private router: Router,
+  constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder) {
   }
 
@@ -69,28 +71,44 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     let product_slug = this.route.snapshot.paramMap.get('slug');
     this.productService.getproductsBySlugs(product_slug).subscribe(response => {
       this.product = response.data;
-      this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
-      this.productAttributeArr = response.data.attributes;
-      this.productAddons = response.data.add_ons;
-      console.log('response.data.product_3d_image.pro_3d_image =======================>', response.data)
-      this.productImages.push(...response.data.product_3d_image)
-      this.productImages.push(...response.data.product_image)
-      localStorage.setItem('productglb',response.data.product_tryon_3d_image[0].pro_3d_image)
-      localStorage.setItem('product2d',response.data.product_tryon_2d_image[0].pro_2d_image)
-
-
-      console.log('this.productImages =======================>', this.productImages)
-      this.ceateForm();
-      if (response.data.product_external_link) {
-        this.product_external_link = response.data.product_external_link;
+      if(Object.keys(this.product).length > 0)
+      {
+        this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
+        this.productAttributeArr = response.data.attributes;
+        this.productAddons = response.data.add_ons;
+        console.log('productAttributeArr =================',this.productAttributeArr);
+        console.log('productAddons =================',this.productAddons);
+  
+        this.productImages.push(...response.data.product_3d_image)
+        this.productImages.push(...response.data.product_image)
+        if (response.data.product_tryon_3d_image.length > 0 || response.data.product_tryon_2d_image.length > 0) {
+          this.tryonenable = true
+        }
+        this.ceateForm();
+        if (response.data.product_external_link) {
+          this.product_external_link = response.data.product_external_link;
+        }
+        else {
+          this.product_external_link = "#"
+        }
+        this.image3d = {
+          "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
+          "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
+        };
       }
-      else {
-        this.product_external_link = "#"
+      else
+      {
+        this.router.navigateByUrl('/')
       }
-      this.image3d = this.product.product_3d_image[0].pro_3d_image;
     });
 
-    
+
+  }
+
+  // Function to sanitize a single URL using DomSanitizer
+  sanitizeURL(url: string): SafeResourceUrl {
+    let urlYoutube = url.replace("watch?v=", "v/");
+    return this.sanitizer.bypassSecurityTrustResourceUrl(urlYoutube);
   }
 
   ceateForm() {
@@ -155,8 +173,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     this.counter++;
   }
 
-  tryonpage()
-  {
+  tryonpage() {
     this.router.navigateByUrl('/tryon')
   }
 
@@ -168,15 +185,15 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   // Add to cart
   async addToCart(product: any) {
 
-    product.addonsprice=this.productAddonsPrice;
-    let extraObj=
+    product.addonsprice = this.productAddonsPrice;
+    let extraObj =
     {
-      extra_document:this.uploadAddonsImage
+      extra_document: this.uploadAddonsImage
     }
     this.addonSelectedResult.push(extraObj);
-    product.addons= this.addonSelectedResult
-    console.log('Final Cart Product ==================>',product)
-    const status = await this.productService.addToCart(product,this.counter);
+    product.addons = this.addonSelectedResult
+    console.log('Final Cart Product ==================>', product)
+    const status = await this.productService.addToCart(product, this.counter);
     if (status) {
       product.stock = (product.stock - this.counter);
       this.toastrService.success('Product has been added in Cart.');
@@ -200,7 +217,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
     this.productService.uploadImage(this.fileToUpload).subscribe(
       (res) => {
-        this.value[formcontrolname] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price:0 ;
+        this.value[formcontrolname] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0;
         let imgobj = {
           keyname: formcontrolname,
           fileUrl: res['data'].fileUrl,
@@ -216,7 +233,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           this.uploadAddonsImage.splice(exists, 1, oldObj)
         }
 
-        console.log('imgobj =======================>',imgobj);
+        console.log('imgobj =======================>', imgobj);
 
       },
       (err) => {
@@ -233,7 +250,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     {
       key: addon.addon_slug,
       value: '',
-      price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price: 0,
+      price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
       other: val
     }
     const exists = this.addonSelectedResult.findIndex(el => el.key == addon.addon_slug);
@@ -241,7 +258,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     // // If the key-value pair doesn't exist, push the object into the array
     if (exists == -1) {
       this.addonSelectedResult.push(seletctObject);
-      this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price? addon.add_ons_value[0].price: 0)
+      this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
     }
     else {
       oldObj.other = val;
@@ -268,14 +285,14 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     const selecttxt = this.productAddons.find(item => item.addon_slug === slug);
     console.log('selecttxt Find', selecttxt);
     if (selecttxt) {
-      this.value[slug] = selecttxt.add_ons_value[0].price ? selecttxt.add_ons_value[0].price: 0;
+      this.value[slug] = selecttxt.add_ons_value[0].price ? selecttxt.add_ons_value[0].price : 0;
     }
 
     let seletctObject =
     {
       key: addon.addon_slug,
       value: val,
-      price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price:0,
+      price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
       other: ''
     }
     const exists = this.addonSelectedResult.findIndex(el => el.key == addon.addon_slug);
@@ -285,31 +302,28 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     // // If the key-value pair doesn't exist, push the object into the array
     if (exists == -1) {
       this.addonSelectedResult.push(seletctObject);
-      this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price? addon.add_ons_value[0].price: 0)
+      this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
     }
     else {
-      console.log('val ===========>',Number(val) , addon.add_ons_input)
+      console.log('val ===========>', Number(val), addon.add_ons_input)
 
       if (Number(val) > 0 && (addon.add_ons_input == 'range' || addon.add_ons_input == 'range-input')) {
-        if(oldObj.other != '')
-        {
-          seletctObject.other=oldObj.other;
-        }
-        this.addonSelectedResult.splice(exists, 1, seletctObject)
-      }
-      else 
-      if (val.length > 0 && (addon.add_ons_input == 'input' || addon.add_ons_input == 'textarea')) {
-        if(oldObj.other != '')
-        {
-          seletctObject.other=oldObj.other;
+        if (oldObj.other != '') {
+          seletctObject.other = oldObj.other;
         }
         this.addonSelectedResult.splice(exists, 1, seletctObject)
       }
       else
-      {
-        this.addonSelectedResult.splice(exists, 1)
-        this.productAddonsPrice -= parseFloat(oldObj.price)
-      }
+        if (val.length > 0 && (addon.add_ons_input == 'input' || addon.add_ons_input == 'textarea')) {
+          if (oldObj.other != '') {
+            seletctObject.other = oldObj.other;
+          }
+          this.addonSelectedResult.splice(exists, 1, seletctObject)
+        }
+        else {
+          this.addonSelectedResult.splice(exists, 1)
+          this.productAddonsPrice -= parseFloat(oldObj.price)
+        }
     }
 
     console.log('this.addonSelectedResult', this.addonSelectedResult);
@@ -356,7 +370,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     }
     else {
       array.splice(exists, 1, obj)
-      this.productAddonsPrice -= parseFloat(oldObj.price ? oldObj.price:0)
+      this.productAddonsPrice -= parseFloat(oldObj.price ? oldObj.price : 0)
     }
   }
 
@@ -380,11 +394,11 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Buy Now
   async buyNow(product: any) {
-    console.log('Before Cart Product ==================>',product)
-    this.addonSelectedResult[this.addonSelectedResult.length + 1].extra_document=this.uploadAddonsImage;
-    product.addons= this.addonSelectedResult
-    console.log('Final Cart Product ==================>',product)
-    const status = await this.productService.addToCart(product,this.counter);
+    console.log('Before Cart Product ==================>', product)
+    this.addonSelectedResult[this.addonSelectedResult.length + 1].extra_document = this.uploadAddonsImage;
+    product.addons = this.addonSelectedResult
+    console.log('Final Cart Product ==================>', product)
+    const status = await this.productService.addToCart(product, this.counter);
     if (status)
       this.router.navigate(['/checkout']);
   }

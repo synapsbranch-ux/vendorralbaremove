@@ -95,7 +95,7 @@ export class CollectionComponent implements OnInit {
       console.log('Product Paginate Check', this.products);
     })
 
-    this.storeurl =`${environment.storeUrl}/?s_slug=${this.store_slug}&page=${this.page_no}`;
+    this.storeurl =`${environment.storeUrl}/${this.store_slug}/${this.page_no}`;
   }
 
 

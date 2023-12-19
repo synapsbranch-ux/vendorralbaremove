@@ -13,6 +13,7 @@ export class VideoModeComponent implements OnInit, AfterViewInit {
   constructor(private sanitizer: DomSanitizer, private renderer: Renderer2) {
   }
   ngOnInit(): void {
+    console.log('Video Mode Container');
     this.modelSrc = localStorage.getItem('productglb');
     this.initializeAR();
   }
@@ -45,7 +46,7 @@ export class VideoModeComponent implements OnInit, AfterViewInit {
       <a-camera fov="80" position="0 1.6 0"></a-camera>
   <!-- head occluder -->
       <a-entity mindar-face-target="anchorIndex: 168">
-    <a-gltf-model mindar-face-occluder position="0 -0.3 0.15"rotation="0 0 0" scale="0.065 0.065 0.065" src="#headModel"></a-gltf-model>
+    <a-gltf-model  position="0 -0.3 0.15"rotation="0 0 0" scale="0.065 0.065 0.065" src="#headModel"></a-gltf-model>
       </a-entity>
       <a-entity mindar-face-target="anchorIndex: 168">
     <a-gltf-model mindar-controls="none" rotation="0 -0 0" position="0 -.1 0" scale=".80 .80 .80" src="#glassesModel" class="glasses1-entity" ></a-gltf-model>

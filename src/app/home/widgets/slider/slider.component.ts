@@ -42,54 +42,32 @@ export class SliderComponent implements OnInit {
   constructor(private userservice: UserService, private storeService: StoreService, private router: Router) { }
 
   ngOnInit(): void {
-
     this.envstore = environment.storeUrl;
-
   }
 
   public HomeSliderConfig: any = HomeSlider;
 
-  vandorbannerClick(vendorid: any) {
-    let VData =
+  vandorbannerClick(v_id: any) {
+    let data =
     {
-      vendor_id: vendorid
+      vendor_id: v_id
     }
-
-    this.userservice.userVendorRoomCount(VData).subscribe(
+    this.storeService.vendorstoredetails(data).subscribe(
       res => {
-        this.storeclick(vendorid, res['data']);
+        let sdata =
+        {
+          vendor_id: v_id,
+          store_id: res.data[0]._id
+        }
+        this.storeService.storeviewcount(sdata).subscribe(
+          response => {
+            window.open(`${environment.storeUrl}/${res.data[0].store_slug}/1`, "_self");
+            console.log('res=================', res.data[0].store_slug)
+          }
+        )
       }
     )
-  }
 
-
-  storeclick(vendorid: any, roomno: any) {
-    this.storeService.getStoresMore.subscribe(response => {
-      console.log('Single Store response  =>', response);
-      this.StoreLists = response['data'];
-      const child = this.StoreLists.map((store_l) => {
-        console.log('Store Vendor id API', store_l.store_owner._id);
-        console.log('Store Vendor id', vendorid);
-        if (store_l.store_owner._id == vendorid) {
-          this.storename = store_l.store_name;
-          this.storeslug = store_l.store_slug;
-          this.storeimgUrl = store_l.store_image;
-          this.vendor_id = store_l.store_owner._id;
-          this.store_id = store_l._id;
-          let sdata = {
-            "store_id": this.store_id,
-            "vendor_id": this.vendor_id
-          }
-          // store view count 
-          this.storeService.storeviewcount(sdata).subscribe(
-            res => {
-              window.open(`${environment.storeUrl}/?s_slug=${this.storeslug}`, "_self");
-            }
-          )
-          return store_l.store_department;
-        }
-      });
-    });
 
   }
 

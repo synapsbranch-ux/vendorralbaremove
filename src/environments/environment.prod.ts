@@ -4,5 +4,5 @@ export const environment = {
   stripe_token: 'STRIPE_TOKEN',
   paypal_token: 'AYPI-cRO_n9Z6gkUd5dsA-Io7FPeP4csWh5GCzBD7vr3JxqWKl249hFR5WF6DXW654DWgBJl5wQltYIw',
   baseUrl: 'https://api.ralbatech.com/api/v1/',
-  storeUrl: 'http://staging.ralbatech.com:5003'
+  storeUrl: 'https://store.ralbatech.com'
 };

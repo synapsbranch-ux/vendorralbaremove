@@ -1,30 +1,80 @@
-
-
 <ng-template class="theme-modal" #view3D let-modal>
 	<div class="modal-content">
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
-			<span aria-hidden="true">&times;</span>
-		  </button>
-	  </div>
-	  <div class="modal-body">
-		<div class="example-container">
-			<a-scene mindar-face embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" >
-			  <a-assets>
-				<a-asset-item id="headModel" src="assets/images/headOccluder.glb"></a-asset-item>
-				<a-asset-item id="glassesModel" [attr.src]="modelSrc"></a-asset-item>
-			  </a-assets>
-			  <a-camera fov="80" active="false" position="0 0 0"></a-camera>
-			  <a-entity mindar-face-target="anchorIndex: 168">
-			<a-gltf-model mindar-face-occluder position="0 -0.3 0.05"rotation="0 0 0" scale="0.048 0.048 0.048" src="#headModel"></a-gltf-model>
-			  </a-entity>
-			  <a-entity mindar-face-target="anchorIndex: 168">
-				  <a-gltf-model rotation="0 0 0" position="0 -.06 -.05" scale=".70 .70 .70"
-				  src="#glassesModel" cursor-listener ></a-gltf-model>
-			  </a-entity>
-			</a-scene>
-		  </div>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"
+				(click)="modal.dismiss('Cross click')">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="row row-centered justify-content-center ">
+			<div class="col-md-12 col-centered pt-3">
+				<div class="d-flex align-items-center justify-content-center mb-3">
+					<button  class="btn btn-solid rounded-lg virtual_btn mr-3" [ngClass]="mode =='video' ? 'active' : ''" (click)="modeChage('video')"> Video Mode</button>
+					<button  class="btn btn-solid rounded-lg virtual_btn" [ngClass]="mode =='image' ? 'active' : ''" (click)="modeChage('image')">Image Mode</button>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<div class="row row-centered justify-content-center">
+				<div class="col-md-12 col-centered">
+					<div class="video-section" [ngClass]="mode =='video' ? 'd-block' : 'd-none'">
+						<div class="example-container" id="video-data">
+							<div  #contentContainer [innerHTML]="modelHTML">
+							</div>
 
-	   </div>
+						<div class="position-absolute w-100" style="bottom:0;z-index:2;">
+							<svg viewBox="0 0 451 542">
+							  <defs>
+								<ellipse id="face-ellipse" cx="225.5px" cy="247.67999999999998px" rx="135.29999999999998px" ry="167.772px"></ellipse>
+								<mask id="mask">
+								  <rect x="0" y="0" width="100%" height="100%" fill="#fff" fill-opacity="0.3"></rect>
+								  <use xlink:href="#face-ellipse"></use>
+								</mask>
+							  </defs>
+							  <rect x="0" y="0" width="100%" height="100%" mask="url(#mask)"></rect>
+							  <use xlink:href="#face-ellipse" fill-opacity="0" stroke="white" stroke-width="2"></use>
+							</svg>
+						  </div>
+						  <div style="position: absolute; bottom: 0px; width: 100%; z-index:3; display: flex; justify-content: center; align-items: center; box-sizing: border-box; padding-right: 0px; margin-bottom: 0px; height: 112px;">
+							<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; margin: 0px 15px;">
+							  <div style="width: 44px; height: 44px; background-position: center center; background-size: contain; background-repeat: no-repeat; margin-bottom: 12px; background-image: url('{{this.cameraDetact}}');"></div>
+							  <div style="font-size: 12px; font-family: Helvetica, roboto, sans-serif, avenir, arial, sans-serif; text-align: center;">
+								<div>Camera Detection</div>
+							  </div>
+							</div>
+							<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; margin: 0px 15px;">
+							  <div style="width: 44px; height: 44px; background-position: center center; background-size: contain; background-repeat: no-repeat; margin-bottom: 12px; background-image: url('{{this.faceDetact}}');"></div>
+							  <div style="font-size: 12px; font-family: Helvetica, roboto, sans-serif, avenir, arial, sans-serif; text-align: center;">
+								<div>Face Detection</div>
+							  </div>
+							</div>
+							<!-- <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; margin: 0px 15px;">
+							  <div style="width: 44px; height: 44px; background-position: center center; background-size: contain; background-repeat: no-repeat; margin-bottom: 12px; background-image: url('assets/images/yellow-check.png');"></div>
+							  <div style="font-size: 12px; font-family: Helvetica, roboto, sans-serif, avenir, arial, sans-serif; text-align: center;">
+								<div>Look straight</div>
+							  </div>
+							</div>
+							<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; margin: 0px 15px;">
+							  <div style="width: 44px; height: 44px; background-position: center center; background-size: contain; background-repeat: no-repeat; margin-bottom: 12px; background-image: url('assets/images/red-close.png');"></div>
+							  <div style="font-size: 12px; font-family: Helvetica, roboto, sans-serif, avenir, arial, sans-serif; text-align: center;">
+								<div>Face position</div>
+							  </div>
+							</div> -->
+						  </div>
+						</div>
+					</div>
+					<div class="image-section" [ngClass]="mode =='image' ? 'd-block': 'd-none'">
+						<div class="upload-section text-center align-items-center justify-content-center">
+							<input type="file" (change)="onFileSelected($event)" accept="image/*">
+							<!-- <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image"> -->
+						</div>
+
+						<main id="face-mask-app" #contentImageContainer [innerHTML]="modelImageHTML">
+						</main>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
 </ng-template>

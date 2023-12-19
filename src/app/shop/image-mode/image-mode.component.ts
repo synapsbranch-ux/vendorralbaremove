@@ -24,6 +24,7 @@ seletedimage:any
   constructor() { }
 
   ngOnInit(): void {
+    console.log('Image Mode Container');
 
     this.canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     this.imageElement = document.getElementById('faces') as HTMLImageElement;

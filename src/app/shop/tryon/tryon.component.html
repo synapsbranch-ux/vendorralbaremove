@@ -2,8 +2,8 @@
     <div class="row row-centered justify-content-center">
         <div class="col-md-12 col-centered">
             <div class="d-flex align-items-center justify-content-center mb-3">
-                <button class="btn btn-solid rounded-lg virtual_btn mr-3" [ngClass]="mode =='video' ? 'active' : ''" (click)="modeChage('video')"> Video Mode</button>
-                <button class="btn btn-solid rounded-lg virtual_btn" [ngClass]="mode =='image' ? 'active' : ''" (click)="modeChage('image')">Image Mode</button>
+                <button [disabled]="!videomodestatus" class="btn btn-solid rounded-lg virtual_btn mr-3" [ngClass]="mode =='video' ? 'active' : ''" (click)="modeChage('video')"> Video Mode</button>
+                <button [disabled]="!imagemodestatus" class="btn btn-solid rounded-lg virtual_btn" [ngClass]="mode =='image' ? 'active' : ''" (click)="modeChage('image')">Image Mode</button>
             </div>
         </div>
         <div class="col-md-9 col-centered">

@@ -34,4 +34,8 @@ export class StoreService {
     return this.http.post(environment.baseUrl+'stores/storeview',data);
   } 
 
+  vendorstoredetails(data: any): Observable<any>{
+    return this.http.post(environment.baseUrl+'stores/vendor-store-details',data);
+  } 
+
 }
