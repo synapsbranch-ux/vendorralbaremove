@@ -6,14 +6,13 @@
             <div class="row">
                 <div class="col-lg-6">
                     <owl-carousel-o [options]="ProductDetailsMainSliderConfig" #owlCar class="product-slick1">
-
                         <ng-container *ngFor="let image of productImages; index as i">
                             <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
                                 <div>
-                                    <model-viewer class="model-viewer" camera-controls camera-orbit="75deg 75deg 20m"
-                                    src="{{image.pro_3d_image}}" alt="A 3D model Product" data-js-focus-visible=""
-                                    ar-status="not-presenting" [style.background-color]="'#8f8f8f'" >
-                                </model-viewer>
+                                    <iframe [src]="iframeLink" frameborder="0" height="100%" width="100%"></iframe>
+                                    <!-- <model-viewer class="model-viewer" camera-controls camera-orbit="75deg 75deg 20m"
+                                    src="{{image.pro_3d_image}}" alt="A 3D model Product"[style.background-color]="'#8f8f8f'" >
+                                </model-viewer> -->
                                 </div>
                             </ng-template>
                             <ng-template carouselSlide [id]="i" *ngIf="i > 0">
@@ -21,10 +20,6 @@
                                     <lib-ngx-image-zoom class="img-fluid" [thumbImage]="image.pro_image"
                                         [fullImage]="image.pro_image" [magnification]="1.5" [enableLens]="true"
                                         [lensWidth]="300" [lensHeight]="300"></lib-ngx-image-zoom>
-
-                                    <!-- <img [defaultImage]="'assets/images/product/placeholder.jpg'" 
-                                   [lazyLoad]="image.src" 
-                                   [alt]="image.alt" class="img-fluid" [src]="image.src"> -->
                                 </div>
                             </ng-template>
                         </ng-container>

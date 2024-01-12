@@ -50,6 +50,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   productWishliststatus: boolean = false;
   tryonenable: boolean = false;
 
+  iframeBaseLink='https://gltfviewer.ralbatech.com/?url='
+  iframeLink:any
+
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -78,7 +81,12 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         this.productAddons = response.data.add_ons;
         console.log('productAttributeArr =================',this.productAttributeArr);
         console.log('productAddons =================',this.productAddons);
-  
+  if(response.data.product_3d_image.length > 0)
+  {
+     let product3durl=response.data.product_3d_image[0].pro_3d_image;
+     let fulliframeURL=  this.iframeBaseLink+product3durl;
+     this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
+  }
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)
         if (response.data.product_tryon_3d_image.length > 0 || response.data.product_tryon_2d_image.length > 0) {
@@ -91,10 +99,34 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         else {
           this.product_external_link = "#"
         }
-        this.image3d = {
-          "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
-          "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
-        };
+        if(response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length > 0)
+        {
+          this.image3d = {
+            "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
+            "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
+          };
+        }
+        else if(response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length == 0)
+        {
+          this.image3d = {
+            "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
+            "Twod_Tryon": ''
+          };
+        }
+        else if(response.data.product_tryon_3d_image.length == 0 && response.data.product_tryon_2d_image.length > 0 )
+        {
+          this.image3d = {
+            "Threed_Tryon": '',
+            "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
+          };
+        }
+        else
+        {
+          this.image3d = {
+            "Threed_Tryon": '',
+            "Twod_Tryon": ''
+          };
+        }
       }
       else
       {

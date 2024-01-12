@@ -6,8 +6,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import '@google/model-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 declare let faceLandmarksDetection: any;
 declare let AFRAME: any;
+declare let facemesh: any
 @Component({
   selector: 'app-product-view3D',
   templateUrl: './product-view3D.component.html',
@@ -45,28 +47,82 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   arSystem: any;
   cameraDetact: any;
   faceDetact: any;
+  facedetectbool: boolean = true;
+  lookStraght: any;
+  facePostion: any;
+  returnUrl:any
 
+  iframeBaseLink='https://tryon.ralbatech.com/?p_name='
+  iframeLink:any
 
+  //Declear for face movement and oval face position
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D | undefined;
+  fmesh: any;
+  MAX_SPEED = 600;
+  drawMaskAR: boolean = true;
+  mindarElement = document.querySelector('#mindar_section') as HTMLDivElement;;
+  messageBox = document.querySelector('.message_box') as HTMLDivElement;;
+  mindaroverlay = document.querySelector('.mindar-ui-loading') as HTMLDivElement;
+  acanvas
+  prevNosePosition = null;
+  totalDistance = 0; // To track total distance moved
+  prevFrameTime = Date.now();
+  video: HTMLVideoElement
+  animationFrameVideoId
+  animationFrameCanvasId
+  animationFrameFaceId
+  isCustomARSystemRegistered:boolean = false; // Flag to track registration
+
+  curFaces = [];
+  glassImageUrl = 'assets/images/overlay.png'; // Replace with your image path
+  glassImage: HTMLImageElement = new Image();
+  isFaceDetect: boolean = false;
+  loaderShow: boolean = true
 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef<HTMLDivElement>;
   @ViewChild('contentImageContainer', { static: false }) contentImageContainer: ElementRef<HTMLDivElement>;
 
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('faceCanvas') faceCanvas!: ElementRef<HTMLCanvasElement>;
+
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
-    private modalService: NgbModal, private sanitizer: DomSanitizer, private renderer: Renderer2) { }
+    private modalService: NgbModal, private sanitizer: DomSanitizer, private renderer: Renderer2, private router: Router) {
+     }
 
   async ngOnInit() {
-    AFRAME.registerSystem('custom-ar', {
-      init: function () {
-        // Initialize your AR system here
-        this.arSystem = this.sceneEl.systems["mindar-face-system"];
-      }
-    });
+    this.returnUrl=this.router.url;
     this.cameraDetact = this.redIcon;
     this.faceDetact = this.redIcon;
-
+    this.lookStraght = this.redIcon;
+    this.facePostion = this.redIcon;
+    this.glassImage.src = this.glassImageUrl;
+    this.registerCustomARSystem();
   }
 
-  async initializeAR() {
+
+  registerCustomARSystem() {
+    if (!AFRAME.systems['custom-ar']) {
+      AFRAME.registerSystem('custom-ar', {
+        init: function () {
+          // Initialize your AR system here
+          this.arSystem = this.sceneEl.systems['mindar-face-system'];
+        }
+      });
+    }
+  }
+
+  unregisterCustomARSystem() {
+    if (AFRAME.systems['custom-ar']) {
+      // Cleanup or reset related to AR system can be handled here if needed
+      // Currently, A-Frame doesn't provide direct unregisterSystem method
+
+      delete AFRAME.systems['custom-ar']; // Remove the system from AFRAME
+    }
+  }
+
+  async initializeFaceGlassImage() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const imageHtml = `
@@ -114,8 +170,16 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       </div>
     </div>
     <div class="md-overlay"></div>`
-
       this.modelImageHTML = this.sanitizer.bypassSecurityTrustHtml(imageHtml);
+    } catch (error) {
+      // Handle errors
+      console.log('error =======', error);
+    }
+  }
+
+  async initializeFaceGlassVideo() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const unsafeHtml = ` 
       <style>
       /* Adjustments to make the resizable div */
@@ -143,7 +207,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     <a-gltf-model mindar-face-occluder position="0 -0.3 0.15"rotation="0 0 0" scale="0.065 0.065 0.065" src="#headModel"></a-gltf-model>
       </a-entity>
       <a-entity mindar-face-target="anchorIndex: 168">
-    <a-gltf-model mindar-controls="none" rotation="0 -0 0" position="0 -.1 0" scale=".80 .80 .80" src="#glassesModel" class="glasses1-entity" ></a-gltf-model>
+    <a-gltf-model mindar-controls="none" rotation="0 0 0" position="0 -.08 0" scale=".78 .78 .78" src="#glassesModel" class="glasses1-entity" ></a-gltf-model>
       </a-entity>
     </a-scene>
     `
@@ -152,12 +216,18 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       //console.log('Camera Found')
       setTimeout(() => {
         document.querySelector('a-scene').addEventListener("targetFound", event => {
-          this.faceDetact=this.greenIcon;
+          this.faceDetact = this.greenIcon;
+          if (this.seletedimage == '') {
+            this.facedetectbool = true;
+          }
+          else {
+            this.facedetectbool = false;
+          }
         });
         document.querySelector('a-scene').addEventListener("targetLost", event => {
-          this.faceDetact=this.redIcon;
+          this.faceDetact = this.redIcon;
         });
-        
+
       }, 0);
 
     } catch (error) {
@@ -165,12 +235,14 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
         const unsafeHtml = ``
         this.modelHTML = this.sanitizer.bypassSecurityTrustHtml(unsafeHtml);
+        this.facedetectbool = false;
         console.error('Camera not found:', error.message);
         this.cameraDetact = this.redIcon;
         // Display an error message to the user or take appropriate action
       } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
         console.error('Camera permission denied:', error.message);
         this.cameraDetact = this.yellowIcon;
+        this.facedetectbool = false;
         // Prompt the user to allow camera access or take appropriate action
       } else {
         console.error('Error accessing the camera:', error.message);
@@ -182,24 +254,26 @@ export class view3DModalComponent implements OnInit, OnDestroy {
 
   onFileSelected(event: any): void {
     // Select the image element by its ID
-    const imgElement = document.getElementById('canvas mask_0');
+    const imgElement = document.getElementById('mask_0') as HTMLImageElement;
     if (imgElement) {
       // Hide the image by setting its display property to 'none'
       imgElement.style.display = 'none';
     } else {
-      console.error('Image element not found');
+      // console.error('Image element not found');
     }
 
     const file: File = event.target.files[0];
     if (file) {
       this.readFile(file);
       setTimeout(() => {
+        this.startFacemask()
+      }, 1000)
+
+      setTimeout(() => {
         if (imgElement) {
           imgElement.style.display = 'block';
         }
-
-        this.startFacemask()
-      }, 2000)
+      }, 1500);
     }
     // this.imageUrl = 'assets/images/uttar.png';
     // setTimeout(()=>{
@@ -228,6 +302,128 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       this.selectedMask = document.querySelector(".selected-mask img") as HTMLImageElement;
     };
     reader.readAsDataURL(file);
+  }
+
+  async main() {
+    this.fmesh = await facemesh.load({ maxFaces: 1 });
+    // Set up front-facing camera
+    await this.setupCamera();
+    let videoWidth = this.video.videoWidth;
+    let videoHeight = this.video.videoHeight;
+    this.video.play()
+
+    // HTML Canvas for the video feed
+    this.canvas = document.getElementById('facecanvas') as HTMLCanvasElement;
+    this.canvas.width = videoWidth;
+    this.canvas.height = videoHeight;
+    this.ctx = this.canvas.getContext('2d');
+    this.loaderShow = false;
+    this.drawVideo();
+    this.renderPrediction();
+  }
+
+
+  async setupCamera(): Promise<HTMLVideoElement> {
+    this.video = document.getElementById('video') as HTMLVideoElement;
+    const stream = await navigator.mediaDevices.getUserMedia({
+      'audio': false,
+      'video': {
+        facingMode: 'user',
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+      },
+    });
+    this.video.srcObject = stream;
+
+    return new Promise<HTMLVideoElement>((resolve) => {
+      this.video.onloadedmetadata = () => {
+        resolve(this.video);
+      };
+    });
+  }
+
+  drawVideo() {
+    // console.log('draw video ctx ta pacchi ki? ==========',this.ctx);
+    this.ctx.drawImage(this.video, 0, 0);
+    this.animationFrameVideoId = requestAnimationFrame(this.drawVideo.bind(this));
+  }
+
+  async renderPrediction() {
+    this.ctx.stroke();
+    // if (this.drawMaskAR) 
+    // {
+    //   // console.log('glassImage===============');
+    //   this.ctx.drawImage(this.glassImage, 0, 0, this.canvas.width -20, this.canvas.height-20);
+    // }
+
+    let facepred = await this.fmesh.estimateFaces(this.canvas);
+    if ((facepred.length > 0) && (facepred[0].faceInViewConfidence > 0.9)) { // If we find a face, process it
+      // console.log('kaka mukh dekhechi!!!',facepred);
+      this.facePostion = this.greenIcon
+      this.drawMaskAR = false;
+      setTimeout(() => {
+        this.initializeFaceGlassVideo();
+        this.isFaceDetect = true;
+        this.acanvas = document.querySelector('.a-canvas') as HTMLCanvasElement;
+
+      }, 5000);
+
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.curFaces = facepred;
+    }
+    if (this.drawMaskAR) {
+      if (this.mindaroverlay) {
+        this.mindaroverlay.style.display = 'none';
+      }
+      this.animationFrameFaceId = requestAnimationFrame(this.renderPrediction.bind(this));
+    } else {
+      this.trackMovement();
+    }
+  };
+
+  async trackMovement() {
+    const predictions = await this.fmesh.estimateFaces(this.video);
+
+    if (predictions.length > 0) {
+      const noseLandmark = predictions[0].annotations.noseTip; // Get nose landmark
+      const currentNosePosition = [noseLandmark[0][0], noseLandmark[0][1]]; // Extract x, y coordinates
+
+      if (this.prevNosePosition) {
+        //console.log(`Detecting distance prevNosePosition :: ${prevNosePosition} currentNosePosition :: ${currentNosePosition}`);
+        // let distance = calculateDistance(prevNosePosition, currentNosePosition);
+        let distance = Math.sqrt(
+          Math.pow(currentNosePosition[0] - this.prevNosePosition[0], 2) + Math.pow(currentNosePosition[1] - this.prevNosePosition[1], 2)
+        )
+        // console.log(`Detecting speed..... distance :: ${distance}`);
+        this.totalDistance += distance;
+
+        // Calculate time elapsed since the last frame
+        const currentTime = Date.now();
+        const deltaTime = this.prevFrameTime ? (currentTime - this.prevFrameTime) / 1000 : 0; // Convert to seconds
+        this.prevFrameTime = currentTime;
+        const speed = distance / deltaTime; // Calculate speed (distance per second)
+        // console.log(`Current speed: ${speed.toFixed(2)} pixels per second. Max Speed :: ${this.MAX_SPEED}  condition check ::: ${speed > this.MAX_SPEED}`);
+        // console.log('arSystem ----------------------------', this.arSystem);
+        //Handlle mundu ghora
+        if (speed > this.MAX_SPEED) {
+          this.lookStraght = this.redIcon;
+          if (this.acanvas) {
+            this.acanvas.style.display = 'none';
+          }
+        }
+        else {
+          this.lookStraght = this.greenIcon;
+
+          if (this.acanvas) {
+            this.acanvas.style.display = 'block';
+          }
+        }
+      } else {
+        this.prevNosePosition = currentNosePosition;
+      }
+    }
+
+    this.animationFrameCanvasId = requestAnimationFrame(this.trackMovement.bind(this)); // Continuously track movement
   }
 
 
@@ -388,17 +584,48 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   }
   modeChage(modename: any) {
     this.mode = modename;
-    //console.log('this.mode', this.mode)
   }
 
 
   openModal() {
-    console.log('imageUrl==============', this.imageUrl);
+    console.log('this.image3d ===============', this.image3d);
     this.modelSrc = this.image3d.Threed_Tryon;
     this.seletedimage = this.image3d.Twod_Tryon;
-    this.modalOpen = true;
-    this.initializeAR();
+    if (this.modelSrc == '') {
+      this.mode = 'image'
+      this.facedetectbool = false;
+    }
+    else
+    {
+      // this.main();
+      // Split the URL by '/'
+    const parts = this.image3d.Threed_Tryon.split('/');
+    // Get the last part (filename)
+    const filename = parts[parts.length - 1];
+    let fulliframeURL=  this.iframeBaseLink+filename;
+    // console.log('fulliframeURL ===========',fulliframeURL)
+    this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL); 
+    // console.log('iframeLink ===========',this.iframeLink)
 
+    }
+    if (this.seletedimage == '') {
+      this.mode = 'video'
+      this.facedetectbool = true;
+      // Split the URL by '/'
+      const parts = this.image3d.Threed_Tryon.split('/');
+      // Get the last part (filename)
+      const filename = parts[parts.length - 1];
+      let fulliframeURL=  this.iframeBaseLink+filename;
+      // console.log('fulliframeURL ===========',fulliframeURL)
+      this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL); 
+      // console.log('iframeLink ===========',this.iframeLink)
+    }
+    else {
+      this.initializeFaceGlassImage();
+    }
+    this.modalOpen = true;
+
+    
     if (isPlatformBrowser(this.platformId)) {
       this.modalService.open(this.view3D, {
         size: 'md',
@@ -415,10 +642,16 @@ export class view3DModalComponent implements OnInit, OnDestroy {
 
 
   private getDismissReason(reason: any): string {
+    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.returnUrl]);
+    })
     this.modelHTML = '';
+    this.imageUrl = '';
     this.modelImageHTML = '';
     this.mode = 'video';
-
+    cancelAnimationFrame(this.animationFrameCanvasId)
+    cancelAnimationFrame(this.animationFrameFaceId)
+    cancelAnimationFrame(this.animationFrameVideoId)
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -429,15 +662,23 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.unregisterCustomARSystem();
+    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.returnUrl]);
+    })
     if (this.modalOpen) {
       this.modalService.dismissAll();
       this.imageUrl = '';
       this.mode = 'video';
       this.modelHTML = '';
       this.modelImageHTML = '';
+      cancelAnimationFrame(this.animationFrameCanvasId)
+      cancelAnimationFrame(this.animationFrameFaceId)
+      cancelAnimationFrame(this.animationFrameVideoId)
     }
 
   }
 
-
 }
+
+
