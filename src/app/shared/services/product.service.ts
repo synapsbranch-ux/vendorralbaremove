@@ -107,6 +107,21 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'category');
   }
 
+  
+
+  //// Get all Brands List
+
+  getallBrands() {
+    return this.http.get(environment.baseUrl + 'brand/list');
+  }
+
+    //// Get all catyegoryList
+
+    getallCategoryWithSubcat() {
+      return this.http.get(environment.baseUrl + 'category-list-for-store');
+    }
+  
+
   // Get Products
   public get getProducts(): Observable<ProductNew[]> {
 

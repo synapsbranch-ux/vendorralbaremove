@@ -10,6 +10,7 @@ import { CompareComponent } from './compare/compare.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
+import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
 
 const routes: Routes = [
 
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: '2d-products/:slug/:page',
     component: CollectionComponent
+  },
+  {
+    path: 'store-2d-products/:storeSlug/:catSlug',
+    component: StoreproductsComponent
   },
   {
     path: 'cart',

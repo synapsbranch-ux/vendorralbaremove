@@ -1,0 +1,109 @@
+<!-- section start -->
+<section class="compare-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="rack_inn">
+                    <img src="assets/images/self.png" alt="" />
+                    <div class="sunglass_main">
+                        <div class="row">
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sunglass_main">
+                        <div class="row">
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sunglass_main">
+                        <div class="row">
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-4">
+                                <div class="sunbox">
+                                    <img src="assets/images/1.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="pagiantion">
+                    <div class="mr-2">
+                        <button class="btn btn-sm btn-primary" *ngIf="showPrev" (click)="handlePrev()">Prev <<</button>
+                        <span class="buttons" *ngFor="let btnNumber of buttonNumbers">
+                        <button class="btn btn-sm btn-primary btns">{{btnNumber}}</button>
+                        </span>
+                        <button class="btn btn-sm btn-primary" *ngIf="showNext" (click)="handleNext();">Next >></button>
+                      </div>
+                </div>
+                <div class="brands">
+                    <h5>Filter Brand :: </h5>
+                    <ng-select [clearSearchOnAdd]="true"
+                    bindLabel="brand_name"
+                    [clearable]="false"
+                    [items]="brandList"
+                    [(ngModel)]="selectedBrand">
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <img height="25" width="25" [src]="item.brand_image"/>
+                        <b>&nbsp;&nbsp;{{item.brand_name}}</b>
+                    </ng-template>
+                </ng-select> 
+                </div>
+                <div class="categories">
+                    <div *ngFor="let category of categoryList">
+                        <div *ngFor="let cat of category">
+                            <div class="main_category" *ngIf="cat.attributes">
+                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                            </div>
+                            <div class="sub_category" *ngIf="!cat.attributes">
+                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section ends -->

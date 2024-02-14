@@ -39,7 +39,8 @@ import { SafePipe } from '../safe.pipe';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
 import { ImageModeComponent } from './image-mode/image-mode.component';
-
+import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ImageModeComponent } from './image-mode/image-mode.component';
     SafePipe,
     TryonComponent,
     VideoModeComponent,
-    ImageModeComponent
+    ImageModeComponent,
+    StoreproductsComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -78,7 +80,8 @@ import { ImageModeComponent } from './image-mode/image-mode.component';
     InfiniteScrollModule,
     SharedModule,
     ShopRoutingModule,
-    NgxImageZoomModule
+    NgxImageZoomModule,
+    NgSelectModule
   ]
 })
 export class ShopModule { }

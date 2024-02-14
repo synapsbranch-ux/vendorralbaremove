@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/shared/services/store.service';
 import { UserService } from './../../../shared/services/user.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -39,36 +39,22 @@ export class SliderComponent implements OnInit {
 
   roomavailablity = [];
   envstore: any
-  constructor(private userservice: UserService, private storeService: StoreService, private router: Router) { }
+  constructor(private userservice: UserService, private storeService: StoreService, private router: Router, private route:ActivatedRoute) {
+   }
 
   ngOnInit(): void {
     this.envstore = environment.storeUrl;
+    this.route.paramMap.subscribe(params => {
+      // Extract the 'slug' and 'page' values from the route parameters
+      this.store_slug = params.get('slug');
+    });
   }
 
   public HomeSliderConfig: any = HomeSlider;
 
-  vandorbannerClick(v_id: any) {
-    let data =
-    {
-      vendor_id: v_id
-    }
-    this.storeService.vendorstoredetails(data).subscribe(
-      res => {
-        let sdata =
-        {
-          vendor_id: v_id,
-          store_id: res.data[0]._id
-        }
-        this.storeService.storeviewcount(sdata).subscribe(
-          response => {
-            window.open(`${environment.storeUrl}/${res.data[0].store_slug}/1`, "_self");
-            console.log('res=================', res.data[0].store_slug)
-          }
-        )
-      }
-    )
-
-
+  vandorbannerClick(catDetails: any) {
+    console.log('catDetails ------------------',catDetails);
+    this.router.navigateByUrl(`/store-2d-products/${this.store_slug}/${catDetails.category_slug}`)
   }
 
 }

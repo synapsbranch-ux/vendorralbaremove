@@ -19,6 +19,7 @@ export class FashionOneComponent implements OnInit {
   public productCollections: any[] = [];
   public stores: Store[] = [];
   public homeslider:any=[];
+  public allcategories:any=[];
   
   constructor(public productService: ProductService,public storeService: StoreService, public homesliderservice: HomesliderService) {
 

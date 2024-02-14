@@ -1,0 +1,74 @@
+.rack_inn{width: 100%; position: relative;}
+.rack_inn img{width: 100%;}
+.sunglass_main{position: absolute; width: auto; display: flex; justify-content: space-between; align-items: center; top: 32%; left: 25%;}
+.sunbox{width: 136px;}
+.sunglass_main:nth-child(2){top: 46%; left: 24%;}
+.sunglass_main:nth-child(3){top: 60%; left: 24%;}
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .sunbox{width: 163px;}
+    .sunglass_main{top: 30.5%; left: 25%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 24%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 24%;}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .sunbox{width: 163px;}
+    .sunglass_main{top: 30.5%; left: 22%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 90%;}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    .sunbox{width: 112px;}
+    .sunglass_main{top: 30.5%; left: 22%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 767px) {
+    .sunbox{width: 80px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 600px) {
+    .sunbox{width: 69px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 540px) {
+    .sunbox{width: 77px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 481px) {
+    .sunbox{width: 53px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 380px) {
+    .sunbox{width: 48px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+@media only screen and (max-width: 360px) {
+    .sunbox{width: 46px;}
+    .sunglass_main{top: 30.5%; left: 21%;}
+    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    .sunbox img{width: 100%;}
+}
+
+.btn.btn.btn-primary{
+    text-transform: capitalize;
+    margin: 4px;
+}
