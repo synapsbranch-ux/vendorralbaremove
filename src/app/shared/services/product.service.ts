@@ -107,7 +107,11 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'category');
   }
 
-  
+    //// Get all Filtered Product List
+
+    getallFilteredProduct(data) {
+      return this.http.post(environment.baseUrl + 'filter-store-product',data);
+    }
 
   //// Get all Brands List
 

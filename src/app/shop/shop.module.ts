@@ -41,7 +41,7 @@ import { VideoModeComponent } from './video-mode/video-mode.component';
 import { ImageModeComponent } from './image-mode/image-mode.component';
 import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     ProductNoSidebarComponent,
@@ -81,7 +81,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     SharedModule,
     ShopRoutingModule,
     NgxImageZoomModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxPaginationModule
   ]
 })
 export class ShopModule { }
