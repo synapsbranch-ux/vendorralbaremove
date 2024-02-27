@@ -2,7 +2,57 @@
 <section class="compare-padding">
     <div class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-sm-12">
+                
+                <div class="row mb-4">
+                    <div class="col-sm-3">
+                        <div class="brands">
+                            <h5>Filter Brand ::</h5>
+                            <ng-select [clearSearchOnAdd]="true"
+                            bindLabel="brand_name"
+                            (change)="changeBrandname($event)"
+                            [clearable]="false"
+                            [items]="brandList"
+                            [(ngModel)]="selectedBrandName">
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <img height="25" width="25" style="object-fit: contain;" [src]="item.brand_image"/>
+                                <b>&nbsp;&nbsp;{{item.brand_name}}</b>
+                            </ng-template>
+                        </ng-select> 
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="categories d-flex flex-wrap">
+                            <div *ngFor="let category of categoryList" class="d-flex">
+                                <div *ngFor="let cat of category">
+                                    <div class="main_category" *ngIf="cat.attributes">
+                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                                    </div>
+                                    <div class="sub_category" *ngIf="!cat.attributes">
+                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagiantion text-left mt-5">
+                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                            <!-- <div class="mr-2">
+                                <button class="btn btn-sm btn-primary" *ngIf="showPrev" (click)="handlePrev()">Prev <<</button>
+                                <span class="buttons" *ngFor="let btnNumber of buttonNumbers">
+                                <button class="btn btn-sm btn-primary btns">{{btnNumber}}</button>
+                                </span>
+                                <button class="btn btn-sm btn-primary" *ngIf="showNext" (click)="handleNext();">Next >></button>
+                              </div> -->
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="col-md-12">
                 <div class="rack_inn">
                     <img src="assets/images/self.png" alt="" />
                     <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 3, currentPage: p }" class="sunglass_main">
@@ -15,48 +65,9 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
-            <div class="col-sm-2">
-                <div class="pagiantion">
-                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <!-- <div class="mr-2">
-                        <button class="btn btn-sm btn-primary" *ngIf="showPrev" (click)="handlePrev()">Prev <<</button>
-                        <span class="buttons" *ngFor="let btnNumber of buttonNumbers">
-                        <button class="btn btn-sm btn-primary btns">{{btnNumber}}</button>
-                        </span>
-                        <button class="btn btn-sm btn-primary" *ngIf="showNext" (click)="handleNext();">Next >></button>
-                      </div> -->
-                </div>
-                <div class="brands">
-                    <h5>Filter Brand ::</h5>
-                    <ng-select [clearSearchOnAdd]="true"
-                    bindLabel="brand_name"
-                    (change)="changeBrandname($event)"
-                    [clearable]="false"
-                    [items]="brandList"
-                    [(ngModel)]="selectedBrandName">
-                    <ng-template ng-option-tmp let-item="item" let-index="index">
-                        <img height="25" width="25" [src]="item.brand_image"/>
-                        <b>&nbsp;&nbsp;{{item.brand_name}}</b>
-                    </ng-template>
-                </ng-select> 
-                </div>
-                <div class="categories">
-                    <div *ngFor="let category of categoryList">
-                        <div *ngFor="let cat of category">
-                            <div class="main_category" *ngIf="cat.attributes">
-                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
-                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
-                            </div>
-                            <div class="sub_category" *ngIf="!cat.attributes">
-                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
-                                <button class="btn btn-primary" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </section>

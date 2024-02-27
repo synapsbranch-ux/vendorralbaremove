@@ -1,9 +1,9 @@
 .rack_inn{width: 100%; position: relative;}
 .rack_inn img{width: 100%;}
-.sunglass_main{position: absolute; width: auto; display: flex; justify-content: space-between; align-items: center; top: 32%; left: 25%;}
-.sunbox{width: 136px;}
-.sunglass_main:nth-child(2){top: 46%; left: 24%;}
-.sunglass_main:nth-child(3){top: 60%; left: 24%;}
+.sunglass_main{position: absolute; width: auto; display: flex; justify-content: space-between; align-items: center; top: 32%; left: 30%;}
+.sunbox{width: 165px;}
+.sunglass_main:nth-child(2){top: 46%; }
+.sunglass_main:nth-child(3){top: 60%; }
 @media (min-width: 1200px) and (max-width: 1399px) {
     .sunbox{width: 163px;}
     .sunglass_main{top: 30.5%; left: 25%;}
