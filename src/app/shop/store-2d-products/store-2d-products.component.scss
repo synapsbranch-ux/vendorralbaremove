@@ -1,71 +1,87 @@
 .rack_inn{width: 100%; position: relative;}
 .rack_inn img{width: 100%;}
-.sunglass_main{position: absolute; width: auto; display: flex; justify-content: space-between; align-items: center; top: 32%; left: 30%;}
-.sunbox{width: 165px;}
-.sunglass_main:nth-child(2){top: 46%; }
-.sunglass_main:nth-child(3){top: 60%; }
+.sunglass_main{position: absolute; width: auto; display: grid; justify-content: space-between; align-items: center; top: 15%; left: 10%;}
+.sunbox{width: 100%; min-width: 468px; padding: 0 10%;}
+.sunbox img{
+    max-width: 458px;
+}
+.sunglass_main:nth-child(2){top: 46%;max-width: 80%; margin: 0 auto; }
+.sunglass_main:nth-child(3){top: 75%; }
 @media (min-width: 1200px) and (max-width: 1399px) {
-    .sunbox{width: 163px;}
-    .sunglass_main{top: 30.5%; left: 25%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 24%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 24%;}
+    // .sunglass_main{top: 30.5%; left: 25%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 24%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 24%;}
+    .sunbox{
+        min-width: auto;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    .sunbox{width: 163px;}
-    .sunglass_main{top: 30.5%; left: 22%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 90%;}
+    // .sunglass_main{top: 30.5%; left: 22%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 90%;}
+    .sunbox{
+        min-width: auto;
+    }
 }
 @media (min-width: 768px) and (max-width: 991px) {
-    .sunbox{width: 112px;}
-    .sunglass_main{top: 30.5%; left: 22%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 22%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
+    .sunbox{
+        min-width: auto;
+    }
+    
 }
 @media only screen and (max-width: 767px) {
-    .sunbox{width: 80px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
+    .sunbox{
+        min-width: auto;
+    }
+    .sunbox img{
+        max-width: 180px;
+    }
 }
 @media only screen and (max-width: 600px) {
-    .sunbox{width: 69px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
 }
 @media only screen and (max-width: 540px) {
-    .sunbox{width: 77px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
 }
 @media only screen and (max-width: 481px) {
-    .sunbox{width: 53px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
+    .sunbox img{
+        max-width: 84px;
+    }
 }
 @media only screen and (max-width: 380px) {
-    .sunbox{width: 48px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
+    .sunbox img{
+        max-width: 72px;
+    }
 }
 @media only screen and (max-width: 360px) {
-    .sunbox{width: 46px;}
-    .sunglass_main{top: 30.5%; left: 21%;}
-    .sunglass_main:nth-child(2){top: 44%; left: 21%;}
-    .sunglass_main:nth-child(3){top: 58%; left: 21%;}
-    .sunbox img{width: 100%;}
+    // .sunglass_main{top: 30.5%; left: 21%;}
+    // .sunglass_main:nth-child(2){top: 44%; left: 21%;}
+    // .sunglass_main:nth-child(3){top: 58%; left: 21%;}
+    // .sunbox img{width: 100%;}
 }
 
 .btn.btn.btn-primary{
