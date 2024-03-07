@@ -6,7 +6,7 @@
                 
                 <div class="row mb-4">
                     <div class="col-sm-3">
-                        <div class="brands">
+                        <div class="brands mb-2">
                             <h5>Filter Brand ::</h5>
                             <ng-select [clearSearchOnAdd]="true"
                             bindLabel="brand_name"
@@ -23,14 +23,14 @@
                     </div>
                     <div class="col-sm-9">
                         <div class="categories d-flex flex-wrap">
-                            <div *ngFor="let category of categoryList" class="d-flex">
+                            <div *ngFor="let category of categoryList" class="d-flex flex-wrap">
                                 <div *ngFor="let cat of category">
                                     <div class="main_category" *ngIf="cat.attributes">
-                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
                                         <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
                                     </div>
                                     <div class="sub_category" *ngIf="!cat.attributes">
-                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
                                         <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
                                     </div>
                                     
@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid full-container">
         <div class="row">
             <div class="col-md-12">
                 <div class="rack_inn">
