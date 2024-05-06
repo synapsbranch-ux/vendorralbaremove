@@ -26,7 +26,7 @@ export const PasswordStrengthValidator = function (control: AbstractControl): Va
 
   let specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
   if (specialCharacters.test(value) === false) {
-    return { passwordStrength: `Special char required` };
+    return { passwordStrength: `Special character required` };
   }
   return null;
 }

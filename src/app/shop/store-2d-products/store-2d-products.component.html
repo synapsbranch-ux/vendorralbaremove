@@ -15,8 +15,8 @@
                             [items]="brandList"
                             [(ngModel)]="selectedBrandName">
                             <ng-template ng-option-tmp let-item="item" let-index="index">
-                                <img height="25" width="25" style="object-fit: contain;" [src]="item.brand_image"/>
-                                <b>&nbsp;&nbsp;{{item.brand_name}}</b>
+                                <!-- <img height="25" width="25" style="object-fit: contain;" [src]="item.brand_image"/> -->
+                                <b>{{item.brand_name}}</b>
                             </ng-template>
                         </ng-select> 
                         </div>
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="pagiantion text-left mt-5">
-                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                            <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
                             <!-- <div class="mr-2">
                                 <button class="btn btn-sm btn-primary" *ngIf="showPrev" (click)="handlePrev()">Prev <<</button>
                                 <span class="buttons" *ngFor="let btnNumber of buttonNumbers">
@@ -59,7 +59,7 @@
             <div class="col-md-12">
                 <div class="rack_inn">
                     <img src="assets/images/self.png" alt="" />
-                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 3, currentPage: p }" class="sunglass_main">
+                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 3, currentPage: currentPage }" class="sunglass_main">
                         <div class="row">
                             <div *ngFor="let item of section" class="col-sm-4 col-4">
                                 <div class="sunbox">

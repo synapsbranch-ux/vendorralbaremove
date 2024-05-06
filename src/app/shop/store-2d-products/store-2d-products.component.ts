@@ -19,7 +19,8 @@ export class StoreproductsComponent implements OnInit {
   selectedBrandName: any
   categoryList = [];
   productList = [];
-  p: any
+  // p: any
+  currentPage: number = 1; // Initialize with default page number
   numItemsPerSection = 3;
   groupedItems = [];
   constructor(private router: Router,
@@ -28,7 +29,10 @@ export class StoreproductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('localStorage.getItem(brand)',localStorage.getItem('brand'));
+    if(localStorage.getItem('cur_page'))
+    {
+      this.currentPage = Number(localStorage.getItem('cur_page'));
+    }
     if (localStorage.getItem('brand')) {
       this.selectedBrand = localStorage.getItem('brand')
     }
@@ -88,6 +92,8 @@ export class StoreproductsComponent implements OnInit {
   }
 
   getCAtegoryDeatils(Category: any) {
+    let pageNumber = 1;
+    localStorage.setItem('cur_page',pageNumber.toString())
     console.log('Category============', Category);
     this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([`/store-2d-products/${this.store_slug}/${Category.category_slug}`]);
@@ -111,6 +117,8 @@ export class StoreproductsComponent implements OnInit {
   }
 
   changeBrandname(brand: any) {
+    let pageNumber = 1;
+    localStorage.setItem('cur_page',pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----',this.selectedBrandName);
@@ -147,6 +155,14 @@ getBrandName(brandarr,brandId)
    } 
   }
   return null
+}
+
+onPageChange(pageNumber: number): void {
+  this.currentPage = pageNumber;
+  localStorage.setItem('cur_page',pageNumber.toString())
+  console.log('pageNumber================',pageNumber);
+  // Do whatever you need to do when the page changes
+  // For example, fetch data for the new page
 }
 
 }

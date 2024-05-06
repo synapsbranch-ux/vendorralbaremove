@@ -11,7 +11,7 @@
     display: grid; 
     justify-content: center; 
     align-items: center; 
-    top: 15%; 
+    top: 75%;
     left:0;
     padding: 0 5%;
     box-sizing: border-box;
@@ -21,11 +21,11 @@
     padding: 0 10%;
     }
 .sunglass_main:nth-child(2){
-    top: 46%;
+    top: 15%; 
     margin: 0 auto; 
 }
 .sunglass_main:nth-child(3){
-    top: 75%; 
+    top: 46%;
 }
 .full-container{
     max-width: 1920px;

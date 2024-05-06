@@ -107,11 +107,11 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'category');
   }
 
-    //// Get all Filtered Product List
+  //// Get all Filtered Product List
 
-    getallFilteredProduct(data) {
-      return this.http.post(environment.baseUrl + 'filter-store-product',data);
-    }
+  getallFilteredProduct(data) {
+    return this.http.post(environment.baseUrl + 'filter-store-product', data);
+  }
 
   //// Get all Brands List
 
@@ -119,12 +119,12 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'brand/list');
   }
 
-    //// Get all catyegoryList
+  //// Get all catyegoryList
 
-    getallCategoryWithSubcat() {
-      return this.http.get(environment.baseUrl + 'category-list-for-store');
-    }
-  
+  getallCategoryWithSubcat() {
+    return this.http.get(environment.baseUrl + 'category-list-for-store');
+  }
+
 
   // Get Products
   public get getProducts(): Observable<ProductNew[]> {
@@ -287,19 +287,17 @@ export class ProductService {
         SinglevendorStatus = false
         return false;
       }
-      else
-      {
-        this.addToCartforSingleVendor(product,prod_qty);
+      else {
+        this.addToCartforSingleVendor(product, prod_qty);
       }
     }
     else {
       localStorage.setItem('vendor_id', product.product_owner._id);
-      this.addToCartforSingleVendor(product,prod_qty);
+      this.addToCartforSingleVendor(product, prod_qty);
     }
   }
 
-  public addToCartforSingleVendor(product, prod_qty)
-  {
+  public addToCartforSingleVendor(product, prod_qty) {
     const cartItem = state.cart.find(item => item._id === product._id);
     const qty = prod_qty
     const items = cartItem ? cartItem : product;
@@ -313,7 +311,7 @@ export class ProductService {
     } else {
       product.quantity = qty;
     }
-    if (product.stock > qty) {
+    if (product.stock >= qty) {
       product.stock -= qty;
     }
     console.log('user Login')
@@ -399,13 +397,13 @@ export class ProductService {
     else {
 
       console.log('user Not Login')
-
-      state.cart.push({
-        ...product,
-        quantity: qty,
-        product_owner: product.product_owner._id,
-      })
-
+      if (!cartItem) {
+        state.cart.push({
+          ...product,
+          quantity: qty,
+          product_owner: product.product_owner._id,
+        })
+      }
       console.log('Cart item added from Without login Retain local ', state.cart);
     }
 

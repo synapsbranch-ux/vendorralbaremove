@@ -66,8 +66,12 @@ export class RegisterComponent implements OnInit {
     this.countDown = timer(0, this.tick)
     .pipe(take(this.counter))
     .subscribe(() => {
-      --this.counter;
-      if (this.counter == 0) {
+      if(this.counter > 0)
+      {
+        --this.counter;
+      }
+      else
+      {
         this.countDown.unsubscribe();
       }
     });

@@ -12,9 +12,13 @@ export class HeaderOneComponent implements OnInit {
   @Input() themeLogo: string = 'assets/images/icon/logo_small_res.png'; // Default Logo
   @Input() topbar: boolean = true; // Default True
   @Input() sticky: boolean = false; // Default false
-  
   public stick: boolean = false;
-
+  
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: Event): void {
+    event.preventDefault(); // Prevent default behavior (e.g., context menu)
+    event.stopPropagation(); // Stop event propagation to parent elements
+  }
   constructor( private router: Router,) { }
 
   ngOnInit(): void {

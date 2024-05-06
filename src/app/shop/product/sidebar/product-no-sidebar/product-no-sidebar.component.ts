@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../../shared/data/slider';
 import { ProductNew, ProductNew2 } from '../../../../shared/classes/product';
@@ -50,13 +50,20 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   productWishliststatus: boolean = false;
   tryonenable: boolean = false;
 
-  iframeBaseLink='https://gltfviewer.ralbatech.com/?url='
-  iframeLink:any
+  iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
+  iframeLink: any
 
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
+  
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: Event): void {
+    event.preventDefault(); // Prevent default behavior (e.g., context menu)
+    event.stopPropagation(); // Stop event propagation to parent elements
+  }
+  
 
   constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder) {
@@ -74,19 +81,19 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     let product_slug = this.route.snapshot.paramMap.get('slug');
     this.productService.getproductsBySlugs(product_slug).subscribe(response => {
       this.product = response.data;
-      if(Object.keys(this.product).length > 0)
-      {
+      if (Object.keys(this.product).length > 0) {
         this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
         this.productAttributeArr = response.data.attributes;
         this.productAddons = response.data.add_ons;
-        console.log('productAttributeArr =================',this.productAttributeArr);
-        console.log('productAddons =================',this.productAddons);
-  if(response.data.product_3d_image.length > 0)
-  {
-     let product3durl=response.data.product_3d_image[0].pro_3d_image;
-     let fulliframeURL=  this.iframeBaseLink+product3durl;
-     this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
-  }
+        console.log('productAttributeArr =================', this.productAttributeArr);
+        console.log('productAddons =================', this.productAddons);
+        if (response.data.product_3d_image.length > 0) {
+          let product3durl = response.data.product_3d_image[0].pro_3d_image;
+          let colorCode = response.data.product_bg_color.slice(1);
+          let fulliframeURL = this.iframeBaseLink + product3durl+'&color='+colorCode;
+          console.log('fulliframeURL----------------',fulliframeURL);
+          this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
+        }
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)
         if (response.data.product_tryon_3d_image.length > 0 || response.data.product_tryon_2d_image.length > 0) {
@@ -99,37 +106,32 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         else {
           this.product_external_link = "#"
         }
-        if(response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length > 0)
-        {
+        if (response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length > 0) {
           this.image3d = {
             "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
             "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
           };
         }
-        else if(response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length == 0)
-        {
+        else if (response.data.product_tryon_3d_image.length > 0 && response.data.product_tryon_2d_image.length == 0) {
           this.image3d = {
             "Threed_Tryon": response.data.product_tryon_3d_image[0].pro_3d_image,
             "Twod_Tryon": ''
           };
         }
-        else if(response.data.product_tryon_3d_image.length == 0 && response.data.product_tryon_2d_image.length > 0 )
-        {
+        else if (response.data.product_tryon_3d_image.length == 0 && response.data.product_tryon_2d_image.length > 0) {
           this.image3d = {
             "Threed_Tryon": '',
             "Twod_Tryon": response.data.product_tryon_2d_image[0].pro_2d_image
           };
         }
-        else
-        {
+        else {
           this.image3d = {
             "Threed_Tryon": '',
             "Twod_Tryon": ''
           };
         }
       }
-      else
-      {
+      else {
         this.router.navigateByUrl('/')
       }
     });
@@ -224,7 +226,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     }
     this.addonSelectedResult.push(extraObj);
     product.addons = this.addonSelectedResult
-    console.log('Final Cart Product ==================>', product)
     const status = await this.productService.addToCart(product, this.counter);
     if (status) {
       product.stock = (product.stock - this.counter);

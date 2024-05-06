@@ -1,9 +1,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/shared/services/store.service';
-import { UserService } from './../../../shared/services/user.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { HomeSlider } from '../../../shared/data/slider';
 import { environment } from 'src/environments/environment';
+import { ProductService } from 'src/app/shared/services/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-slider',
@@ -39,7 +40,8 @@ export class SliderComponent implements OnInit {
 
   roomavailablity = [];
   envstore: any
-  constructor(private userservice: UserService, private storeService: StoreService, private router: Router, private route:ActivatedRoute) {
+  isVisable2Dstore:boolean=false;
+  constructor(public productService: ProductService, private storeService: StoreService, private router: Router, private route:ActivatedRoute, private toastr:ToastrService) {
    }
 
   ngOnInit(): void {
@@ -48,6 +50,26 @@ export class SliderComponent implements OnInit {
       // Extract the 'slug' and 'page' values from the route parameters
       this.store_slug = params.get('slug');
     });
+
+    let catdata =
+    {
+      'store_slug': this.store_slug,
+    }
+    this.productService.get2DProductList(catdata).subscribe(
+      res => {
+        if(res['data'].product_list.length > 0)
+          {
+            this.isVisable2Dstore = true;
+          }
+          else
+          {
+            this.isVisable2Dstore = false;
+          }
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+   });
   }
 
   public HomeSliderConfig: any = HomeSlider;
@@ -55,6 +77,17 @@ export class SliderComponent implements OnInit {
   vandorbannerClick(catDetails: any) {
     console.log('catDetails ------------------',catDetails);
     this.router.navigateByUrl(`/store-2d-products/${this.store_slug}/${catDetails.category_slug}`)
+  }
+
+  redirectStore()
+  {
+    let url = `https://store.ralbatech.com/${this.store_slug}/1`
+    window.open(url, '_blank');
+  }
+  redirec2dtStore()
+  {
+    this.router.navigateByUrl(`2d-products/${this.store_slug}/1`)
+
   }
 
 }

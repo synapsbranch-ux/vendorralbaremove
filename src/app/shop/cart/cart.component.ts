@@ -130,7 +130,7 @@ export class CartComponent implements OnInit , OnChanges {
   }
 
   public removeItem(product: any) {
-    product.stock= (product.stock + 1);
+    product.stock= (product.stock + product.quantity);
     this.product_service.removeCartItem(product);
     this.product_service.cartItems.subscribe(response => this.products = response);
 

@@ -1,6 +1,7 @@
 import {
   Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input,
-  Injectable, PLATFORM_ID, Inject, Renderer2, ElementRef
+  Injectable, PLATFORM_ID, Inject, Renderer2, ElementRef,
+  HostListener
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -85,7 +86,11 @@ export class view3DModalComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('faceCanvas') faceCanvas!: ElementRef<HTMLCanvasElement>;
-
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: Event): void {
+    event.preventDefault(); // Prevent default behavior (e.g., context menu)
+    event.stopPropagation(); // Stop event propagation to parent elements
+  }
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private modalService: NgbModal, private sanitizer: DomSanitizer, private renderer: Renderer2, private router: Router) {
@@ -99,6 +104,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     this.facePostion = this.redIcon;
     this.glassImage.src = this.glassImageUrl;
     this.registerCustomARSystem();
+    this.initializeFaceGlassImage();
   }
 
 
@@ -123,8 +129,8 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   }
 
   async initializeFaceGlassImage() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    // try {
+    //   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const imageHtml = `
       <style>
       .loading {
@@ -171,10 +177,10 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     </div>
     <div class="md-overlay"></div>`
       this.modelImageHTML = this.sanitizer.bypassSecurityTrustHtml(imageHtml);
-    } catch (error) {
-      // Handle errors
-      console.log('error =======', error);
-    }
+    // } catch (error) {
+    //   // Handle errors
+    //   console.log('error =======', error);
+    // }
   }
 
   async initializeFaceGlassVideo() {
@@ -594,6 +600,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     if (this.modelSrc == '') {
       this.mode = 'image'
       this.facedetectbool = false;
+     
     }
     else
     {
@@ -663,9 +670,9 @@ export class view3DModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unregisterCustomARSystem();
-    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
-      this.router.navigate([this.returnUrl]);
-    })
+    // this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
+    //   this.router.navigate([this.returnUrl]);
+    // })
     if (this.modalOpen) {
       this.modalService.dismissAll();
       this.imageUrl = '';

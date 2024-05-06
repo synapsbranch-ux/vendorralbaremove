@@ -14,6 +14,8 @@ import { CollectionComponent } from './widgets/collection/collection.component';
 import { StoreComponent } from '../store/store.component';
 import { SingleStoreComponent } from '../store/single-store/single-store.component';
 import { SingleStoreBannerComponent } from '../store/single-store-banner/single-store-banner.component';
+import { NewHomeComponent } from './new-home/new-home.component';
+import { NewTermComponent } from './new-term/new-term.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { SingleStoreBannerComponent } from '../store/single-store-banner/single-
     CollectionComponent,
     StoreComponent,
     SingleStoreComponent,
-    SingleStoreBannerComponent
+    SingleStoreBannerComponent,
+    NewHomeComponent,
+    NewTermComponent
   ],
   imports: [
     CommonModule,

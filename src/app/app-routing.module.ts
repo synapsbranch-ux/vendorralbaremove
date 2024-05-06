@@ -13,11 +13,21 @@ import { StoreComponent } from './store/store.component';
 import { DepartmentComponent } from './department/department.component';
 import { SingleStoreComponent } from './store/single-store/single-store.component';
 import { SingleStoreBannerComponent } from './store/single-store-banner/single-store-banner.component';
+import { ComingSoonComponent } from './pages/coming-soon/coming-soon.component';
+import { NewHomeComponent } from './home/new-home/new-home.component';
+import { NewTermComponent } from './home/new-term/new-term.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: FashionOneComponent,
+    // component: FashionOneComponent,
+    component: NewHomeComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'terms-condition',
+    // component: FashionOneComponent,
+    component: NewTermComponent,
     pathMatch: 'full'
   },
   {
