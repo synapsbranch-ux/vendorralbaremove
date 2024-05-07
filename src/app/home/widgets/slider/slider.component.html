@@ -13,9 +13,6 @@
 	                   {{buttonText}}
 	                </a>
                      <span *ngIf="slider.banner_main_category">
-                     <a *ngIf="slider.banner_main_category.length > 0"  (click)="vandorbannerClick(slider.banner_main_category[0])" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
-                        {{slider.banner_main_category[0].category_name}}
-                     </a> 
                      <span *ngIf="slider.banner_sub_categories.length > 0">
                      <span *ngFor="let subcat of slider.banner_sub_categories">
                         <a *ngIf="subcat"  (click)="vandorbannerClick(subcat)" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">

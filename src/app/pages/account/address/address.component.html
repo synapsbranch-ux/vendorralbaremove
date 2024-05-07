@@ -139,7 +139,7 @@
                                                     <label for="postal_code">Postal Code *</label>
                                                     <input type="text" class="form-control" id="postal_code"
                                                         placeholder="Postal code" formControlName="postalCode"
-                                                        maxlength="10">
+                                                        maxlength="12">
                                                     <div *ngIf="postalCode.invalid && (postalCode.dirty || postalCode.touched) && postalCode.errors"
                                                         class="text text-danger mt-1">
                                                         <div *ngIf="postalCode.errors?.required">

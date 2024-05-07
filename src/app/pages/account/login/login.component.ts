@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     // form initialization
     this.form = new FormGroup({
       'phone_email': new FormControl(null, [Validators.required]),
-      'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
+      'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(12)]),
     });
 
     // store current return URL

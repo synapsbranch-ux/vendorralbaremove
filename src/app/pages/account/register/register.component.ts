@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
         'fname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'lname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
-        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(16),PasswordStrengthValidator]),
+        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(12),PasswordStrengthValidator]),
         'repeat_password': new FormControl(null, [Validators.required]),
         'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
 
