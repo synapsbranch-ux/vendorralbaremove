@@ -25,12 +25,12 @@
                         <div class="categories d-flex flex-wrap">
                             <div *ngFor="let category of categoryList" class="d-flex flex-wrap">
                                 <div *ngFor="let cat of category">
-                                    <div class="main_category" *ngIf="cat.attributes">
-                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                    <!-- <div class="main_category" *ngIf="cat.attributes">
+                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
                                         <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
-                                    </div>
+                                    </div> -->
                                     <div class="sub_category" *ngIf="!cat.attributes">
-                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">more {{cat.category_name}} ..</button> 
+                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
                                         <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
                                     </div>
                                     

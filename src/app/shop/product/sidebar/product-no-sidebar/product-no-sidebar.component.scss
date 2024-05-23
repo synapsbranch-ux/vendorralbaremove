@@ -1,6 +1,11 @@
 .small-slider-product img {
-    max-height: 130px;
+    height: 100px;
+    width: 100px;
     object-fit: contain;
+}
+.product-slick1 {
+        height: 365px;
+        display: block;
 }
 
 .product-right .color-variant li.active {
@@ -86,3 +91,14 @@ iframe {
     padding-left: 1rem !important;
     padding-bottom: 1rem !important;
 }
+
+@media only screen and (max-width: 600px) {
+    .product-slick1 {
+        height: 200px;
+    }
+    .small-slider-product img {
+        height: 65px;
+        width: 65px;
+        object-fit: contain;
+    }
+  }

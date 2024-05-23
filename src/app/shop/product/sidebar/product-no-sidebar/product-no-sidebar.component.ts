@@ -136,6 +136,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       }
     });
 
+console.log('this.productImages ===================================',this.productImages);
 
   }
 

@@ -35,11 +35,11 @@ const routes: Routes = [
     component: AboutUsComponent,
     pathMatch: 'full'
   },
-  {
-    path: 'contact',
-    component: ContactComponent,
-    pathMatch: 'full'
-  },
+  // {
+  //   path: 'contact',
+  //   component: ContactComponent,
+  //   pathMatch: 'full'
+  // },
   {
     path: 'privacy-policy',
     component: PrivacyPolicyComponent,

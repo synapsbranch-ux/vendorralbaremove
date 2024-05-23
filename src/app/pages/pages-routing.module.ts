@@ -81,10 +81,10 @@ const routes: Routes = [
     path: 'edit-profile', 
     component: EditProfileComponent,canActivate: [AuthGuard], 
   },
-  { 
-    path: 'contact', 
-    component: ContactComponent 
-  },
+  // { 
+  //   path: 'contact', 
+  //   component: ContactComponent 
+  // },
   { 
     path: 'search', 
     component: SearchComponent 
