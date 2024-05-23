@@ -84,7 +84,7 @@
             }
 
             .home {
-
+                background-position: 90%;
                 .tools-parts,
                 .tools-parts1 {
                     img {
@@ -3083,6 +3083,13 @@ background-color: $black;*/
 }
 
 @media(max-width: 767px) {
+    .home-slider {
+        span{
+            .btn{
+                padding: 10px 18px;
+            }
+        }
+    }
     .product-wrapper-grid {
         &.list-view {
             .product-box {
