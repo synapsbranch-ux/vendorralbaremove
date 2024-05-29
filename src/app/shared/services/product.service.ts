@@ -140,6 +140,10 @@ export class ProductService {
     return this.http.post(environment.baseUrl + 'stores/all-product-2d-list-by-vendor-for-user', storeSlug);
   }
 
+  getStoreDetails(storeSlug: any): Observable<any> {
+    return this.http.post(environment.baseUrl + 'stores/details', storeSlug);
+  }
+
   // Get Products BY categoriess
   getProductscat(data: any): Observable<any> {
     return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', data);

@@ -31,7 +31,7 @@ export class SliderComponent implements OnInit {
   store_slug: any
   vendor_id: any
   store_id: any;
-
+  storeVisiblity:boolean = false;
   StoreLists = [];
 
   DepartmentsList = [];
@@ -57,7 +57,7 @@ export class SliderComponent implements OnInit {
     }
     this.productService.get2DProductList(catdata).subscribe(
       res => {
-        if(res['data'].product_list.length > 0)
+        if(res['data'].length > 0)
           {
             this.isVisable2Dstore = true;
           }
@@ -70,6 +70,18 @@ export class SliderComponent implements OnInit {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
    });
+
+   this.productService.getStoreDetails(catdata).subscribe(
+    res => {
+      if(res['data'].length > 0)
+        {
+          this.storeVisiblity = res['data'][0].store_jpg_file ? true : false ;
+        }
+    },
+    error => {
+      // .... HANDLE ERROR HERE 
+      this.toastr.error(error.error.message)
+ });
   }
 
   public HomeSliderConfig: any = HomeSlider;
@@ -86,7 +98,7 @@ export class SliderComponent implements OnInit {
   }
   redirec2dtStore()
   {
-    this.router.navigateByUrl(`2d-products/${this.store_slug}/1`)
+    this.router.navigateByUrl(`2d-products/${this.store_slug}`)
 
   }
 

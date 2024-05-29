@@ -3,7 +3,6 @@ import { AuthGuard } from './../shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductNoSidebarComponent } from './product/sidebar/product-no-sidebar/product-no-sidebar.component';
-import { CollectionComponent } from './collection/collection.component';
 import { CartComponent } from './cart/cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CompareComponent } from './compare/compare.component';
@@ -11,6 +10,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
 import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
+import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';
 
 const routes: Routes = [
 
@@ -27,8 +27,8 @@ const routes: Routes = [
     component: VideoModeComponent,
   },
   {
-    path: '2d-products/:slug/:page',
-    component: CollectionComponent
+    path: '2d-products/:storeSlug',
+    component: AllTwoDProductsComponent
   },
   {
     path: 'store-2d-products/:storeSlug/:catSlug',

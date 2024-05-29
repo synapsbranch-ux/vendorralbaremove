@@ -22,21 +22,28 @@
                         </div>
                     </div>
                     <div class="col-sm-9">
-                        <div class="categories d-flex flex-wrap">
-                            <div *ngFor="let category of categoryList" class="d-flex flex-wrap">
-                                <div *ngFor="let cat of category">
-                                    <!-- <div class="main_category" *ngIf="cat.attributes">
-                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
-                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
-                                    </div> -->
-                                    <div class="sub_category" *ngIf="!cat.attributes">
-                                        <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
-                                        <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                        <div class="d-flex align-items-center justify-content-between">
+
+                            <div class="categories d-flex flex-wrap">
+                                <div *ngFor="let category of categoryList" class="d-flex flex-wrap">
+                                    <div *ngFor="let cat of category">
+                                        <!-- <div class="main_category" *ngIf="cat.attributes">
+                                            <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
+                                            <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                                        </div> -->
+                                        <div class="sub_category" *ngIf="!cat.attributes">
+                                            <button class="btn btn-primary rounded more" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug == cat_slug">{{cat.category_name}}</button> 
+                                            <button class="btn btn-primary rounded" (click)="getCAtegoryDeatils(cat)" *ngIf="cat.category_slug != cat_slug">{{cat.category_name}}</button> 
+                                        </div>
+                                        
                                     </div>
-                                    
                                 </div>
                             </div>
+                            <div class="text-right">
+                                <button class="btn btn-primary rounded" (click)="getAllProducts()">Clear Filter</button> 
+                            </div>
                         </div>
+
                         <div class="pagiantion text-left mt-5">
                             <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
                             <!-- <div class="mr-2">
@@ -47,6 +54,7 @@
                                 <button class="btn btn-sm btn-primary" *ngIf="showNext" (click)="handleNext();">Next >></button>
                               </div> -->
                         </div>
+
                     </div>
                 </div>
                 

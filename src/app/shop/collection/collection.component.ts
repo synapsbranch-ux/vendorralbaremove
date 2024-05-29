@@ -26,7 +26,7 @@ export class CollectionComponent implements OnInit {
   public products: ProductNew[] = [];
   public product_list: ProductNew[] = [];
   public minPrice: number = 0;
-  public maxPrice: number = 120000;
+  public maxPrice: number = 12000;
   public tags: any[] = [];
   public category: string;
   public pageNo: number = 1;
@@ -148,7 +148,7 @@ export class CollectionComponent implements OnInit {
       queryParamsHandling: 'merge', // preserve the existing query params in the route
       skipLocationChange: false  // do trigger navigation
     }).finally(() => {
-      this.viewScroller.setOffset([120, 120]);
+      this.viewScroller.setOffset([10, 10]);
       this.viewScroller.scrollToAnchor('products'); // Anchore Link
     });
   }

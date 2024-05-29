@@ -21,7 +21,7 @@
                      </span>
                     </span>
                      <span>
-                        <button (click)="redirectStore()" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
+                        <button *ngIf="storeVisiblity" (click)="redirectStore()" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
                            Virtual Tour
                          </button> 
                          <button *ngIf="isVisable2Dstore" (click)="redirec2dtStore()" [style.color]="slider.banner_button_text_color" [style.background-color]="slider.banner_button_bg_color" class="btn rounded-lg">
