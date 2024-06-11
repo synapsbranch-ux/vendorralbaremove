@@ -49,7 +49,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="name">First Name</label>
-                            <input type="text" class="form-control" formControlName="firstName" placeholder="First name" required="">
+                            <input type="text" class="form-control" formControlName="firstName" placeholder="First name" required="" (keydown)="handleEnter($event, 'lastName')">
                             <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text text-danger">
                                 <div *ngIf="firstName.errors?.required">
                                     First Name is required.
@@ -60,8 +60,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label for="email">Last Name</label>
-                            <input type="text" class="form-control" formControlName="lastName" placeholder="Last name" required="">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last name" required="" (keydown)="handleEnter($event, 'phone')">
                             <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text text-danger">
                                 <div *ngIf="lastName.errors?.required">
                                     Last Name is required.
@@ -72,8 +72,8 @@
                             </div>
                          </div>
                         <div class="col-md-6">
-                            <label for="review">Phone number</label>
-                            <input type="text" class="form-control" formControlName="phone" placeholder="Enter your number" required="" maxlength="12">
+                            <label for="phone">Phone number</label>
+                            <input type="text" class="form-control" id="phone" formControlName="phone" placeholder="Enter your number" required="" maxlength="12" (keydown)="handleEnter($event, 'email')">
                       
                             <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text text-danger mt-1">
                                 <div *ngIf="phone.errors?.pattern">
@@ -86,7 +86,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" formControlName="email" placeholder="Email" required="">
+                            <input type="text" class="form-control" id="email" formControlName="email" placeholder="Email" required="" (keydown)="handleEnter($event, 'massage')">
                             <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger mt-1">
                                 <div *ngIf="email.errors?.required">
                                     Email is required.
@@ -98,7 +98,7 @@
                         </div>
                         <div class="col-md-12">
                             <label for="review">Write Your Message</label>
-                            <textarea class="form-control" placeholder="Write Your Message" formControlName="massage" rows="6"></textarea>
+                            <textarea class="form-control" placeholder="Write Your Message" id="massage" formControlName="massage" rows="6" (keydown)="handleEnter($event)"></textarea>
                             <div *ngIf="massage.invalid && (massage.dirty || massage.touched)" class="text text-danger">
                                 <div *ngIf="massage.errors?.required">
                                     Message is required.

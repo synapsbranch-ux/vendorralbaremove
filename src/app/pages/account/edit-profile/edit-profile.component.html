@@ -33,7 +33,7 @@
                             <div class="form-row">
                                 <div class="col-md-6 mb-4">
                                     <label for="fname">Name</label>
-                                    <input type="text" class="form-control m-0" id="fname" placeholder="Name" [(ngModel)]="userName" required="" formControlName="fname" >
+                                    <input type="text" class="form-control m-0" id="fname" placeholder="Name" [(ngModel)]="userName" required="" formControlName="fname" (keydown)="handleEnter($event, 'email')">
                                     <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="text text-danger mt-1">
                                         <div *ngIf="fname.errors?.required">
                                             First Name is required.
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <label for="email">Email</label>
-                                    <input type="text" class="form-control m-0" id="email" placeholder="Email" [(ngModel)]="userEmail"  required="" formControlName="emailid" readonly>
+                                    <input type="text" class="form-control m-0" id="email" placeholder="Email" [(ngModel)]="userEmail"  required="" formControlName="emailid" readonly (keydown)="handleEnter($event, 'phone')">
                                     <div *ngIf="emailid.invalid && (emailid.dirty || emailid.touched)" class="text text-danger mt-1">
                                         <div *ngIf="emailid.errors?.required">
                                             Email is required.
@@ -59,7 +59,7 @@
                             <div class="form-row">
                                 <div class="col-md-6 mb-4">
                                     <label for="phone">Phone</label>
-                                    <input type="text" class="form-control m-0" id="phone" placeholder="Phone" [(ngModel)]="userPhone" required="" formControlName="phonenum"  maxlength="12">
+                                    <input type="text" class="form-control m-0" id="phone" placeholder="Phone" [(ngModel)]="userPhone" required="" formControlName="phonenum"  maxlength="12" (keydown)="handleEnter($event)">
                                     <div *ngIf="phonenum.invalid && (phonenum.dirty || phonenum.touched)" class="text text-danger mt-1">
                                         <div *ngIf="phonenum.errors?.required">
                                             Phone number is required.

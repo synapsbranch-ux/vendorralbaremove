@@ -10,7 +10,7 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-4">
                                 <label for="fname"> Name</label>
-                                <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname">
+                                <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname" (keydown)="handleEnter($event, 'email')">
                                 <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="text text-danger mt-1">
                                     <div *ngIf="fname.errors?.required">
                                         Name is required.
@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="email">Email</label>
-                                <input type="text" class="form-control m-0" id="email" placeholder="Email" required="" formControlName="email">
+                                <input type="text" class="form-control m-0" id="email" placeholder="Email" required="" formControlName="email" (keydown)="handleEnter($event, 'password')">
                                 <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger mt-1">
                                     <div *ngIf="email.errors?.required">
                                         Email is required.
@@ -37,7 +37,7 @@
 
                             <div class="col-md-6 mb-4">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control m-0" maxlength="12" id="password" placeholder="Enter your password" required="" formControlName="password">
+                                <input type="password" class="form-control m-0" maxlength="12" id="password" placeholder="Enter your password" required="" formControlName="password" (keydown)="handleEnter($event, 'repeat_password')">
                                 <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text text-danger mt-1">
                                     <div *ngIf="password.errors?.required">
                                         Password is required.
@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="repeat_password">Repeat Password</label>
-                                <input type="password" class="form-control m-0" maxlength="12" id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password">
+                                <input type="password" class="form-control m-0" maxlength="12" id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password" (keydown)="handleEnter($event, 'phone')">
                                 <div *ngIf="repeat_password.invalid && (repeat_password.dirty || repeat_password.touched) && repeat_password.errors" class="text text-danger mt-1">
                                     <div *ngIf="repeat_password.errors?.required">
                                         Repeat password is required.
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone"  maxlength="12">
+                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone"  maxlength="12" (keydown)="handleEnter($event, 'catagories_name')">
                                 <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text text-danger mt-1">
                                     <div *ngIf="phone.errors?.required">
                                         Phone number is required.
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="phone">Categories</label>
-                                <select class="form-control" formControlName="catagories_name" (change)="getcatval($event.target.value)">
+                                <select class="form-control" formControlName="catagories_name" id="catagories_name" (change)="getcatval($event.target.value)" (keydown)="handleEnter($event, 'other_categories')">
                                     <option disabled selected >--Select Categories--</option>
                                     <option *ngFor="let catagories of catagoriesLists" [value]="catagories.category_name" >{{catagories.category_name}}</option>
                                     <option  value="others">Others</option>
@@ -88,14 +88,14 @@
                             </div>
                             <div class="col-md-6 mb-4" *ngIf="othersstatus">
                                 <label for="other_categories">Other categories</label>
-                                <input type="text" class="form-control m-0" id="other_categories" placeholder="Other categories name" formControlName="other_categories">
+                                <input type="text" class="form-control m-0" id="other_categories" placeholder="Other categories name" formControlName="other_categories" (keydown)="handleEnter($event, 'customControlAutosizing1')">
                             </div>
                         </div>
                         <div class="form-terms mb-5">
                             <div class="custom-control custom-checkbox mr-sm-2 d-flex align-items-center">
-                                <input type="checkbox" class="custom-control-input" id="customControlAutosizing1">
+                                <input type="checkbox" class="custom-control-input" id="customControlAutosizing1" (keydown)="handleEnter($event)">
                                 <label class="custom-control-label pt-04" for="customControlAutosizing1"><span>I agree all statements
-                                            in <a [routerLink]="['../privacy-policy']" routerLinkActive="router-link-active"  class="pull-right">Terms
+                                            in <a [routerLink]="['../privacy-policy']" target="_blank" routerLinkActive="router-link-active"  class="pull-right">Terms
                                                 &amp;
                                                 Conditions</a></span></label>
 

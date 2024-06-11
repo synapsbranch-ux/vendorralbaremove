@@ -7,8 +7,8 @@ export const environment = {
   instagram_token: 'INSTA_TOKEN',
   stripe_token: 'STRIPE_TOKEN',
   paypal_token: 'AQxkANdcrLuPoNov76SLsKkJjk955jXj3tYlhsm0BcRFuNylKDzRpINlaY2V9zKZioziBatf2D6OSw3_',
-  baseUrl: 'http://localhost:5000/api/v1/',
-  // baseUrl: 'https://api.ralbatech.com/api/v1/',
+  // baseUrl: 'http://localhost:5000/api/v1/',
+  baseUrl: 'https://api.ralbatech.com/api/v1/',
   storeUrl: 'https://store.ralbatech.com'
 };
 

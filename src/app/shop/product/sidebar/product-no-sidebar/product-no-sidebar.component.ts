@@ -31,6 +31,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   public activeSlide: any = 0;
   addtocartstatus: boolean = false;
   public productSubmitForm: FormGroup;
+  others_color_code:any
   image3d: any;
   product_external_link: any = "#"
   cartbuttonhideStatus: any = 'inactive';
@@ -280,6 +281,7 @@ console.log('this.productImages ===================================',this.produc
   }
 
   onMultiInputChange(val: any, slug, addon) {
+    this.others_color_code = val;
     let seletctObject =
     {
       key: addon.addon_slug,

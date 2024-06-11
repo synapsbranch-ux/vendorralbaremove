@@ -141,10 +141,11 @@
                                                             <input class="form-control" type="color" #otherInput
                                                                 (change)="onMultiInputChange(otherInput.value,addon.addon_slug,addon)"
                                                                 [disabled]="(addon.add_ons_value[0].values < 1 && range)">
-                                                            <input class="form-control" type="range" value="0" #ranger
+                                                            <input class="color-range mt-3" type="range" value="0" #ranger
                                                                 (change)="onInputChange(ranger.value,addon.addon_slug,addon)"
-                                                                [disabled]="addon.add_ons_value[0].values < 1 && range">
-                                                        </div>
+                                                                [disabled]="addon.add_ons_value[0].values < 1 && range" [style.background]="otherInput.value">
+                                                                {{addon.add_ons_value[0].values}} {{range}}
+                                                            </div>
                                                         <div class="price-section"
                                                             *ngIf="addon.add_ons_value[0].values > 0 && range">
                                                             <p class="mt-1">Seleted Price : <input type="text"
@@ -162,10 +163,9 @@
                                                         </div>
                                                     </div>
                                                     <div *ngSwitchCase="'range'" class="w-100 addons-price">
-                                                        <input class="form-control" type="range" value="0" #ranger
+                                                        <input class="color-range" type="range" value="0" #ranger
                                                             (change)="onInputChange(ranger.value,addon.addon_slug,addon)"
-                                                            [disabled]="addon.add_ons_value[0].values < 1 && range">
-
+                                                            [disabled]="addon.add_ons_value[0].values < 1 && range" [style.background]="addon.add_ons_code">
                                                         <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
                                                             <p class="mt-1">Seleted Price : <input
                                                                     *ngIf="addon.add_ons_value[0].values > 0 && range"

@@ -29,7 +29,7 @@ export class EditProfileComponent implements OnInit {
     let obj = JSON.parse(localStorage.getItem('currentUser'));
     this.form =  new FormGroup({
       'fname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
-      'emailid':  new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+      'emailid':  new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
       'phonenum': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
     })
 
@@ -81,6 +81,21 @@ export class EditProfileComponent implements OnInit {
      this.toastr.error(error.error.message)
 }
  )
+  }
+
+  handleEnter(event: KeyboardEvent, nextElementId?: string): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (nextElementId) {
+        const nextElement = document.getElementById(nextElementId);
+        if (nextElement) {
+          nextElement.focus();
+        }
+      } else {
+        // If no next element id is provided, submit the form
+          this.onSubmit();
+      }
+    }
   }
 
 }

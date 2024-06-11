@@ -23,7 +23,7 @@ export class ContactComponent implements OnInit {
       'firstName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'lastName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'phone':new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
-      'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+      'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
       'massage': new FormControl(null, [Validators.required]),
     })
 
@@ -63,5 +63,22 @@ export class ContactComponent implements OnInit {
    }
  )
 }
+
+
+handleEnter(event: KeyboardEvent, nextElementId?: string): void {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    if (nextElementId) {
+      const nextElement = document.getElementById(nextElementId);
+      if (nextElement) {
+        nextElement.focus();
+      }
+    } else {
+      // If no next element id is provided, submit the form
+        this.onSubmit();
+    }
+  }
+}
+
 
 }

@@ -141,4 +141,19 @@ this.userservice.getSingleAddressDetails(lData).subscribe(
 
   }
 
+  handleEnter(event: KeyboardEvent, nextElementId?: string): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (nextElementId) {
+        const nextElement = document.getElementById(nextElementId);
+        if (nextElement) {
+          nextElement.focus();
+        }
+      } else {
+        // If no next element id is provided, submit the form
+          this.onSubmit();
+      }
+    }
+  }
+
 }

@@ -169,7 +169,7 @@
                         <div class="col-sm-6">
                             <div class="con_sec">
                                 <input type="text" class="form-control" formControlName="firstName"
-                                    placeholder="First name" required="">
+                                    placeholder="First name" required="" (keydown)="handleEnter($event, 'lastName')">
                                 <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
                                     class="text text-danger">
                                     <div *ngIf="firstName.errors?.required">
@@ -183,8 +183,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="con_sec">
-                                <input type="text" class="form-control" formControlName="lastName"
-                                    placeholder="Last name" required="">
+                                <input type="text" class="form-control" id="lastName" formControlName="lastName"
+                                    placeholder="Last name" required="" (keydown)="handleEnter($event, 'phone')">
                                 <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
                                     class="text text-danger">
                                     <div *ngIf="lastName.errors?.required">
@@ -198,8 +198,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="con_sec">
-                                <input type="text" class="form-control" formControlName="phone"
-                                    placeholder="Contact Number" required="" maxlength="12">
+                                <input type="text" class="form-control" id="phone" formControlName="phone"
+                                    placeholder="Contact Number" required="" maxlength="12" (keydown)="handleEnter($event, 'email')">
 
                                 <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
                                     class="text text-danger mt-1">
@@ -217,8 +217,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="con_sec">
-                                <input type="text" class="form-control" formControlName="email" placeholder="Email"
-                                    required="">
+                                <input type="text" class="form-control" id="email" formControlName="email" placeholder="Email"
+                                    required="" (keydown)="handleEnter($event, 'massage')">
                                 <div *ngIf="email.invalid && (email.dirty || email.touched)"
                                     class="text text-danger mt-1">
                                     <div *ngIf="email.errors?.required">
@@ -232,7 +232,7 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="con_sec">
-                                <textarea class="form-control" placeholder="Write Your Message"
+                                <textarea class="form-control" id="massage" placeholder="Write Your Message"
                                     formControlName="massage" rows="6"></textarea>
                                 <div *ngIf="massage.invalid && (massage.dirty || massage.touched)"
                                     class="text text-danger">

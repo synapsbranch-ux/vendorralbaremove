@@ -92,6 +92,39 @@ iframe {
     padding-bottom: 1rem !important;
 }
 
+.color-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    outline: none;
+    background: #d3d3d3;
+  }
+  
+  .color-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .color-range::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .color-range::-ms-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+
 @media only screen and (max-width: 600px) {
     .product-slick1 {
         height: 200px;
