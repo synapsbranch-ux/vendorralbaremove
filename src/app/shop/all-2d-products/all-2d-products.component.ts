@@ -44,6 +44,13 @@ export class AllTwoDProductsComponent implements OnInit {
       this.selectedBrand = ''
     }
 
+    if (localStorage.getItem('cat_slug')) {
+      this.cat_slug = localStorage.getItem('cat_slug')
+    }
+    else {
+      this.cat_slug = ''
+    }
+
     this.route.paramMap.subscribe(params => {
       // Extract the 'slug' and 'page' values from the route parameters
       this.store_slug = params.get('storeSlug');

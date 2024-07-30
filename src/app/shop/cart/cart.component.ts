@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ProductSlider } from '../../shared/data/slider';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
+import { NavigationStart, Router } from '@angular/router';
 
 const state = {
 
@@ -32,7 +33,8 @@ export class CartComponent implements OnInit , OnChanges {
   desabledecrement:boolean=false
   delay:boolean=false;
   productWishliststatus:boolean=false;
-  constructor(public product_service: ProductService, private toaster: ToastrService) {
+
+  constructor(public product_service: ProductService, private toaster: ToastrService, private router: Router) {
 
   }
 
@@ -41,8 +43,68 @@ export class CartComponent implements OnInit , OnChanges {
     this.products=JSON.parse(localStorage.getItem('cartItems'));
     this.product_service.cartItems.subscribe(response => this.products = response);
     console.log('this.products ==========> Cart page :::',this.products);
+    this.detectNavigationType();
   }
   
+
+  private detectNavigationType(): void {
+    // Check if the navigation is a hard refresh
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+
+      this.product_service.allCartProducts().subscribe(
+        res => {
+          let bodydata = res['data'];
+          console.log('bodydata=========================>', bodydata);
+          if (bodydata) {
+            if (bodydata.hasOwnProperty('products')) {
+              this.cartproducts = [];
+              for (const element of res['data'].products) {
+                this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                  if (product['data']) {
+                    this.product_img = product['data'].product_image[0]? product['data'].product_image[0].pro_image:'assets/images/product/placeholder.jpg';
+                    let data =
+                    {
+                      "_id": element.pro_id,
+                      "product_image": [
+                        {
+                          "pro_image": this.product_img,
+                          "status": "active"
+                        },
+                      ],
+                      "cart_id": res['data']._id,
+                      "product_name": element.pro_name,
+                      "product_slug": element.pro_slug,
+                      "quantity": element.qty,
+                      "stock": (product['data'].stock - element.qty),
+                      "product_sale_price": element.price,
+                      "addons": element.addons,
+                      "addonsprice": element.addonsprice
+                    }
+                    this.cartproducts.push(data);
+                    this.products = this.cartproducts;
+                    state.cart.push(this.cartproducts);
+                    localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
+                    this.getTotal.subscribe();
+                    console.log('this.cartproducts', this.cartproducts);
+                  }
+                })
+
+              }
+            }
+          }
+
+        }
+      )
+    }
+
+    // Listen to router events for additional logic if needed
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        // You can add more logic here to handle soft navigations
+        console.log('Navigation started', event.url);
+      }
+    });
+  }
 
   ngOnChanges(changes) {
   }

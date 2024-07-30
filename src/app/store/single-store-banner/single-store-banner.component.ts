@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { StoreService } from 'src/app/shared/services/store.service';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-single-store-banner',
@@ -12,37 +13,149 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./single-store-banner.component.scss']
 })
 export class SingleStoreBannerComponent implements OnInit {
-
-  store_slug:any
+  @Input() currency: any = this.productService.Currency; // Default Currency 
+  public ImageSrc: string
+  store_slug: any
   public sliders = [];
+  categories: any
+  allProducts: any[] = [];
+  menProducts: any[] = [];
+  womenProducts: any[] = [];
+  unisexProducts: any[] = [];
+  pradaProducts: any[] = [];
+  gucciProducts: any[] = [];
+  coachProducts: any[] = [];
+  newArrivalProducts: any[] = [];
 
-  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService) {
+
+
+  // Logo
+  public brands = [];
+
+  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService, private productService: ProductService, private toastr: ToastrService) {
 
   }
 
   ngOnInit() {
+    this.getAllBrands();
 
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
     });
 
-    let storeObj=
+    let storeObj =
     {
       store_slug: this.store_slug
     }
     // get all home slider date from API
     this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
-      res =>
-      {
-        this.sliders=res.data;
-        console.log('Banner res',res);
+      res => {
+        this.sliders = res.data;
+        console.log('Banner res', res);
       },
       error => {
         this.toaster.error(error.error.message);
         this.router.navigateByUrl('/')
       }
-    )
+    );
+    this.productService.getallCategoryWithSubcat().subscribe(
+      res => {
+        console.log('res=========', res['data'])
+        this.categories = res['data'][0];
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      });
 
+    this.fetchAllProducts();
+  }
+
+  getAllBrands() {
+    this.productService.getallBrands().subscribe(
+      res => {
+        console.log('res=========', res['data'])
+        this.brands = res['data'];
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      });
+  }
+
+
+  fetchAllProducts() {
+    const prodObj = {
+      "store_slug": this.store_slug
+    };
+
+    this.productService.getallFilteredProduct(prodObj).subscribe(
+      res => {
+        this.allProducts = res['data'];
+        this.filterProducts();
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message);
+      }
+    );
+  }
+
+  filterProducts() {
+    const menCategoryId = this.categories.find(cat => cat.category_name === 'Men')?.category_id;
+    const womenCategoryId = this.categories.find(cat => cat.category_name === 'Women')?.category_id;
+    const unisexCategoryId = this.categories.find(cat => cat.category_name === 'Unisex')?.category_id;
+
+    this.menProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_sub_categories.some(subCat => subCat.child_category_id === menCategoryId)
+    ), 4);
+
+    this.womenProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_sub_categories.some(subCat => subCat.child_category_id === womenCategoryId)
+    ), 4);
+
+    this.unisexProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_sub_categories.some(subCat => subCat.child_category_id === unisexCategoryId)
+    ), 4);
+
+    this.pradaProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'PRADA'
+    ), 4);
+
+    this.gucciProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'GUCCI'
+    ), 4);
+
+    this.coachProducts = this.getRandomItems(this.allProducts.filter(product =>
+      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'COACH'
+    ), 4);
+
+    // Get 4 random items from new arrivals
+    this.newArrivalProducts = this.getRandomItems(this.allProducts, 4);
+  }
+
+  getRandomItems(array: any[], count: number): any[] {
+    const shuffled = array.sort(() => 0.5 - Math.random());
+    return array.slice(0, count);
+  }
+  viewResults(keyname: any) {
+    if (['men', 'women', 'unisex'].includes(keyname)) {
+      this.router.navigate([`/store-2d-products/${this.store_slug}/${keyname}`]);
+    }
+    else {
+      if (keyname != 'all') {
+        localStorage.setItem('brand', keyname)
+      }
+      this.router.navigate([`/store-2d-products/${this.store_slug}/all`]);
+    }
+
+  }
+
+  viewResults2d(keyname: any) {
+    if (['men', 'women', 'unisex'].includes(keyname)) {
+      localStorage.setItem('cat_slug', keyname);
+      this.router.navigate([`/2d-products/${this.store_slug}`]);
+    }
   }
 
 }

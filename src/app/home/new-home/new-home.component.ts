@@ -18,6 +18,7 @@ export class NewHomeComponent implements OnInit {
   constructor(private elementRef: ElementRef,private userservice: UserService) { }
 
   ngOnInit(): void {
+    localStorage.removeItem('vendor_log');
     this.form =  new FormGroup({
       'firstName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'lastName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),

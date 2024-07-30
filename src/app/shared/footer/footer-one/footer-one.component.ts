@@ -1,5 +1,7 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { StoreService } from '../../services/store.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-footer-one',
@@ -17,11 +19,44 @@ export class FooterOneComponent implements OnInit {
     event.stopPropagation(); // Stop event propagation to parent elements
   }
   public today: number = Date.now();
-
-  constructor(private router: Router) { }
+  store_slug:any
+  constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.store_slug = params['slug'];
+    });
 
+    if (this.store_slug) {
+      localStorage.setItem('storeslug', this.store_slug);
+    }
+    else {
+      this.store_slug = localStorage.getItem('storeslug')
+    }
+    if (this.store_slug) {
+
+      let storeObj = {
+        store_slug: this.store_slug
+      };
+
+      // get all home slider data from API
+      this.storeService.vendorstoredetails(storeObj).subscribe(
+        res => {
+          console.log('Vendor Store Deatails ----------------------------------', res.data[0].logo);
+          if (res.data[0].is_logo) {
+            this.themeLogo = res.data[0].logo
+          }
+          else {
+            this.themeLogo = 'assets/images/icon/logo_small_res.png';
+          }
+
+        },
+        error => {
+          this.toaster.error(error.error.message);
+          this.router.navigateByUrl('/');
+        }
+      );
+    }
   }
 
   redirectcat(url:any)

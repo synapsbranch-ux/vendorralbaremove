@@ -29,8 +29,7 @@ export class StoreproductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('cur_page'))
-    {
+    if (localStorage.getItem('cur_page')) {
       this.currentPage = Number(localStorage.getItem('cur_page'));
     }
     if (localStorage.getItem('brand')) {
@@ -42,7 +41,9 @@ export class StoreproductsComponent implements OnInit {
       this.store_slug = params.get('storeSlug');
       this.cat_slug = params.get('catSlug');
     });
-
+    if (this.cat_slug == 'all') {
+      this.cat_slug = ''
+    }
     let prodObj = {
       "product_category": this.cat_slug,
       "store_slug": this.store_slug,
@@ -63,7 +64,7 @@ export class StoreproductsComponent implements OnInit {
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];
-        this.selectedBrandName = this.getBrandName(this.brandList,this.selectedBrand)
+        this.selectedBrandName = this.getBrandName(this.brandList, this.selectedBrand)
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -85,20 +86,20 @@ export class StoreproductsComponent implements OnInit {
   }
 
   groupItemsIntoSections(items) {
+    this.groupedItems=[];
     for (let i = 0; i < items.length; i += this.numItemsPerSection) {
       const section = items.slice(i, i + this.numItemsPerSection);
       this.groupedItems.push(section);
     }
   }
 
-  getAllProducts()
-  {
+  getAllProducts() {
 
     this.cat_slug = '';
     this.selectedBrand = '';
     this.selectedBrandName = ''
     let pageNumber = 1;
-    localStorage.setItem('cur_page',pageNumber.toString())
+    localStorage.setItem('cur_page', pageNumber.toString())
     localStorage.setItem('brand', this.selectedBrand);
     let prodObj = {
       "product_category": '',
@@ -118,8 +119,15 @@ export class StoreproductsComponent implements OnInit {
 
   getCAtegoryDeatils(Category: any) {
     let pageNumber = 1;
-    localStorage.setItem('cur_page',pageNumber.toString())
+    localStorage.setItem('cur_page', pageNumber.toString())
     console.log('Category============', Category);
+    if(!this.store_slug)
+    {
+      this.route.paramMap.subscribe(params => {
+        this.store_slug = params.get('storeSlug');
+        this.cat_slug = params.get('catSlug');
+      });
+    }
     this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([`/store-2d-products/${this.store_slug}/${Category.category_slug}`]);
     })
@@ -143,11 +151,22 @@ export class StoreproductsComponent implements OnInit {
 
   changeBrandname(brand: any) {
     let pageNumber = 1;
-    localStorage.setItem('cur_page',pageNumber.toString())
+    localStorage.setItem('cur_page', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
-    console.log('this.selectedBrandName----',this.selectedBrandName);
+    console.log('this.selectedBrandName----', this.selectedBrandName);
     localStorage.setItem('brand', this.selectedBrand);
+    if(!this.store_slug)
+      {
+        this.route.paramMap.subscribe(params => {
+          this.store_slug = params.get('storeSlug');
+        });
+      }
+      if(!this.cat_slug)
+      {
+        this.cat_slug = 'all'
+      }
+      console.log('`/store-2d-products/${this.store_slug}/${this.cat_slug}`',`/store-2d-products/${this.store_slug}/${this.cat_slug}`)
     this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
       this.router.navigate([`/store-2d-products/${this.store_slug}/${this.cat_slug}`]);
     })
@@ -168,26 +187,23 @@ export class StoreproductsComponent implements OnInit {
   }
 
 
-getBrandName(brandarr,brandId)
-{
-  if(brandarr.length > 0)
-  {
-   for (const brand of brandarr) {
-     if(brand._id == brandId)
-     {
-      return brand.brand_name
-     }
-   } 
+  getBrandName(brandarr, brandId) {
+    if (brandarr.length > 0) {
+      for (const brand of brandarr) {
+        if (brand._id == brandId) {
+          return brand.brand_name
+        }
+      }
+    }
+    return null
   }
-  return null
-}
 
-onPageChange(pageNumber: number): void {
-  this.currentPage = pageNumber;
-  localStorage.setItem('cur_page',pageNumber.toString())
-  console.log('pageNumber================',pageNumber);
-  // Do whatever you need to do when the page changes
-  // For example, fetch data for the new page
-}
+  onPageChange(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    localStorage.setItem('cur_page', pageNumber.toString())
+    console.log('pageNumber================', pageNumber);
+    // Do whatever you need to do when the page changes
+    // For example, fetch data for the new page
+  }
 
 }

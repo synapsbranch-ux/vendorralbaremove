@@ -144,7 +144,6 @@
                                                             <input class="color-range mt-3" type="range" value="0" #ranger
                                                                 (change)="onInputChange(ranger.value,addon.addon_slug,addon)"
                                                                 [disabled]="addon.add_ons_value[0].values < 1 && range" [style.background]="otherInput.value">
-                                                                {{addon.add_ons_value[0].values}} {{range}}
                                                             </div>
                                                         <div class="price-section"
                                                             *ngIf="addon.add_ons_value[0].values > 0 && range">

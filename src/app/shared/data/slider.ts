@@ -71,19 +71,21 @@ export let InstaSlider: any = {
 export let LogoSlider: any = {
     loop: true,
     dots: false,
+    autoplay: true,
+    autoplaySpeed: 1000,
     navSpeed: 300,
     responsive: {
         767: {
-            items: 5
+            items: 6
         },
         576: {
-            items: 4
-        },
-        480: {
             items: 3
         },
+        480: {
+            items: 1
+        },
         0: {
-            items: 2
+            items: 1
         }
     }
 };

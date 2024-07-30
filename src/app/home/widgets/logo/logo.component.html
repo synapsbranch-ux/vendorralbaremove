@@ -1,10 +1,10 @@
 <owl-carousel-o [options]="LogoSliderConfig" class="no-arrow">
-  <ng-container *ngFor="let logo of logos">
+  <ng-container *ngFor="let brand of brands">
     <ng-template carouselSlide>
       <div>
         <div class="logo-block">
-          <a [routerLink]="'/home/fashion'">
-            <img [src]="logo.image" alt="logo" class="w-auto">
+          <a (click)="viewResults(brand._id)" class="pe-auto">
+            <img src="assets/images/brands/{{brand.brand_slug}}.png" alt="brand" class="w-95">
           </a>
         </div>
       </div>
