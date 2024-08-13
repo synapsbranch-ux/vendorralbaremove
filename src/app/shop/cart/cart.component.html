@@ -16,21 +16,30 @@
             </div>
             <div class="col-sm-12 col-lg-8 col-12">
                 <div class="row justify-content-center align-items-center mb-4" *ngFor="let product of products">
-                    <div class="col-sm-5 col-md-5 col-9 flex_item">
+                    <div class="col-sm-7 col-md-7 col-9 flex_item">
                         <div class="cart_product_img">
-                            <!-- <a [routerLink]="['/shop/product/', product.product_slug]" routerLinkActive="active"> -->
+                            <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
                             <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
-                            <!-- </a> -->
+                            </a>
                         </div>
                         <div class="cart_product_info">
-                            <p class="mb-2 product_title">
+                            <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active"><p class="mb-2 product_title">
                                 {{ product.product_name | titlecase }}
-                            </p>
+                            </p></a>
                             <p class="mb-2">Price : {{ ((product.product_sale_price)? product.product_sale_price: product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}</p>
-                            <p class="mb-2">Addons : {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}</p>
+                           <span *ngIf="product.addons && product.addons.length > 0">
+                            <p>Addons</p>
+                            <ul class="addon_cart">
+                                <li *ngFor="let addon of product.addons; let i = index">
+                                    {{(addon.input_type == 'range' || addon.input_type == 'range-input')? addon.key : addon.value }} - {{ addon.price | currency: product_service.Currency?.currency:'symbol' }}
+                                    <a (click)="removeAddon(product, i)"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </li>
+                            </ul>
+                            <p class="mb-2 font-weight-bold">Total addons : {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}</p>
+                        </span>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-md-4 col-3">
+                    <div class="col-sm-3 col-md-3 col-3">
                         <div class="qty-box">
                             <div class="input-group">
                                 <span class="input-group-prepend">
@@ -47,66 +56,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-12">
+                    <div class="col-sm-2 col-12">
                         <ul class="cart_item_action mt-2">
                             <!-- <li><i class="ti-pencil"></i>Edit Item</li> -->
                             <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
                             <li><a (click)="addwishlist(product)">  <i [ngClass]="checkwishlist(product)? 'fa fa-heart' : 'fa fa-heart-o'"
                                 class=""></i>Wishlist</a></li>
                         </ul>
-                    </div>
-                </div>
-
-                <div class="row section-t-space">
-                    <div class="col-12">
-                        <!-- <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                            <ngb-panel>
-                                <ng-template ngbPanelTitle>
-                                    <h5 class="m-0 text-left">Estimated Your Shipping 
-                                        <span class="float-right est_info">Shipping to 91001 <i class=" ti-angle-down ml-2"></i></span>
-                                    </h5>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                                    labore sustainable VHS.
-                                </ng-template>
-                            </ngb-panel>
-                            <ngb-panel>
-                                <ng-template ngbPanelTitle>
-                                    <h5 class="m-0 text-left">Enter a Coupon Code
-                                    <span class="float-right est_info">20% discount applied <i class=" ti-angle-down ml-2"></i></span></h5>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                                    labore sustainable VHS.
-                                </ng-template>
-                            </ngb-panel>
-                            <ngb-panel>
-                                <ng-template ngbPanelTitle>
-                                    <h5 class="m-0 text-left">Apply Gift Card
-                                        <span class="float-right est_info">
-                                            <i class="ti-angle-down ml-2"></i>
-                                        </span>
-                                    </h5>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                                    labore sustainable VHS.
-                                </ng-template>
-                            </ngb-panel>
-                        </ngb-accordion> -->
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   public activeSlide: any = 0;
   addtocartstatus: boolean = false;
   public productSubmitForm: FormGroup;
-  others_color_code:any
+  others_color_code: any
   image3d: any;
   product_external_link: any = "#"
   cartbuttonhideStatus: any = 'inactive';
@@ -50,27 +50,33 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   productImages = [];
   productWishliststatus: boolean = false;
   tryonenable: boolean = false;
-
+  currentCartProductDeatils: any;
+  cartAddons: any;
   iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
   iframeLink: any
-
+  isProductinCart: boolean = false;
+  othervalue:any;
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
   public ProductDetailsThumbConfig: any = ProductDetailsThumbSlider;
-  
+
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
-  
+
 
   constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router,
     public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
+    let product_slug = this.route.snapshot.paramMap.get('slug');
+    //console.log('this.currentCartProductDeatils --------------------', this.currentCartProductDeatils);
+    //console.log('this.cartAddons --------------------', this.cartAddons);
+
     this.productService.getSettingsDetails().subscribe(
       res => {
         if (res.length) {
@@ -79,20 +85,26 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         }
       }
     )
-    let product_slug = this.route.snapshot.paramMap.get('slug');
     this.productService.getproductsBySlugs(product_slug).subscribe(response => {
       this.product = response.data;
       if (Object.keys(this.product).length > 0) {
         this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
         this.productAttributeArr = response.data.attributes;
         this.productAddons = response.data.add_ons;
-        console.log('productAttributeArr =================', this.productAttributeArr);
+        //console.log('productAttributeArr =================', this.productAttributeArr);
+
+        // Initialize selectedOptions and value objects with the existing values
+        this.productAddons.forEach(addon => {
+          if (addon.addon_slug) {
+            this.selectedOptions[addon.addon_slug] = addon.add_ons_value[0].values || 0;
+          }
+        });
+
         console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
           let colorCode = response.data.product_bg_color.slice(1);
-          let fulliframeURL = this.iframeBaseLink + product3durl+'&color='+colorCode;
-          console.log('fulliframeURL----------------',fulliframeURL);
+          let fulliframeURL = this.iframeBaseLink + product3durl + '&color=' + colorCode;
           this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
         }
         this.productImages.push(...response.data.product_3d_image)
@@ -131,20 +143,62 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
             "Twod_Tryon": ''
           };
         }
+
+        let cart = JSON.parse(localStorage.getItem('cartItems'));
+        if (cart && cart.length > 0) {
+          this.currentCartProductDeatils = this.findProductInCart(product_slug, cart);
+          if (this.currentCartProductDeatils) {
+            this.isProductinCart = true;
+            console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
+            this.counter = this.currentCartProductDeatils.quantity;
+            if (this.currentCartProductDeatils.addons && this.currentCartProductDeatils.addons.length > 0) {
+              this.cartAddons = this.currentCartProductDeatils.addons;
+              this.addonSelectedResult = this.cartAddons;
+              this.productAddonsPrice = this.currentCartProductDeatils.addonsprice
+              this.AddonService = true;
+              this.prefillAddons(this.cartAddons);
+            }
+          }
+
+        }
+
       }
       else {
         this.router.navigateByUrl('/')
       }
     });
 
-console.log('this.productImages ===================================',this.productImages);
+  }
 
+
+  prefillAddons(savedAddons: any) {
+    savedAddons.forEach((savedAddon: any) => {
+      const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
+      if (addon) {
+        this.value[addon.addon_slug] = savedAddon.price;
+        this.selectedOptions[addon.addon_slug] = savedAddon.value;
+        addon.add_ons_value[0].values = savedAddon.value;
+        if (addon.input_type == 'range') {
+          this.range = true;
+        }
+        if (savedAddon.input_type == 'range-input') {
+          this.othervalue = savedAddon.other;
+          this.range = true;
+         
+        }
+      }
+    });
   }
 
   // Function to sanitize a single URL using DomSanitizer
   sanitizeURL(url: string): SafeResourceUrl {
     let urlYoutube = url.replace("watch?v=", "v/");
     return this.sanitizer.bypassSecurityTrustResourceUrl(urlYoutube);
+  }
+
+
+  findProductInCart(product_slug, cart) {
+    return cart.find(product => product.product_slug === product_slug);
   }
 
   ceateForm() {
@@ -191,7 +245,7 @@ console.log('this.productImages ===================================',this.produc
 
       }
     }
-    console.log('formControlsConfig -========================>?', formControlsConfig)
+    //console.log('formControlsConfig -========================>?', formControlsConfig)
     this.productSubmitForm = this.formBuilder.group(formControlsConfig);
 
   }
@@ -220,22 +274,50 @@ console.log('this.productImages ===================================',this.produc
 
   // Add to cart
   async addToCart(product: any) {
+    console.log('this.productAddonsPrice ==============', this.productAddonsPrice, this.addonSelectedResult);
+    if (this.isProductinCart) {
+      product.addonsprice = this.productAddonsPrice;
+      let extraObj =
+      {
+        extra_document: this.uploadAddonsImage
+      }
+      if (this.uploadAddonsImage.length > 0) {
+        this.addonSelectedResult.push(extraObj);
+      }
+      product.addons = this.addonSelectedResult
+      console.log('Product Ready To cart------------------', product);
 
-    product.addonsprice = this.productAddonsPrice;
-    let extraObj =
-    {
-      extra_document: this.uploadAddonsImage
+      let extraStock = this.counter - this.currentCartProductDeatils.quantity
+
+      const status = await this.productService.addToCart(product, extraStock);
+      if (status) {
+        product.stock = (product.stock - this.counter);
+      }
+      this.toastrService.success('Product updated in Cart.');
     }
-    this.addonSelectedResult.push(extraObj);
-    product.addons = this.addonSelectedResult
-    const status = await this.productService.addToCart(product, this.counter);
-    if (status) {
-      product.stock = (product.stock - this.counter);
+    else {
+      product.addonsprice = this.productAddonsPrice;
+      let extraObj =
+      {
+        extra_document: this.uploadAddonsImage
+      }
+      if (this.uploadAddonsImage.length > 0) {
+        this.addonSelectedResult.push(extraObj);
+      }
+      product.addons = this.addonSelectedResult
+      console.log('Product Ready To cart------------------', product);
+
+      const status = await this.productService.addToCart(product, this.counter);
+      if (status) {
+        product.stock = (product.stock - this.counter);
+
+      }
+
       this.toastrService.success('Product has been added in Cart.');
     }
-
-
   }
+
+
   // key value to text convert with capitalize format
   capitalizeString(str) {
     let words = str.split('_');
@@ -268,16 +350,16 @@ console.log('this.productImages ===================================',this.produc
           this.uploadAddonsImage.splice(exists, 1, oldObj)
         }
 
-        console.log('imgobj =======================>', imgobj);
+        //console.log('imgobj =======================>', imgobj);
 
       },
       (err) => {
-        // console.log('GLB Image Upload Error',err);
+        // //console.log('GLB Image Upload Error',err);
       })
     // }
-    console.log('this.uploadAddonsImage', this.uploadAddonsImage);
-    console.log('this.addonSelectedResult', this.addonSelectedResult);
-    console.log('this.productAddonsPrice ', this.productAddonsPrice);
+    //console.log('this.uploadAddonsImage', this.uploadAddonsImage);
+    //console.log('this.addonSelectedResult', this.addonSelectedResult);
+    //console.log('this.productAddonsPrice ', this.productAddonsPrice);
   }
 
   onMultiInputChange(val: any, slug, addon) {
@@ -285,6 +367,7 @@ console.log('this.productImages ===================================',this.produc
     let seletctObject =
     {
       key: addon.addon_slug,
+      input_type: addon.add_ons_input,
       value: '',
       price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
       other: val
@@ -301,70 +384,10 @@ console.log('this.productImages ===================================',this.produc
       this.addonSelectedResult.splice(exists, 1, oldObj)
     }
 
-    console.log('this.addonSelectedResult', this.addonSelectedResult);
-    console.log('this.productAddonsPrice ', this.productAddonsPrice);
+    //console.log('this.addonSelectedResult', this.addonSelectedResult);
+    //console.log('this.productAddonsPrice ', this.productAddonsPrice);
   }
 
-  onInputChange(val: any, slug, addon) {
-    // Do something with the angle value
-    this.productAddons.map((elm) => {
-      if (elm.addon_slug == slug) {
-        elm.add_ons_value[0].values = val;
-        // return elm
-      }
-      this.range = true;
-      if (val == 0 && (addon.add_ons_input == 'range' || addon.add_ons_input == 'range-input')) {
-        elm.add_ons_value[0].values = val;
-        this.range = false;
-      }
-    })
-    const selecttxt = this.productAddons.find(item => item.addon_slug === slug);
-    console.log('selecttxt Find', selecttxt);
-    if (selecttxt) {
-      this.value[slug] = selecttxt.add_ons_value[0].price ? selecttxt.add_ons_value[0].price : 0;
-    }
-
-    let seletctObject =
-    {
-      key: addon.addon_slug,
-      value: val,
-      price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
-      other: ''
-    }
-    const exists = this.addonSelectedResult.findIndex(el => el.key == addon.addon_slug);
-    let oldObj = this.addonSelectedResult.find(el => el.key == addon.addon_slug);
-    console.log('exists ===========>', exists);
-
-    // // If the key-value pair doesn't exist, push the object into the array
-    if (exists == -1) {
-      this.addonSelectedResult.push(seletctObject);
-      this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
-    }
-    else {
-      console.log('val ===========>', Number(val), addon.add_ons_input)
-
-      if (Number(val) > 0 && (addon.add_ons_input == 'range' || addon.add_ons_input == 'range-input')) {
-        if (oldObj.other != '') {
-          seletctObject.other = oldObj.other;
-        }
-        this.addonSelectedResult.splice(exists, 1, seletctObject)
-      }
-      else
-        if (val.length > 0 && (addon.add_ons_input == 'input' || addon.add_ons_input == 'textarea')) {
-          if (oldObj.other != '') {
-            seletctObject.other = oldObj.other;
-          }
-          this.addonSelectedResult.splice(exists, 1, seletctObject)
-        }
-        else {
-          this.addonSelectedResult.splice(exists, 1)
-          this.productAddonsPrice -= parseFloat(oldObj.price)
-        }
-    }
-
-    console.log('this.addonSelectedResult', this.addonSelectedResult);
-    console.log('this.productAddonsPrice ', this.productAddonsPrice);
-  }
 
   getFormControlName(name: string): string {
     return name.toLowerCase()
@@ -372,41 +395,96 @@ console.log('this.productImages ===================================',this.produc
       .replace(/[^\w-]+/g, '');
   }
 
-  updatePrice(dropdownSlug) {
+
+  onInputChange(val: any, slug: string, addon: any) {
+    // Update the values in the model
+    this.productAddons = this.productAddons.map(elm => {
+      if (elm.addon_slug === slug) {
+        elm.add_ons_value[0].values = val;
+      }
+      return elm;
+    });
+
+    this.range = true;
+    if (val == 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
+      this.range = false;
+    }
+
+    this.value[slug] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0;
+    this.selectedOptions[slug] = val;
+
+    // Update addonSelectedResult
+    const selecttxt = this.productAddons.find(item => item.addon_slug === slug);
+    if (selecttxt) {
+      let seletctObject = {
+        key: addon.addon_slug,
+        input_type: addon.add_ons_input,
+        value: val,
+        price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
+        other: ''
+      };
+
+      const exists = this.addonSelectedResult.findIndex(el => el.key === addon.addon_slug);
+      let oldObj = this.addonSelectedResult.find(el => el.key === addon.addon_slug);
+      console.log('isCartExists', exists)
+      if (exists === -1) {
+        this.addonSelectedResult.push(seletctObject);
+        console.log('addon_slug addon_slug******', addon.addon_slug)
+        this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+      } else {
+        const isCartExists = this.cartAddons.findIndex(el => el.key === addon.addon_slug);
+        console.log('isCartExists 8888888888888888******', isCartExists)
+        if (isCartExists === -1) {
+          this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+        }
+
+        if (Number(val) > 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
+          if (oldObj.other !== '') {
+            seletctObject.other = oldObj.other;
+          }
+          this.addonSelectedResult.splice(exists, 1, seletctObject);
+        } else if (val.length > 0 && (addon.add_ons_input === 'input' || addon.add_ons_input === 'textarea')) {
+          if (oldObj.other !== '') {
+            seletctObject.other = oldObj.other;
+          }
+          this.addonSelectedResult.splice(exists, 1, seletctObject);
+        } else {
+          this.addonSelectedResult.splice(exists, 1);
+          this.productAddonsPrice -= parseFloat(oldObj.price);
+        }
+      }
+    }
+  }
+
+  updatePrice(dropdownSlug: string) {
     const dropdown = this.productAddons.find(item => item.addon_slug === dropdownSlug);
     if (dropdown) {
       const selectedOption = this.selectedOptions[dropdownSlug];
       const priceObj = dropdown.add_ons_value.find(option => option.value_slug === selectedOption);
       if (priceObj) {
-        let seletctObject =
-        {
+        let seletctObject = {
           key: dropdownSlug,
+          input_type: dropdown.add_ons_input,
           value: selectedOption,
           price: priceObj.price ? priceObj.price : 0,
           other: ''
-        }
-        this.pushObjectIfKeyNotExists(this.addonSelectedResult, 'key', selectedOption, seletctObject);
-        this.productAddonsPrice += parseFloat(priceObj.price ? priceObj.price : 0)
+        };
 
-        console.log('this.addonSelectedResult', this.addonSelectedResult);
-        console.log('this.productAddonsPrice ', this.productAddonsPrice);
+        this.pushObjectIfKeyNotExists(this.addonSelectedResult, 'key', selectedOption, seletctObject);
 
         this.value[dropdownSlug] = priceObj.price;
       }
     }
   }
 
-  pushObjectIfKeyNotExists(array, key, value, obj) {
-    // Check if any object in the array has the specified key-value pair
-    const exists = array.findIndex(el => el.key == obj.key);
-    let oldObj = array.find(el => el.key == obj.key);
-    // If the key-value pair doesn't exist, push the object into the array
-    if (exists == -1) {
+  pushObjectIfKeyNotExists(array: any[], key: string, value: any, obj: any) {
+    const exists = array.findIndex(el => el.key === obj.key);
+    if (exists === -1) {
+      this.productAddonsPrice += parseFloat(obj.price ? obj.price : 0);
       array.push(obj);
-    }
-    else {
-      array.splice(exists, 1, obj)
-      this.productAddonsPrice -= parseFloat(oldObj.price ? oldObj.price : 0)
+    } else {
+      array.splice(exists, 1, obj);
+      // this.productAddonsPrice -= parseFloat(oldObj.price ? oldObj.price : 0);
     }
   }
 
@@ -428,16 +506,6 @@ console.log('this.productImages ===================================',this.produc
     }
   }
 
-  // Buy Now
-  async buyNow(product: any) {
-    console.log('Before Cart Product ==================>', product)
-    this.addonSelectedResult[this.addonSelectedResult.length + 1].extra_document = this.uploadAddonsImage;
-    product.addons = this.addonSelectedResult
-    console.log('Final Cart Product ==================>', product)
-    const status = await this.productService.addToCart(product, this.counter);
-    if (status)
-      this.router.navigate(['/checkout']);
-  }
 
   // Add to Wishlist
   addToWishlist(product: any) {

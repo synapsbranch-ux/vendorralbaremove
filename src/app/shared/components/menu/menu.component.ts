@@ -50,6 +50,7 @@ export class MenuComponent implements OnInit {
         res => {
           if (res.data[0]?.banner_main_category && res.data[0].banner_sub_categories.length > 0) {
             menuarr = res.data[0].banner_sub_categories;
+            console.log('menuarr - --------------------',menuarr);
             this.menuItems = menuarr.map(items => {
               let menuChild;
               // if(items.child_categories.length > 0){

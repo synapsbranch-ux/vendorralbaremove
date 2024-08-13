@@ -17,3 +17,10 @@
     align-items: center;
     justify-content: space-evenly;
 }
+.addon_cart li {
+    display: list-item;
+    list-style: none;
+}
+.addon_cart a{
+    cursor: pointer;
+}

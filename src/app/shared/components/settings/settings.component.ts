@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, Injectable, PLATFORM_ID, Inject, SimpleChanges, DoCheck } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,86 +7,92 @@ import { ProductNew } from "../../classes/product";
 import { Router } from '@angular/router';
 
 @Component({
-selector: 'app-settings',
-templateUrl: './settings.component.html',
-styleUrls: ['./settings.component.scss']
+  selector: 'app-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, DoCheck {
 
-cartproducts=[];
-product_img:any;
+  cartproducts = [];
+  product_img: any;
 
-user_id:string
-public products: ProductNew[] = [];
-public search: boolean = false;
+  user_id: string
+  public products: ProductNew[] = [];
+  public search: boolean = false;
 
-public languages = [{ 
-  name: 'English',
-  code: 'en'
-}, {
-  name: 'French',
-  code: 'fr'
-}];
+  public languages = [{
+    name: 'English',
+    code: 'en'
+  }, {
+    name: 'French',
+    code: 'fr'
+  }];
 
-public currencies = [{
-  name: 'Euro',
-  currency: 'EUR',
-  price: 0.90 // price of euro
-}, {
-  name: 'Rupees',
-  currency: 'INR',
-  price: 70.93 // price of inr
-}, {
-  name: 'Pound',
-  currency: 'GBP',
-  price: 0.78 // price of euro
-}, {
-  name: 'Dollar',
-  currency: 'USD',
-  price: 1 // price of usd
-}]
+  public currencies = [{
+    name: 'Euro',
+    currency: 'EUR',
+    price: 0.90 // price of euro
+  }, {
+    name: 'Rupees',
+    currency: 'INR',
+    price: 70.93 // price of inr
+  }, {
+    name: 'Pound',
+    currency: 'GBP',
+    price: 0.78 // price of euro
+  }, {
+    name: 'Dollar',
+    currency: 'USD',
+    price: 1 // price of usd
+  }]
 
-constructor(@Inject(PLATFORM_ID) private platformId: Object,
-  private translate: TranslateService,
-  private router: Router , public product_service: ProductService) {
-}
-
-ngOnInit(): void {
-this.user_id=localStorage.getItem("user_id");
-this.product_service.cartItems.subscribe(response => this.products = response);
-}
-
-
-searchToggle(){
-  this.search = !this.search;
-}
-
-changeLanguage(code){
-  if (isPlatformBrowser(this.platformId)) {
-    this.translate.use(code)
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    private translate: TranslateService,
+    private router: Router, public product_service: ProductService) {
   }
-}
 
-get getTotal(): Observable<number> {
-  return this.product_service.cartTotalAmount();
-}
+  ngOnInit(): void {
+    this.user_id = localStorage.getItem("user_id");
 
-removeItem(product: any) {
-  this.product_service.removeCartItem(product);
-  this.product_service.cartItems.subscribe(response => this.products = response);
-}
+  }
 
-changeCurrency(currency: any) {
-  this.product_service.Currency = currency
-}
+  ngDoCheck(): void {
+    this.products = JSON.parse(localStorage.getItem('cartItems'));
+  }
 
-logout()
-{
-  localStorage.clear();
-  this.router.navigate(['/login'])
-  .then(() => {
-      window.location.reload();
-  });
-}
+  searchToggle() {
+    this.search = !this.search;
+  }
+
+  changeLanguage(code) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.translate.use(code)
+    }
+  }
+
+  get getTotal(): Observable<number> {
+    return this.product_service.cartTotalAmount();
+  }
+
+  get getTotalAddons(): Observable<number> {
+    return this.product_service.cartAddonsTotalAmount();
+  }
+
+  removeItem(product: any) {
+    this.product_service.removeCartItem(product);
+    this.product_service.cartItems.subscribe(response => this.products = response);
+  }
+
+  changeCurrency(currency: any) {
+    this.product_service.Currency = currency
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login'])
+      .then(() => {
+        window.location.reload();
+      });
+  }
 
 }
