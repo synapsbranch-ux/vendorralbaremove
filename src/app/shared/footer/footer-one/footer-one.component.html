@@ -7,7 +7,13 @@
                     <div class="col-lg-6">
                         <div class="subscribe">
                             <div class="footer-logo">
-                                <img [src]="themeLogo" alt="logo" class="img-fluid">
+                                <a *ngIf="!vendorhome" routerLink="/" id="headerlogo">
+                                    <img [src]="themeLogo" class="img-fluid" alt="logo">
+                                </a>
+                                <a *ngIf="vendorhome" routerLink="/vendor/{{store_slug}}" id="headerlogo">
+                                    <img *ngIf="isvendorlogoimage" [src]="themeLogo" class="img-fluid" alt="logo">
+                                    <h2 *ngIf="!isvendorlogoimage">{{themeLogo}}</h2>
+                                </a>
                             </div>
                         </div>
                     </div>

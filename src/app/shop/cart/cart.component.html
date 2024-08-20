@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="col-sm-12 col-lg-8 col-12">
-                <div class="row justify-content-center align-items-center mb-4" *ngFor="let product of products">
+                <div class="row justify-content-center align-items-center mb-3 cart-products-list" *ngFor="let product of products">
                     <div class="col-sm-7 col-md-7 col-9 flex_item">
                         <div class="cart_product_img">
                             <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
@@ -31,12 +31,13 @@
                             <p>Addons</p>
                             <ul class="addon_cart">
                                 <li *ngFor="let addon of product.addons; let i = index">
-                                    {{(addon.input_type == 'range' || addon.input_type == 'range-input')? addon.key : addon.value }} - {{ addon.price | currency: product_service.Currency?.currency:'symbol' }}
+                                    {{(addon.input_type == 'range' || addon.input_type == 'range-input' || addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} - {{ addon.price | currency: product_service.Currency?.currency:'symbol' }}
                                     <a (click)="removeAddon(product, i)"><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </li>
                             </ul>
                             <p class="mb-2 font-weight-bold">Total addons : {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}</p>
                         </span>
+                        <a [routerLink]="['/product/', product.product_slug]" class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-3 col-3">

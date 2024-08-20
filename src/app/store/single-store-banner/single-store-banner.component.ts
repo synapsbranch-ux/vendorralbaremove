@@ -60,15 +60,16 @@ export class SingleStoreBannerComponent implements OnInit {
     );
     this.productService.getallCategoryWithSubcat().subscribe(
       res => {
-        console.log('res=========', res['data'])
+        console.log('res getallCategoryWithSubcat this.categories=========', res['data'])
         this.categories = res['data'][0];
+        this.fetchAllProducts();
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
 
-    this.fetchAllProducts();
+    
   }
 
   getAllBrands() {
@@ -102,6 +103,7 @@ export class SingleStoreBannerComponent implements OnInit {
   }
 
   filterProducts() {
+    console.log('this.categories ---------------------',this.categories);
     const menCategoryId = this.categories.find(cat => cat.category_name === 'Men')?.category_id;
     const womenCategoryId = this.categories.find(cat => cat.category_name === 'Women')?.category_id;
     const unisexCategoryId = this.categories.find(cat => cat.category_name === 'Unisex')?.category_id;

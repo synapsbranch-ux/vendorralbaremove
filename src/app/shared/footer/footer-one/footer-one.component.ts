@@ -18,6 +18,8 @@ export class FooterOneComponent implements OnInit {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
+  vendorhome:boolean=false;
+  isvendorlogoimage:boolean = false;
   public today: number = Date.now();
   store_slug:any
   constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
@@ -42,9 +44,18 @@ export class FooterOneComponent implements OnInit {
       // get all home slider data from API
       this.storeService.vendorstoredetails(storeObj).subscribe(
         res => {
-          console.log('Vendor Store Deatails ----------------------------------', res.data[0].logo);
           if (res.data[0].is_logo) {
-            this.themeLogo = res.data[0].logo
+            if(res.data[0].logo)
+            {
+              this.themeLogo = res.data[0].logo
+              this.isvendorlogoimage = true;
+            }
+            else
+            {
+              this.themeLogo = res.data[0].logo_name
+              this.isvendorlogoimage = false;
+            }
+            this.vendorhome = true;
           }
           else {
             this.themeLogo = 'assets/images/icon/logo_small_res.png';

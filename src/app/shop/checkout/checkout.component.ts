@@ -285,23 +285,6 @@ let address_arr={
           }
         )
 
-      let orderProducts : Object[]=[];
-
-      for(const elem of this.products)
-      {
-        let odetails= {
-          product_id: elem._id,
-          product_name: elem.product_name,
-          product_image: elem.product_image[0].pro_image,
-          product_slug: elem.product_slug,
-          qty: elem.quantity,
-          price: elem.product_sale_price,
-          addons: elem.addons,
-          addonsprice: elem.addonsprice
-        }
-        orderProducts.push(odetails);
-      }
-
   let orderData={}
 
   if(formData.paymentOption == 'paypal')
@@ -322,7 +305,7 @@ let address_arr={
       billing_address_id: formData.userBillingAddressId,
       billing_email: formData.email,
       billing_phone: formData.phone,
-      order_details: orderProducts,
+      cart_id: localStorage.getItem('cart_'),
     }
   }
   else if(formData.paymentOption == 'COD')
@@ -343,7 +326,7 @@ let address_arr={
     billing_address_id: formData.userBillingAddressId,
     billing_email: formData.email,
     billing_phone: formData.phone,
-    order_details: orderProducts,
+    cart_id: localStorage.getItem('cart_'),
   }
   }
   else
