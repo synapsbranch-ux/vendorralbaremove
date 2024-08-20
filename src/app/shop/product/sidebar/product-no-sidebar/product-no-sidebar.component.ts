@@ -55,7 +55,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
   iframeLink: any
   isProductinCart: boolean = false;
-  othervalue:any;
+  othervalue: any;
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -96,11 +96,13 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         // Initialize selectedOptions and value objects with the existing values
         this.productAddons.forEach(addon => {
           if (addon.addon_slug) {
-            this.selectedOptions[addon.addon_slug] = addon.add_ons_value[0].values || 0;
+
+            if (addon.add_ons_input == 'range' || addon.add_ons_input == 'range-input')
+              this.selectedOptions[addon.addon_slug] = addon.add_ons_value[0].values || 0;
           }
         });
 
-        console.log('productAddons =================', this.productAddons);
+        //console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
           let colorCode = response.data.product_bg_color.slice(1);
@@ -149,7 +151,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           this.currentCartProductDeatils = this.findProductInCart(product_slug, cart);
           if (this.currentCartProductDeatils) {
             this.isProductinCart = true;
-            console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
+            //console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
             this.counter = this.currentCartProductDeatils.quantity;
             if (this.currentCartProductDeatils.addons && this.currentCartProductDeatils.addons.length > 0) {
               this.cartAddons = this.currentCartProductDeatils.addons;
@@ -184,7 +186,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         if (savedAddon.input_type == 'range-input') {
           this.othervalue = savedAddon.other;
           this.range = true;
-         
         }
       }
     });
@@ -274,7 +275,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Add to cart
   async addToCart(product: any) {
-    console.log('this.productAddonsPrice ==============', this.productAddonsPrice, this.addonSelectedResult);
+    //console.log('this.productAddonsPrice ==============', this.productAddonsPrice, this.addonSelectedResult);
     if (this.isProductinCart) {
       product.addonsprice = this.productAddonsPrice;
       let extraObj =
@@ -285,7 +286,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         this.addonSelectedResult.push(extraObj);
       }
       product.addons = this.addonSelectedResult
-      console.log('Product Ready To cart------------------', product);
+      //console.log('Product Ready To cart------------------', product);
 
       let extraStock = this.counter - this.currentCartProductDeatils.quantity
 
@@ -305,7 +306,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         this.addonSelectedResult.push(extraObj);
       }
       product.addons = this.addonSelectedResult
-      console.log('Product Ready To cart------------------', product);
+     // console.log('Product Ready To cart------------------', product);
 
       const status = await this.productService.addToCart(product, this.counter);
       if (status) {
@@ -405,7 +406,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       return elm;
     });
 
-    this.range = true;
     if (val == 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
       this.range = false;
     }
@@ -423,28 +423,27 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
         other: ''
       };
-
-      const exists = this.addonSelectedResult.findIndex(el => el.key === addon.addon_slug);
-      let oldObj = this.addonSelectedResult.find(el => el.key === addon.addon_slug);
-      console.log('isCartExists', exists)
+        const exists = this.addonSelectedResult.findIndex(el => el.key === addon.addon_slug);
+        let oldObj = this.addonSelectedResult.find(el => el.key === addon.addon_slug);
       if (exists === -1) {
         this.addonSelectedResult.push(seletctObject);
-        console.log('addon_slug addon_slug******', addon.addon_slug)
         this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+        this.range = true;
       } else {
         const isCartExists = this.cartAddons.findIndex(el => el.key === addon.addon_slug);
-        console.log('isCartExists 8888888888888888******', isCartExists)
         if (isCartExists === -1) {
           this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
         }
 
         if (Number(val) > 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
-          if (oldObj.other !== '') {
+          
+          if (oldObj.other != '') {
             seletctObject.other = oldObj.other;
           }
+
           this.addonSelectedResult.splice(exists, 1, seletctObject);
         } else if (val.length > 0 && (addon.add_ons_input === 'input' || addon.add_ons_input === 'textarea')) {
-          if (oldObj.other !== '') {
+          if (oldObj.other != '') {
             seletctObject.other = oldObj.other;
           }
           this.addonSelectedResult.splice(exists, 1, seletctObject);

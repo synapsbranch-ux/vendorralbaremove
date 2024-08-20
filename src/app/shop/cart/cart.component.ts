@@ -69,6 +69,7 @@ export class CartComponent implements OnInit, OnChanges {
           console.log('bodydata=========================>', bodydata);
           if (bodydata) {
             if (bodydata.hasOwnProperty('products')) {
+              localStorage.setItem('cart_',res['data']._id)
               this.cartproducts = [];
               for (const element of res['data'].products) {
                 this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {

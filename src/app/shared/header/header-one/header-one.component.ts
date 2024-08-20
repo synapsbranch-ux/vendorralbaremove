@@ -15,6 +15,8 @@ export class HeaderOneComponent implements OnInit {
   @Input() topbar: boolean = true; // Default True
   @Input() sticky: boolean = false; // Default false
   public stick: boolean = false;
+  vendorhome:boolean=false;
+  isvendorlogoimage:boolean = false;
 
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
@@ -45,7 +47,17 @@ export class HeaderOneComponent implements OnInit {
       this.storeService.vendorstoredetails(storeObj).subscribe(
         res => {
           if (res.data[0].is_logo) {
-            this.themeLogo = res.data[0].logo
+            if(res.data[0].logo)
+            {
+              this.themeLogo = res.data[0].logo
+              this.isvendorlogoimage = true;
+            }
+            else
+            {
+              this.themeLogo = res.data[0].logo_name
+              this.isvendorlogoimage = false;
+            }
+            this.vendorhome = true;
           }
           else {
             this.themeLogo = 'assets/images/icon/logo_small_res.png';

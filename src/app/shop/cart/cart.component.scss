@@ -24,3 +24,20 @@
 .addon_cart a{
     cursor: pointer;
 }
+.cart_product_info a{
+    text-decoration: underline;
+    color: black;
+}
+.cart-products-list{
+    border: solid 1px #000;
+    border-radius: 6px;
+    padding: 5px;
+}
+.anchor-remove
+{
+    text-decoration: none !important;
+}
+.rounded-sm{
+    padding: 4px 8px;
+    font-size: 12px;
+}

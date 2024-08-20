@@ -83,7 +83,7 @@ if(this.userservice.getUserOrderid())
       this.billing_zip =res['data'][0].billing_zip;
       this.createdAt =res['data'][0].createdAt;
       this.payment_method =res['data'][0].payment_method;
-      this.expected_delivery=new Date(new Date(this.createdAt).setDate(new Date(this.createdAt).getDate() + 10)); 
+      this.expected_delivery=res['data'][0].order_delivery_date; 
     }
   )
 }
