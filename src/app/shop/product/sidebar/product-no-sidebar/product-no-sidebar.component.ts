@@ -428,13 +428,19 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       if (exists === -1) {
         this.addonSelectedResult.push(seletctObject);
         this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
-        this.range = true;
-      } else {
-        const isCartExists = this.cartAddons.findIndex(el => el.key === addon.addon_slug);
-        if (isCartExists === -1) {
-          this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+        if((addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input'))
+        {
+          this.range = true;
         }
-
+        
+      } else {
+        if(this.cartAddons)
+        {
+          const isCartExists = this.cartAddons.findIndex(el => el.key === addon.addon_slug);
+          if (isCartExists === -1) {
+            this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+          }
+        }
         if (Number(val) > 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
           
           if (oldObj.other != '') {
@@ -453,6 +459,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         }
       }
     }
+    console.log('addonSelectedResult------------',this.addonSelectedResult)
+    console.log('productAddonsPrice------------',this.productAddonsPrice)
   }
 
   updatePrice(dropdownSlug: string) {

@@ -161,7 +161,7 @@
                                                         <input class="form-control" type="text" #ranger
                                                             (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
                                                             [(ngModel)]="selectedOptions[addon.addon_slug]">
-                                                        <div class="price-section" *ngIf="value[addon.addon_slug] > 0">
+                                                        <div class="price-section" *ngIf="selectedOptions[addon.addon_slug] > 0">
                                                             <p class="mt-1">Selected Price: <input type="text" [(ngModel)]="value[addon.addon_slug]"></p>
                                                         </div>
                                                     </div>
