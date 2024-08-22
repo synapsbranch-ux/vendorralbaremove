@@ -101,6 +101,20 @@ export class ProductService {
     return this.Products;
   }
 
+  // get Shipping and Tax data
+
+  getallShippingTaxs(vendorObj:any) {
+    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = "Bearer " + this.token
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.token
+      })
+    }
+
+    return this.http.post(environment.baseUrl + 'user/getShippingTax',vendorObj,httpOptions);
+  }
+
   //// Get all Categories List
 
   getallCategories() {

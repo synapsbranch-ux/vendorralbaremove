@@ -33,7 +33,6 @@ import { CartComponent } from './cart/cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CompareComponent } from './compare/compare.component';
 import { CheckoutComponent } from './checkout/checkout.component';
-import { SuccessComponent } from './checkout/success/success.component';
 import { RandomOrderPipe } from '../random-order.pipe';
 import { SafePipe } from '../safe.pipe';
 import { TryonComponent } from './tryon/tryon.component';
@@ -62,7 +61,6 @@ import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.comp
     WishlistComponent,
     CompareComponent,
     CheckoutComponent,
-    SuccessComponent,
     RandomOrderPipe,
     SafePipe,
     TryonComponent,

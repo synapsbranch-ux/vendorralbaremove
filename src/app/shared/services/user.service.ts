@@ -205,7 +205,9 @@ export class UserService {
   }
 
   logout() {
-    localStorage.clear();
+    localStorage.removeItem('user_token');
+    localStorage.removeItem('cartItems');
+    localStorage.removeItem('user_id');
     this.router.navigate(['/login'])
       .then(() => {
         window.location.reload();

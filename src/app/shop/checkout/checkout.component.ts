@@ -52,7 +52,8 @@ export class CheckoutComponent implements OnInit {
   zip_code_:any;
   product_not_available:any=[];
   userFuyllName:any
-
+  shipping_charge_value = 0;
+  tax_percentage_value = 0;
   constructor(private fb: FormBuilder,
     public productService: ProductService,private userservice: UserService,
     private orderService: OrderService, private route: ActivatedRoute,private router: Router, private toaster : ToastrService) { 
@@ -119,7 +120,23 @@ export class CheckoutComponent implements OnInit {
     {
       this.getuserallAddressList();
     }
+    this.getShippingTax();
+  }
 
+  getShippingTax() {
+    let vendorObj =
+    {
+      vendor_id: localStorage.getItem('vendor_id') ? localStorage.getItem('vendor_id') : 'null'
+    }
+    this.productService.getallShippingTaxs(vendorObj).subscribe(
+      res => {
+        this.shipping_charge_value = res['data'][0].shipping_charge;
+        this.tax_percentage_value = res['data'][0].tax_percentage;
+      },
+      error => {
+        this.toaster.error(error.error.message)
+      }
+    )
   }
 
   get phone() { return this.checkoutForm.get('phone'); }
@@ -306,6 +323,7 @@ let address_arr={
       billing_email: formData.email,
       billing_phone: formData.phone,
       cart_id: localStorage.getItem('cart_'),
+      vendor_id: localStorage.getItem('vendor_id')
     }
   }
   else if(formData.paymentOption == 'COD')
@@ -327,6 +345,7 @@ let address_arr={
     billing_email: formData.email,
     billing_phone: formData.phone,
     cart_id: localStorage.getItem('cart_'),
+    vendor_id: localStorage.getItem('vendor_id')
   }
   }
   else

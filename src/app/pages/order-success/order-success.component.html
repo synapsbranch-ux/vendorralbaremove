@@ -44,9 +44,19 @@
                                 <tfoot class="table">
                                     <tr>
                                         <td colspan="5" class="text-right"><strong>Subtotal:</strong>
-                                            {{total_order_amount |
-                                            currency:product_service?.Currency.currency:'symbol'}}
+                                            {{ total_order_amount - (tax_percentage_value + shipping_charge_value) | 
+                                                currency:product_service?.Currency.currency:'symbol' }}
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Tax Amount:</strong>
+                                            {{tax_percentage_value |
+                                            currency:product_service?.Currency.currency:'symbol'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Shipping Charge:</strong>
+                                            {{shipping_charge_value |
+                                            currency:product_service?.Currency.currency:'symbol'}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="5" class="text-right"><strong>Total:</strong>

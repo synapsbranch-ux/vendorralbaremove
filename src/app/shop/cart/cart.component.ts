@@ -33,7 +33,8 @@ export class CartComponent implements OnInit, OnChanges {
   desabledecrement: boolean = false
   delay: boolean = false;
   productWishliststatus: boolean = false;
-
+  shipping_charge_value = 0;
+  tax_percentage_value = 0;
   constructor(public product_service: ProductService, private toaster: ToastrService, private router: Router) {
 
   }
@@ -41,11 +42,27 @@ export class CartComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     console.log('Cart')
     this.products = JSON.parse(localStorage.getItem('cartItems'));
-    this.product_service.cartItems.subscribe(response => response? this.products = response : this.products=[] );
+    this.product_service.cartItems.subscribe(response => response ? this.products = response : this.products = []);
     console.log('this.products ==========> Cart page :::', this.products);
     this.detectNavigationType();
+    this.getShippingTax();
   }
 
+  getShippingTax() {
+    let vendorObj =
+    {
+      vendor_id: localStorage.getItem('vendor_id') ? localStorage.getItem('vendor_id') : 'null'
+    }
+    this.product_service.getallShippingTaxs(vendorObj).subscribe(
+      res => {
+        this.shipping_charge_value = res['data'][0].shipping_charge;
+        this.tax_percentage_value = res['data'][0].tax_percentage;
+      },
+      error => {
+        this.toaster.error(error.error.message)
+      }
+    )
+  }
 
   removeAddon(product: any, addonIndex: number): void {
     const addonToRemove = product.addons[addonIndex];
@@ -69,7 +86,7 @@ export class CartComponent implements OnInit, OnChanges {
           console.log('bodydata=========================>', bodydata);
           if (bodydata) {
             if (bodydata.hasOwnProperty('products')) {
-              localStorage.setItem('cart_',res['data']._id)
+              localStorage.setItem('cart_', res['data']._id)
               this.cartproducts = [];
               for (const element of res['data'].products) {
                 this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
@@ -137,11 +154,11 @@ export class CartComponent implements OnInit, OnChanges {
     }, 1000);
     console.log('product.quantity===============', product.quantity);
     if (product.stock > 0) {
-        product.stock = (product.stock - 1)
-        product.quantity = product.quantity + 1
-  
+      product.stock = (product.stock - 1)
+      product.quantity = product.quantity + 1
+
       let incremtstatus = this.product_service.updateCartQuantity(product, 0);
-      console.log('incremtstatus------------------',incremtstatus);
+      console.log('incremtstatus------------------', incremtstatus);
       // this.getTotal.subscribe();
       this.desableincrement = false;
     }

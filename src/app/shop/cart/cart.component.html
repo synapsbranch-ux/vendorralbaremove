@@ -15,42 +15,58 @@
                 </div>
             </div>
             <div class="col-sm-12 col-lg-8 col-12">
-                <div class="row justify-content-center align-items-center mb-3 cart-products-list" *ngFor="let product of products">
+                <div class="row justify-content-center align-items-center mb-3 cart-products-list"
+                    *ngFor="let product of products">
                     <div class="col-sm-7 col-md-7 col-9 flex_item">
                         <div class="cart_product_img">
                             <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
-                            <img class="img-fluid" [src]="product.product_image[0].pro_image" [alt]="product.product_name">
+                                <img class="img-fluid" [src]="product.product_image[0].pro_image"
+                                    [alt]="product.product_name">
                             </a>
                         </div>
                         <div class="cart_product_info">
-                            <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active"><p class="mb-2 product_title">
-                                {{ product.product_name | titlecase }}
-                            </p></a>
-                            <p class="mb-2">Price : {{ ((product.product_sale_price)? product.product_sale_price: product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}</p>
-                           <span *ngIf="product.addons && product.addons.length > 0">
-                            <p>Addons</p>
-                            <ul class="addon_cart">
-                                <li *ngFor="let addon of product.addons; let i = index">
-                                    {{(addon.input_type == 'range' || addon.input_type == 'range-input' || addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} - {{ addon.price | currency: product_service.Currency?.currency:'symbol' }}
-                                    <a (click)="removeAddon(product, i)"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                </li>
-                            </ul>
-                            <p class="mb-2 font-weight-bold">Total addons : {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}</p>
-                        </span>
-                        <a [routerLink]="['/product/', product.product_slug]" class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
+                            <a [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
+                                <p class="mb-2 product_title">
+                                    {{ product.product_name | titlecase }}
+                                </p>
+                            </a>
+                            <p class="mb-2">Price : {{ ((product.product_sale_price)? product.product_sale_price:
+                                product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}
+                            </p>
+                            <span *ngIf="product.addons && product.addons.length > 0">
+                                <p>Addons</p>
+                                <ul class="addon_cart">
+                                    <li *ngFor="let addon of product.addons; let i = index">
+                                        {{(addon.input_type == 'range' || addon.input_type == 'range-input' ||
+                                        addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} - {{
+                                        addon.price | currency: product_service.Currency?.currency:'symbol' }}
+                                        <a (click)="removeAddon(product, i)"><i class="fa fa-times"
+                                                aria-hidden="true"></i></a>
+                                    </li>
+                                </ul>
+                                <p class="mb-2 font-weight-bold">Total addons : {{ ((product.addonsprice)?
+                                    product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}
+                                </p>
+                            </span>
+                            <a [routerLink]="['/product/', product.product_slug]"
+                                class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-3 col-3">
                         <div class="qty-box">
                             <div class="input-group">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-left-minus"   [disabled]="desabledecrement" data-type="minus" (click)="decrement(product)">
+                                    <button type="button" class="btn quantity-left-minus" [disabled]="desabledecrement"
+                                        data-type="minus" (click)="decrement(product)">
                                         <i class="ti-minus"></i>
                                     </button>
                                 </span>
-                                <input type="text" name="quantity" class="form-control input-number" disabled [(ngModel)]="product.quantity">
+                                <input type="text" name="quantity" class="form-control input-number" disabled
+                                    [(ngModel)]="product.quantity">
                                 <span class="input-group-prepend">
-                                    <button type="button" class="btn quantity-right-plus"  [disabled]="desableincrement || product.stock <= 0"  data-type="plus"  (click)="increment(product)" >
+                                    <button type="button" class="btn quantity-right-plus"
+                                        [disabled]="desableincrement || product.stock <= 0" data-type="plus"
+                                        (click)="increment(product)">
                                         <i class="ti-plus"></i>
                                     </button>
                                 </span>
@@ -61,8 +77,9 @@
                         <ul class="cart_item_action mt-2">
                             <!-- <li><i class="ti-pencil"></i>Edit Item</li> -->
                             <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
-                            <li><a (click)="addwishlist(product)">  <i [ngClass]="checkwishlist(product)? 'fa fa-heart' : 'fa fa-heart-o'"
-                                class=""></i>Wishlist</a></li>
+                            <li><a (click)="addwishlist(product)"> <i
+                                        [ngClass]="checkwishlist(product)? 'fa fa-heart' : 'fa fa-heart-o'"
+                                        class=""></i>Wishlist</a></li>
                         </ul>
                     </div>
                 </div>
@@ -76,22 +93,32 @@
                             <div>Product <span> Total</span></div>
                         </div>
                         <ul class="qty" *ngFor="let product of products">
-                            <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{ ((product.product_sale_price)? product.product_sale_price: product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}} + {{ ((product.addonsprice)? product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}</span></li>
+                            <li>{{ product.product_name | titlecase }} × {{product.quantity}} <span>{{
+                                    ((product.product_sale_price)? product.product_sale_price:
+                                    product.product_retail_price) | currency:
+                                    product_service.Currency?.currency:'symbol'}} + {{ ((product.addonsprice)?
+                                    product.addonsprice: 0) | currency:
+                                    product_service.Currency?.currency:'symbol'}}</span></li>
                         </ul>
                         <ul class="sub-total">
-                            <li>Subtotal <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                            <li>Subtotal <span class="count">{{ getTotal | async |
+                                    currency:product_service?.Currency.currency:'symbol' }}</span></li>
                             <!-- <li>Coupon <span class="count">-$77.60</span></li>
-                      <li>Gift Card <span class="count">-$100.00</span></li>
-                      <li>Estimated Tax  <span class="count">$23.28</span></li>
-                      <li>Estimated Shipping  <span class="count">FREE</span></li> -->
+                      <li>Gift Card <span class="count">-$100.00</span></li>-->
+                            <li>Estimated Tax <span class="count">{{tax_percentage_value ? ((getTotal | async) * (tax_percentage_value / 100) | number:'1.2-2' |
+                                currency:product_service?.Currency.currency:'symbol'): 0}}</span></li>
+                            <li>Estimated Shipping <span class="count">{{shipping_charge_value ? (shipping_charge_value |
+                                currency:product_service?.Currency.currency:'symbol') : 'Free'}}</span></li>
                         </ul>
 
                         <ul class="total">
-                            <li>Estimated Total <span class="count">{{ getTotal | async | currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                            <li>Estimated Total <span class="count"> {{ (getTotal | async) + ((getTotal | async) * (tax_percentage_value / 100)) + shipping_charge_value | 
+                                currency:product_service?.Currency.currency:'symbol' }}</span></li>
                         </ul>
                     </div>
                     <div class="text-center">
-                        <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i class="ti-lock mr-1"></i>Checkout</a>
+                        <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i
+                                class="ti-lock mr-1"></i>Checkout</a>
                         <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
                     </div>
                     <!-- <div class="text-center mt-3">

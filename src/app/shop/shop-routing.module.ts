@@ -54,10 +54,6 @@ const routes: Routes = [
     path: 'settings-header',
     component: SettingsComponent
   }
-  // {
-  //   path: 'checkout/success/:id',
-  //   component: SuccessComponent
-  // }
 ];
 
 @NgModule({

@@ -13,7 +13,8 @@
                         </div>
                         <div class="login-sec col-sm-12 pb-4" *ngIf="isUserLogin">
                             <p>You need to login, to continue.. </p>
-                            <button type="button" (click)="checkoutLogin()" class="btn btn-solid rounded-lg">Login</button>
+                            <button type="button" (click)="checkoutLogin()"
+                                class="btn btn-solid rounded-lg">Login</button>
                         </div>
                         <div class="col-lg-7 col-sm-12 col-xs-12" [class.desabledform]="isUserLogin">
                             <div class="checkout-title">
@@ -24,8 +25,10 @@
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Email Address</div>
-                                    <input [(ngModel)]="email_" id="email_address" type="text" formControlName="email" placeholder="" autocomplete="off">
-                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text text-danger mt-1">
+                                    <input [(ngModel)]="email_" id="email_address" type="text" formControlName="email"
+                                        placeholder="" autocomplete="off">
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)"
+                                        class="text text-danger mt-1">
                                         <div *ngIf="email.errors?.required">
                                             Email is required.
                                         </div>
@@ -36,7 +39,8 @@
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Phone</div>
-                                    <input [(ngModel)]="phone_" id="phone_no" type="text" formControlName="phone" placeholder="" autocomplete="off">
+                                    <input [(ngModel)]="phone_" id="phone_no" type="text" formControlName="phone"
+                                        placeholder="" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -51,25 +55,37 @@
                                             <ng-template ngbPanelContent>
                                                 <div class="row">
 
-                                                    <div class="col-sm-6" *ngFor="let address of useraddressslist let i = index">
+                                                    <div class="col-sm-6"
+                                                        *ngFor="let address of useraddressslist let i = index">
 
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userShippingAddressId{{i}}" ngModel="{{address._id}}" name="userShippingAddressId"  value="{{address._id}}" formControlName="userShippingAddressId">
-                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userShippingAddressId{{i}}" name="userShippingAddressId"  value="{{address._id}}" formControlName="userShippingAddressId">
+                                                            <input *ngIf="address.is_default == 1" type="radio"
+                                                                class="user_address_id" id="userShippingAddressId{{i}}"
+                                                                ngModel="{{address._id}}" name="userShippingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userShippingAddressId">
+                                                            <input
+                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                                type="radio" class="user_address_id"
+                                                                id="userShippingAddressId{{i}}"
+                                                                name="userShippingAddressId" value="{{address._id}}"
+                                                                formControlName="userShippingAddressId">
                                                             <label for="userShippingAddressId{{i}}">
-                                                                <address >
+                                                                <address>
                                                                     <h4> {{address.user_full_name}} </h4>
-                                                                    <p>{{address.addressline1}}, {{address.addressline2}}</p>
+                                                                    <p>{{address.addressline1}},
+                                                                        {{address.addressline2}}</p>
                                                                     <p>{{address.city}} - {{address.postal_code}}</p>
                                                                     <p>{{address.state}}</p>
                                                                     <h5>Ph: {{address.mobile}}</h5>
                                                                 </address>
                                                             </label>
-                                                           
+
                                                         </div>
                                                     </div>
                                                     <div class="linkaddress">
-                                                        <a class="add_address" (click)="checkaddress();">Add New adress</a><br>
+                                                        <a class="add_address" (click)="checkaddress();">Add New
+                                                            adress</a><br>
                                                     </div>
                                                 </div>
                                             </ng-template>
@@ -88,25 +104,37 @@
                                             </ng-template>
                                             <ng-template ngbPanelContent>
                                                 <div class="row">
-                                                    <div class="col-sm-6" *ngFor="let address of useraddressslist let i = index">
+                                                    <div class="col-sm-6"
+                                                        *ngFor="let address of useraddressslist let i = index">
 
                                                         <div class="radio-option d-flex align-items-start">
-                                                            <input *ngIf="address.is_default == 1" type="radio" class="user_address_id" id="userBillingAddressId{{i}}" ngModel="{{address._id}}" name="userBillingAddressId"  value="{{address._id}}" formControlName="userBillingAddressId">
-                                                            <input *ngIf="address.is_default == 0 || address.is_default != 1" type="radio" class="user_address_id" id="userBillingAddressId{{i}}" name="userBillingAddressId"  value="{{address._id}}" formControlName="userBillingAddressId">
+                                                            <input *ngIf="address.is_default == 1" type="radio"
+                                                                class="user_address_id" id="userBillingAddressId{{i}}"
+                                                                ngModel="{{address._id}}" name="userBillingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userBillingAddressId">
+                                                            <input
+                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                                type="radio" class="user_address_id"
+                                                                id="userBillingAddressId{{i}}"
+                                                                name="userBillingAddressId" value="{{address._id}}"
+                                                                formControlName="userBillingAddressId">
                                                             <label for="userBillingAddressId{{i}}">
-                                                                <address >
+                                                                <address>
                                                                     <h4> {{address.user_full_name}} </h4>
-                                                                    <p>{{address.addressline1}}, {{address.addressline2}}</p>
+                                                                    <p>{{address.addressline1}},
+                                                                        {{address.addressline2}}</p>
                                                                     <p>{{address.city}} - {{address.postal_code}}</p>
                                                                     <p>{{address.state}}</p>
                                                                     <h5>Ph: {{address.mobile}}</h5>
                                                                 </address>
                                                             </label>
-                                                           
+
                                                         </div>
                                                     </div>
                                                     <div class="linkaddress">
-                                                        <a class="add_address" (click)="checkaddress();">Add New adress</a><br>
+                                                        <a class="add_address" (click)="checkaddress();">Add New
+                                                            adress</a><br>
                                                     </div>
                                                 </div>
                                             </ng-template>
@@ -126,12 +154,18 @@
                                         <li *ngFor="let product of products">
                                             {{ product.product_name }} × {{ product.quantity }}
                                             <span *ngIf="product.product_sale_price">
-                                                {{ (product.product_sale_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }} +  {{ (product.addonsprice) | currency:productService?.Currency.currency:'symbol' }}
+                                                {{ (product.product_sale_price) * productService?.Currency.price |
+                                                currency:productService?.Currency.currency:'symbol' }} + {{
+                                                (product.addonsprice) |
+                                                currency:productService?.Currency.currency:'symbol' }}
                                             </span>
                                             <span *ngIf="product.product_sale_price == null">
-                                                {{ (product.product_retail_price) * productService?.Currency.price | currency:productService?.Currency.currency:'symbol' }} +  {{ (product.addonsprice) | currency:productService?.Currency.currency:'symbol' }}
+                                                {{ (product.product_retail_price) * productService?.Currency.price |
+                                                currency:productService?.Currency.currency:'symbol' }} + {{
+                                                (product.addonsprice) |
+                                                currency:productService?.Currency.currency:'symbol' }}
                                             </span>
-                                    
+
                                         </li>
                                     </ul>
                                     <ul class="qty" *ngIf='!products.length'>
@@ -139,15 +173,22 @@
                                     </ul>
                                     <ul class="sub-total">
                                         <li>
-                                            Subtotal <span class="count">{{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</span>
+                                            Subtotal <span class="count">{{ getTotal | async |
+                                                currency:productService?.Currency.currency:'symbol'}}</span>
                                         </li>
-                                        <!-- <li>Coupon <span class="count">-$77.60</span></li>
-                                        <li>Gift Card <span class="count">-$100.00</span></li>
-                                        <li>Estimated Tax  <span class="count">$23.28</span></li>
-                                        <li>Estimated Shipping  <span class="count">FREE</span></li> -->
+                                        <li>Estimated Tax <span class="count">{{tax_percentage_value ? ((getTotal |
+                                                async) * (tax_percentage_value / 100) | number:'1.2-2' |
+                                                currency:productService?.Currency.currency:'symbol'): 0}}</span></li>
+                                        <li>Estimated Shipping <span class="count">{{shipping_charge_value ?
+                                                (shipping_charge_value |
+                                                currency:productService?.Currency.currency:'symbol') : 'Free'}}</span>
+                                        </li>
                                     </ul>
+
                                     <ul class="total">
-                                        <li>Estimated Total <span class="count">{{ getTotal | async | currency:productService?.Currency.currency:'symbol'}}</span></li>
+                                        <li>Estimated Total <span class="count"> {{ (getTotal | async) + ((getTotal |
+                                                async) * (tax_percentage_value / 100)) + shipping_charge_value |
+                                                currency:productService?.Currency.currency:'symbol' }}</span></li>
                                     </ul>
                                 </div>
 
@@ -155,12 +196,19 @@
                                     <div class="upper-box">
                                         <div class="payment-options">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked" name="paymentOption" value="COD" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)">
-                                                <label class="custom-control-label" for="defaultUnchecked">Cash On Delivery</label>
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked"
+                                                    name="paymentOption" value="COD" mdbInput
+                                                    formControlName="paymentOption" (click)="getpaymentoption($event)">
+                                                <label class="custom-control-label" for="defaultUnchecked">Cash On
+                                                    Delivery</label>
                                             </div>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="paymentOption" value="paypal" mdbInput formControlName="paymentOption" (click)="getpaymentoption($event)" [disabled]="checkoutForm.invalid">
-                                                <label class="custom-control-label" for="defaultUnchecked1">Paypal</label>
+                                                <input type="radio" class="custom-control-input" id="defaultUnchecked1"
+                                                    name="paymentOption" value="paypal" mdbInput
+                                                    formControlName="paymentOption" (click)="getpaymentoption($event)"
+                                                    [disabled]="checkoutForm.invalid">
+                                                <label class="custom-control-label"
+                                                    for="defaultUnchecked1">Paypal</label>
                                                 <img class="image d-block" src="assets/images/paypal.png" alt="" />
                                             </div>
                                             <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
@@ -168,12 +216,16 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid" class="btn-solid btn rounded-lg">
+                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid"
+                                            class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>
 
-                                        <div [className]="orderValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="orderValid">
-                                            <div class="d-flex align-items-center"><span *ngIf="orderValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{orderMassage}}</div>
+                                        <div [className]="orderValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'"
+                                            role="alert" *ngIf="orderValid">
+                                            <div class="d-flex align-items-center"><span *ngIf="orderValid"><i
+                                                        class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                                                    &nbsp;</span>{{orderMassage}}</div>
                                             <!-- <ngx-paypal [config]="payPalConfig" *ngIf="payment == 'Paypal'"></ngx-paypal> -->
                                         </div>
                                     </div>

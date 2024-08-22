@@ -38,8 +38,8 @@ export class OrderSuccessComponent implements OnInit {
   payment_method: any
   order_id:any;
   expected_delivery:any
-
-
+  shipping_charge_value = 0;
+  tax_percentage_value = 0;
 
   constructor(public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
 
@@ -75,6 +75,8 @@ if(this.userservice.getUserOrderid())
       this.createdAt =res['data'][0].createdAt;
       this.payment_method =res['data'][0].payment_method;
       this.expected_delivery=res['data'][0].order_delivery_date; 
+      this.shipping_charge_value = res['data'][0].shipping_charge;
+      this.tax_percentage_value = res['data'][0].tax_amount;
     }
   )
 }
