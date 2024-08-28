@@ -167,13 +167,7 @@ export class RegisterComponent implements OnInit {
           this.otpValid=true;
           this.isValid = true;
           // this.signupMassage="Your Registration successful";
-
-          setTimeout(() => {
-            this.router.navigate(['/dashboard'])
-            .then(() => {
-              window.location.reload();
-            });
-          },3000)          
+          this.router.navigate(['/dashboard'])      
         },
         error => {
           // .... HANDLE ERROR HERE 

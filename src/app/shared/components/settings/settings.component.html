@@ -108,7 +108,7 @@
               </h4>
             </div>
           </div>
-          <div class="close-circle" (click)="removeItem(product)">
+          <div *ngIf="!user_id" class="close-circle" (click)="removeItem(product)">
             <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a>
           </div>
         </li>

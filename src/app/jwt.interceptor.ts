@@ -10,20 +10,26 @@ import {
 
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(map(event => {
       if (event instanceof HttpResponse) {
         if (event.body['error'] == 1) {
-          localStorage.removeItem('user_token');
-          localStorage.removeItem('cartItems');
-          localStorage.removeItem('user_id');
-          window.location.reload();
+          if(event.body['message'] == 'Authorization Failed : jwt expired')
+          {
+            event.body['data']=[];
+            localStorage.removeItem('user_token');
+            localStorage.removeItem('cartItems');
+            localStorage.removeItem('user_id');
+            this.router.navigateByUrl('login')
+          }
+          console.log('event Error JWT',event)
 
           console.log(event);
         }

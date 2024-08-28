@@ -5,9 +5,20 @@ address {
 .desabledform {
     opacity: .4;
 }
+.opercity-5
+{
+    opacity: .5;
+}
 
 .add_address {
     text-decoration: underline;
     color: #007bff;
     cursor: pointer;
+}
+.upper-box .loading{
+    position: absolute;
+    top: 0;
+    left: 25%;
+    z-index: 99;
+    width: 40%;
 }

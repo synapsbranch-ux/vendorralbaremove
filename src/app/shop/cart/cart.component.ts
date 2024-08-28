@@ -1,6 +1,6 @@
 import { ToastrService } from 'ngx-toastr';
 import { element } from 'protractor';
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductSlider } from '../../shared/data/slider';
 import { ProductService } from "../../shared/services/product.service";
@@ -20,7 +20,7 @@ const state = {
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit, OnChanges {
+export class CartComponent implements OnInit {
 
 
 
@@ -40,23 +40,26 @@ export class CartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log('Cart')
     this.products = JSON.parse(localStorage.getItem('cartItems'));
     this.product_service.cartItems.subscribe(response => response ? this.products = response : this.products = []);
-    console.log('this.products ==========> Cart page :::', this.products);
     this.detectNavigationType();
-    this.getShippingTax();
+    console.log("ocalStorage.getItem('tax')", localStorage.getItem('tax'));
+    if (!localStorage.getItem('tax')) {
+      this.getShippingTax();
+    }
   }
 
   getShippingTax() {
     let vendorObj =
     {
-      vendor_id: localStorage.getItem('vendor_id') ? localStorage.getItem('vendor_id') : 'null'
+      vendor_id: localStorage.getItem('vendor_id') ? localStorage.getItem('vendor_id') : ''
     }
     this.product_service.getallShippingTaxs(vendorObj).subscribe(
       res => {
         this.shipping_charge_value = res['data'][0].shipping_charge;
         this.tax_percentage_value = res['data'][0].tax_percentage;
+        localStorage.setItem('shipping', this.shipping_charge_value.toString());
+        localStorage.setItem('tax', this.tax_percentage_value.toString());
       },
       error => {
         this.toaster.error(error.error.message)
@@ -79,18 +82,23 @@ export class CartComponent implements OnInit, OnChanges {
   private detectNavigationType(): void {
     // Check if the navigation is a hard refresh
     if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-
       this.product_service.allCartProducts().subscribe(
         res => {
           let bodydata = res['data'];
-          console.log('bodydata=========================>', bodydata);
           if (bodydata) {
             if (bodydata.hasOwnProperty('products')) {
               localStorage.setItem('cart_', res['data']._id)
               this.cartproducts = [];
+              let vendorSet = false;
               for (const element of res['data'].products) {
                 this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
                   if (product['data']) {
+                    const vendorId = product['data'].product_owner._id;
+                    if (!localStorage.getItem('vendor_id')) {
+                      localStorage.setItem('vendor_id', vendorId);
+                      vendorSet = true;
+                    }
+
                     this.product_img = product['data']?.product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                     let data =
                     {
@@ -114,28 +122,19 @@ export class CartComponent implements OnInit, OnChanges {
                     this.products = this.cartproducts;
                     state.cart.push(this.cartproducts);
                     localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
-                    // this.getTotal.subscribe();
-                    console.log('this.cartproducts', this.cartproducts);
+                    // Call getShippingTax if vendor_id was set
+                    if (vendorSet) {
+                      this.getShippingTax();
+                    }
                   }
                 })
-
               }
             }
           }
-
         }
       )
     }
-
-    // Listen to router events for additional logic if needed
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        // You can add more logic here to handle soft navigations
-        console.log('Navigation started', event.url);
-      }
-    });
   }
-
   ngOnChanges(changes) {
   }
 

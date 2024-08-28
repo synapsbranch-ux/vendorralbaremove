@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProductNew } from '../classes/product';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { UserService } from './user.service';
 
 const state = {
 
@@ -30,7 +31,7 @@ export class ProductService {
 
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private toastrService: ToastrService, private router: Router) {
+    private toastrService: ToastrService, private router: Router, private userService: UserService) {
 
   }
 
@@ -68,6 +69,10 @@ export class ProductService {
             this.catarr = {
               'category': this.catagoriesalt,
             };
+          },
+          error => {
+
+            this.toastrService.error(error.error.message);
           }
         )
       }
@@ -103,7 +108,7 @@ export class ProductService {
 
   // get Shipping and Tax data
 
-  getallShippingTaxs(vendorObj:any) {
+  getallShippingTaxs(vendorObj: any) {
     this.token = localStorage.getItem('user_token') // Will return if it is not set 
     this.token = "Bearer " + this.token
     let httpOptions = {
@@ -112,7 +117,7 @@ export class ProductService {
       })
     }
 
-    return this.http.post(environment.baseUrl + 'user/getShippingTax',vendorObj,httpOptions);
+    return this.http.post(environment.baseUrl + 'user/getShippingTax', vendorObj, httpOptions);
   }
 
   //// Get all Categories List
@@ -334,86 +339,105 @@ export class ProductService {
     }
 
     //console.log('user Login')
-    if (localStorage.getItem('user_id')) {
-      let product_price = 0;
-      if (product.product_sale_price == null) {
-        product_price = product.product_retail_price
-      }
-      else {
-        product_price = product.product_sale_price
-      }
-      //console.log('addToCart function check cartItem ', cartItem)
-      //console.log('addToCart function check Product Cart ', product)
-      let cdata =
+    if (localStorage.getItem('user_token')) {
+      if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
       {
-        products: [{
-          "pro_id": product._id,
-          "pro_name": product.product_name,
-          "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
-          "pro_slug": product.product_slug,
-          "qty": product.quantity ? product.quantity : cartItem.quantity,
-          "price": product_price,
-          "addons": product.addons,
-          "addonsprice": product.addonsprice
-        }]
-      }
-      //console.log('full Product Cart Data for Submit', cdata);
-
-      this.addToCartDbBulk(cdata).subscribe(
-        res => {
-          let bodydata = res['data'];
-          if (bodydata.hasOwnProperty('products')) {
-            //console.log('element.products ======================>', res['data'].products)
-            let cartproducts = [];
-            let product_img
-            for (const element of res['data'].products) {
-              //console.log('element.pro_slug ======================>', element.pro_slug)
-              this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                //console.log('product[data].product_image', product['data'].product_image)
-                product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
-                let data =
-                {
-                  "_id": element.pro_id,
-                  "product_image": [
-                    {
-                      "pro_image": product_img,
-                      "status": "active"
-                    },
-                  ],
-                  "cart_id": res['data']._id,
-                  "product_name": element.pro_name,
-                  "product_slug": element.pro_slug,
-                  "quantity": element.qty,
-                  "stock": (product['data'].stock - element.qty),
-                  "product_sale_price": element.price,
-                  "addons": element.addons,
-                  "addonsprice": element.addonsprice
-                }
-                //console.log('Before Push Cart Items List', cartproducts)
-                cartproducts.push(data);
-                //console.log('After Push Cart Items List', cartproducts)
-                localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-                //console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
-
-              })
-
-              const cartItem = state.cart.find(item => item._id === product._id);
-              if (!cartItem) {
-                //console.log('addToCart function check state.cart Before push', state.cart)
-                state.cart.push({
-                  ...product,
-                  quantity: qty,
-                  stock: product.stock,
-                  cart_id: res['data']._id,
-                  product_owner: product.product_owner._id
-                })
-                //console.log('addToCart function check state.cart After push', state.cart)
-              }
-
-            }
-          }
+        if (!cartItem) {
+          state.cart.push({
+            ...product,
+            quantity: qty,
+            product_owner: product.product_owner._id,
+          })
         }
-      )
+      }
+      else
+      {
+        let product_price = 0;
+        if (product.product_sale_price == null) {
+          product_price = product.product_retail_price
+        }
+        else {
+          product_price = product.product_sale_price
+        }
+        //console.log('addToCart function check cartItem ', cartItem)
+        //console.log('addToCart function check Product Cart ', product)
+        let cdata =
+        {
+          products: [{
+            "pro_id": product._id,
+            "pro_name": product.product_name,
+            "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+            "pro_slug": product.product_slug,
+            "qty": product.quantity ? product.quantity : cartItem.quantity,
+            "price": product_price,
+            "addons": product.addons,
+            "addonsprice": product.addonsprice
+          }]
+        }
+        //console.log('full Product Cart Data for Submit', cdata);
+  
+        this.addToCartDbBulk(cdata).subscribe(
+          res => {
+            let bodydata = res['data'];
+            localStorage.setItem('cart_', res['data']._id)
+            if (bodydata.hasOwnProperty('products')) {
+              //console.log('element.products ======================>', res['data'].products)
+              let cartproducts = [];
+              let product_img
+              for (const element of res['data'].products) {
+                //console.log('element.pro_slug ======================>', element.pro_slug)
+                this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                  //console.log('product[data].product_image', product['data'].product_image)
+                  product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                  let data =
+                  {
+                    "_id": element.pro_id,
+                    "product_image": [
+                      {
+                        "pro_image": product_img,
+                        "status": "active"
+                      },
+                    ],
+                    "cart_id": res['data']._id,
+                    "product_name": element.pro_name,
+                    "product_slug": element.pro_slug,
+                    "quantity": element.qty,
+                    "stock": (product['data'].stock - element.qty),
+                    "product_sale_price": element.price,
+                    "addons": element.addons,
+                    "addonsprice": element.addonsprice
+                  }
+                  //console.log('Before Push Cart Items List', cartproducts)
+                  cartproducts.push(data);
+                  //console.log('After Push Cart Items List', cartproducts)
+                  localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+                  //console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
+  
+                })
+  
+                const cartItem = state.cart.find(item => item._id === product._id);
+                if (!cartItem) {
+                  //console.log('addToCart function check state.cart Before push', state.cart)
+                  state.cart.push({
+                    ...product,
+                    quantity: qty,
+                    stock: product.stock,
+                    cart_id: res['data']._id,
+                    product_owner: product.product_owner._id
+                  })
+                  //console.log('addToCart function check state.cart After push', state.cart)
+                }
+  
+              }
+            }
+          },
+          error => {
+  
+            this.toastrService.error(error.error.message);
+          }
+        )
+      }
+
     }
     else {
 
@@ -444,82 +468,89 @@ export class ProductService {
         console.log('Updated Product details-----------', items)
         const qty = product.quantity
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
-        // if (qty !== 0 && stock) {
-        //   cartProducts[index].quantity += quantity
-        //   cartProducts[index].stock += quantity
 
-        //   console.log('cartProducts[index]------------', cartProducts[index]);
-        // }
-
-        const currentUser = localStorage.getItem("user_id");
-
-        if (currentUser) {
-
-          let product_price = 0;
-          if (product.product_sale_price == null) {
-            product_price = product.product_retail_price
-          }
-          else {
-            product_price = product.product_sale_price
-          }
-
-          let cdata =
+        if (localStorage.getItem('user_token')) {
+          if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
           {
-            products: [{
-              "pro_id": product._id,
-              "pro_name": product.product_name,
-              "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
-              "pro_slug": product.product_slug,
-              "qty": qty + quantity,
-              "price": product_price,
-              "addons": product.addons,
-              "addonsprice": product.addonsprice
-            }]
+            return true;
           }
-          ////console.log('full Product Cart Data for Submit',cdata);
-
-          this.addToCartDbBulk(cdata).subscribe(
-            res => {
-              let bodydata = res['data'];
-              console.log('bodydata Cart Return', bodydata);
-              if (bodydata.hasOwnProperty('products')) {
-                let cartproducts = [];
-                let product_img
-                for (const element of res['data'].products) {
-                  this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                    product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
-                    let data =
-                    {
-                      "_id": element.pro_id,
-                      "product_image": [
-                        {
-                          "pro_image": product_img,
-                          "status": "active"
-                        },
-                      ],
-                      "cart_id": res['data']._id,
-                      "product_name": element.pro_name,
-                      "product_slug": element.pro_slug,
-                      "quantity": element.qty,
-                      "stock": (product['data'].stock - element.qty),
-                      "product_sale_price": element.price,
-                      "addons": element.addons,
-                      "addonsprice": element.addonsprice
-                    }
-
-                    console.log('cartproducts Push', data);
-                    cartproducts.push(data);
-                    console.log('Return LocalStorage Product Service', cartproducts);
-                    localStorage.removeItem('cartItems');
-                    localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-
-
-                  })
-
-                }
-              }
+          else
+          {
+            let product_price = 0;
+            if (product.product_sale_price == null) {
+              product_price = product.product_retail_price
             }
-          )
+            else {
+              product_price = product.product_sale_price
+            }
+  
+            let cdata =
+            {
+              products: [{
+                "pro_id": product._id,
+                "pro_name": product.product_name,
+                "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+                "pro_slug": product.product_slug,
+                "qty": qty + quantity,
+                "price": product_price,
+                "addons": product.addons,
+                "addonsprice": product.addonsprice
+              }]
+            }
+            ////console.log('full Product Cart Data for Submit',cdata);
+  
+            this.addToCartDbBulk(cdata).subscribe(
+              res => {
+                let bodydata = res['data'];
+                console.log('bodydata Cart Return', bodydata);
+                if (bodydata.hasOwnProperty('products')) {
+                  let cartproducts = [];
+                  let product_img
+                  for (const element of res['data'].products) {
+                    this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                      product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                      let data =
+                      {
+                        "_id": element.pro_id,
+                        "product_image": [
+                          {
+                            "pro_image": product_img,
+                            "status": "active"
+                          },
+                        ],
+                        "cart_id": res['data']._id,
+                        "product_name": element.pro_name,
+                        "product_slug": element.pro_slug,
+                        "quantity": element.qty,
+                        "stock": (product['data'].stock - element.qty),
+                        "product_sale_price": element.price,
+                        "addons": element.addons,
+                        "addonsprice": element.addonsprice
+                      }
+  
+                      console.log('cartproducts Push', data);
+                      cartproducts.push(data);
+                      console.log('Return LocalStorage Product Service', cartproducts);
+                      localStorage.removeItem('cartItems');
+                      localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+  
+  
+                    },
+                      error => {
+  
+                        this.toastrService.error(error.error.message);
+                      }
+                    )
+  
+                  }
+                }
+              },
+              error => {
+  
+                this.toastrService.error(error.error.message);
+              }
+            )
+          }
         }
         return true;
       }
@@ -544,69 +575,81 @@ export class ProductService {
   public removeCartItem(product: ProductNew): any {
     let getCartList = JSON.parse(localStorage.getItem('cartItems'));
     const productIdToFind = product._id; // Assuming `product` has a `product_id` field
-    
+
     const index = getCartList.findIndex(item => item._id === productIdToFind);
-    
+
     console.log('Befor Structure Delete Cart', product, getCartList, index);
-    if (localStorage.getItem('user_id')) {
-      getCartList.splice(index, 1);
-      console.log('After Remove Cart getCartList :', getCartList);
-      localStorage.setItem("cartItems", JSON.stringify(getCartList));
-
-      let dcDAta =
+    if (localStorage.getItem('user_token')) {
+      if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
       {
-        "cart_id": product.cart_id,
-        "pro_id": product._id,
+      getCartList.splice(index, 1);
+      localStorage.setItem("cartItems", JSON.stringify(getCartList));
       }
-      this.deleteToCartDb(dcDAta).subscribe(
-        res => {
-          let bodydata = res['data'];
-          console.log('bodydata Cart Return', bodydata);
-          if (bodydata.hasOwnProperty('products')) {
-            let cartproducts = [];
-            let product_img
-            for (const element of res['data'].products) {
-              this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
-                let data =
-                {
-                  "_id": element.pro_id,
-                  "product_image": [
-                    {
-                      "pro_image": product_img,
-                      "status": "active"
-                    },
-                  ],
-                  "cart_id": res['data']._id,
-                  "product_name": element.pro_name,
-                  "product_slug": element.pro_slug,
-                  "quantity": element.qty,
-                  "stock": (product['data'].stock - element.qty),
-                  "product_sale_price": element.price,
-                  "addons": element.addons,
-                  "addonsprice": element.addonsprice
-                }
-
-                console.log('cartproducts Push', data);
-                cartproducts.push(data);
-                console.log('Return LocalStorage Product Service', cartproducts);
-                localStorage.removeItem('cartItems');
-                localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-
-
-              })
-
-            }
-          }
-          else {
-            let getCartList_ = []
-            localStorage.setItem("cartItems", JSON.stringify(getCartList_));
-          }
-
-
+      else
+      {
+        getCartList.splice(index, 1);
+        console.log('After Remove Cart getCartList :', getCartList);
+        localStorage.setItem("cartItems", JSON.stringify(getCartList));
+  
+        let dcDAta =
+        {
+          "cart_id": product.cart_id,
+          "pro_id": product._id,
         }
-      )
-    }
+        this.deleteToCartDb(dcDAta).subscribe(
+          res => {
+            let bodydata = res['data'];
+            console.log('bodydata Cart Return', bodydata);
+            if (bodydata.hasOwnProperty('products')) {
+              let cartproducts = [];
+              let product_img
+              for (const element of res['data'].products) {
+                this.getproductsBySlugs(element.pro_slug).subscribe(product => {
+                  product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                  let data =
+                  {
+                    "_id": element.pro_id,
+                    "product_image": [
+                      {
+                        "pro_image": product_img,
+                        "status": "active"
+                      },
+                    ],
+                    "cart_id": res['data']._id,
+                    "product_name": element.pro_name,
+                    "product_slug": element.pro_slug,
+                    "quantity": element.qty,
+                    "stock": (product['data'].stock - element.qty),
+                    "product_sale_price": element.price,
+                    "addons": element.addons,
+                    "addonsprice": element.addonsprice
+                  }
+  
+                  console.log('cartproducts Push', data);
+                  cartproducts.push(data);
+                  console.log('Return LocalStorage Product Service', cartproducts);
+                  localStorage.removeItem('cartItems');
+                  localStorage.setItem("cartItems", JSON.stringify(cartproducts));
+  
+  
+                })
+  
+              }
+            }
+            else {
+              let getCartList_ = []
+              localStorage.setItem("cartItems", JSON.stringify(getCartList_));
+            }
+  
+  
+          },
+          error => {
+  
+            this.toastrService.error(error.error.message);
+          }
+        )
+      }
+     }
     else {
       //console.log('Remove Cart User Without Login :', state.cart);
       getCartList.splice(index, 1);
@@ -617,39 +660,32 @@ export class ProductService {
 
   // Total amount 
   public cartTotalAmount(): Observable<number> {
-    return this.cartItems.pipe(map((product: ProductNew[]) => {
-      return product.reduce((prev, curr: ProductNew) => {
-        let product_price = 0;
-        if (curr.addonsprice) {
-          if (curr.product_sale_price == null) {
-            product_price = curr.product_retail_price + curr.addonsprice
-          }
-          else {
-            product_price = curr.product_sale_price + curr.addonsprice
-          }
-        } else {
-          if (curr.product_sale_price == null) {
-            product_price = curr.product_retail_price
-          }
-          else {
-            product_price = curr.product_sale_price
-          }
+    return this.cartItems.pipe(
+      map((products: ProductNew[]) => {
+        if (!products || products.length === 0) {
+          return 0;
         }
-
-        let price = product_price;
-        //  console.log('******************************************************')
-        //  console.log('product_name --------------------',curr.product_name)
-        //  console.log('product_price-------------------', product_price)
-        //  console.log('price * curr.quantity ------------------',curr.quantity)
-        //  console.log('price * curr.quantity ------------------',price * curr.quantity)
-        //  console.log('prev ------------------', prev)
-        //  console.log('prev + (price * curr.quantity) ------------------', prev + (price * curr.quantity))
-        //  console.log('########################################################')
-        // console.log('prev + (price * curr.quantity) * this.Currency.price', prev + (price + curr.quantity))
-        return prev + (price * curr.quantity);
-      }, 0);
-    }));
+  
+        return products.reduce((prev, curr: ProductNew) => {
+          let product_price = 0;
+  
+          if (curr.addonsprice) {
+            product_price = curr.product_sale_price != null
+              ? curr.product_sale_price + curr.addonsprice
+              : curr.product_retail_price + curr.addonsprice;
+          } else {
+            product_price = curr.product_sale_price != null
+              ? curr.product_sale_price
+              : curr.product_retail_price;
+          }
+  
+          let price = product_price;
+          return prev + (price * curr.quantity);
+        }, 0);
+      })
+    );
   }
+  
 
   public cartAddonsTotalAmount(): Observable<number> {
     return this.cartItems.pipe(map((product: ProductNew[]) => {

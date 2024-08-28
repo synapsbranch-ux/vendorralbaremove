@@ -84,7 +84,7 @@
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
                         <p class="mb-2">{{ product?.product_description}}</p>
-                        <app-stock-inventory [stock]="product.stock"></app-stock-inventory>
+                        <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory>
                         <div class="product-attributes pb-4">
                             <div *ngIf="productAttributeArr">
                                 <div *ngFor="let attribute of productAttributeArr">
@@ -158,7 +158,7 @@
                                                     </div>
                                         
                                                     <div *ngSwitchCase="'input'" class="w-100 addons-price">
-                                                        <input class="form-control" type="text" #ranger
+                                                        <input class="form-control" type="number" #ranger
                                                             (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
                                                             [(ngModel)]="selectedOptions[addon.addon_slug]">
                                                         <div class="price-section" *ngIf="selectedOptions[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">

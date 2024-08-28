@@ -222,17 +222,11 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
               this.router.navigate([this.returnUrl]);
             })
-              .then(() => {
-                window.location.reload();
-            });
           }
           else {
             this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
               this.router.navigate(['dashboard']);
             })
-            .then(() => {
-                window.location.reload();
-            });
           }
         }, 2500)
 

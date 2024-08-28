@@ -1,5 +1,5 @@
 <!-- <app-breadcrumb [title]="'Checkout'" [breadcrumb]="'Checkout'"></app-breadcrumb> -->
-<section class="section-b-space">
+<section class="section-b-space" [ngClass]="{'opercity-5': orderPrcessed}">
     <div class="container padding-cls">
         <div class="checkout-page">
 
@@ -214,9 +214,10 @@
                                             <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
                                             </ngx-paypal>
                                         </div>
+                                        <img *ngIf="orderPrcessed" src="assets/images/animated_loader.gif" alt="loader" class="loading">
                                     </div>
                                     <div class="text-right">
-                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid"
+                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid || isSubmitting"
                                             class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>

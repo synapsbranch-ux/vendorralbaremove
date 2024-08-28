@@ -58,6 +58,7 @@ export class SettingsComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     this.products = JSON.parse(localStorage.getItem('cartItems'));
+    this.user_id = localStorage.getItem("user_id");
   }
 
   searchToggle() {
@@ -92,9 +93,6 @@ export class SettingsComponent implements OnInit, DoCheck {
     localStorage.removeItem('cartItems');
     localStorage.removeItem('user_id');
     this.router.navigate(['/login'])
-      .then(() => {
-        window.location.reload();
-      });
   }
 
 }

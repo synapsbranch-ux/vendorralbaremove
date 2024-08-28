@@ -73,9 +73,6 @@ export class FooterOneComponent implements OnInit {
   redirectcat(url:any)
   {
     this.router.navigate([url])
-    .then(() => {
-        window.location.reload();
-    });
   }
 
 }

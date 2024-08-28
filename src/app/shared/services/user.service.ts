@@ -204,14 +204,22 @@ export class UserService {
     return this.userorderid;
   }
 
+  isTokenExpired(token: string): boolean {
+    if (!token) {
+      return true; // No token means it's not valid or expired
+    }
+  
+    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the payload
+    const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+  
+    return payload.exp < currentTime; // Check if token is expired
+  }
+
   logout() {
     localStorage.removeItem('user_token');
     localStorage.removeItem('cartItems');
     localStorage.removeItem('user_id');
     this.router.navigate(['/login'])
-      .then(() => {
-        window.location.reload();
-      });
   }
 
 }

@@ -9,6 +9,7 @@ import '@google/model-viewer';
 import { view3DModalComponent } from 'src/app/shared/components/modal/product-view3D/product-view3D.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { UserService } from 'src/app/shared/services/user.service';
 
 
 const state = {
@@ -69,7 +70,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
 
   constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router,
-    public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder) {
+    public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder, private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -287,7 +288,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       }
       product.addons = this.addonSelectedResult
       //console.log('Product Ready To cart------------------', product);
-
       let extraStock = this.counter - this.currentCartProductDeatils.quantity
 
       const status = await this.productService.addToCart(product, extraStock);
@@ -306,7 +306,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         this.addonSelectedResult.push(extraObj);
       }
       product.addons = this.addonSelectedResult
-     // console.log('Product Ready To cart------------------', product);
+      // console.log('Product Ready To cart------------------', product);
 
       const status = await this.productService.addToCart(product, this.counter);
       if (status) {
@@ -423,26 +423,24 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         price: addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0,
         other: ''
       };
-        const exists = this.addonSelectedResult.findIndex(el => el.key === addon.addon_slug);
-        let oldObj = this.addonSelectedResult.find(el => el.key === addon.addon_slug);
+      const exists = this.addonSelectedResult.findIndex(el => el.key === addon.addon_slug);
+      let oldObj = this.addonSelectedResult.find(el => el.key === addon.addon_slug);
       if (exists === -1) {
         this.addonSelectedResult.push(seletctObject);
         this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
-        if((addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input'))
-        {
+        if ((addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
           this.range = true;
         }
-        
+
       } else {
-        if(this.cartAddons)
-        {
+        if (this.cartAddons) {
           const isCartExists = this.cartAddons.findIndex(el => el.key === addon.addon_slug);
           if (isCartExists === -1) {
             this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
           }
         }
         if (Number(val) > 0 && (addon.add_ons_input === 'range' || addon.add_ons_input === 'range-input')) {
-          
+
           if (oldObj.other != '') {
             seletctObject.other = oldObj.other;
           }
@@ -459,8 +457,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         }
       }
     }
-    console.log('addonSelectedResult------------',this.addonSelectedResult)
-    console.log('productAddonsPrice------------',this.productAddonsPrice)
+    console.log('addonSelectedResult------------', this.addonSelectedResult)
+    console.log('productAddonsPrice------------', this.productAddonsPrice)
   }
 
   updatePrice(dropdownSlug: string) {

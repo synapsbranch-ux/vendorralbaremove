@@ -54,7 +54,7 @@
                                                 <td class="text-right">
                                                     {{(product.addonsprice ? product.addonsprice: 0) |
                                                     currency:product_service?.Currency.currency:'symbol'}}
-                                                    <p class="m-0">
+                                                    <p class="m-0" *ngIf="product.addons.length > 0">
                                                         <a class="pe-auto"
                                                             (click)="viewAddonsDetails(product.addons)">View
                                                             Addons</a>

@@ -36,9 +36,11 @@ export class EditProfileComponent implements OnInit {
    this.userservice.getUserDetails().subscribe(
      res =>
      {
-      this.userName= res['data'][0].name;
-      this.userEmail= res['data'][0].email;
-      this.userPhone= res['data'][0].phone;
+      if (res['error'] != 1) {
+        this.userName = res['data'][0].name;
+        this.userEmail = res['data'][0].email;
+        this.userPhone = res['data'][0].phone;
+      }
      }
    )
 
