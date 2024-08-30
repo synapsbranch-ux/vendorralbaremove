@@ -41,7 +41,7 @@ export class OrderService {
 
   getAllAddress()
   {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
   
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -53,7 +53,7 @@ export class OrderService {
 
   userCreateOrder(data:Object)
   {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
   
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -65,7 +65,7 @@ export class OrderService {
 
   userSingleOrderDetails(data:Object)
   {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
   
     let httpOptionsroom = {
       headers: new HttpHeaders({

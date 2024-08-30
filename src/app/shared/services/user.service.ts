@@ -48,7 +48,7 @@ export class UserService {
 
 
   getAllAddress() {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -58,7 +58,7 @@ export class UserService {
     return this.http.get(environment.baseUrl + 'user/addressList', httpOptionsroom);
   }
   getAllOrderList() {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -68,7 +68,7 @@ export class UserService {
     return this.http.get(environment.baseUrl + 'user/orderList', httpOptionsroom);
   }
   getAllOrderDetailsList(data) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -78,7 +78,7 @@ export class UserService {
     return this.http.post(environment.baseUrl + 'user/orderList', data, httpOptionsroom);
   }
   getSingleAddress(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -88,7 +88,7 @@ export class UserService {
     return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
   }
   getUserDetails() {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -98,7 +98,7 @@ export class UserService {
     return this.http.get(environment.baseUrl + 'user/details', httpOptionsroom);
   }
   userUpdateAddress(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -109,7 +109,7 @@ export class UserService {
   }
 
   addNewAddress(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -120,7 +120,7 @@ export class UserService {
   }
 
   getSingleAddressDetails(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -130,7 +130,7 @@ export class UserService {
     return this.http.post(environment.baseUrl + 'user/addressDetails', data, httpOptionsroom);
   }
   setDefaultAddress(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -141,7 +141,7 @@ export class UserService {
   }
 
   deleteAddress(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -152,7 +152,7 @@ export class UserService {
   }
 
   userUpdateProdile(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -163,7 +163,7 @@ export class UserService {
   }
 
   changePassword(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -174,7 +174,7 @@ export class UserService {
   }
 
   samepasswordcheck(data: any) {
-    let token = localStorage.getItem('user_token') // Will return if it is not set 
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({
@@ -216,9 +216,9 @@ export class UserService {
   }
 
   logout() {
-    localStorage.removeItem('user_token');
+    localStorage.removeItem('u_token');
     localStorage.removeItem('cartItems');
-    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_');
     this.router.navigate(['/login'])
   }
 

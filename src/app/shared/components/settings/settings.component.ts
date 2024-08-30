@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit, DoCheck {
   cartproducts = [];
   product_img: any;
 
-  user_id: string
+  user_: string
   public products: ProductNew[] = [];
   public search: boolean = false;
 
@@ -52,13 +52,13 @@ export class SettingsComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_ = localStorage.getItem("user_");
 
   }
 
   ngDoCheck(): void {
     this.products = JSON.parse(localStorage.getItem('cartItems'));
-    this.user_id = localStorage.getItem("user_id");
+    this.user_ = localStorage.getItem("user_");
   }
 
   searchToggle() {
@@ -89,9 +89,9 @@ export class SettingsComponent implements OnInit, DoCheck {
   }
 
   logout() {
-    localStorage.removeItem('user_token');
+    localStorage.removeItem('u_token');
     localStorage.removeItem('cartItems');
-    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_');
     this.router.navigate(['/login'])
   }
 

@@ -228,8 +228,8 @@ export class RegisterComponent implements OnInit {
     }
     this.userService.userLogin(data).subscribe(
       res => {
-        localStorage.setItem('user_id', res['data'].user_id);
-        localStorage.setItem('user_token', res['data'].token);
+        localStorage.setItem('user_', res['data'].user_);
+        localStorage.setItem('u_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
 
   /////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ export class RegisterComponent implements OnInit {
   
   //Cart Details
   ///////////////////////////////////////////////////////////
-  const currentUser = localStorage.getItem("user_id");
+  const currentUser = localStorage.getItem("user_");
   
   if (currentUser) {
   const cartItems_local = localStorage.getItem('cartItems');

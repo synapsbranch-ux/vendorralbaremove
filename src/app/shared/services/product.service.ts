@@ -109,7 +109,7 @@ export class ProductService {
   // get Shipping and Tax data
 
   getallShippingTaxs(vendorObj: any) {
-    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = localStorage.getItem('u_token') // Will return if it is not set 
     this.token = "Bearer " + this.token
     let httpOptions = {
       headers: new HttpHeaders({
@@ -339,8 +339,8 @@ export class ProductService {
     }
 
     //console.log('user Login')
-    if (localStorage.getItem('user_token')) {
-      if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
+    if (localStorage.getItem('u_token')) {
+      if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
       {
         if (!cartItem) {
           state.cart.push({
@@ -469,8 +469,8 @@ export class ProductService {
         const qty = product.quantity
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
 
-        if (localStorage.getItem('user_token')) {
-          if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
+        if (localStorage.getItem('u_token')) {
+          if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
           {
             return true;
           }
@@ -579,8 +579,8 @@ export class ProductService {
     const index = getCartList.findIndex(item => item._id === productIdToFind);
 
     console.log('Befor Structure Delete Cart', product, getCartList, index);
-    if (localStorage.getItem('user_token')) {
-      if(this.userService.isTokenExpired(localStorage.getItem('user_token')))
+    if (localStorage.getItem('u_token')) {
+      if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
       {
       getCartList.splice(index, 1);
       localStorage.setItem("cartItems", JSON.stringify(getCartList));
@@ -827,7 +827,7 @@ export class ProductService {
   ////////////////////////////////////////
 
   addToCartDb(data: any): Observable<any> {
-    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = localStorage.getItem('u_token') // Will return if it is not set 
 
     this.token = "Bearer " + this.token
     let httpOptions = {
@@ -840,7 +840,7 @@ export class ProductService {
   }
 
   addToCartDbBulk(data: any): Observable<any> {
-    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = localStorage.getItem('u_token') // Will return if it is not set 
 
     this.token = "Bearer " + this.token
     let httpOptions = {
@@ -853,7 +853,7 @@ export class ProductService {
   }
 
   deleteToCartDb(data: any): Observable<any> {
-    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = localStorage.getItem('u_token') // Will return if it is not set 
     this.token = "Bearer " + this.token
     let httpOptions = {
       headers: new HttpHeaders({
@@ -864,7 +864,7 @@ export class ProductService {
   }
 
   allCartProducts(): Observable<any> {
-    this.token = localStorage.getItem('user_token') // Will return if it is not set 
+    this.token = localStorage.getItem('u_token') // Will return if it is not set 
 
     let httpOptionsroom = {
       headers: new HttpHeaders({

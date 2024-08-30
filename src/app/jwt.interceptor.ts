@@ -24,9 +24,9 @@ export class JwtInterceptor implements HttpInterceptor {
           if(event.body['message'] == 'Authorization Failed : jwt expired')
           {
             event.body['data']=[];
-            localStorage.removeItem('user_token');
+            localStorage.removeItem('u_token');
             localStorage.removeItem('cartItems');
-            localStorage.removeItem('user_id');
+            localStorage.removeItem('user_');
             this.router.navigateByUrl('login')
           }
           console.log('event Error JWT',event)
