@@ -21,18 +21,18 @@
                         <div class="form-group">
                             <label for="login_password">Password</label>
                             <div class="password_sec">
-                                <input type="{{passworfieldtype}}" class="form-control" maxlength="12" id="login_password" placeholder="Enter your password" required="" formControlName="login_password" (keydown)="handleEnter($event)">
+                                <input type="{{passworfieldtype}}" class="form-control" id="login_password" placeholder="Enter your password" required="" formControlName="login_password" (keydown)="handleEnter($event)">
                                 <span (click)="changeIcon()" class="fa {{passwordicon}} field-icon toggle-password"></span>
                             </div>
-                            <div *ngIf="login_password.invalid && (login_password.dirty || login_password.touched)" class="text text-danger mt-1">
+                            <div *ngIf="login_password.invalid && (login_password.dirty || login_password.touched)" class="text text-danger mt-1 pt-2">
                                 <div *ngIf="login_password.errors?.required">
                                     Password is required.
                                 </div>
                                 <div *ngIf="login_password.errors?.minlength">
                                     Password will be minimum 8 character.
                                 </div>
-                                <div *ngIf="login_password.errors?.maxLength">
-                                    Password will be miximum 12 character.
+                                <div *ngIf="login_password.errors?.maxlength">
+                                    Password will be miximum 15 character.
                                 </div>
                             </div>
                         </div>

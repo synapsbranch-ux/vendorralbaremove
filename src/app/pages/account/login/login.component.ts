@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     // current state cart product list
     this.cartproducts = state.cart;
     //check user already login or not
-    const currentUser = localStorage.getItem("user_id");
+    const currentUser = localStorage.getItem("user_");
     if (currentUser) {
       this.router.navigate(['/dashboard'])
     }
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     // form initialization
     this.form = new FormGroup({
       'phone_email': new FormControl(null, [Validators.required]),
-      'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(12)]),
+      'login_password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
     });
 
     // store current return URL
@@ -82,8 +82,8 @@ export class LoginComponent implements OnInit {
   login = async (data) => {
     this.userService.userLogin(data).subscribe(
       async res => {
-        localStorage.setItem('user_id', res['data'].user_id);
-        localStorage.setItem('user_token', res['data'].token);
+        localStorage.setItem('user_', res['data'].user_);
+        localStorage.setItem('u_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
 
         this.loginValid = true;

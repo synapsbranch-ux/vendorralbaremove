@@ -22,7 +22,7 @@ export class ContactComponent implements OnInit {
     this.form =  new FormGroup({
       'firstName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'lastName': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
-      'phone':new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+      'phone':new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
       'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
       'massage': new FormControl(null, [Validators.required]),
     })

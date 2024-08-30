@@ -50,9 +50,9 @@ export class RegisterComponent implements OnInit {
         'fname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'lname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'email': new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
-        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(12),PasswordStrengthValidator]),
+        'password': new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(15),PasswordStrengthValidator]),
         'repeat_password': new FormControl(null, [Validators.required]),
-        'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+        'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
 
       },
        {
@@ -228,8 +228,8 @@ export class RegisterComponent implements OnInit {
     }
     this.userService.userLogin(data).subscribe(
       res => {
-        localStorage.setItem('user_id', res['data'].user_id);
-        localStorage.setItem('user_token', res['data'].token);
+        localStorage.setItem('user_', res['data'].user_);
+        localStorage.setItem('u_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
 
   /////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ export class RegisterComponent implements OnInit {
   
   //Cart Details
   ///////////////////////////////////////////////////////////
-  const currentUser = localStorage.getItem("user_id");
+  const currentUser = localStorage.getItem("user_");
   
   if (currentUser) {
   const cartItems_local = localStorage.getItem('cartItems');

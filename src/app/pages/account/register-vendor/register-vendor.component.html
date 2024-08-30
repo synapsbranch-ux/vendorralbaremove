@@ -37,7 +37,7 @@
 
                             <div class="col-md-6 mb-4">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control m-0" maxlength="12" id="password" placeholder="Enter your password" required="" formControlName="password" (keydown)="handleEnter($event, 'repeat_password')">
+                                <input type="password" class="form-control m-0"  id="password" placeholder="Enter your password" required="" formControlName="password" (keydown)="handleEnter($event, 'repeat_password')">
                                 <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text text-danger mt-1">
                                     <div *ngIf="password.errors?.required">
                                         Password is required.
@@ -45,8 +45,8 @@
                                     <div *ngIf="password.errors?.minlength">
                                         Password will be minimum 8 character.
                                     </div>
-                                    <div *ngIf="password.errors?.maxLength">
-                                        Password will be miximum 12 character.
+                                    <div *ngIf="password.errors?.maxlength">
+                                        Password will be miximum 15 character.
                                     </div>
                                     <div class="text-danger" class="error-text" *ngIf="password.hasError('passwordStrength')">
                                         {{password.errors['passwordStrength']}}
@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="repeat_password">Repeat Password</label>
-                                <input type="password" class="form-control m-0" maxlength="12" id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password" (keydown)="handleEnter($event, 'phone')">
+                                <input type="password" class="form-control m-0"  id="repeat_password" placeholder="Repeat your password" required="" formControlName="repeat_password" (keydown)="handleEnter($event, 'phone')">
                                 <div *ngIf="repeat_password.invalid && (repeat_password.dirty || repeat_password.touched) && repeat_password.errors" class="text text-danger mt-1">
                                     <div *ngIf="repeat_password.errors?.required">
                                         Repeat password is required.
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone"  maxlength="12" (keydown)="handleEnter($event, 'catagories_name')">
+                                <input type="text" class="form-control m-0" id="phone" placeholder="Enter your phone" required="" formControlName="phone"   (keydown)="handleEnter($event, 'catagories_name')">
                                 <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text text-danger mt-1">
                                     <div *ngIf="phone.errors?.required">
                                         Phone number is required.
@@ -73,8 +73,8 @@
                                     <div *ngIf="phone.errors?.pattern">
                                         Only number is allowed.
                                     </div>
-                                    <div *ngIf="phone.errors?.maxLength">
-                                        Phone number only allow 12 digits.
+                                    <div *ngIf="phone.errors?.maxlength">
+                                        Phone number only allow 15 digits.
                                     </div>
                                 </div>
                             </div>

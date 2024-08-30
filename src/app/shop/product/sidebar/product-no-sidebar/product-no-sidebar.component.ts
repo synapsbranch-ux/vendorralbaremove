@@ -483,13 +483,22 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   }
 
   pushObjectIfKeyNotExists(array: any[], key: string, value: any, obj: any) {
-    const exists = array.findIndex(el => el.key === obj.key);
-    if (exists === -1) {
-      this.productAddonsPrice += parseFloat(obj.price ? obj.price : 0);
+    const index = array.findIndex(el => el.key === obj.key);
+    
+    if (index === -1) {
+      // If the object is not found, add it to the array and update the price
+      this.productAddonsPrice += parseFloat(obj.price ? obj.price : '0');
       array.push(obj);
     } else {
-      array.splice(exists, 1, obj);
-      // this.productAddonsPrice -= parseFloat(oldObj.price ? oldObj.price : 0);
+      // If the object is found, subtract the old price and then update or replace the object
+      const oldPrice = array[index].price ? parseFloat(array[index].price) : 0;
+      this.productAddonsPrice -= oldPrice;
+      
+      // Update the array with the new object
+      array.splice(index, 1, obj);
+      
+      // Add the new price
+      this.productAddonsPrice += parseFloat(obj.price ? obj.price : '0');
     }
   }
 

@@ -48,7 +48,7 @@ export class EditAddressComponent implements OnInit {
         'city': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'state': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
         'postalCode': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(10)]),
-        'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+        'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
         'defaultstatus': new FormControl(null, [Validators.required]),
     })
 let lData=

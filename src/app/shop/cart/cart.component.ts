@@ -1,6 +1,6 @@
 import { ToastrService } from 'ngx-toastr';
 import { element } from 'protractor';
-import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductSlider } from '../../shared/data/slider';
 import { ProductService } from "../../shared/services/product.service";
@@ -35,7 +35,7 @@ export class CartComponent implements OnInit {
   productWishliststatus: boolean = false;
   shipping_charge_value = 0;
   tax_percentage_value = 0;
-  constructor(public product_service: ProductService, private toaster: ToastrService, private router: Router) {
+  constructor(public product_service: ProductService, private toaster: ToastrService, private router: Router, private cdr: ChangeDetectorRef) {
 
   }
 
@@ -44,7 +44,7 @@ export class CartComponent implements OnInit {
     this.product_service.cartItems.subscribe(response => response ? this.products = response : this.products = []);
     this.detectNavigationType();
     console.log("ocalStorage.getItem('tax')", localStorage.getItem('tax'));
-    if (!localStorage.getItem('tax')) {
+    if (localStorage.getItem('vendor_id')) {
       this.getShippingTax();
     }
   }
@@ -60,6 +60,8 @@ export class CartComponent implements OnInit {
         this.tax_percentage_value = res['data'][0].tax_percentage;
         localStorage.setItem('shipping', this.shipping_charge_value.toString());
         localStorage.setItem('tax', this.tax_percentage_value.toString());
+        // Trigger change detection manually
+        this.cdr.detectChanges();
       },
       error => {
         this.toaster.error(error.error.message)
@@ -124,7 +126,9 @@ export class CartComponent implements OnInit {
                     localStorage.setItem("cartItems", JSON.stringify(this.cartproducts));
                     // Call getShippingTax if vendor_id was set
                     if (vendorSet) {
-                      this.getShippingTax();
+                      if (localStorage.getItem('vendor_id')) {
+                        this.getShippingTax();
+                      }
                     }
                   }
                 })

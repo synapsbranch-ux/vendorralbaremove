@@ -72,7 +72,7 @@ export class CheckoutComponent implements OnInit {
       this.email_ = this.local_checkout_obj['email_address'];
       this.phone_ = this.local_checkout_obj['phone_no'];
     }
-    if (localStorage.getItem('user_id')) {
+    if (localStorage.getItem('user_')) {
       this.isUserLogin = false;
     }
 
@@ -283,7 +283,7 @@ export class CheckoutComponent implements OnInit {
     }
     this.isSubmitting = true;
     this.orderPrcessed = true;
-    const currentUser = localStorage.getItem("user_id");
+    const currentUser = localStorage.getItem("user_");
     if (currentUser) {
 
       if (this.products.length > 0) {

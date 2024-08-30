@@ -48,17 +48,17 @@
         <i class="fa fa-user-o" aria-hidden="true"></i> My Account
       </a>
       <ul class="onhover-show-div">
-        <li *ngIf="!user_id">
+        <li *ngIf="!user_">
           <a [routerLink]="['/login']" data-lng="en">
             Login
           </a>
         </li>
-        <li *ngIf="user_id">
+        <li *ngIf="user_">
           <a [routerLink]="['/dashboard']">
             Profile
           </a>
         </li>
-        <li *ngIf="user_id" (click)="logout();">
+        <li *ngIf="user_" (click)="logout();">
           <a data-lng="es">
             Logout
           </a>
@@ -108,7 +108,7 @@
               </h4>
             </div>
           </div>
-          <div *ngIf="!user_id" class="close-circle" (click)="removeItem(product)">
+          <div *ngIf="!user_" class="close-circle" (click)="removeItem(product)">
             <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a>
           </div>
         </li>
