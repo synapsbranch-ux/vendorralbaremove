@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
   login = async (data) => {
     this.userService.userLogin(data).subscribe(
       async res => {
-        localStorage.setItem('user_', res['data'].user_);
+        localStorage.setItem('user_', res['data'].user_id);
         localStorage.setItem('u_token', res['data'].token);
         localStorage.setItem('currentUser', JSON.stringify(res));
 
