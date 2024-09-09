@@ -30,7 +30,7 @@ export class EditProfileComponent implements OnInit {
     this.form =  new FormGroup({
       'fname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'emailid':  new FormControl(null, [Validators.required, Validators.email,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
-      'phonenum': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+      'phonenum': new FormControl(null, [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
     })
 
    this.userservice.getUserDetails().subscribe(

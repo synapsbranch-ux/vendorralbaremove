@@ -113,7 +113,7 @@
                                                         <div *ngIf="postalCode.errors?.required">
                                                             Posta Code is Required
                                                         </div>
-                                                        <div *ngIf="telephone.errors?.maxLength">
+                                                        <div *ngIf="telephone.errors?.maxlength">
                                                             Postal Code only allow 10 digits.
                                                         </div>
                                                     </div>
@@ -131,8 +131,8 @@
                                                         <div *ngIf="telephone.errors?.pattern">
                                                             Only number is allowed.
                                                         </div>
-                                                        <div *ngIf="telephone.errors?.maxLength">
-                                                            Telephone number only allow 12 digits.
+                                                        <div *ngIf="telephone.errors?.maxlength">
+                                                            TelePhone number only allow 15 digits.
                                                         </div>
                                                     </div>
                                                 </div>

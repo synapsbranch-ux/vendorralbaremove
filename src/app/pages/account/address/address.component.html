@@ -139,13 +139,13 @@
                                                     <label for="postal_code">Postal Code *</label>
                                                     <input type="text" class="form-control" id="postal_code"
                                                         placeholder="Postal code" formControlName="postalCode"
-                                                        maxlength="12" (keydown)="handleEnter($event, 'telephone')">
+                                                         (keydown)="handleEnter($event, 'telephone')">
                                                     <div *ngIf="postalCode.invalid && (postalCode.dirty || postalCode.touched) && postalCode.errors"
                                                         class="text text-danger mt-1">
                                                         <div *ngIf="postalCode.errors?.required">
                                                             Postal Code is Required
                                                         </div>
-                                                        <div *ngIf="telephone.errors?.maxLength">
+                                                        <div *ngIf="telephone.errors?.maxlength">
                                                             Postal Code only allow 10 digits.
                                                         </div>
                                                     </div>
@@ -154,7 +154,7 @@
                                                     <label for="telephone">Telephone *</label>
                                                     <input type="text" class="form-control" id="telephone"
                                                         placeholder="Telephone" formControlName="telephone"
-                                                        maxlength="12" (keydown)="handleEnter($event)">
+                                                         (keydown)="handleEnter($event)">
                                                     <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors"
                                                         class="text text-danger mt-1">
                                                         <div *ngIf="telephone.errors?.required">
@@ -163,8 +163,8 @@
                                                         <div *ngIf="telephone.errors?.pattern">
                                                             Only number is allowed.
                                                         </div>
-                                                        <div *ngIf="telephone.errors?.maxLength">
-                                                            Telephone number only allow 12 digits.
+                                                        <div *ngIf="telephone.errors?.maxlength">
+                                                            TelePhone number only allow 15 digits.
                                                         </div>
                                                     </div>
                                                 </div>

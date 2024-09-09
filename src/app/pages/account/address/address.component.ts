@@ -41,7 +41,7 @@ export class AddressComponent implements OnInit {
       'city': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'state': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'postalCode': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(10)]),
-      'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(12)]),
+      'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
     })
 
       // get return url from route parameters or default to '/'

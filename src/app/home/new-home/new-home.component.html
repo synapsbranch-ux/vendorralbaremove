@@ -199,7 +199,7 @@
                         <div class="col-sm-6">
                             <div class="con_sec">
                                 <input type="text" class="form-control" id="phone" formControlName="phone"
-                                    placeholder="Contact Number" required="" maxlength="12" (keydown)="handleEnter($event, 'email')">
+                                    placeholder="Contact Number" required=""  (keydown)="handleEnter($event, 'email')">
 
                                 <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
                                     class="text text-danger mt-1">
@@ -209,8 +209,8 @@
                                     <div *ngIf="phone.errors?.pattern">
                                         Only number is allowed.
                                     </div>
-                                    <div *ngIf="phone.errors?.maxLength">
-                                        Phone number only allow 12 digits.
+                                    <div *ngIf="phone.errors?.maxlength">
+                                        Phone number only allow 15 digits.
                                     </div>
                                 </div>
                             </div>
