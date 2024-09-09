@@ -1,5 +1,5 @@
 import { 
-    AdvancedLayout, 
+    GridLayout, 
     ButtonsConfig,
     ButtonsStrategy, 
     KS_DEFAULT_BTN_CLOSE, 
@@ -8,7 +8,9 @@ import {
     KS_DEFAULT_BTN_EXTURL, 
     KS_DEFAULT_BTN_FULL_SCREEN, 
     PlainGalleryConfig, 
-    PlainGalleryStrategy 
+    PlainGalleryStrategy, 
+    Size,
+    BreakConfig
 } from '@ks89/angular-modal-gallery';
 
 // Button Configuration
@@ -25,7 +27,16 @@ export let ButtonsConfiguration: ButtonsConfig = {
 };
 
 // Gallery Configuration
+// Define the Size and BreakConfig objects
+const size: Size = { width: '100%', height: 'auto' }; // Replace with actual values if needed
+
+const breakConfig: BreakConfig = {
+    length: 10, // Example value; adjust based on layout requirements
+    wrap: true  // Example value; adjust based on your needs
+};
+
+// Create the configuration
 export let PlainGalleryConfiguration: PlainGalleryConfig = {
     strategy: PlainGalleryStrategy.CUSTOM,
-    layout: new AdvancedLayout(-1, true)
+    layout: new GridLayout(size, breakConfig)
 };

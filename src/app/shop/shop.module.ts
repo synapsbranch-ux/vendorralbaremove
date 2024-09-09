@@ -1,12 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxPayPalModule } from 'ngx-paypal';
-import { Ng5SliderModule } from 'ng5-slider';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SharedModule } from '../shared/shared.module';
 import { ShopRoutingModule } from './shop-routing.module';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
-
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 // Product Details Components
 import { ProductNoSidebarComponent } from './product/sidebar/product-no-sidebar/product-no-sidebar.component';
 
@@ -20,7 +18,7 @@ import { RelatedProductComponent } from './product/widgets/related-product/relat
 
 // Collection Components
 import { CollectionComponent } from './collection/collection.component';
-
+import { MatExpansionModule } from '@angular/material/expansion';
 // Collection Widgets
 import { GridComponent } from './collection/widgets/grid/grid.component';
 import { PaginationComponent } from './collection/widgets/pagination/pagination.component';
@@ -28,7 +26,7 @@ import { BrandsComponent } from './collection/widgets/brands/brands.component';
 import { ColorsComponent } from './collection/widgets/colors/colors.component';
 import { SizeComponent } from './collection/widgets/size/size.component';
 import { PriceComponent } from './collection/widgets/price/price.component';
-
+import { FormsModule }   from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CompareComponent } from './compare/compare.component';
@@ -76,13 +74,14 @@ import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.comp
   imports: [
     CommonModule,
     NgxPayPalModule,
-    Ng5SliderModule,
-    InfiniteScrollModule,
+    NgxSliderModule,
+    FormsModule,
     SharedModule,
     ShopRoutingModule,
     NgxImageZoomModule,
     NgSelectModule,
-    NgxPaginationModule
-  ]
+    NgxPaginationModule,
+    MatExpansionModule
+  ],
 })
 export class ShopModule { }

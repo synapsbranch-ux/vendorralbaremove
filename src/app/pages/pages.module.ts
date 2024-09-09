@@ -4,7 +4,7 @@ import { EditAddressComponent } from './account/edit-address/edit-address.compon
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './account/change-Password/change-Password.component';
 import { AddressComponent } from './account/address/address.component';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GalleryModule } from '@ks89/angular-modal-gallery';
 import { SharedModule } from '../shared/shared.module';
@@ -46,6 +46,7 @@ import { MasonryFullWidthComponent } from './portfolio/masonry-full-width/masonr
 import { Room3Dstore } from './room-3dstore/room-3dstore.component';
 import { RegisterVendorComponent } from './account/register-vendor/register-vendor.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -87,11 +88,14 @@ import { MatDialogModule } from '@angular/material/dialog';
   ],
   imports: [
     CommonModule,
-    GalleryModule.forRoot(),
+    GalleryModule,
+    NgbModule,
     SharedModule,
     PagesRoutingModule,
     NgOtpInputModule,
     MatDialogModule
-  ]
+  ],
+  exports: [OrderSuccessComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PagesModule { }

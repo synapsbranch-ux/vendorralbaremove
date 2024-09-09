@@ -4,10 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import {  NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule,NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
-import { ToastrModule } from 'ngx-toastr';
 import { TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { SharedModule } from './shared/shared.module';
@@ -22,7 +21,7 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { DepartmentComponent } from './department/department.component';
 import { JwtInterceptor } from './jwt.interceptor';
-
+import { ToastrModule } from 'ngx-toastr';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -62,7 +61,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     AppRoutingModule,
     NgxImageZoomModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    NgbAccordionModule
   ],
   providers: [
     {

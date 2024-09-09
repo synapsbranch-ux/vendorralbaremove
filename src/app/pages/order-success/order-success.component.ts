@@ -1,11 +1,11 @@
 import { UserService } from 'src/app/shared/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from './../../shared/services/order.service';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ProductNew } from 'src/app/shared/classes/product';
 import { ProductSlider } from 'src/app/shared/data/slider';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-order-success',

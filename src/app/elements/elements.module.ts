@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ElementsRoutingModule } from './elements-routing.module';
@@ -14,6 +14,7 @@ import { ProductSliderComponent } from './product/product-slider/product-slider.
 import { BannersComponent } from './product/banners/banners.component';
 import { ProductTabsComponent } from './product/product-tabs/product-tabs.component';
 import { MultiSliderComponent } from './product/multi-slider/multi-slider.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import { MultiSliderComponent } from './product/multi-slider/multi-slider.compon
   imports: [
     CommonModule,
     SharedModule,
+    NgbModule,
     ElementsRoutingModule
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ElementsModule { }

@@ -2,11 +2,12 @@
 @import '~animate.css/animate.min.css';
 
 // Bootstrap Layout scss
-@import '~bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap/scss/bootstrap';
+
 
 // Owl Carousel
-@import '~ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
-@import '~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+@import 'node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import 'node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
 
 // Themify icon scss
 @import 'themify';
@@ -24,8 +25,5 @@
 @import 'theme/menu';
 @import 'theme/responsive';
 
-// Toastr Css
-@import '~ngx-toastr/toastr.css';
-
 // Rating Scss
-@import '~ngx-bar-rating/themes/br-default-theme';
+@import 'node_modules/ngx-bar-rating/themes/br-default-theme';

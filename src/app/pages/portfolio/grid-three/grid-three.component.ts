@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ButtonsConfiguration, PlainGalleryConfiguration } from '../../../shared/data/portfolio';
-import { Image, AdvancedLayout } from '@ks89/angular-modal-gallery';
+import { Image, GridLayout, Size, BreakConfig } from '@ks89/angular-modal-gallery';
 
 @Component({
   selector: 'app-grid-three',
@@ -51,13 +51,24 @@ export class GridThreeComponent implements OnInit {
   ngOnInit(): void {
     this.Images = this.AllImage
   }
-
   openImage(image) {
     const index: number = this.getCurrentIndexCustomLayout(image, this.Images);
+    
+    // Convert index to string as required by Size
+    const size: Size = { width: index.toString(), height: index.toString() };
+    
+    // Define a BreakConfig object with required properties
+    const breakConfig: BreakConfig = {
+        length: index, // Adjust as needed; assuming `index` represents the number of columns
+        wrap: true // or false, based on your layout requirements
+    };
+    
+    // Update the GalleryConfig with the correct layout
     this.GalleryConfig = Object.assign({}, this.GalleryConfig, { 
-        layout: new AdvancedLayout(index, true) 
+        layout: new GridLayout(size, breakConfig) 
     });
-  }
+}
+
 
   getCurrentIndexCustomLayout(image: Image, images: Image[]): number {
     return image ? images.indexOf(image) : -1;

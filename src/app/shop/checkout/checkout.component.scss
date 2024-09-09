@@ -22,3 +22,12 @@ address {
     z-index: 99;
     width: 40%;
 }
+.mat-accordion .mat-expansion-panel 
+{
+    box-shadow: none !important;
+    margin-bottom: 2rem;
+}
+.payment-options label
+{
+    padding-left: 6px;
+}

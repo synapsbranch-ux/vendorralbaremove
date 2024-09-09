@@ -3,7 +3,7 @@ import { ContactComponent } from './pages/account/contact/contact.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 
 import { ShopComponent } from './shop/shop.component';
 import { PagesComponent } from './pages/pages.component';
@@ -85,14 +85,15 @@ const routes: Routes = [
 
 ];
 
+const routerOptions: ExtraOptions = {
+  initialNavigation: 'enabledBlocking',  // or 'enabled' or 'disabled'
+  useHash: false,
+  anchorScrolling: 'enabled',
+  scrollPositionRestoration: 'enabled',
+};
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    initialNavigation: 'enabled',
-    useHash: false,
-    anchorScrolling: 'enabled',
-    scrollPositionRestoration: 'enabled',
-    relativeLinkResolution: 'legacy'
-})],
+  imports: [RouterModule.forRoot(routes, routerOptions)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

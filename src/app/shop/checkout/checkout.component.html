@@ -45,7 +45,53 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+                                    <mat-accordion>
+                                        <mat-expansion-panel [expanded]="true">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    <h5 class="m-0">1. Shipping Address </h5>
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <div class="row">
+
+                                                <div class="col-sm-6"
+                                                    *ngFor="let address of useraddressslist let i = index">
+
+                                                    <div class="radio-option d-flex align-items-start">
+                                                        <input *ngIf="address.is_default == 1" type="radio"
+                                                            class="user_address_id" id="userShippingAddressId{{i}}"
+                                                            ngModel="{{address._id}}" name="userShippingAddressId"
+                                                            value="{{address._id}}"
+                                                            formControlName="userShippingAddressId">
+                                                        <input
+                                                            *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                            type="radio" class="user_address_id"
+                                                            id="userShippingAddressId{{i}}" name="userShippingAddressId"
+                                                            value="{{address._id}}"
+                                                            formControlName="userShippingAddressId">
+                                                        <label for="userShippingAddressId{{i}}">
+                                                            <address>
+                                                                <h4> {{address.user_full_name}} </h4>
+                                                                <p>{{address.addressline1}},
+                                                                    {{address.addressline2}}</p>
+                                                                <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                <p>{{address.state}}</p>
+                                                                <h5>Ph: {{address.mobile}}</h5>
+                                                            </address>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="linkaddress">
+                                                    <a class="add_address" (click)="checkaddress();">Add New
+                                                        adress</a><br>
+                                                </div>
+                                            </div>
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+
+
+                                    <!-- <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
                                         <ngb-panel id="custom-panel-1">
                                             <ng-template ngbPanelTitle let-closed="closed">
                                                 <div class="d-flex align-items-center justify-content-between">
@@ -90,12 +136,55 @@
                                                 </div>
                                             </ng-template>
                                         </ngb-panel>
-                                    </ngb-accordion>
+                                    </ngb-accordion> -->
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+                                    <mat-accordion>
+                                        <mat-expansion-panel [expanded]="true">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    <h5 class="m-0">2. Billing Address</h5>
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <div class="row">
+                                                <div class="col-sm-6"
+                                                    *ngFor="let address of useraddressslist let i = index">
+
+                                                    <div class="radio-option d-flex align-items-start">
+                                                        <input *ngIf="address.is_default == 1" type="radio"
+                                                            class="user_address_id" id="userBillingAddressId{{i}}"
+                                                            ngModel="{{address._id}}" name="userBillingAddressId"
+                                                            value="{{address._id}}"
+                                                            formControlName="userBillingAddressId">
+                                                        <input
+                                                            *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                            type="radio" class="user_address_id"
+                                                            id="userBillingAddressId{{i}}" name="userBillingAddressId"
+                                                            value="{{address._id}}"
+                                                            formControlName="userBillingAddressId">
+                                                        <label for="userBillingAddressId{{i}}">
+                                                            <address>
+                                                                <h4> {{address.user_full_name}} </h4>
+                                                                <p>{{address.addressline1}},
+                                                                    {{address.addressline2}}</p>
+                                                                <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                <p>{{address.state}}</p>
+                                                                <h5>Ph: {{address.mobile}}</h5>
+                                                            </address>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="linkaddress">
+                                                    <a class="add_address" (click)="checkaddress();">Add New
+                                                        adress</a><br>
+                                                </div>
+                                            </div>
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                    <!-- <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
                                         <ngb-panel id="custom-panel-1">
                                             <ng-template ngbPanelTitle let-closed="closed">
                                                 <div class="d-flex align-items-center justify-content-between">
@@ -139,7 +228,7 @@
                                                 </div>
                                             </ng-template>
                                         </ngb-panel>
-                                    </ngb-accordion>
+                                    </ngb-accordion> -->
                                 </div>
                             </div>
                         </div>
@@ -214,10 +303,12 @@
                                             <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
                                             </ngx-paypal>
                                         </div>
-                                        <img *ngIf="orderPrcessed" src="assets/images/animated_loader.gif" alt="loader" class="loading">
+                                        <img *ngIf="orderPrcessed" src="assets/images/animated_loader.gif" alt="loader"
+                                            class="loading">
                                     </div>
                                     <div class="text-right">
-                                        <button type="submit" *ngIf="!paypalstatus" [disabled]="checkoutForm.invalid || isSubmitting"
+                                        <button type="submit" *ngIf="!paypalstatus"
+                                            [disabled]="checkoutForm.invalid || isSubmitting"
                                             class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>
