@@ -35,6 +35,18 @@ export class JwtInterceptor implements HttpInterceptor {
         }
       }
       return event;
-    }));
+    }),
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 400 || error.status === 410 || error.status === 412) {
+        return throwError(error);
+      } else
+      {
+        error.error.message = 'There is no Internet connection Please check once';
+        return throwError(error);
+      }
+      // You can also log the error or perform other actions here
+    })
+  
+  );
   }
 }
