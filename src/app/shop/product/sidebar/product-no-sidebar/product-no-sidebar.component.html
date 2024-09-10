@@ -196,7 +196,7 @@
                                                     </div>
                                         
                                                     <div *ngSwitchCase="'select' || 'multiselect'" class="w-100 addons-price">
-                                                        <select class="form-control"
+                                                        <select class="form-select"
                                                             [(ngModel)]="selectedOptions[addon.addon_slug]"
                                                             (change)="updatePrice(addon.addon_slug)">
                                                             <option *ngFor="let option of addon.add_ons_value"
