@@ -68,9 +68,9 @@ export class ChangePasswordComponent implements OnInit {
     }
     let formData = this.form.value;
     let EdData = {
-      "old_Password": formData.oldPassword,
-      "new_Password": formData.newPassword,
-      "confirm_Password": formData.confirmPassword
+      "old_Password": formData.oldPassword.trim(),
+      "new_Password": formData.newPassword.trim(),
+      "confirm_Password": formData.confirmPassword.trim()
     }
     if (this.changePasswordFormStatus) {
       this.userservice.changePassword(EdData).subscribe(

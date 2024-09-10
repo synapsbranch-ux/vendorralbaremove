@@ -154,15 +154,15 @@ export class RegisterComponent implements OnInit {
       let data = {
         'name': formData.fname+' '+formData.lname,
         'email': formData.email,
-        'password': formData.password,
-        'repeat_password': formData.repeat_password,
+        'password': formData.password.trim(),
+        'repeat_password': formData.repeat_password.trim(),
         'phone': formData.phone,
         'otp': this.userOtp
       }
       this.userService.userSignUp(data).subscribe(
         res => {
 
-          this.loginfn(formData.email,formData.password);
+          this.loginfn(formData.email,formData.password.trim());
           this.toastr.success('OTP successfully Verified. Loging...')
           this.otpValid=true;
           this.isValid = true;

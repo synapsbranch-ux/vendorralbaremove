@@ -168,8 +168,8 @@ export class RegisterVendorComponent implements OnInit {
           'name': formData.fname,
           'email': formData.email,
           'phone': formData.phone,
-          'password': formData.password,
-          'repeat_password': formData.repeat_password,
+          'password': formData.password.trim(),
+          'repeat_password': formData.repeat_password.trim(),
           'otp': this.userOtp,
           'catagories': catname,
         }

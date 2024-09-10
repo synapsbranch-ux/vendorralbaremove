@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
     let formData = this.form.value;
     let data = {
       'email_phone': formData.phone_email,
-      'password': formData.login_password,
+      'password': formData.login_password.trim(),
     }
     this.login(data);
 
