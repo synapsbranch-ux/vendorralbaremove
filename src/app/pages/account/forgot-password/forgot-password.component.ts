@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })
-export class ForgetPasswordComponent implements OnInit {
+export class ForgotPasswordComponent implements OnInit {
   form: FormGroup;
   isValid:boolean=false;
   submitMassage:any;
