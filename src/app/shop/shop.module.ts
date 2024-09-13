@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { SharedModule } from '../shared/shared.module';
 import { ShopRoutingModule } from './shop-routing.module';
-import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 // Product Details Components
 import { ProductNoSidebarComponent } from './product/sidebar/product-no-sidebar/product-no-sidebar.component';
@@ -78,7 +77,6 @@ import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.comp
     FormsModule,
     SharedModule,
     ShopRoutingModule,
-    NgxImageZoomModule,
     NgSelectModule,
     NgxPaginationModule,
     MatExpansionModule

@@ -11,7 +11,7 @@ import { WishlistComponent } from './account/wishlist/wishlist.component';
 import { DashboardComponent } from './account/dashboard/dashboard.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
-import { ForgetPasswordComponent } from './account/forget-password/forget-password.component';
+import { ForgetPasswordComponent } from './account/forgot-password/forgot-password.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { ContactComponent } from './account/contact/contact.component';
 import { SearchComponent } from './search/search.component';
@@ -62,7 +62,7 @@ const routes: Routes = [
     component: RegisterVendorComponent
   },
   { 
-    path: 'forget-password', 
+    path: 'forgot-password', 
     component: ForgetPasswordComponent, 
   },
   { 

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsMainSlider, ProductDetailsThumbSlider } from '../../../../shared/data/slider';
 import { ProductNew, ProductNew2 } from '../../../../shared/classes/product';
@@ -484,7 +484,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   pushObjectIfKeyNotExists(array: any[], key: string, value: any, obj: any) {
     const index = array.findIndex(el => el.key === obj.key);
-    
+
     if (index === -1) {
       // If the object is not found, add it to the array and update the price
       this.productAddonsPrice += parseFloat(obj.price ? obj.price : '0');
@@ -493,10 +493,10 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       // If the object is found, subtract the old price and then update or replace the object
       const oldPrice = array[index].price ? parseFloat(array[index].price) : 0;
       this.productAddonsPrice -= oldPrice;
-      
+
       // Update the array with the new object
       array.splice(index, 1, obj);
-      
+
       // Add the new price
       this.productAddonsPrice += parseFloat(obj.price ? obj.price : '0');
     }
@@ -527,4 +527,23 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     this.productWishliststatus = this.productService.wishlistProductCheck(product)
   }
 
+ @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    const { offsetX, offsetY } = event;
+    const container = event.currentTarget as HTMLElement;
+    const image = container.querySelector('img') as HTMLElement;
+    const scale = 2; // Zoom scale
+
+    const xPercent = (offsetX / container.offsetWidth) * 100;
+    const yPercent = (offsetY / container.offsetHeight) * 100;
+
+    image.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+    container.classList.add('zoomed');
+  }
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    const container = document.querySelector('.zoom-container') as HTMLElement;
+    container.classList.remove('zoomed');
+  }
 }

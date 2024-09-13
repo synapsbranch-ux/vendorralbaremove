@@ -125,6 +125,31 @@ iframe {
     cursor: pointer;
   }
 
+
+
+
+  .zoom-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%; /* Adjust as needed */
+    height: 100%; /* Adjust as needed */
+    cursor: crosshair;
+  }
+  
+  .zoom-image {
+    transition: transform 0.2s ease;
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+  }
+  
+  .zoom-container.zoomed .zoom-image {
+    transform: scale(2); /* Adjust scale as needed */
+  }
+  
+  
+  
+
 @media only screen and (max-width: 600px) {
     .product-slick1 {
         height: 200px;

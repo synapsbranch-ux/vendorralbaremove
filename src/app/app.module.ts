@@ -16,8 +16,6 @@ import { AppComponent } from './app.component';
 import { ShopComponent } from './shop/shop.component';
 import { PagesComponent } from './pages/pages.component';
 import { ElementsComponent } from './elements/elements.component';
-
-import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { DepartmentComponent } from './department/department.component';
 import { JwtInterceptor } from './jwt.interceptor';
@@ -60,7 +58,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     SharedModule,
     AppRoutingModule,
-    NgxImageZoomModule,
     NgOtpInputModule,
     NgbAccordionModule
   ],

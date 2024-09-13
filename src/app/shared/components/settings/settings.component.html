@@ -85,7 +85,7 @@
       </ul>
       <ul class="show-div shopping-cart" *ngIf='products'>
         <li *ngFor="let product of products">
-          <div class="media">
+          <div class="media flex">
             <a [routerLink]="['/product/', product.product_slug]">
             <img class="mr-3" [src]="product.product_image[0]? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg'" [alt]="product?.product_name">
             </a>
