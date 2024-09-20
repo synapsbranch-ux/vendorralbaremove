@@ -12,20 +12,28 @@ import { Observable } from 'rxjs';
 export class WishlistComponent implements OnInit {
 
   public products: ProductNew[] = [];
-
-  constructor(private router: Router, 
+  backlink: any
+  constructor(private router: Router,
     public productService: ProductService) {
     this.productService.wishlistItems.subscribe(
       response => {
         this.products = response
       }
-      
-      
 
-      );
+
+
+    );
   }
 
   ngOnInit(): void {
+
+    let store_slug = localStorage.getItem('storeslug');
+    if (store_slug) {
+      this.backlink = `/vendor/${store_slug}`;
+    }
+    else {
+      this.backlink = '/'
+    }
   }
 
   public get getTotal(): Observable<number> {
@@ -34,17 +42,13 @@ export class WishlistComponent implements OnInit {
 
   async addToCart(product: any) {
     let quantity = 1;
-    const status = await this.productService.addToCart(product,quantity);
+    const status = await this.productService.addToCart(product, quantity);
     this.getTotal.subscribe();
-    if(status) {
-      if(product.stock > 0)
-      {
-        product.stock = (product.stock - 1);
-      }
-      
+    product.stock = (product.stock - 1);
+    this.router.navigateByUrl('/checkout', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/cart']);
-      this.removeItem(product);
-    }
+    });
+    this.removeItem(product);
   }
 
   removeItem(product: any) {

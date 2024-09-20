@@ -38,7 +38,7 @@ export class CheckoutComponent implements OnInit {
   paypalstatus: boolean = false;
   transactionId = 0;
   isUserLogin: boolean = true;
-  paypalreurnData = [];
+  paypalReturnData = [];
   local_checkout_obj = {};
   email_: any;
   phone_: any;
@@ -79,7 +79,7 @@ export class CheckoutComponent implements OnInit {
     let vendorSet = false;
 
     this.productService.cartItems.subscribe(response => this.products = response);
-    
+
     for (const element of this.products) {
       this.productService.getproductsBySlugs(element.product_slug)
         .pipe(first())
@@ -90,7 +90,7 @@ export class CheckoutComponent implements OnInit {
               vendorSet = true;
               this.getShippingTax(); // Call getShippingTax only once
             }
-    
+
             let stock = (v.data.stock - element.quantity);
             if (stock < 0) {
               if (v.data.product_name) {
@@ -105,13 +105,13 @@ export class CheckoutComponent implements OnInit {
           complete: () => console.info('Complete')
         });
     }
-    
+
     this.getTotal.subscribe(amount => this.amount = amount);
     this.initConfig();
     this.checkoutForm = new FormGroup({
       'phone': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
-      'paymentOption': new FormControl(null),
+      'paymentOption': new FormControl(null, [Validators.required]),
       'userShippingAddressId': new FormControl(null, [Validators.required]),
       'userBillingAddressId': new FormControl(null, [Validators.required]),
     })
@@ -233,12 +233,9 @@ export class CheckoutComponent implements OnInit {
       },
       onApprove: (data, actions) => {
         actions.order.get().then(details => {
-          this.transactionId = details['id'];
 
-          setTimeout(() => {
-            this.placeorder();
-          }, 1500)
-          this.paypalreurnData = [
+          this.transactionId = details['id'];
+          this.paypalReturnData = [
             {
               transaction_id: details.id,
               country_code: details.payer.address.country_code,
@@ -246,21 +243,62 @@ export class CheckoutComponent implements OnInit {
               name: `${details.payer.name.given_name} ${details.payer.name.surname}`,
               customer_id_paypal: details.payer.payer_id,
               paypal_status: details.status,
+              paypal_data: details
             }
           ];
+          this.placeorder();
         });
       },
       onClientAuthorization: (data) => {
+
+        this.paypalReturnData = [
+          {
+            transaction_id: '',
+            country_code: '',
+            email_address: '',
+            name: '',
+            customer_id_paypal: '',
+            paypal_status: '',
+            paypal_data: data
+          }
+        ];
+        this.placeorder();
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+
       },
       onCancel: (data, actions) => {
-         console.log('OnCancel', data, actions);
+        this.paypalReturnData = [
+          {
+            transaction_id: '',
+            country_code: '',
+            email_address: '',
+            name: '',
+            customer_id_paypal: '',
+            paypal_status: '',
+            paypal_data: data
+          }
+        ];
+        this.placeorder();
+        console.log('OnCancel', data, actions);
       },
       onError: err => {
+
+        this.paypalReturnData = [
+          {
+            transaction_id: '',
+            country_code: '',
+            email_address: '',
+            name: '',
+            customer_id_paypal: '',
+            paypal_status: '',
+            paypal_data: err
+          }
+        ];
+        this.placeorder();
         console.log('OnError', err);
       },
       onClick: (data, actions) => {
-       console.log('onClick', data, actions);
+        console.log('onClick', data, actions);
       },
     };
 
@@ -281,70 +319,28 @@ export class CheckoutComponent implements OnInit {
     if (this.checkoutForm.invalid || this.isSubmitting) {
       return;
     }
-    this.isSubmitting = true;
-    this.orderPrcessed = true;
-    const currentUser = localStorage.getItem("user_");
-    if (currentUser) {
+    if (this.products.length > 0) {
+      this.isSubmitting = true;
+      this.orderPrcessed = true;
+      const currentUser = localStorage.getItem("user_");
+      if (currentUser) {
+        if (this.products.length > 0) {
+          let orderTotal = 0;
+          let formData = this.checkoutForm.value;
+          this.getTotal.subscribe(
+            res => {
+              orderTotal = res
 
-      if (this.products.length > 0) {
-
-
-
-        let orderTotal = 0;
-        let paymentStatus = "";
-        let formData = this.checkoutForm.value;
-
-        if (formData.paymentOption == 'COD') {
-          paymentStatus = "success";
-          this.transactionId = uuidv4();
-        }
-        else {
-          this.initConfig();
-          paymentStatus = "pending";
-        }
-        this.getTotal.subscribe(
-          res => {
-            orderTotal = res
-
-          }
-        )
-
-        let orderData = {}
-
-        if (formData.paymentOption == 'paypal') {
-          orderData =
+            }
+          )
+          let orderData =
           {
             total_order_amount: orderTotal,
             order_status: 'initiated',
-            payment_status: paymentStatus,
             payment_method: formData.paymentOption,
-            transaction_id: this.transactionId,
-            country_code: this.paypalreurnData[0].country_code,
-            email_address: this.paypalreurnData[0].email_address,
-            name: this.paypalreurnData[0].name,
-            customer_id_paypal: this.paypalreurnData[0].customer_id_paypal,
-            paypal_status: this.paypalreurnData[0].paypal_status,
-            shipping_address_id: formData.userShippingAddressId,
-            billing_address_id: formData.userBillingAddressId,
-            billing_email: formData.email,
-            billing_phone: formData.phone,
-            cart_id: localStorage.getItem('cart_'),
-            vendor_id: localStorage.getItem('vendor_id')
-          }
-        }
-        else if (formData.paymentOption == 'COD') {
-          orderData =
-          {
-            total_order_amount: orderTotal,
-            order_status: 'initiated',
-            payment_status: paymentStatus,
-            payment_method: formData.paymentOption,
-            transaction_id: this.transactionId,
             country_code: "",
             email_address: formData.email,
             name: this.userFuyllName,
-            customer_id_paypal: "",
-            paypal_status: "",
             shipping_address_id: formData.userShippingAddressId,
             billing_address_id: formData.userBillingAddressId,
             billing_email: formData.email,
@@ -352,64 +348,154 @@ export class CheckoutComponent implements OnInit {
             cart_id: localStorage.getItem('cart_'),
             vendor_id: localStorage.getItem('vendor_id')
           }
-        }
-        else {
-          this.isSubmitting = false;
-          this.orderPrcessed = false;
-          this.toaster.error('Please select a payment method')
-          return;
-        }
 
-        for (const element of this.products) {
+          for (const element of this.products) {
 
-          this.productService.getproductsBySlugs(element.product_slug)
-            .pipe(first())
-            .subscribe({
-              next: (v) => {
-                let stock = (v.data.stock - element.quantity);
+            this.productService.getproductsBySlugs(element.product_slug)
+              .pipe(first())
+              .subscribe({
+                next: (v) => {
+                  let stock = (v.data.stock - element.quantity);
 
-                if (stock < 0) {
-                  if (v.data.product_name) {
-                    this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
-                    this.router.navigateByUrl(`product/${v.data.product_slug}`)
+                  if (stock < 0) {
+                    if (v.data.product_name) {
+                      this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+                      this.router.navigateByUrl(`product/${v.data.product_slug}`)
+                    }
                   }
-                }
-                else {
-                  return;
-                }
-              },
-              error: (e) => {
-              },
-              complete: () => console.info('Complete')
-            }
-            );
-        }
+                  else {
+                    return;
+                  }
+                },
+                error: (e) => {
+                },
+                complete: () => console.info('Complete')
+              }
+              );
+          }
 
-        this.orderService.userCreateOrder(orderData).subscribe(
-          res => {
-            this.orderValid = true;
-            this.orderPrcessed = false;
-            this.orderMassage = "Your Order Placed successfully";
-            for (const elem of this.products) {
-              this.productService.removeCartItem(elem);
-            }
-            this.userservice.setUserOrderid(res['data']._id);
-            setTimeout(() => {
+          this.orderService.userCreateOrder(orderData).subscribe(
+            res => {
+              this.userservice.setUserOrderid(res['data']._id);
+              if (formData.paymentOption == 'COD') {
+                this.transactionId = uuidv4();
+                let orderData =
+                {
+                  order_id: res['data']._id,
+                  total_order_amount: orderTotal,
+                  order_status: 'initiated',
+                  payment_status: 'pending',
+                  payment_method: formData.paymentOption,
+                  transaction_id: this.transactionId,
+                  country_code: "",
+                  email_address: formData.email,
+                  name: this.userFuyllName,
+                  customer_id_paypal: "",
+                  paypal_status: "",
+                  shipping_address_id: formData.userShippingAddressId,
+                  billing_address_id: formData.userBillingAddressId,
+                  billing_email: formData.email,
+                  billing_phone: formData.phone,
+                  cart_id: localStorage.getItem('cart_'),
+                  vendor_id: localStorage.getItem('vendor_id')
+                }
+
+                this.orderService.userCreateOrderPayment(orderData).subscribe(
+                  res => {
+                    this.orderValid = true;
+                    this.orderPrcessed = false;
+                    this.orderMassage = "Your Order Placed successfully";
+                    for (const elem of this.products) {
+                      this.productService.removeCartItem(elem);
+                    }
+                    setTimeout(() => {
+                      this.isSubmitting = false;
+                      this.router.navigateByUrl('/order/success');
+                    }, 1000)
+                  },
+                  error => {
+                    // .... HANDLE ERROR HERE 
+                    this.toaster.error(error.error.message);
+                    this.orderPrcessed = false;
+                    this.isSubmitting = false;
+                  });
+              }
+              else {
+                this.paymentOrder();
+              }
+            },
+            error => {
+              // .... HANDLE ERROR HERE 
+              this.toaster.error(error.error.message);
+              this.orderPrcessed = false;
               this.isSubmitting = false;
-              this.router.navigateByUrl('/order/success');
-            }, 1000)
-          },
-          error => {
-            // .... HANDLE ERROR HERE 
-            this.toaster.error(error.error.message);
-            this.orderPrcessed = false;
-            this.isSubmitting = false;
-          });
-
+            });
+        }
+      }
+      else {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
       }
     }
-    else {
-      this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
+
+  }
+
+  paymentOrder() {
+console.log('payment fun')
+    if (this.products.length > 0) {
+      
+      let orderTotal = 0;
+      let paymentStatus = "";
+      let formData = this.checkoutForm.value;
+      this.getTotal.subscribe(
+        res => {
+          orderTotal = res
+        }
+      )
+      let orderData =
+      {
+        order_id: this.userservice.getUserOrderid(),
+        total_order_amount: orderTotal,
+        order_status: 'initiated',
+        payment_status: paymentStatus,
+        payment_method: formData.paymentOption,
+        transaction_id: this.transactionId,
+        country_code: this.paypalReturnData[0].country_code ? this.paypalReturnData[0].country_code : '',
+        email_address: this.paypalReturnData[0].email_address ? this.paypalReturnData[0].email_address : formData.email,
+        name: this.paypalReturnData[0].name ? this.paypalReturnData[0].name : this.userFuyllName,
+        customer_id_paypal: this.paypalReturnData[0].customer_id_paypal ? this.paypalReturnData[0].customer_id_paypal : '',
+        paypal_status: this.paypalReturnData[0].paypal_status ? this.paypalReturnData[0].paypal_status : '',
+        paypal_data: this.paypalReturnData[0].paypal_data,
+        shipping_address_id: formData.userShippingAddressId,
+        billing_address_id: formData.userBillingAddressId,
+        billing_email: formData.email,
+        billing_phone: formData.phone,
+        cart_id: localStorage.getItem('cart_'),
+        vendor_id: localStorage.getItem('vendor_id')
+      }
+
+      console.log('Payment obj',orderData);
+
+      this.orderService.userCreateOrderPayment(orderData).subscribe(
+        res => {
+          this.orderValid = true;
+          this.orderPrcessed = false;
+          this.orderMassage = "Your Order Placed successfully";
+          for (const elem of this.products) {
+            this.productService.removeCartItem(elem);
+          }
+          this.userservice.setUserOrderid(res['data']._id);
+          setTimeout(() => {
+            this.isSubmitting = false;
+            this.router.navigateByUrl('/order/success');
+          }, 1000)
+        },
+        error => {
+          // .... HANDLE ERROR HERE 
+          this.toaster.error(error.error.message);
+          this.orderPrcessed = false;
+          this.isSubmitting = false;
+        });
+
     }
 
   }

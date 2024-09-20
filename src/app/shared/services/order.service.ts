@@ -63,6 +63,18 @@ export class OrderService {
     return this.http.post(environment.baseUrl+'user/orderCreate',data,httpOptionsroom);
   }
 
+  userCreateOrderPayment(data:Object)
+  {
+    let token = localStorage.getItem('u_token') // Will return if it is not set 
+  
+    let httpOptionsroom = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + token
+      })
+    }
+    return this.http.post(environment.baseUrl+'user/orderPayment',data,httpOptionsroom);
+  }
+
   userSingleOrderDetails(data:Object)
   {
     let token = localStorage.getItem('u_token') // Will return if it is not set 

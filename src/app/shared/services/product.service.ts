@@ -218,16 +218,12 @@ export class ProductService {
     }
     this.toastrService.success('Product has been added in wishlist.');
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
-    ////console.log('Wishlist added Localstorage',localStorage.getItem('wishlistItems'));
     return true
   }
 
   // Remove Wishlist items
   public removeWishlistItem(product: ProductNew): any {
-    // //console.log('removeWishlistItem    product ==========================================>',product);
-    // //console.log('removeWishlistItem     state.wishlist ==========================================>',state.wishlist);
     const index = state.wishlist.indexOf(product);
-    // //console.log('removeWishlistItem    index ==========================================>',index);
     state.wishlist.splice(index, 1);
     localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
     return true
@@ -235,10 +231,6 @@ export class ProductService {
 
   public wishlistProductCheck(product: ProductNew): any {
     const wishlistItem = state.wishlist.find(item => item._id === product._id);
-
-    // //console.log('wishlistProductCheck     product ==========================================>',product);
-    // //console.log('wishlistProductCheck     state.wishlist ==========================================>',state.wishlist);
-    // //console.log('wishlistProductCheck    wishlistItem ==========================================>',wishlistItem);
     if (wishlistItem) {
       return true
     }
@@ -306,13 +298,19 @@ export class ProductService {
 
     let SinglevendorStatus = true;
     if (localStorage.getItem('vendor_id')) {
-      if (localStorage.getItem('vendor_id') != product.product_owner._id) {
-        SinglevendorStatus = false
-        return false;
+      if (product?.product_owner) {
+        if (localStorage.getItem('vendor_id') != product?.product_owner?._id) {
+          SinglevendorStatus = false
+          return false;
+        }
+        else {
+          this.addToCartforSingleVendor(product, prod_qty);
+        }
       }
       else {
         this.addToCartforSingleVendor(product, prod_qty);
       }
+
     }
     else {
       localStorage.setItem('vendor_id', product.product_owner._id);
@@ -340,8 +338,7 @@ export class ProductService {
 
     //console.log('user Login')
     if (localStorage.getItem('u_token')) {
-      if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
-      {
+      if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
         if (!cartItem) {
           state.cart.push({
             ...product,
@@ -350,8 +347,7 @@ export class ProductService {
           })
         }
       }
-      else
-      {
+      else {
         let product_price = 0;
         if (product.product_sale_price == null) {
           product_price = product.product_retail_price
@@ -375,7 +371,7 @@ export class ProductService {
           }]
         }
         //console.log('full Product Cart Data for Submit', cdata);
-  
+
         this.addToCartDbBulk(cdata).subscribe(
           res => {
             let bodydata = res['data'];
@@ -412,9 +408,9 @@ export class ProductService {
                   //console.log('After Push Cart Items List', cartproducts)
                   localStorage.setItem("cartItems", JSON.stringify(cartproducts));
                   //console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
-  
+
                 })
-  
+
                 const cartItem = state.cart.find(item => item._id === product._id);
                 if (!cartItem) {
                   //console.log('addToCart function check state.cart Before push', state.cart)
@@ -427,12 +423,12 @@ export class ProductService {
                   })
                   //console.log('addToCart function check state.cart After push', state.cart)
                 }
-  
+
               }
             }
           },
           error => {
-  
+
             this.toastrService.error(error.error.message);
           }
         )
@@ -470,12 +466,10 @@ export class ProductService {
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
 
         if (localStorage.getItem('u_token')) {
-          if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
-          {
+          if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
             return true;
           }
-          else
-          {
+          else {
             let product_price = 0;
             if (product.product_sale_price == null) {
               product_price = product.product_retail_price
@@ -483,7 +477,7 @@ export class ProductService {
             else {
               product_price = product.product_sale_price
             }
-  
+
             let cdata =
             {
               products: [{
@@ -498,7 +492,7 @@ export class ProductService {
               }]
             }
             ////console.log('full Product Cart Data for Submit',cdata);
-  
+
             this.addToCartDbBulk(cdata).subscribe(
               res => {
                 let bodydata = res['data'];
@@ -527,26 +521,26 @@ export class ProductService {
                         "addons": element.addons,
                         "addonsprice": element.addonsprice
                       }
-  
+
                       console.log('cartproducts Push', data);
                       cartproducts.push(data);
                       console.log('Return LocalStorage Product Service', cartproducts);
                       localStorage.removeItem('cartItems');
                       localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-  
-  
+
+
                     },
                       error => {
-  
+
                         this.toastrService.error(error.error.message);
                       }
                     )
-  
+
                   }
                 }
               },
               error => {
-  
+
                 this.toastrService.error(error.error.message);
               }
             )
@@ -580,17 +574,15 @@ export class ProductService {
 
     console.log('Befor Structure Delete Cart', product, getCartList, index);
     if (localStorage.getItem('u_token')) {
-      if(this.userService.isTokenExpired(localStorage.getItem('u_token')))
-      {
-      getCartList.splice(index, 1);
-      localStorage.setItem("cartItems", JSON.stringify(getCartList));
+      if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
+        getCartList.splice(index, 1);
+        localStorage.setItem("cartItems", JSON.stringify(getCartList));
       }
-      else
-      {
+      else {
         getCartList.splice(index, 1);
         console.log('After Remove Cart getCartList :', getCartList);
         localStorage.setItem("cartItems", JSON.stringify(getCartList));
-  
+
         let dcDAta =
         {
           "cart_id": product.cart_id,
@@ -624,32 +616,32 @@ export class ProductService {
                     "addons": element.addons,
                     "addonsprice": element.addonsprice
                   }
-  
+
                   console.log('cartproducts Push', data);
                   cartproducts.push(data);
                   console.log('Return LocalStorage Product Service', cartproducts);
                   localStorage.removeItem('cartItems');
                   localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-  
-  
+
+
                 })
-  
+
               }
             }
             else {
               let getCartList_ = []
               localStorage.setItem("cartItems", JSON.stringify(getCartList_));
             }
-  
-  
+
+
           },
           error => {
-  
+
             this.toastrService.error(error.error.message);
           }
         )
       }
-     }
+    }
     else {
       //console.log('Remove Cart User Without Login :', state.cart);
       getCartList.splice(index, 1);
@@ -665,10 +657,10 @@ export class ProductService {
         if (!products || products.length === 0) {
           return 0;
         }
-  
+
         return products.reduce((prev, curr: ProductNew) => {
           let product_price = 0;
-  
+
           if (curr.addonsprice) {
             product_price = curr.product_sale_price != null
               ? curr.product_sale_price + curr.addonsprice
@@ -678,14 +670,14 @@ export class ProductService {
               ? curr.product_sale_price
               : curr.product_retail_price;
           }
-  
+
           let price = product_price;
           return prev + (price * curr.quantity);
         }, 0);
       })
     );
   }
-  
+
 
   public cartAddonsTotalAmount(): Observable<number> {
     return this.cartItems.pipe(map((product: ProductNew[]) => {

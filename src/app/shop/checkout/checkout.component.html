@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Phone</div>
-                                    <input [(ngModel)]="phone_" id="phone_no" type="text" formControlName="phone"
+                                    <input [(ngModel)]="phone_" id="phone_no" type="number" formControlName="phone"
                                         placeholder="" autocomplete="off">
                                 </div>
                             </div>
@@ -89,54 +89,6 @@
                                             </div>
                                         </mat-expansion-panel>
                                     </mat-accordion>
-
-
-                                    <!-- <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
-                                        <ngb-panel id="custom-panel-1">
-                                            <ng-template ngbPanelTitle let-closed="closed">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <h5 class="m-0">1. Shipping Address </h5>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template ngbPanelContent>
-                                                <div class="row">
-
-                                                    <div class="col-sm-6"
-                                                        *ngFor="let address of useraddressslist let i = index">
-
-                                                        <div class="radio-option d-flex align-items-start">
-                                                            <input *ngIf="address.is_default == 1" type="radio"
-                                                                class="user_address_id" id="userShippingAddressId{{i}}"
-                                                                ngModel="{{address._id}}" name="userShippingAddressId"
-                                                                value="{{address._id}}"
-                                                                formControlName="userShippingAddressId">
-                                                            <input
-                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
-                                                                type="radio" class="user_address_id"
-                                                                id="userShippingAddressId{{i}}"
-                                                                name="userShippingAddressId" value="{{address._id}}"
-                                                                formControlName="userShippingAddressId">
-                                                            <label for="userShippingAddressId{{i}}">
-                                                                <address>
-                                                                    <h4> {{address.user_full_name}} </h4>
-                                                                    <p>{{address.addressline1}},
-                                                                        {{address.addressline2}}</p>
-                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
-                                                                    <p>{{address.state}}</p>
-                                                                    <h5>Ph: {{address.mobile}}</h5>
-                                                                </address>
-                                                            </label>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="linkaddress">
-                                                        <a class="add_address" (click)="checkaddress();">Add New
-                                                            adress</a><br>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </ngb-panel>
-                                    </ngb-accordion> -->
                                 </div>
                             </div>
                             <div class="row">
@@ -184,57 +136,12 @@
                                             </div>
                                         </mat-expansion-panel>
                                     </mat-accordion>
-                                    <!-- <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
-                                        <ngb-panel id="custom-panel-1">
-                                            <ng-template ngbPanelTitle let-closed="closed">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <h5 class="m-0">2. Billing Address</h5>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template ngbPanelContent>
-                                                <div class="row">
-                                                    <div class="col-sm-6"
-                                                        *ngFor="let address of useraddressslist let i = index">
-
-                                                        <div class="radio-option d-flex align-items-start">
-                                                            <input *ngIf="address.is_default == 1" type="radio"
-                                                                class="user_address_id" id="userBillingAddressId{{i}}"
-                                                                ngModel="{{address._id}}" name="userBillingAddressId"
-                                                                value="{{address._id}}"
-                                                                formControlName="userBillingAddressId">
-                                                            <input
-                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
-                                                                type="radio" class="user_address_id"
-                                                                id="userBillingAddressId{{i}}"
-                                                                name="userBillingAddressId" value="{{address._id}}"
-                                                                formControlName="userBillingAddressId">
-                                                            <label for="userBillingAddressId{{i}}">
-                                                                <address>
-                                                                    <h4> {{address.user_full_name}} </h4>
-                                                                    <p>{{address.addressline1}},
-                                                                        {{address.addressline2}}</p>
-                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
-                                                                    <p>{{address.state}}</p>
-                                                                    <h5>Ph: {{address.mobile}}</h5>
-                                                                </address>
-                                                            </label>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="linkaddress">
-                                                        <a class="add_address" (click)="checkaddress();">Add New
-                                                            adress</a><br>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </ngb-panel>
-                                    </ngb-accordion> -->
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-lg-5 col-sm-12 col-xs-12" [class.desabledform]="isUserLogin">
-                            <div class="checkout-details" [class.desabledform]="checkoutForm.invalid">
+                            <div class="checkout-details">
                                 <div class="order-box">
                                     <div class="title-box">
                                         <div>Product <span> Total</span></div>
@@ -281,13 +188,13 @@
                                     </ul>
                                 </div>
 
-                                <div class="payment-box">
+                                <div class="payment-box" >
                                     <div class="upper-box">
-                                        <div class="payment-options">
+                                        <div class="payment-options" *ngIf="products.length > 0">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="defaultUnchecked"
                                                     name="paymentOption" value="COD" mdbInput
-                                                    formControlName="paymentOption" (click)="getpaymentoption($event)">
+                                                    formControlName="paymentOption" [disabled]="!products.length" (click)="getpaymentoption($event)">
                                                 <label class="custom-control-label" for="defaultUnchecked">Cash On
                                                     Delivery</label>
                                             </div>
@@ -295,12 +202,12 @@
                                                 <input type="radio" class="custom-control-input" id="defaultUnchecked1"
                                                     name="paymentOption" value="paypal" mdbInput
                                                     formControlName="paymentOption" (click)="getpaymentoption($event)"
-                                                    [disabled]="checkoutForm.invalid">
+                                                    [disabled]="!products.length">
                                                 <label class="custom-control-label"
                                                     for="defaultUnchecked1">Paypal</label>
-                                                <img class="image d-block" src="assets/images/paypal.png" alt="" />
+                                                <img [class.desabledform]="checkoutForm.invalid" class="image d-block" src="assets/images/paypal.png" alt="" />
                                             </div>
-                                            <ngx-paypal *ngIf="paypalstatus" [config]="payPalConfig">
+                                            <ngx-paypal  *ngIf="paypalstatus" [config]="payPalConfig">
                                             </ngx-paypal>
                                         </div>
                                         <img *ngIf="orderPrcessed" src="assets/images/animated_loader.gif" alt="loader"
@@ -308,7 +215,7 @@
                                     </div>
                                     <div class="text-right">
                                         <button type="submit" *ngIf="!paypalstatus"
-                                            [disabled]="checkoutForm.invalid || isSubmitting"
+                                            [disabled]="checkoutForm.invalid || isSubmitting || !products.length"
                                             class="btn-solid btn rounded-lg">
                                             Place Order
                                         </button>

@@ -12,41 +12,42 @@ import { ProductService } from 'src/app/shared/services/product.service';
 export class OrderListComponent implements OnInit {
 
   public openDashboard: boolean = false;
-  userName:string="";
-  userEmail:string="";
-  userPhone:string="";
+  userName: string = "";
+  userEmail: string = "";
+  userPhone: string = "";
   userData: JSON;
-  orderList=[];
-  orderliststatus:boolean=true;
+  orderList = [];
+  orderliststatus: boolean = true;
+  ongoingOrders = [];
+  deliveredOrders = [];
 
+  constructor(private router: Router, private userservice: UserService, public productService: ProductService) {
 
-  constructor( private router: Router, private userservice: UserService, public productService: ProductService) { 
-    
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('user_'))
-    {    
+    if (localStorage.getItem('user_')) {
       this.userservice.getUserDetails().subscribe(
-      res =>
-      {
-        if (res['error'] != 1) {
-          this.userName = res['data'][0].name;
-          this.userEmail = res['data'][0].email;
-          this.userPhone = res['data'][0].phone;
+        res => {
+          if (res['error'] != 1) {
+            this.userName = res['data'][0].name;
+            this.userEmail = res['data'][0].email;
+            this.userPhone = res['data'][0].phone;
+          }
         }
-      }
-    )
-    this.userservice.getAllOrderList().subscribe(
-      res =>
-      {
-        this.orderList=res['data'];
-        if(this.orderList.length < 1)
-        {
-this.orderliststatus=false;
+      )
+      this.userservice.getAllOrderList().subscribe(
+        res => {
+          this.orderList = res['data'];
+          // Filter orders based on their status
+          this.ongoingOrders = this.orderList.filter(order => order.order_status !== 'delivered');
+          this.deliveredOrders = this.orderList.filter(order => order.order_status === 'delivered');
+
+          if (this.orderList.length < 1) {
+            this.orderliststatus = false;
+          }
         }
-      }
-      
+
       )
 
     }
@@ -57,14 +58,12 @@ this.orderliststatus=false;
   ToggleDashboard() {
     this.openDashboard = !this.openDashboard;
   }
-  viewOrder(orderId:any)
-  {
+  viewOrder(orderId: any) {
     this.userservice.setUserOrderid(orderId);
     this.router.navigateByUrl('/view-order')
   }
 
-  logout()
-  {
+  logout() {
     this.userservice.logout();
   }
 

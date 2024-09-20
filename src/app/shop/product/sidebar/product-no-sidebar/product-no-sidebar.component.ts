@@ -57,6 +57,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   iframeLink: any
   isProductinCart: boolean = false;
   othervalue: any;
+  fileUrl:any;
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -103,7 +104,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           }
         });
 
-        //console.log('productAddons =================', this.productAddons);
+        // console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
           let colorCode = response.data.product_bg_color.slice(1);
@@ -152,7 +153,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           this.currentCartProductDeatils = this.findProductInCart(product_slug, cart);
           if (this.currentCartProductDeatils) {
             this.isProductinCart = true;
-            //console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
+            console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
             this.counter = this.currentCartProductDeatils.quantity;
             if (this.currentCartProductDeatils.addons && this.currentCartProductDeatils.addons.length > 0) {
               this.cartAddons = this.currentCartProductDeatils.addons;
@@ -176,19 +177,33 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   prefillAddons(savedAddons: any) {
     savedAddons.forEach((savedAddon: any) => {
-      const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
-      if (addon) {
-        this.value[addon.addon_slug] = savedAddon.price;
-        this.selectedOptions[addon.addon_slug] = savedAddon.value;
-        addon.add_ons_value[0].values = savedAddon.value;
-        if (addon.input_type == 'range') {
-          this.range = true;
-        }
-        if (savedAddon.input_type == 'range-input') {
-          this.othervalue = savedAddon.other;
-          this.range = true;
+      if(savedAddon.hasOwnProperty('extra_document'))
+      {
+        savedAddon.extra_document.forEach((savedAddon: any) => {
+          const addon = this.productAddons.find(a => a.addon_slug === savedAddon.keyname);
+          if (addon) {
+            this.fileUrl = savedAddon.fileUrl;
+          }
+        });
+        
+      }
+      else
+      {
+        const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
+        if (addon) {
+          this.value[addon.addon_slug] = savedAddon.price;
+          this.selectedOptions[addon.addon_slug] = savedAddon.value;
+          addon.add_ons_value[0].values = savedAddon.value;
+          if (addon.input_type == 'range') {
+            this.range = true;
+          }
+          if (savedAddon.input_type == 'range-input') {
+            this.othervalue = savedAddon.other;
+            this.range = true;
+          }
         }
       }
+
     });
   }
 
@@ -332,7 +347,16 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   uploadFiles(files: FileList, formcontrolname, addon) {
     this.fileToUpload = files.item(0);
-
+  
+    // Check if the file size exceeds 5MB
+    const fileSizeInMB = this.fileToUpload.size / (1024 * 1024); // Convert bytes to MB
+    if (fileSizeInMB > 5) {
+      // Show error toaster message and return to prevent the upload
+      this.toastrService.error('File size exceeds 5MB. Please select a smaller file.');
+      return;
+    }
+  
+    // Proceed with the upload if the file size is within the limit
     this.productService.uploadImage(this.fileToUpload).subscribe(
       (res) => {
         this.value[formcontrolname] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0;
@@ -344,24 +368,18 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         let oldObj = this.uploadAddonsImage.find(el => el.keyname == formcontrolname);
         if (exists == -1) {
           this.uploadAddonsImage.push(imgobj);
-          this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
-        }
-        else {
+          this.productAddonsPrice += parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0);
+        } else {
           oldObj.fileUrl = res['data'].fileUrl;
-          this.uploadAddonsImage.splice(exists, 1, oldObj)
+          this.uploadAddonsImage.splice(exists, 1, oldObj);
         }
-
-        //console.log('imgobj =======================>', imgobj);
-
       },
-      (err) => {
-        // //console.log('GLB Image Upload Error',err);
-      })
-    // }
-    //console.log('this.uploadAddonsImage', this.uploadAddonsImage);
-    //console.log('this.addonSelectedResult', this.addonSelectedResult);
-    //console.log('this.productAddonsPrice ', this.productAddonsPrice);
+      error => {
+        this.toastrService.error(error.error.message);
+      }
+    );
   }
+  
 
   onMultiInputChange(val: any, slug, addon) {
     this.others_color_code = val;
@@ -523,27 +541,42 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Add to Wishlist
   addToWishlist(product: any) {
+    product.addonsprice = this.productAddonsPrice;
+    let extraObj =
+    {
+      extra_document: this.uploadAddonsImage
+    }
+    if (this.uploadAddonsImage.length > 0) {
+      this.addonSelectedResult.push(extraObj);
+    }
+    product.addons = this.addonSelectedResult
+    // console.log('Product Ready To cart------------------', product);
     this.productService.addToWishlist(product);
     this.productWishliststatus = this.productService.wishlistProductCheck(product)
   }
 
- @HostListener('mousemove', ['$event'])
+  @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     const { offsetX, offsetY } = event;
     const container = event.currentTarget as HTMLElement;
     const image = container.querySelector('img') as HTMLElement;
     const scale = 2; // Zoom scale
+    if (image) {
+      const xPercent = (offsetX / container.offsetWidth) * 100;
+      const yPercent = (offsetY / container.offsetHeight) * 100;
 
-    const xPercent = (offsetX / container.offsetWidth) * 100;
-    const yPercent = (offsetY / container.offsetHeight) * 100;
+      image.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+      container.classList.add('zoomed');
+    }
 
-    image.style.transformOrigin = `${xPercent}% ${yPercent}%`;
-    container.classList.add('zoomed');
   }
 
   @HostListener('mouseleave')
   onMouseLeave() {
     const container = document.querySelector('.zoom-container') as HTMLElement;
-    container.classList.remove('zoomed');
+    if (container) {
+      container.classList.remove('zoomed');
+    }
+
   }
 }

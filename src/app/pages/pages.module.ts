@@ -12,7 +12,6 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { NgOtpInputModule } from  'ng-otp-input';
 
 // Pages Components
-import { WishlistComponent } from './account/wishlist/wishlist.component';
 import { DashboardComponent } from './account/dashboard/dashboard.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
@@ -47,10 +46,10 @@ import { Room3Dstore } from './room-3dstore/room-3dstore.component';
 import { RegisterVendorComponent } from './account/register-vendor/register-vendor.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
-    WishlistComponent,
     DashboardComponent,
     LoginComponent,
     RegisterComponent,
@@ -93,7 +92,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SharedModule,
     PagesRoutingModule,
     NgOtpInputModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule
   ],
   exports: [OrderSuccessComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

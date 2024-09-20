@@ -71,12 +71,16 @@ export class CartComponent implements OnInit {
 
   removeAddon(product: any, addonIndex: number): void {
     const addonToRemove = product.addons[addonIndex];
+    console.log('addonToRemove',addonToRemove);
     // Remove the addon from the product's addons array
     product.addons.splice(addonIndex, 1);
     // Subtract the addon price from the total addons price
-    if (product.addonsprice) {
+    if (product.addonsprice && !addonToRemove?.extra_document) {
       product.addonsprice -= addonToRemove.price;
     }
+
+
+
     this.product_service.updateCartQuantity(product, 0)
     // this.getTotal.subscribe();
   }

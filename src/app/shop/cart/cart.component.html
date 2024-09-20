@@ -37,9 +37,14 @@
                                 <p>Addons</p>
                                 <ul class="addon_cart">
                                     <li *ngFor="let addon of product.addons; let i = index">
-                                        {{(addon.input_type == 'range' || addon.input_type == 'range-input' ||
-                                        addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} - {{
-                                        addon.price | currency: product_service.Currency?.currency:'symbol' }}
+                                        {{addon.input_type}}
+                                        <span *ngIf="addon.input_type">{{(addon.input_type == 'range' ||
+                                            addon.input_type == 'range-input' ||
+                                            addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} -
+                                            {{
+                                            addon.price | currency: product_service.Currency?.currency:'symbol'
+                                            }}</span>
+                                        <span *ngIf="!addon.input_type">Prescription - 0</span>
                                         <a (click)="removeAddon(product, i)"><i class="fa fa-times"
                                                 aria-hidden="true"></i></a>
                                     </li>
@@ -105,15 +110,18 @@
                                     currency:product_service?.Currency.currency:'symbol' }}</span></li>
                             <!-- <li>Coupon <span class="count">-$77.60</span></li>
                       <li>Gift Card <span class="count">-$100.00</span></li>-->
-                            <li>Estimated Tax <span class="count">{{tax_percentage_value ? ((getTotal | async) * (tax_percentage_value / 100) | number:'1.2-2' |
-                                currency:product_service?.Currency.currency:'symbol'): 0}}</span></li>
-                            <li>Estimated Shipping <span class="count">{{shipping_charge_value ? (shipping_charge_value |
-                                currency:product_service?.Currency.currency:'symbol') : 'Free'}}</span></li>
+                            <li>Estimated Tax <span class="count">{{tax_percentage_value ? ((getTotal | async) *
+                                    (tax_percentage_value / 100) | number:'1.2-2' |
+                                    currency:product_service?.Currency.currency:'symbol'): 0}}</span></li>
+                            <li>Estimated Shipping <span class="count">{{shipping_charge_value ? (shipping_charge_value
+                                    |
+                                    currency:product_service?.Currency.currency:'symbol') : 'Free'}}</span></li>
                         </ul>
 
                         <ul class="total">
-                            <li>Estimated Total <span class="count"> {{ (getTotal | async) + ((getTotal | async) * (tax_percentage_value / 100)) + shipping_charge_value | 
-                                currency:product_service?.Currency.currency:'symbol' }}</span></li>
+                            <li>Estimated Total <span class="count"> {{ (getTotal | async) + ((getTotal | async) *
+                                    (tax_percentage_value / 100)) + shipping_charge_value |
+                                    currency:product_service?.Currency.currency:'symbol' }}</span></li>
                         </ul>
                     </div>
                     <div class="text-center">

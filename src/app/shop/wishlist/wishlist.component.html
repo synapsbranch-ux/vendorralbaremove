@@ -91,11 +91,11 @@
     </div>
     <div class="row wishlist-buttons" *ngIf="products.length">
       <div class="col-12">
-        <a [routerLink]="['/']" class="btn btn-solid rounded-lg"
+        <a [routerLink]="[backlink]" class="btn btn-solid rounded-lg"
           >continue shopping</a
         >
-        <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg"
-          >checkout</a
+        <a [routerLink]="['/cart']" class="btn btn-solid rounded-lg"
+          >Cart</a
         >
       </div>
     </div>

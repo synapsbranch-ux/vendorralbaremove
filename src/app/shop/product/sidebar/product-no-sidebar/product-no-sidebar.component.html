@@ -41,7 +41,7 @@
                                                 <div class="owl-thumb" [class.active]="i == activeSlide">
                                                     <img [defaultImage]="'assets/images/product/placeholder.jpg'"
                                                         [lazyLoad]="image.pro_image" [alt]="product.product_name"
-                                                        class="img-fluid" [src]="image.pro_image"
+                                                        class="img-fluid m-auto" [src]="image.pro_image"
                                                         (click)="owlCar.to(activeSlide = i.toString())">
                                                 </div>
                                             </ng-template>
@@ -84,7 +84,7 @@
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
                         <p class="mb-2">{{ product?.product_description}}</p>
-                        <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory>
+                        <!-- <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory> -->
                         <div class="product-attributes pb-4">
                             <div *ngIf="productAttributeArr">
                                 <div *ngFor="let attribute of productAttributeArr">
@@ -108,7 +108,7 @@
 
                             <div *ngIf="productAddons">
 
-                                <div class="form-check form-switch pb-2">
+                                <div class="form-check form-switch pb-2" *ngIf="productAddons.length > 0">
                                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
                                         [(ngModel)]="AddonService">
                                     <label class="form-check-label" for="flexSwitchCheckChecked">Lens Categories and
@@ -198,6 +198,7 @@
                                                             <p class="mt-1">Selected Price: <input type="text"
                                                                     [(ngModel)]="value[addon.addon_slug]"></p>
                                                         </div>
+                                                        <a   *ngIf="fileUrl" href="{{fileUrl}}" target="_blank">View File</a>
                                                     </div>
 
                                                     <div *ngSwitchCase="'textarea'" class="w-100 addons-price">
@@ -258,7 +259,7 @@
                                             <input type="text" name="quantity" class="form-control input-number"
                                                 [value]="counter" disabled />
                                             <span class="input-group-prepend">
-                                                <button type="button" class="btn quantity-right-plus" data-type="plus"
+                                                <button [disabled]="counter > product.stock" type="button" class="btn quantity-right-plus" data-type="plus"
                                                     (click)="increment()">
                                                     <i class="ti-plus"></i>
                                                 </button>

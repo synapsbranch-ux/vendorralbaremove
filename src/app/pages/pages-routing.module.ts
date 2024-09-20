@@ -6,8 +6,6 @@ import { ChangePasswordComponent } from './account/change-Password/change-Passwo
 import { AddressComponent } from './account/address/address.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { WishlistComponent } from './account/wishlist/wishlist.component';
 import { DashboardComponent } from './account/dashboard/dashboard.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
@@ -41,10 +39,6 @@ import { RegisterVendorComponent } from './account/register-vendor/register-vend
 
 
 const routes: Routes = [
-  { 
-    path: 'wishlist', 
-    component: WishlistComponent 
-  },
   { 
     path: 'dashboard', 
     component: DashboardComponent,canActivate: [AuthGuard], 
