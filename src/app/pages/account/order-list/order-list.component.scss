@@ -16,6 +16,28 @@ a {
     }
 }
 
+.bg-success.devivery {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 3px !important;
+    background-color: #1d7c00 !important;
+}
+
+.bg-warning.pending {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 3px !important;
+}
+
+.bg-primary.ongoing {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 3px !important;
+}
+
 .card {
     margin-bottom: 1rem;
 }
@@ -104,6 +126,6 @@ address {
     }
 }
 
-.delivery-card{
+.delivery-card {
     background-color: #f2f2f2;
 }

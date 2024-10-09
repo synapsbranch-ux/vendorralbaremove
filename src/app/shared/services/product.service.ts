@@ -320,13 +320,15 @@ export class ProductService {
 
   public addToCartforSingleVendor(product, prod_qty) {
     const cartItem = state.cart.find(item => item._id === product._id);
+    console.log('addToCartforSingleVendor state.cart-----------------------', state.cart)
     const qty = prod_qty
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
     //console.log('stock =========================', stock);
     if (!stock) return false
     //console.log('Cart Product', product);
-
+    console.log('product Before ----------------------', product);
+    console.log('product Before cartItem----------------------', cartItem, qty);
     if (cartItem) {
       cartItem.quantity += qty
     } else {
@@ -335,7 +337,8 @@ export class ProductService {
     if (product.stock >= qty) {
       product.stock -= qty;
     }
-
+    console.log('product After ----------------------', product);
+    console.log('prod_qty --------------------', prod_qty);
     //console.log('user Login')
     if (localStorage.getItem('u_token')) {
       if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
@@ -355,8 +358,8 @@ export class ProductService {
         else {
           product_price = product.product_sale_price
         }
-        //console.log('addToCart function check cartItem ', cartItem)
-        //console.log('addToCart function check Product Cart ', product)
+        console.log('addToCart function check cartItem ', cartItem)
+        console.log('addToCart function check Product Cart ', product)
         let cdata =
         {
           products: [{
@@ -403,11 +406,11 @@ export class ProductService {
                     "addons": element.addons,
                     "addonsprice": element.addonsprice
                   }
-                  //console.log('Before Push Cart Items List', cartproducts)
+                  console.log('Before Push Cart Items List', cartproducts)
                   cartproducts.push(data);
-                  //console.log('After Push Cart Items List', cartproducts)
+                  console.log('After Push Cart Items List', cartproducts)
                   localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-                  //console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
+                  console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
 
                 })
 
@@ -576,7 +579,9 @@ export class ProductService {
     if (localStorage.getItem('u_token')) {
       if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
         getCartList.splice(index, 1);
+
         localStorage.setItem("cartItems", JSON.stringify(getCartList));
+        state.cart = getCartList;
       }
       else {
         getCartList.splice(index, 1);
@@ -592,7 +597,7 @@ export class ProductService {
           res => {
             let bodydata = res['data'];
             console.log('bodydata Cart Return', bodydata);
-            if (bodydata.hasOwnProperty('products')) {
+            if (bodydata.hasOwnProperty('products') && res['data'].products.length > 0) {
               let cartproducts = [];
               let product_img
               for (const element of res['data'].products) {
@@ -622,8 +627,8 @@ export class ProductService {
                   console.log('Return LocalStorage Product Service', cartproducts);
                   localStorage.removeItem('cartItems');
                   localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-
-
+                  state.cart = cartproducts;
+                  console.log('state.cart Delete', state.cart);
                 })
 
               }
@@ -631,6 +636,8 @@ export class ProductService {
             else {
               let getCartList_ = []
               localStorage.setItem("cartItems", JSON.stringify(getCartList_));
+              state.cart = getCartList_;
+              console.log('state.cart Delete', state.cart);
             }
 
 
@@ -646,6 +653,7 @@ export class ProductService {
       //console.log('Remove Cart User Without Login :', state.cart);
       getCartList.splice(index, 1);
       localStorage.setItem("cartItems", JSON.stringify(getCartList));
+      state.cart = getCartList;
     }
     return true
   }

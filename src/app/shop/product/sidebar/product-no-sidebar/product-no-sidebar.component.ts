@@ -13,7 +13,6 @@ import { UserService } from 'src/app/shared/services/user.service';
 
 
 const state = {
-
   products: JSON.parse(localStorage['products'] || '[]'),
   wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
   compare: JSON.parse(localStorage['compareItems'] || '[]'),

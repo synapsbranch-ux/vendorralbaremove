@@ -8,7 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { PasswordStrengthValidator } from 'src/app/password-strength.validators';
 
 const state = {
-
   products: JSON.parse(localStorage.getItem('products') || '[]'),
   wishlist: JSON.parse(localStorage['wishlistItems'] || '[]'),
   compare: JSON.parse(localStorage['compareItems'] || '[]'),

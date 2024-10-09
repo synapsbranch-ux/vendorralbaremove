@@ -48,7 +48,6 @@ export class OrderDetailsComponent implements OnInit {
   addonsjson = [];
   shipping_charge_value = 0;
   tax_percentage_value = 0;
-
   constructor(private dialog: MatDialog, public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
 
   }

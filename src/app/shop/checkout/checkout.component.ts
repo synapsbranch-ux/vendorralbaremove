@@ -107,7 +107,7 @@ export class CheckoutComponent implements OnInit {
     }
 
     this.getTotal.subscribe(amount => this.amount = amount);
-    this.initConfig();
+
     this.checkoutForm = new FormGroup({
       'phone': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]),
@@ -124,7 +124,6 @@ export class CheckoutComponent implements OnInit {
     if (!this.isUserLogin) {
       this.getuserallAddressList();
     }
-
   }
 
   getShippingTax() {
@@ -156,6 +155,7 @@ export class CheckoutComponent implements OnInit {
     this.orderService.getAllAddress().subscribe(
       res => {
         this.useraddressslist = res['data'];
+        console.log('this.useraddressslist=====================', this.useraddressslist);
       }
     )
   }
@@ -177,132 +177,150 @@ export class CheckoutComponent implements OnInit {
     this.router.navigate(['/address'], { queryParams: { returnUrl: '/checkout' } });
   }
 
-  // Paypal Payment Gateway
-  private initConfig(): void {
-    let orderProductspaypal: Object[] = [];
+// PayPal Payment Gateway
+private initConfig(): void {
+  let orderProductspaypal: Object[] = [];
 
-    for (const elem of this.products) {
-      let odetailsobj =
-      {
-        name: elem.product_name,
-        quantity: elem.quantity,
-        unit_amount: {
-          currency_code: this.productService.Currency.currency,
-          value: (elem.product_sale_price + elem.addonsprice).toString(),
-        },
-      }
-      orderProductspaypal.push(odetailsobj);
-    }
-    let taxTotal = (this.amount * (Number(localStorage.getItem('tax')) / 100));
-    // console.log('this.tax_percentage_value ----------------',this.tax_percentage_value);
-    this.payPalConfig = {
-      currency: this.productService.Currency.currency,
-      clientId: environment.paypal_token,
-      createOrderOnClient: (data) => <ICreateOrderRequest>{
-        intent: 'CAPTURE',
-        purchase_units: [
-          {
-            amount: {
-              currency_code: this.productService.Currency.currency,
-              value: (this.amount + taxTotal + this.shipping_charge_value).toFixed(2),
-              breakdown: {
-                item_total: {
-                  currency_code: this.productService.Currency.currency,
-                  value: this.amount,
-                },
-                tax_total: {
-                  currency_code: this.productService.Currency.currency,
-                  value: taxTotal.toFixed(2),
-                },
-                shipping: {
-                  currency_code: this.productService.Currency.currency,
-                  value: this.shipping_charge_value.toFixed(2),
-                },
-              }
-            },
-            items: orderProductspaypal
-          }
-        ]
-      },
-      advanced: {
-        commit: 'true'
-      },
-      style: {
-        label: 'paypal',
-        layout: 'vertical'
-      },
-      onApprove: (data, actions) => {
-        actions.order.get().then(details => {
-
-          this.transactionId = details['id'];
-          this.paypalReturnData = [
-            {
-              transaction_id: details.id,
-              country_code: details.payer.address.country_code,
-              email_address: details.payer.email_address,
-              name: `${details.payer.name.given_name} ${details.payer.name.surname}`,
-              customer_id_paypal: details.payer.payer_id,
-              paypal_status: details.status,
-              paypal_data: details
-            }
-          ];
-          this.placeorder();
-        });
-      },
-      onClientAuthorization: (data) => {
-
-        this.paypalReturnData = [
-          {
-            transaction_id: '',
-            country_code: '',
-            email_address: '',
-            name: '',
-            customer_id_paypal: '',
-            paypal_status: '',
-            paypal_data: data
-          }
-        ];
-        this.placeorder();
-        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-
-      },
-      onCancel: (data, actions) => {
-        this.paypalReturnData = [
-          {
-            transaction_id: '',
-            country_code: '',
-            email_address: '',
-            name: '',
-            customer_id_paypal: '',
-            paypal_status: '',
-            paypal_data: data
-          }
-        ];
-        this.placeorder();
-        console.log('OnCancel', data, actions);
-      },
-      onError: err => {
-
-        this.paypalReturnData = [
-          {
-            transaction_id: '',
-            country_code: '',
-            email_address: '',
-            name: '',
-            customer_id_paypal: '',
-            paypal_status: '',
-            paypal_data: err
-          }
-        ];
-        this.placeorder();
-        console.log('OnError', err);
-      },
-      onClick: (data, actions) => {
-        console.log('onClick', data, actions);
+  for (const elem of this.products) {
+    let odetailsobj = {
+      name: elem.product_name,
+      quantity: elem.quantity,
+      unit_amount: {
+        currency_code: this.productService.Currency.currency,
+        value: (elem.product_sale_price + elem.addonsprice).toString(),
       },
     };
-
+    orderProductspaypal.push(odetailsobj);
   }
+
+  let billAddress = this.useraddressslist.filter((address) => address._id == this.checkoutForm?.value?.userBillingAddressId);
+  let taxTotal = (this.amount * (Number(localStorage.getItem('tax')) / 100));
+
+  this.payPalConfig = {
+    currency: this.productService.Currency.currency,
+    clientId: environment.paypal_token,
+    createOrderOnClient: (data) => <ICreateOrderRequest>{
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: {
+            currency_code: this.productService.Currency.currency,
+            value: (this.amount + taxTotal + this.shipping_charge_value).toFixed(2),
+            breakdown: {
+              item_total: {
+                currency_code: this.productService.Currency.currency,
+                value: this.amount,
+              },
+              tax_total: {
+                currency_code: this.productService.Currency.currency,
+                value: taxTotal.toFixed(2),
+              },
+              shipping: {
+                currency_code: this.productService.Currency.currency,
+                value: this.shipping_charge_value.toFixed(2),
+              },
+            }
+          },
+          items: orderProductspaypal,
+          shipping: {
+            address: {
+              address_line_1: billAddress[0].addressline1,
+              address_line_2: billAddress[0].addressline2,
+              admin_area_2: billAddress[0].city,
+              admin_area_1: billAddress[0].state,
+              postal_code: billAddress[0].postal_code,
+              country_code: 'US'
+            }
+          }
+        }
+      ]
+    },
+
+    advanced: {
+      commit: 'true'
+    },
+    style: {
+      label: 'paypal',
+      layout: 'vertical'
+    },
+    onApprove: (data, actions) => {
+      actions.order.get().then(details => {
+        // Successful transaction (COMPLETED)
+        // Status expected here: COMPLETED
+        this.transactionId = details['id'];
+        this.paypalReturnData = [
+          {
+            transaction_id: details.id,
+            country_code: details.payer.address.country_code,
+            email_address: details.payer.email_address,
+            name: `${details.payer.name.given_name} ${details.payer.name.surname}`,
+            customer_id_paypal: details.payer.payer_id,
+            paypal_status: details.status,
+            paypal_data: details
+          }
+        ];
+        this.placePaypalOrder(); // Handle completed status
+      });
+    },
+    onClientAuthorization: (data) => {
+      // Transaction successfully authorized (AUTHORIZED or APPROVED)
+      // Status expected here: COMPLETED or APPROVED (Authorization completed)
+      this.paypalReturnData = [
+        {
+          transaction_id: data.id || '',
+          country_code: data.payer?.address?.country_code || '',
+          email_address: data.payer?.email_address || '',
+          name: `${data.payer?.name?.given_name || ''} ${data.payer?.name?.surname || ''}`,
+          customer_id_paypal: data.payer?.payer_id || '',
+          paypal_status: data.status || 'COMPLETED',
+          paypal_data: data
+        }
+      ];
+      this.placePaypalOrder(); // Handle client authorization status
+      console.log('onClientAuthorization', data);
+    },
+    onCancel: (data, actions) => {
+      // Transaction canceled by user (CANCELED)
+      // Status expected here: CANCELED
+      this.paypalReturnData = [
+        {
+          transaction_id: data['id'] || '',
+          country_code: '',
+          email_address: '',
+          name: '',
+          customer_id_paypal: '',
+          paypal_status: 'CANCELLED',
+          paypal_data: data
+        }
+      ];
+      this.placePaypalOrder(); // Handle canceled status
+      console.log('OnCancel', data, actions);
+    },
+    onError: err => {
+      // Error during transaction (ERROR, FAILED, DENIED)
+      // Possible statuses here: ERROR, FAILED, DENIED
+      this.paypalReturnData = [
+        {
+          transaction_id: '',
+          country_code: '',
+          email_address: '',
+          name: '',
+          customer_id_paypal: '',
+          paypal_status: 'ERROR',
+          paypal_data: err
+        }
+      ];
+      this.placePaypalOrder(); // Handle error status
+      console.log('OnError', err);
+    },
+    onClick: (data, actions) => {
+      // Click event before transaction starts
+      // No specific status expected here, this is just to confirm user intent
+      console.log('onClick', data, actions);
+    },
+  };
+}
+
 
   getpaymentoption(event) {
 
@@ -311,14 +329,20 @@ export class CheckoutComponent implements OnInit {
     }
     let formData = this.checkoutForm.value;
     if (event.target.value == 'paypal' && this.useraddressslist.length > 0 && formData.userShippingAddressId != null && formData.userBillingAddressId != null) {
+      this.initConfig();
       this.paypalstatus = true;
     }
   }
 
   placeorder() {
+    let formData = this.checkoutForm.value;
     if (this.checkoutForm.invalid || this.isSubmitting) {
       return;
     }
+    if (formData.paymentOption != 'COD') {
+      this.toaster.warning('Please choose paypal once')
+    }
+
     if (this.products.length > 0) {
       this.isSubmitting = true;
       this.orderPrcessed = true;
@@ -326,7 +350,7 @@ export class CheckoutComponent implements OnInit {
       if (currentUser) {
         if (this.products.length > 0) {
           let orderTotal = 0;
-          let formData = this.checkoutForm.value;
+
           this.getTotal.subscribe(
             res => {
               orderTotal = res
@@ -391,7 +415,7 @@ export class CheckoutComponent implements OnInit {
                   email_address: formData.email,
                   name: this.userFuyllName,
                   customer_id_paypal: "",
-                  paypal_status: "",
+                  paypal_status: '',
                   shipping_address_id: formData.userShippingAddressId,
                   billing_address_id: formData.userBillingAddressId,
                   billing_email: formData.email,
@@ -420,9 +444,6 @@ export class CheckoutComponent implements OnInit {
                     this.isSubmitting = false;
                   });
               }
-              else {
-                this.paymentOrder();
-              }
             },
             error => {
               // .... HANDLE ERROR HERE 
@@ -439,10 +460,89 @@ export class CheckoutComponent implements OnInit {
 
   }
 
-  paymentOrder() {
-console.log('payment fun')
+  placePaypalOrder() {
+    if (this.checkoutForm.invalid || this.isSubmitting) {
+      return;
+    }
     if (this.products.length > 0) {
-      
+      this.isSubmitting = true;
+      this.orderPrcessed = true;
+      const currentUser = localStorage.getItem("user_");
+      if (currentUser) {
+        if (this.products.length > 0) {
+          let orderTotal = 0;
+          let formData = this.checkoutForm.value;
+          console.log('formData----------------', formData)
+          this.getTotal.subscribe(
+            res => {
+              orderTotal = res
+
+            }
+          )
+          let orderData =
+          {
+            total_order_amount: orderTotal,
+            order_status: 'initiated',
+            payment_method: formData.paymentOption,
+            country_code: "",
+            email_address: formData.email,
+            name: this.userFuyllName,
+            shipping_address_id: formData.userShippingAddressId,
+            billing_address_id: formData.userBillingAddressId,
+            billing_email: formData.email,
+            billing_phone: formData.phone,
+            cart_id: localStorage.getItem('cart_'),
+            vendor_id: localStorage.getItem('vendor_id')
+          }
+
+          for (const element of this.products) {
+
+            this.productService.getproductsBySlugs(element.product_slug)
+              .pipe(first())
+              .subscribe({
+                next: (v) => {
+                  let stock = (v.data.stock - element.quantity);
+
+                  if (stock < 0) {
+                    if (v.data.product_name) {
+                      this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+                      this.router.navigateByUrl(`product/${v.data.product_slug}`)
+                    }
+                  }
+                  else {
+                    return;
+                  }
+                },
+                error: (e) => {
+                },
+                complete: () => console.info('Complete')
+              }
+              );
+          }
+          this.orderService.userCreateOrder(orderData).subscribe(
+            res => {
+              this.userservice.setUserOrderid(res['data']._id);
+              if (formData.paymentOption != 'COD') {
+                this.paymentOrder();
+              }
+            },
+            error => {
+              // .... HANDLE ERROR HERE 
+              this.toaster.error(error.error.message);
+              this.orderPrcessed = false;
+              this.isSubmitting = false;
+            });
+        }
+      }
+      else {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
+      }
+    }
+  }
+
+  paymentOrder() {
+    if (this.products.length > 0) {
+
       let orderTotal = 0;
       let paymentStatus = "";
       let formData = this.checkoutForm.value;
@@ -455,7 +555,7 @@ console.log('payment fun')
       {
         order_id: this.userservice.getUserOrderid(),
         total_order_amount: orderTotal,
-        order_status: 'initiated',
+        order_status: (this.paypalReturnData[0].paypal_status === 'APPROVED' || this.paypalReturnData[0].paypal_status === 'COMPLETED') ? 'initiated' : 'pending',
         payment_status: paymentStatus,
         payment_method: formData.paymentOption,
         transaction_id: this.transactionId,
@@ -473,21 +573,22 @@ console.log('payment fun')
         vendor_id: localStorage.getItem('vendor_id')
       }
 
-      console.log('Payment obj',orderData);
-
       this.orderService.userCreateOrderPayment(orderData).subscribe(
         res => {
+          this.userservice.setUserOrderid(res['data']._id);
+          console.log('this.paypalReturnData[0].paypal_status',this.paypalReturnData[0].paypal_status);
+          if (this.paypalReturnData[0].paypal_status === 'APPROVED' || this.paypalReturnData[0].paypal_status === 'COMPLETED') {
+            for (const elem of this.products) {
+              this.productService.removeCartItem(elem);
+            }
+          }
           this.orderValid = true;
           this.orderPrcessed = false;
-          this.orderMassage = "Your Order Placed successfully";
-          for (const elem of this.products) {
-            this.productService.removeCartItem(elem);
-          }
-          this.userservice.setUserOrderid(res['data']._id);
+          this.orderMassage = (this.paypalReturnData[0].paypal_status === 'APPROVED' || this.paypalReturnData[0].paypal_status === 'COMPLETED') ? "Your Order Placed successfully" : "Your Order is Pending";
           setTimeout(() => {
             this.isSubmitting = false;
             this.router.navigateByUrl('/order/success');
-          }, 1000)
+          }, 2000)
         },
         error => {
           // .... HANDLE ERROR HERE 
