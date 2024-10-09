@@ -29,7 +29,7 @@ export class CheckoutComponent implements OnInit {
   public checkoutForm: FormGroup;
   public products: ProductNew[] = [];
   public payPalConfig?: IPayPalConfig;
-  public payment: string = 'Stripe';
+
   public amount: any;
   returnUrl: string;
   useraddressslist = [];
@@ -169,7 +169,7 @@ export class CheckoutComponent implements OnInit {
   checkaddress() {
     let address_arr = {
       email_address: (<HTMLInputElement>document.getElementById('email_address')).value,
-      phone_no: (<HTMLInputElement>document.getElementById('email_address')).value,
+      phone_no: (<HTMLInputElement>document.getElementById('phone_no')).value,
     }
 
     localStorage.setItem('checkoutform', JSON.stringify(address_arr))
