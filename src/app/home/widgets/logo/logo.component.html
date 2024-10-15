@@ -1,5 +1,6 @@
 <owl-carousel-o [options]="LogoSliderConfig" class="no-arrow">
   <ng-container *ngFor="let brand of brands">
+    {{brand.brand_slug}}
     <ng-template carouselSlide>
       <div>
         <div class="logo-block">

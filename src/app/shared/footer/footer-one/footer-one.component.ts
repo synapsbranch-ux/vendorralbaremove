@@ -44,15 +44,15 @@ export class FooterOneComponent implements OnInit {
       // get all home slider data from API
       this.storeService.vendorstoredetails(storeObj).subscribe(
         res => {
-          if (res.data[0].is_logo) {
-            if(res.data[0].logo)
+          if (res.data[0]?.is_logo) {
+            if(res.data[0]?.logo)
             {
               this.themeLogo = res.data[0].logo
               this.isvendorlogoimage = true;
             }
             else
             {
-              this.themeLogo = res.data[0].logo_name
+              this.themeLogo = res.data[0]?.logo_name
               this.isvendorlogoimage = false;
             }
             this.vendorhome = true;

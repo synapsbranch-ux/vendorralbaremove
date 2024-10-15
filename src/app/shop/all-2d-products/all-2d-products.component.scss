@@ -20,6 +20,10 @@
 .items .img-wrapper{
     margin-top: 35px;
 }
+.front.text-center img {
+    max-width: 340px;
+    width: 100%;
+}
 @media only screen and (max-width: 600px) {
     .items {
       height: 250px;

@@ -26,11 +26,11 @@ export class SingleStoreBannerComponent implements OnInit {
   gucciProducts: any[] = [];
   coachProducts: any[] = [];
   newArrivalProducts: any[] = [];
-
-
-
   // Logo
   public brands = [];
+  //// for 2D products
+
+  currentPage = 1;
 
   constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService, private productService: ProductService, private toastr: ToastrService) {
 
@@ -69,13 +69,13 @@ export class SingleStoreBannerComponent implements OnInit {
         this.toastr.error(error.error.message)
       });
 
-    
+
   }
 
   getAllBrands() {
     this.productService.getallBrands().subscribe(
       res => {
-        console.log('res=========', res['data'])
+        console.log('res brands=========', res['data'])
         this.brands = res['data'];
       },
       error => {
@@ -97,13 +97,14 @@ export class SingleStoreBannerComponent implements OnInit {
       },
       error => {
         // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message);
+        this.toastr.success(error.error.message);
+        this.router.navigateByUrl('/')
       }
     );
   }
 
   filterProducts() {
-    console.log('this.categories ---------------------',this.categories);
+    console.log('this.categories ---------------------', this.categories);
     const menCategoryId = this.categories.find(cat => cat.category_name === 'Men')?.category_id;
     const womenCategoryId = this.categories.find(cat => cat.category_name === 'Women')?.category_id;
     const unisexCategoryId = this.categories.find(cat => cat.category_name === 'Unisex')?.category_id;
@@ -158,6 +159,14 @@ export class SingleStoreBannerComponent implements OnInit {
       localStorage.setItem('cat_slug', keyname);
       this.router.navigate([`/2d-products/${this.store_slug}`]);
     }
+  }
+
+  /// for 2D products
+
+  onPageChange(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    localStorage.setItem('cur_page', pageNumber.toString())
+    console.log('pageNumber================', pageNumber);
   }
 
 }

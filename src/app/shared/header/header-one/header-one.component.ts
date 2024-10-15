@@ -15,8 +15,8 @@ export class HeaderOneComponent implements OnInit {
   @Input() topbar: boolean = true; // Default True
   @Input() sticky: boolean = false; // Default false
   public stick: boolean = false;
-  vendorhome:boolean=false;
-  isvendorlogoimage:boolean = false;
+  vendorhome: boolean = false;
+  isvendorlogoimage: boolean = false;
 
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
@@ -46,15 +46,16 @@ export class HeaderOneComponent implements OnInit {
       // get all home slider data from API
       this.storeService.vendorstoredetails(storeObj).subscribe(
         res => {
-          if (res.data[0].is_logo) {
-            if(res.data[0].logo)
-            {
+          console.log('every click run')
+          localStorage.setItem('store3diamge', (res.data[0]?.store_glb_file) ? res.data[0]?.store_glb_file : '')
+          console.log('every click run Local Value', localStorage.getItem('store3diamge'))
+          if (res.data[0]?.is_logo) {
+            if (res.data[0]?.logo) {
               this.themeLogo = res.data[0].logo
               this.isvendorlogoimage = true;
             }
-            else
-            {
-              this.themeLogo = res.data[0].logo_name
+            else {
+              this.themeLogo = res.data[0]?.logo_name
               this.isvendorlogoimage = false;
             }
             this.vendorhome = true;

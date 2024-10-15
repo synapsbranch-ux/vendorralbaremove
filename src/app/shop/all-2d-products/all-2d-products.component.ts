@@ -10,10 +10,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./all-2d-products.component.scss']
 })
 export class AllTwoDProductsComponent implements OnInit {
+  @Input() store_slug: string | undefined;
   @Input() currency: any = this.productService.Currency; // Default Currency 
   public ImageSrc: string
   public products: ProductNew[] = [];
-  store_slug: any;
   cat_slug: any = '';
   brandList = [];
   selectedBrand: any
@@ -51,10 +51,12 @@ export class AllTwoDProductsComponent implements OnInit {
       this.cat_slug = ''
     }
 
-    this.route.paramMap.subscribe(params => {
-      // Extract the 'slug' and 'page' values from the route parameters
-      this.store_slug = params.get('storeSlug');
-    });
+    if (!this.store_slug) {
+      this.route.paramMap.subscribe(params => {
+        // Extract the 'storeSlug' value from the route parameters
+        this.store_slug = params.get('storeSlug');
+      });
+    }
 
     let prodObj = {
       "product_category": this.cat_slug,

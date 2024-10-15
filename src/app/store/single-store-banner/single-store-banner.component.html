@@ -4,7 +4,7 @@
 <section class="p-0">
     <app-slider [sliders]="sliders" [textClass]="'text-center'" [category]="'fashion'" [buttonText]="'shop now'">
     </app-slider>
-    <div class="container">
+    <div class="container" *ngIf="allProducts.length > 0">
         <div class="main-container pt-4 mt-4">
             <h3 class="pb-3 text-dark">New Arrival Eyeglasses</h3>
             <div class="product-list">
@@ -19,7 +19,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -71,7 +72,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -123,7 +125,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -175,7 +178,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -227,7 +231,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -279,7 +284,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -331,7 +337,8 @@
                                             [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
                                             class="img-prod lazy-loading" alt="{{ product.product_name }}" />
                                     </a>
-                                    <img *ngIf="product.product_image[0].pro_image" class="single_self" src="assets/images/single_prod_self.png" alt="">
+                                    <img *ngIf="product.product_image[0].pro_image" class="single_self"
+                                        src="assets/images/single_prod_self.png" alt="">
                                 </div>
                             </div>
                             <div class="product-detail">
@@ -395,6 +402,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="twod-products">
+        <app-all-2d-products [store_slug]="store_slug" *ngIf="allProducts.length == 0"></app-all-2d-products>
+
     </div>
 </section>
 <!-- Home slider End -->

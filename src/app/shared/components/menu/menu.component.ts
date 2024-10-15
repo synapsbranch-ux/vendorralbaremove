@@ -15,6 +15,7 @@ export class MenuComponent implements OnInit {
   public menuItems: Menu[];
   store_slug: any;
   vrLink:any;
+  storeGlb:boolean=false;
   constructor(private router: Router, public navServices: NavService, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService) {
     /* this.navServices.items.subscribe(menuItems => this.menuItems = menuItems );
      this.router.events.subscribe((event) => {
@@ -23,6 +24,10 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('store3diamge'))
+    {
+      this.storeGlb=true;
+    }
     let menuarr = [];
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];

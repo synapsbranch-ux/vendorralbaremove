@@ -39,6 +39,10 @@ import { StoreproductsComponent } from './store-2d-products/store-2d-products.co
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';
+import { SingleStoreComponent } from '../store/single-store/single-store.component';
+import { SingleStoreBannerComponent } from '../store/single-store-banner/single-store-banner.component';
+import { LogoComponent } from '../home/widgets/logo/logo.component';
+import { SliderComponent } from '../home/widgets/slider/slider.component';
 @NgModule({
   declarations: [
     ProductNoSidebarComponent,
@@ -64,7 +68,11 @@ import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.comp
     VideoModeComponent,
     ImageModeComponent,
     StoreproductsComponent,
-    AllTwoDProductsComponent
+    AllTwoDProductsComponent,
+    SingleStoreComponent,
+    SliderComponent,
+    LogoComponent,
+    SingleStoreBannerComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
