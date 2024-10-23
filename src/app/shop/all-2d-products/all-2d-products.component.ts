@@ -15,6 +15,7 @@ export class AllTwoDProductsComponent implements OnInit {
   public ImageSrc: string
   public products: ProductNew[] = [];
   cat_slug: any = '';
+  cat_id: any
   brandList = [];
   selectedBrand: any
   selectedBrandName: any
@@ -24,7 +25,9 @@ export class AllTwoDProductsComponent implements OnInit {
   // p: any
   currentPage: number = 1; // Initialize with default page number
   numItemsPerSection = 3;
+  limit: number = 9;
   groupedItems = [];
+  totalProducts: any;
   constructor(private router: Router,
     public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService) {
     this.productService.compareItems.subscribe(response => this.products = response);
@@ -57,23 +60,6 @@ export class AllTwoDProductsComponent implements OnInit {
         this.store_slug = params.get('storeSlug');
       });
     }
-
-    let prodObj = {
-      "product_category": this.cat_slug,
-      "store_slug": this.store_slug,
-      "brand": this.selectedBrand
-    }
-    this.productService.get2DProductList(prodObj).subscribe(
-      res => {
-        this.productList = res['data']
-        this.groupItemsIntoSections(this.productList);
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
-
-
     this.productService.getallBrands().subscribe(
       res => {
         console.log('res=========', res['data'])
@@ -89,6 +75,37 @@ export class AllTwoDProductsComponent implements OnInit {
       res => {
         console.log('res=========', res['data'])
         this.categoryList = res['data'];
+
+        if (this.cat_slug !== '' && this.cat_slug !== 'all') {
+          let filter_cat = this.categoryList[0].filter((cat) => cat.category_slug === this.cat_slug);
+          console.log('filter_cat', filter_cat);
+      
+          // Check if filter_cat has any elements before accessing the first one
+          if (filter_cat.length > 0) {
+              console.log('filter_cat id', filter_cat[0].category_id);
+              this.cat_id = filter_cat[0].category_id;
+          } else {
+              console.log('No matching category found');
+          }
+      }
+
+        let prodObj = {
+          "product_category": this.cat_id,
+          "store_slug": this.store_slug,
+          "brand": this.selectedBrand,
+          "page": this.currentPage,
+          "limit": this.limit
+        }
+        this.productService.get2DProductList(prodObj).subscribe(
+          res => {
+            this.productList = res['data'].products
+            this.totalProducts = res['data'].totalCount
+            this.groupItemsIntoSections(this.productList);
+          },
+          error => {
+            // .... HANDLE ERROR HERE 
+            this.toastr.error(error.error.message)
+          });
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -110,11 +127,14 @@ export class AllTwoDProductsComponent implements OnInit {
     let prodObj = {
       "product_category": '',
       "store_slug": this.store_slug,
-      "brand": ''
+      "brand": '',
+      "page": this.currentPage,
+      "limit": this.limit
     }
     this.productService.get2DProductList(prodObj).subscribe(
       res => {
-        this.productList = res['data']
+        this.productList = res['data'].products
+        this.totalProducts = res['data'].totalCount
         this.groupItemsIntoSections(this.productList);
       },
       error => {
@@ -129,14 +149,18 @@ export class AllTwoDProductsComponent implements OnInit {
     localStorage.setItem('cur_cat', Category.category_slug)
     console.log('Category============', Category);
     this.cat_slug = Category.category_slug;
+    this.cat_id = Category.category_id;
     let prodObj = {
-      "product_category": this.cat_slug,
+      "product_category": this.cat_id,
       "store_slug": this.store_slug,
-      "brand": this.selectedBrand
+      "brand": this.selectedBrand,
+      "page": this.currentPage,
+      "limit": this.limit
     }
     this.productService.get2DProductList(prodObj).subscribe(
       res => {
-        this.productList = res['data']
+        this.productList = res['data'].products
+        this.totalProducts = res['data'].totalCount
         this.groupItemsIntoSections(this.productList);
       },
       error => {
@@ -153,13 +177,16 @@ export class AllTwoDProductsComponent implements OnInit {
     console.log('this.selectedBrandName----', this.selectedBrandName);
     localStorage.setItem('brand', this.selectedBrand);
     let prodObj = {
-      "product_category": this.cat_slug,
+      "product_category": this.cat_id,
       "store_slug": this.store_slug,
-      "brand": this.selectedBrand
+      "brand": this.selectedBrand,
+      "page": this.currentPage,
+      "limit": this.limit
     }
     this.productService.get2DProductList(prodObj).subscribe(
       res => {
-        this.productList = res['data']
+        this.productList = res['data'].products
+        this.totalProducts = res['data'].totalCount
         this.groupItemsIntoSections(this.productList);
       },
       error => {
@@ -171,9 +198,12 @@ export class AllTwoDProductsComponent implements OnInit {
 
   groupItemsIntoSections(items) {
     this.groupedItems=[];
-    for (let i = 0; i < items.length; i += this.numItemsPerSection) {
-      const section = items.slice(i, i + this.numItemsPerSection);
-      this.groupedItems.push(section);
+    if(items)
+    {
+      for (let i = 0; i < items.length; i += this.numItemsPerSection) {
+        const section = items.slice(i, i + this.numItemsPerSection);
+        this.groupedItems.push(section);
+      }
     }
   }
 

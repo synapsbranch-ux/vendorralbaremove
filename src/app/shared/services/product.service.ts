@@ -880,6 +880,16 @@ export class ProductService {
     return this.http.post(environment.baseUrl + 'productsearch', data);
   }
 
+// for dashboard brands
+
+getHomeBrands() {
+  return this.http.get(environment.baseUrl + 'home-page-brand/list');
+}
+
+getHomeFilteredProduct(data) {
+  return this.http.post(environment.baseUrl + 'home-filter-store-product', data);
+}
+
 }
 
 

@@ -31,5 +31,6 @@ export class LogoComponent implements OnInit {
     this.router.navigate([`/store-2d-products/${this.store_slug}/all`]);
 
   }
+  
 
 }

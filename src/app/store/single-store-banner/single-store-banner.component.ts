@@ -26,6 +26,7 @@ export class SingleStoreBannerComponent implements OnInit {
   gucciProducts: any[] = [];
   coachProducts: any[] = [];
   newArrivalProducts: any[] = [];
+  is2Dshow:boolean = false;
   // Logo
   public brands = [];
   //// for 2D products
@@ -51,7 +52,6 @@ export class SingleStoreBannerComponent implements OnInit {
     this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
       res => {
         this.sliders = res.data;
-        console.log('Banner res', res);
       },
       error => {
         this.toaster.error(error.error.message);
@@ -60,7 +60,6 @@ export class SingleStoreBannerComponent implements OnInit {
     );
     this.productService.getallCategoryWithSubcat().subscribe(
       res => {
-        console.log('res getallCategoryWithSubcat this.categories=========', res['data'])
         this.categories = res['data'][0];
         this.fetchAllProducts();
       },
@@ -73,9 +72,8 @@ export class SingleStoreBannerComponent implements OnInit {
   }
 
   getAllBrands() {
-    this.productService.getallBrands().subscribe(
+    this.productService.getHomeBrands().subscribe(
       res => {
-        console.log('res brands=========', res['data'])
         this.brands = res['data'];
       },
       error => {
@@ -90,7 +88,7 @@ export class SingleStoreBannerComponent implements OnInit {
       "store_slug": this.store_slug
     };
 
-    this.productService.getallFilteredProduct(prodObj).subscribe(
+    this.productService.getHomeFilteredProduct(prodObj).subscribe(
       res => {
         this.allProducts = res['data'];
         this.filterProducts();
@@ -104,37 +102,42 @@ export class SingleStoreBannerComponent implements OnInit {
   }
 
   filterProducts() {
-    console.log('this.categories ---------------------', this.categories);
     const menCategoryId = this.categories.find(cat => cat.category_name === 'Men')?.category_id;
     const womenCategoryId = this.categories.find(cat => cat.category_name === 'Women')?.category_id;
     const unisexCategoryId = this.categories.find(cat => cat.category_name === 'Unisex')?.category_id;
+    if (this.allProducts.length > 0) {
+      this.menProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_sub_categories.some(subCat => subCat.child_category_id === menCategoryId)
+      ), 4);
 
-    this.menProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_sub_categories.some(subCat => subCat.child_category_id === menCategoryId)
-    ), 4);
+      this.womenProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_sub_categories.some(subCat => subCat.child_category_id === womenCategoryId)
+      ), 4);
 
-    this.womenProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_sub_categories.some(subCat => subCat.child_category_id === womenCategoryId)
-    ), 4);
+      this.unisexProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_sub_categories.some(subCat => subCat.child_category_id === unisexCategoryId)
+      ), 4);
 
-    this.unisexProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_sub_categories.some(subCat => subCat.child_category_id === unisexCategoryId)
-    ), 4);
+      this.pradaProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_brand && product.product_brand.brand_name.toUpperCase() === 'PRADA'
+      ), 4);
 
-    this.pradaProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'PRADA'
-    ), 4);
+      this.gucciProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_brand && product.product_brand.brand_name.toUpperCase() === 'GUCCI'
+      ), 4);
 
-    this.gucciProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'GUCCI'
-    ), 4);
+      this.coachProducts = this.getRandomItems(this.allProducts.filter(product =>
+        product.product_brand && product.product_brand.brand_name.toUpperCase() === 'COACH'
+      ), 4);
 
-    this.coachProducts = this.getRandomItems(this.allProducts.filter(product =>
-      product.product_brand && product.product_brand.brand_name.toUpperCase() === 'COACH'
-    ), 4);
+      // Get 4 random items from new arrivals
+      this.newArrivalProducts = this.getRandomItems(this.allProducts, 4);
+    }
+    else
+    {
+      this.is2Dshow  =true;
+    }
 
-    // Get 4 random items from new arrivals
-    this.newArrivalProducts = this.getRandomItems(this.allProducts, 4);
   }
 
   getRandomItems(array: any[], count: number): any[] {

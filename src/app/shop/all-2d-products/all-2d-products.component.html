@@ -66,7 +66,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="rack_inn">
-                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 3, currentPage: currentPage }"
+                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 9, currentPage: currentPage, totalItems: totalProducts }"
                         class="sunglass_main">
                         <div class="row">
                             <div *ngFor="let product of section" class="col-6 col-sm-6 col-md-4">

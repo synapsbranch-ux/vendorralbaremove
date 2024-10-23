@@ -67,7 +67,7 @@
             <div class="col-md-12">
                 <div class="rack_inn">
                     <img src="assets/images/self.png" alt="" />
-                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 3, currentPage: currentPage }" class="sunglass_main">
+                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 9, currentPage: currentPage, totalItems: totalProducts}" class="sunglass_main">
                         <div class="row">
                             <div *ngFor="let item of section" class="col-sm-4 col-4">
                                 <div class="sunbox">
