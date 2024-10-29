@@ -11,12 +11,18 @@ import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
 import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
 import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';
+import { AllContactProductsComponent } from './all-contact-products/all-contact-products.component';
+import { ProductContactComponent } from './product/sidebar/product-contact/product-contact.component';
 
 const routes: Routes = [
 
   {
     path: 'product/:slug',
     component: ProductNoSidebarComponent,
+  },
+  {
+    path: 'contact-product/:slug',
+    component: ProductContactComponent,
   },
   {
     path: 'tryon',
@@ -29,6 +35,10 @@ const routes: Routes = [
   {
     path: '2d-products/:storeSlug',
     component: AllTwoDProductsComponent
+  },
+  {
+    path: 'contact-products/:storeSlug',
+    component: AllContactProductsComponent
   },
   {
     path: 'store-2d-products/:storeSlug/:catSlug',

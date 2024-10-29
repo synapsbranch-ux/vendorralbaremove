@@ -37,7 +37,7 @@ export class JwtInterceptor implements HttpInterceptor {
       return event;
     }),
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 400 || error.status === 410 || error.status === 412) {
+      if (error.status === 400 || error.status === 410 || error.status === 412 || error.status === 404) {
         return throwError(error);
       } else
       {

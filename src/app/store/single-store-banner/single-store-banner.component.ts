@@ -26,7 +26,7 @@ export class SingleStoreBannerComponent implements OnInit {
   gucciProducts: any[] = [];
   coachProducts: any[] = [];
   newArrivalProducts: any[] = [];
-  is2Dshow:boolean = false;
+  is2Dshow: boolean = false;
   // Logo
   public brands = [];
   //// for 2D products
@@ -38,7 +38,10 @@ export class SingleStoreBannerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllBrands();
+    // this.getAllBrands();
+    if (localStorage.getItem('top_brands')) {
+      this.brands = JSON.parse(localStorage.getItem('top_brands'));
+    }
 
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
@@ -71,16 +74,16 @@ export class SingleStoreBannerComponent implements OnInit {
 
   }
 
-  getAllBrands() {
-    this.productService.getHomeBrands().subscribe(
-      res => {
-        this.brands = res['data'];
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
-  }
+  // getAllBrands() {
+  //   this.productService.getHomeBrands().subscribe(
+  //     res => {
+  //       this.brands = res['data'];
+  //     },
+  //     error => {
+  //       // .... HANDLE ERROR HERE 
+  //       this.toastr.error(error.error.message)
+  //     });
+  // }
 
 
   fetchAllProducts() {
@@ -133,9 +136,8 @@ export class SingleStoreBannerComponent implements OnInit {
       // Get 4 random items from new arrivals
       this.newArrivalProducts = this.getRandomItems(this.allProducts, 4);
     }
-    else
-    {
-      this.is2Dshow  =true;
+    else {
+      this.is2Dshow = true;
     }
 
   }

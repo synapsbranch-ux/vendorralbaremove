@@ -30,8 +30,11 @@ export interface ProductNew {
     product_retail_price?: number;
     product_sale_price?: number;
     addonsprice?: number;
+    pack?: string;
     status?: string;
     stock?: number;
+    left_eye_qty?:number;
+    right_eye_qty?:number;
     createdAt?: Date;
     updatedAt?: Date;
     quantity?: number;
@@ -50,6 +53,8 @@ export interface ProductNew2 {
     product_3d_image?: New3dImages[];
     product_retail_price?: number;
     product_sale_price?: number;
+    left_eye_qty?:number;
+    right_eye_qty?:number;
     status?: string;
     stock?: number;
     createdAt?: Date;

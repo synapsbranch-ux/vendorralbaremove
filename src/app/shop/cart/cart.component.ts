@@ -6,6 +6,7 @@ import { ProductSlider } from '../../shared/data/slider';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { NavigationStart, Router } from '@angular/router';
+import { emit } from 'process';
 
 const state = {
 
@@ -35,6 +36,8 @@ export class CartComponent implements OnInit {
   productWishliststatus: boolean = false;
   shipping_charge_value = 0;
   tax_percentage_value = 0;
+  totalstock: number = 0;
+
   constructor(public product_service: ProductService, private toaster: ToastrService, private router: Router, private cdr: ChangeDetectorRef) {
 
   }
@@ -71,7 +74,7 @@ export class CartComponent implements OnInit {
 
   removeAddon(product: any, addonIndex: number): void {
     const addonToRemove = product.addons[addonIndex];
-    console.log('addonToRemove',addonToRemove);
+    console.log('addonToRemove', addonToRemove);
     // Remove the addon from the product's addons array
     product.addons.splice(addonIndex, 1);
     // Subtract the addon price from the total addons price
@@ -119,10 +122,13 @@ export class CartComponent implements OnInit {
                       "product_name": element.pro_name,
                       "product_slug": element.pro_slug,
                       "quantity": element.qty,
+                      "left_eye_qty": element.left_eye_qty,
+                      "right_eye_qty": element.right_eye_qty,
                       "stock": (product['data'].stock - element.qty),
                       "product_sale_price": element.price,
                       "addons": element.addons,
-                      "addonsprice": element.addonsprice
+                      "addonsprice": element.addonsprice,
+                      "pack": product['data'].attributes[0].value,
                     }
                     this.cartproducts.push(data);
                     this.products = this.cartproducts;
@@ -207,6 +213,138 @@ export class CartComponent implements OnInit {
 
 
   }
+
+  // ------------------------------ Left Eye
+  // Increament
+  increment1(product, qty = 1) {
+    this.desabledecrement = false;
+    this.delay = true;
+    setTimeout(() => {
+      this.delay = false
+    }, 1000);
+    console.log('product.quantity===============', product.quantity);
+    if (product.stock > 0) {
+      product.stock = (product.stock - 1)
+      product.quantity = product.quantity + 1
+      product.left_eye_qty = product.left_eye_qty + 1
+
+      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+
+      let incremtstatus = this.product_service.updateCartQuantity(product, 0);
+      console.log('incremtstatus------------------', incremtstatus);
+      // this.getTotal.subscribe();
+      this.desableincrement = false;
+    }
+    else {
+      this.toaster.error('Your product out of stock');
+      this.desableincrement = true;
+    }
+
+    if (product.quantity >= 1) {
+      this.desableincrement = false;
+    }
+    else {
+      this.desableincrement = true;
+    }
+    console.log('product.quantity===============', product.quantity);
+  }
+
+  // Decrement
+  decrement1(product, qty = -1) {
+    console.log('product.stock', product.stock);
+
+    this.desableincrement = false;
+    this.delay = true;
+    setTimeout(() => {
+      this.delay = false
+    }, 1000);
+
+
+    if (product.quantity == 1) {
+      this.desabledecrement = true;
+    }
+    else {
+      product.stock = (product.stock + 1);
+      product.quantity = product.quantity - 1
+      product.left_eye_qty = product.left_eye_qty - 1
+
+      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+
+      this.desabledecrement = false;
+      this.product_service.updateCartQuantity(product, 0);
+      // this.getTotal.subscribe();
+    }
+
+
+  }
+
+  // ------------------------------ Right Eye
+  // Increament
+  increment2(product, qty = 1) {
+    console.log('product.stock', product.stock);
+
+    this.desabledecrement = false;
+    this.delay = true;
+    setTimeout(() => {
+      this.delay = false
+    }, 1000);
+    console.log('product.quantity===============', product.quantity);
+    if (product.stock > 0) {
+      product.stock = (product.stock - 1)
+      product.quantity = product.quantity + 1
+      product.right_eye_qty = product.right_eye_qty + 1
+
+      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+
+
+      let incremtstatus = this.product_service.updateCartQuantity(product, 0);
+      console.log('incremtstatus------------------', incremtstatus);
+      // this.getTotal.subscribe();
+      this.desableincrement = false;
+    }
+    else {
+      this.toaster.error('Your product out of stock');
+      this.desableincrement = true;
+    }
+
+    if (product.quantity >= 1) {
+      this.desableincrement = false;
+    }
+    else {
+      this.desableincrement = true;
+    }
+    console.log('product.quantity===============', product.quantity);
+  }
+
+  // Decrement
+  decrement2(product, qty = -1) {
+    console.log('product.stock', product.stock);
+
+    this.desableincrement = false;
+    this.delay = true;
+    setTimeout(() => {
+      this.delay = false
+    }, 1000);
+
+
+    if (product.quantity == 1) {
+      this.desabledecrement = true;
+    }
+    else {
+      product.stock = (product.stock + 1);
+      product.quantity = product.quantity - 1
+      product.right_eye_qty = product.right_eye_qty - 1
+
+      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+
+      this.desabledecrement = false;
+      this.product_service.updateCartQuantity(product, 0);
+      // this.getTotal.subscribe();
+    }
+
+
+  }
+
   public checkwishlist(product) {
     return this.product_service.wishlistProductCheck(product)
   }

@@ -14,8 +14,8 @@ export class MenuComponent implements OnInit {
 
   public menuItems: Menu[];
   store_slug: any;
-  vrLink:any;
-  storeGlb:boolean=false;
+  vrLink: any;
+  storeGlb: boolean = false;
   constructor(private router: Router, public navServices: NavService, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService) {
     /* this.navServices.items.subscribe(menuItems => this.menuItems = menuItems );
      this.router.events.subscribe((event) => {
@@ -24,54 +24,59 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('store3diamge'))
-    {
-      this.storeGlb=true;
+    if (localStorage.getItem('store3diamge')) {
+      this.storeGlb = true;
     }
     let menuarr = [];
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
     });
-    
+
     if (this.store_slug) {
       localStorage.setItem('storeslug', this.store_slug);
     }
-    else
-    {
+    else {
       this.store_slug = localStorage.getItem('storeslug')
     }
-    
+
     if (this.store_slug) {
       if (!localStorage.getItem('storeslug')) {
         localStorage.setItem('storeslug', this.store_slug);
       }
-    
+
       let storeObj = {
         store_slug: this.store_slug
       };
-    
+
       // get all home slider data from API
       this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
         res => {
-          if (res.data[0]?.banner_main_category && res.data[0].banner_sub_categories.length > 0) {
+          if (res.data[0].banner_top_brands.length > 0) {
+            localStorage.setItem('top_brands',JSON.stringify(res.data[0].banner_top_brands))
+          }
+
+          if (res.data[0].banner_sub_categories.length > 0) {
             menuarr = res.data[0].banner_sub_categories;
-            console.log('menuarr - --------------------',menuarr);
+            console.log('menuarr - --------------------', menuarr);
+
             this.menuItems = menuarr.map(items => {
               let menuChild;
-              // if(items.child_categories.length > 0){
-              //   menuChild = items.child_categories.map(childItems => {
-              //      return { path: 'category/'+childItems.category_slug, title: childItems.category_name, type: 'link' }
-              //   });
-              // }
+
+              // Check if the slug is 'contact' to modify the path
+              let menuPath = items.category_slug === 'contact'
+                ? `/contact-products/${this.store_slug}`
+                : `/store-2d-products/${this.store_slug}/${items.category_slug}`;
+
               return {
                 title: items.category_name,
-                path: `/store-2d-products/${this.store_slug}/${items.category_slug}`,
+                path: menuPath,
                 type: 'link',
                 active: false,
                 children: menuChild
               };
             });
           }
+
         },
         error => {
           this.toaster.error(error.error.message);
@@ -81,15 +86,15 @@ export class MenuComponent implements OnInit {
     } else {
       if (localStorage.getItem('storeslug')) {
         this.store_slug = localStorage.getItem('storeslug');
-    
+
         let storeObj = {
           store_slug: this.store_slug
         };
-    
+
         // get all home slider data from API
         this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
           res => {
-            if (res.data[0]?.banner_main_category && res.data[0].banner_sub_categories.length > 0) {
+            if (res.data[0].banner_sub_categories.length > 0) {
               menuarr = res.data[0].banner_sub_categories;
               this.menuItems = menuarr.map(items => {
                 let menuChild;
@@ -115,7 +120,7 @@ export class MenuComponent implements OnInit {
         );
       }
     }
-    
+
     this.vrLink = `${environment.storeUrl}/${this.store_slug}/1`
   }
 

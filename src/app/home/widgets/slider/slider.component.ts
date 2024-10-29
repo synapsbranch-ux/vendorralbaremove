@@ -54,6 +54,8 @@ export class SliderComponent implements OnInit {
     let catdata =
     {
       'store_slug': this.store_slug,
+      "page": 1,
+      "limit": 10
     }
     this.productService.get2DProductList(catdata).subscribe(
       res => {
@@ -70,8 +72,11 @@ export class SliderComponent implements OnInit {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
    });
-
-   this.productService.getStoreDetails(catdata).subscribe(
+   let storedata =
+   {
+     'store_slug': this.store_slug,
+   }
+   this.productService.getStoreDetails(storedata).subscribe(
     res => {
       if(res['data'].length > 0)
         {
@@ -87,7 +92,6 @@ export class SliderComponent implements OnInit {
   public HomeSliderConfig: any = HomeSlider;
 
   vandorbannerClick(catDetails: any) {
-    console.log('catDetails ------------------',catDetails);
     this.router.navigateByUrl(`/store-2d-products/${this.store_slug}/${catDetails.category_slug}`)
   }
 

@@ -55,6 +55,8 @@ export class CollectionComponent implements OnInit {
     let catdata =
     {
       'store_slug': this.store_slug,
+      "page": 1,
+      "limit": 100
     }
     this.productService.get2DProductList(catdata).subscribe(
       res => {

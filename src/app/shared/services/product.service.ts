@@ -83,15 +83,7 @@ export class ProductService {
       }
 
     }
-
-
-
-
-    // ////console.log('Product Category Name arr === ',this.catarr);
-
     this.Products = this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', this.catarr).pipe(map((data: any) => {
-      // ////console.log('Product Data === ',data.data);
-
       return data.data;
     }));
 
@@ -134,8 +126,8 @@ export class ProductService {
 
   //// Get all Brands List
 
-  getallBrands() {
-    return this.http.get(environment.baseUrl + 'brand/list');
+  getallBrands(store_slug: any) {
+    return this.http.get(environment.baseUrl + `brand/list?store_slug=${store_slug}`);
   }
 
   //// Get all catyegoryList
@@ -154,7 +146,9 @@ export class ProductService {
   getProductsBycat(catdata: any): Observable<any> {
     return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', catdata);
   }
-
+  getContactFilterdProductList(storeSlug: any): Observable<any> {
+    return this.http.post(environment.baseUrl + 'filter-contact-product', storeSlug);
+  }
   get2DProductList(storeSlug: any): Observable<any> {
     return this.http.post(environment.baseUrl + 'stores/all-product-2d-list-by-vendor-for-user', storeSlug);
   }
@@ -360,19 +354,44 @@ export class ProductService {
         }
         console.log('addToCart function check cartItem ', cartItem)
         console.log('addToCart function check Product Cart ', product)
-        let cdata =
+        let cdata
+        if(product.hasOwnProperty('left_eye_qty')&& product.hasOwnProperty('right_eye_qty'))
         {
-          products: [{
-            "pro_id": product._id,
-            "pro_name": product.product_name,
-            "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
-            "pro_slug": product.product_slug,
-            "qty": product.quantity ? product.quantity : cartItem.quantity,
-            "price": product_price,
-            "addons": product.addons,
-            "addonsprice": product.addonsprice
-          }]
+          cdata =
+          {
+            products: [{
+              "pro_id": product._id,
+              "pro_name": product.product_name,
+              "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+              "pro_slug": product.product_slug,
+              "qty": product.quantity ? product.quantity : cartItem.quantity,
+              "left_eye_qty": product.left_eye_qty ? product.left_eye_qty : cartItem.left_eye_qty,
+              "right_eye_qty": product.right_eye_qty ? product.right_eye_qty : cartItem.right_eye_qty,
+              "price": product_price,
+              "addons": product.addons,
+              "addonsprice": product.addonsprice
+            }]
+          }
         }
+        else
+        {
+          cdata =
+          {
+            products: [{
+              "pro_id": product._id,
+              "pro_name": product.product_name,
+              "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
+              "pro_slug": product.product_slug,
+              "qty": product.quantity ? product.quantity : cartItem.quantity,
+              "left_eye_qty": 0,
+              "right_eye_qty": 0,
+              "price": product_price,
+              "addons": product.addons,
+              "addonsprice": product.addonsprice
+            }]
+          }
+        }
+
         //console.log('full Product Cart Data for Submit', cdata);
 
         this.addToCartDbBulk(cdata).subscribe(
@@ -401,6 +420,8 @@ export class ProductService {
                     "product_name": element.pro_name,
                     "product_slug": element.pro_slug,
                     "quantity": element.qty,
+                    "left_eye_qty": element.left_eye_qty,
+                    "right_eye_qty": element.right_eye_qty,
                     "stock": (product['data'].stock - element.qty),
                     "product_sale_price": element.price,
                     "addons": element.addons,
@@ -488,6 +509,8 @@ export class ProductService {
                 "pro_name": product.product_name,
                 "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
                 "pro_slug": product.product_slug,
+                "left_eye_qty": product.left_eye_qty,
+                "right_eye_qty": product.right_eye_qty,
                 "qty": qty + quantity,
                 "price": product_price,
                 "addons": product.addons,
@@ -518,6 +541,8 @@ export class ProductService {
                         "cart_id": res['data']._id,
                         "product_name": element.pro_name,
                         "product_slug": element.pro_slug,
+                        "left_eye_qty": element.left_eye_qty,
+                        "right_eye_qty": element.right_eye_qty,
                         "quantity": element.qty,
                         "stock": (product['data'].stock - element.qty),
                         "product_sale_price": element.price,
@@ -880,15 +905,15 @@ export class ProductService {
     return this.http.post(environment.baseUrl + 'productsearch', data);
   }
 
-// for dashboard brands
+  // for dashboard brands
 
-getHomeBrands() {
-  return this.http.get(environment.baseUrl + 'home-page-brand/list');
-}
+  getHomeBrands() {
+    return this.http.get(environment.baseUrl + 'home-page-brand/list');
+  }
 
-getHomeFilteredProduct(data) {
-  return this.http.post(environment.baseUrl + 'home-filter-store-product', data);
-}
+  getHomeFilteredProduct(data) {
+    return this.http.post(environment.baseUrl + 'home-filter-store-product', data);
+  }
 
 }
 

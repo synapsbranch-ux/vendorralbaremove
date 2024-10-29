@@ -60,7 +60,7 @@ export class AllTwoDProductsComponent implements OnInit {
         this.store_slug = params.get('storeSlug');
       });
     }
-    this.productService.getallBrands().subscribe(
+    this.productService.getallBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];
@@ -119,11 +119,14 @@ export class AllTwoDProductsComponent implements OnInit {
   getAllProducts() {
 
     this.cat_slug = '';
+    this.cat_id ='';
     this.selectedBrand = '';
     this.selectedBrandName = ''
     let pageNumber = 1;
     localStorage.setItem('cur_page', pageNumber.toString())
     localStorage.setItem('brand', this.selectedBrand);
+    localStorage.setItem('cat_slug',this.cat_slug);
+    localStorage.setItem('cur_cat',this.cat_slug);
     let prodObj = {
       "product_category": '',
       "store_slug": this.store_slug,
@@ -224,6 +227,23 @@ export class AllTwoDProductsComponent implements OnInit {
     console.log('pageNumber================', pageNumber);
     // Do whatever you need to do when the page changes
     // For example, fetch data for the new page
+    let prodObj = {
+      "product_category": this.cat_id,
+      "store_slug": this.store_slug,
+      "brand": this.selectedBrand,
+      "page": this.currentPage,
+      "limit": this.limit
+    }
+    this.productService.get2DProductList(prodObj).subscribe(
+      res => {
+        this.productList = res['data'].products
+        this.totalProducts = res['data'].totalCount
+        this.groupItemsIntoSections(this.productList);
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      });
   }
 
 }

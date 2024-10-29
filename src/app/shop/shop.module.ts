@@ -43,9 +43,12 @@ import { SingleStoreComponent } from '../store/single-store/single-store.compone
 import { SingleStoreBannerComponent } from '../store/single-store-banner/single-store-banner.component';
 import { LogoComponent } from '../home/widgets/logo/logo.component';
 import { SliderComponent } from '../home/widgets/slider/slider.component';
+import { AllContactProductsComponent } from './all-contact-products/all-contact-products.component';
+import { ProductContactComponent } from './product/sidebar/product-contact/product-contact.component';
 @NgModule({
   declarations: [
     ProductNoSidebarComponent,
+    ProductContactComponent,
     ServicesComponent,
     CountdownComponent,
     SocialComponent,
@@ -73,6 +76,7 @@ import { SliderComponent } from '../home/widgets/slider/slider.component';
     SliderComponent,
     LogoComponent,
     SingleStoreBannerComponent,
+    AllContactProductsComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

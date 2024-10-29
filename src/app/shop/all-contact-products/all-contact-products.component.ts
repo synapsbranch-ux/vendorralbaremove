@@ -1,25 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-store-2d-products',
-  templateUrl: './store-2d-products.component.html',
-  styleUrls: ['./store-2d-products.component.scss']
+  selector: 'app-all-contact-products',
+  templateUrl: './all-contact-products.component.html',
+  styleUrls: ['./all-contact-products.component.scss']
 })
-export class StoreproductsComponent implements OnInit {
-
+export class AllContactProductsComponent implements OnInit {
+  @Input() store_slug: string | undefined;
+  @Input() currency: any = this.productService.Currency; // Default Currency 
+  public ImageSrc: string
   public products: ProductNew[] = [];
-  store_slug: any;
-  cat_slug: any
+  cat_slug: any = '';
   cat_id: any
   brandList = [];
   selectedBrand: any
   selectedBrandName: any
   categoryList = [];
   productList = [];
+  topBransList = []
   // p: any
   currentPage: number = 1; // Initialize with default page number
   numItemsPerSection = 3;
@@ -32,25 +34,29 @@ export class StoreproductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('top_brands')) {
+      this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
+    }
+
     if (localStorage.getItem('cur_page')) {
       this.currentPage = Number(localStorage.getItem('cur_page'));
+    }
+    else {
+      this.currentPage = 1
     }
     if (localStorage.getItem('brand')) {
       this.selectedBrand = localStorage.getItem('brand')
     }
-
-    this.route.paramMap.subscribe(params => {
-      // Extract the 'slug' and 'page' values from the route parameters
-      this.store_slug = params.get('storeSlug');
-      this.cat_slug = params.get('catSlug');
-    });
-    if (this.cat_slug == 'all') {
-      this.cat_slug = ''
-      this.cat_id = ''
+    else {
+      this.selectedBrand = ''
     }
 
-
-
+    if (!this.store_slug) {
+      this.route.paramMap.subscribe(params => {
+        // Extract the 'storeSlug' value from the route parameters
+        this.store_slug = params.get('storeSlug');
+      });
+    }
     this.productService.getallBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
@@ -64,21 +70,7 @@ export class StoreproductsComponent implements OnInit {
 
     this.productService.getallCategoryWithSubcat().subscribe(
       res => {
-        console.log('res=========', res['data'])
         this.categoryList = res['data'];
-
-        if (this.cat_slug !== '' && this.cat_slug !== 'all') {
-          let filter_cat = this.categoryList[0].filter((cat) => cat.category_slug === this.cat_slug);
-          console.log('filter_cat', filter_cat);
-
-          // Check if filter_cat has any elements before accessing the first one
-          if (filter_cat.length > 0) {
-            console.log('filter_cat id', filter_cat[0].category_id);
-            this.cat_id = filter_cat[0].category_id;
-          } else {
-            console.log('No matching category found');
-          }
-        }
 
         let prodObj = {
           "product_category": this.cat_id,
@@ -87,7 +79,7 @@ export class StoreproductsComponent implements OnInit {
           "page": this.currentPage,
           "limit": this.limit
         }
-        this.productService.getallFilteredProduct(prodObj).subscribe(
+        this.productService.getContactFilterdProductList(prodObj).subscribe(
           res => {
             this.productList = res['data'].products
             this.totalProducts = res['data'].totalCount
@@ -97,46 +89,28 @@ export class StoreproductsComponent implements OnInit {
             // .... HANDLE ERROR HERE 
             this.toastr.error(error.error.message)
           });
-
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
-
-
   }
 
-  groupItemsIntoSections(items) {
-    this.groupedItems = [];
-    if (items) {
-      for (let i = 0; i < items.length; i += this.numItemsPerSection) {
-        const section = items.slice(i, i + this.numItemsPerSection);
-        this.groupedItems.push(section);
-      }
-    }
-  }
-
-  getAllProducts() {
-
-    this.cat_slug = '';
-    this.selectedBrand = '';
-    this.selectedBrandName = ''
+  getBrandDeatils(brand:any)
+  {
     let pageNumber = 1;
-    this.cat_id = '';;
-
     localStorage.setItem('cur_page', pageNumber.toString())
+    this.selectedBrand = brand._id
+    this.selectedBrandName = brand.brand_name;
     localStorage.setItem('brand', this.selectedBrand);
-    localStorage.setItem('cat_slug',this.cat_slug);
-    localStorage.setItem('cur_cat',this.cat_slug);
     let prodObj = {
-      "product_category": '',
+      "product_category": this.cat_id,
       "store_slug": this.store_slug,
-      "brand": '',
+      "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getallFilteredProduct(prodObj).subscribe(
+    this.productService.get2DProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
@@ -148,30 +122,25 @@ export class StoreproductsComponent implements OnInit {
       });
   }
 
-  getCAtegoryDeatils(Category: any) {
+  getAllProducts() {
+
+    this.cat_slug = '';
+    this.cat_id = '';
+    this.selectedBrand = '';
+    this.selectedBrandName = ''
     let pageNumber = 1;
     localStorage.setItem('cur_page', pageNumber.toString())
-    console.log('Category============', Category);
-    if (!this.store_slug) {
-      this.route.paramMap.subscribe(params => {
-        this.store_slug = params.get('storeSlug');
-        this.cat_slug = params.get('catSlug');
-      });
-    }
-    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
-      this.router.navigate([`/store-2d-products/${this.store_slug}/${Category.category_slug}`]);
-    })
-    // this.router.navigateByUrl(`/store-2d-products/${this.store_slug}/${Category.category_slug}`);
-    this.cat_slug = Category.category_slug;
-    this.cat_id = Category.category_id;
+    localStorage.setItem('brand', this.selectedBrand);
+    localStorage.setItem('cat_slug', this.cat_slug);
+    localStorage.setItem('cur_cat', this.cat_slug);
     let prodObj = {
-      "product_category": Category.category_id,
+      "product_category": '',
       "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
+      "brand": '',
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getallFilteredProduct(prodObj).subscribe(
+    this.productService.get2DProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
@@ -190,19 +159,6 @@ export class StoreproductsComponent implements OnInit {
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----', this.selectedBrandName);
     localStorage.setItem('brand', this.selectedBrand);
-    if (!this.store_slug) {
-      this.route.paramMap.subscribe(params => {
-        this.store_slug = params.get('storeSlug');
-      });
-    }
-    if (!this.cat_slug) {
-      this.cat_slug = 'all'
-      this.cat_id = ''
-    }
-    console.log('`/store-2d-products/${this.store_slug}/${this.cat_slug}`', `/store-2d-products/${this.store_slug}/${this.cat_slug}`)
-    this.router.navigateByUrl('settings-header', { skipLocationChange: true }).then(() => {
-      this.router.navigate([`/store-2d-products/${this.store_slug}/${this.cat_slug}`]);
-    })
     let prodObj = {
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
@@ -210,9 +166,10 @@ export class StoreproductsComponent implements OnInit {
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getallFilteredProduct(prodObj).subscribe(
+    this.productService.get2DProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
+        this.totalProducts = res['data'].totalCount
         this.groupItemsIntoSections(this.productList);
       },
       error => {
@@ -221,6 +178,16 @@ export class StoreproductsComponent implements OnInit {
       });
   }
 
+
+  groupItemsIntoSections(items) {
+    this.groupedItems = [];
+    if (items) {
+      for (let i = 0; i < items.length; i += this.numItemsPerSection) {
+        const section = items.slice(i, i + this.numItemsPerSection);
+        this.groupedItems.push(section);
+      }
+    }
+  }
 
   getBrandName(brandarr, brandId) {
     if (brandarr.length > 0) {
@@ -236,28 +203,26 @@ export class StoreproductsComponent implements OnInit {
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
     localStorage.setItem('cur_page', pageNumber.toString())
-
-    // Create the request object
+    console.log('pageNumber================', pageNumber);
+    // Do whatever you need to do when the page changes
+    // For example, fetch data for the new page
     let prodObj = {
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
       "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
-    };
-
-    // Call the API to get the filtered products
-    this.productService.getallFilteredProduct(prodObj).subscribe(
+    }
+    this.productService.get2DProductList(prodObj).subscribe(
       res => {
-        this.productList = res['data'].products;
+        this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
         this.groupItemsIntoSections(this.productList);
       },
       error => {
-        // Handle error here
-        this.toastr.error(error.error.message);
-      }
-    );
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      });
   }
 
 }
