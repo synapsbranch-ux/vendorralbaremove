@@ -48,6 +48,7 @@ export class OrderDetailsComponent implements OnInit {
   addonsjson = [];
   shipping_charge_value = 0;
   tax_percentage_value = 0;
+  productDetails=[];
   constructor(private dialog: MatDialog, public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
 
   }
@@ -82,6 +83,7 @@ export class OrderDetailsComponent implements OnInit {
             this.expected_delivery = res['data'][0].order_delivery_date;
             this.shipping_charge_value = res['data'][0].shipping_charge;
             this.tax_percentage_value = res['data'][0].tax_amount;
+            this.productDetails = res['data'][0].products_details;
           }
         )
     }
@@ -101,6 +103,11 @@ export class OrderDetailsComponent implements OnInit {
   logout() {
     this.userservice.logout();
   }
+
+  findProductDetails(productId: string) {
+    return this.productDetails.find(detail => detail._id === productId);
+  }
+  
 
   viewAddonsDetails(addonsjsondata) {
     this.addonsjson = addonsjsondata;

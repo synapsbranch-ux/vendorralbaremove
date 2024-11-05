@@ -56,7 +56,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   iframeLink: any
   isProductinCart: boolean = false;
   othervalue: any;
-  fileUrl:any;
+  fileUrl: any;
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -176,18 +176,16 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   prefillAddons(savedAddons: any) {
     savedAddons.forEach((savedAddon: any) => {
-      if(savedAddon.hasOwnProperty('extra_document'))
-      {
+      if (savedAddon.hasOwnProperty('extra_document')) {
         savedAddon.extra_document.forEach((savedAddon: any) => {
           const addon = this.productAddons.find(a => a.addon_slug === savedAddon.keyname);
           if (addon) {
             this.fileUrl = savedAddon.fileUrl;
           }
         });
-        
+
       }
-      else
-      {
+      else {
         const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
         if (addon) {
           this.value[addon.addon_slug] = savedAddon.price;
@@ -305,10 +303,15 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       let extraStock = this.counter - this.currentCartProductDeatils.quantity
 
       const status = await this.productService.addToCart(product, extraStock);
-      if (status) {
+      console.log('status----', status);
+      if (status || status == undefined) {
         product.stock = (product.stock - this.counter);
+        this.toastrService.success('Product updated in Cart.');
       }
-      this.toastrService.success('Product updated in Cart.');
+      else {
+        this.toastrService.warning('Different vendor product not allow');
+      }
+
     }
     else {
       product.addonsprice = this.productAddonsPrice;
@@ -323,12 +326,14 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       // console.log('Product Ready To cart------------------', product);
 
       const status = await this.productService.addToCart(product, this.counter);
-      if (status) {
+      if (status || status == undefined) {
         product.stock = (product.stock - this.counter);
-
+        this.toastrService.success('Product has been added in Cart.');
+      } 
+      else{
+        this.toastrService.warning('Different vendor product not allow');
       }
 
-      this.toastrService.success('Product has been added in Cart.');
     }
   }
 
@@ -346,7 +351,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   uploadFiles(files: FileList, formcontrolname, addon) {
     this.fileToUpload = files.item(0);
-  
+
     // Check if the file size exceeds 5MB
     const fileSizeInMB = this.fileToUpload.size / (1024 * 1024); // Convert bytes to MB
     if (fileSizeInMB > 5) {
@@ -354,7 +359,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       this.toastrService.error('File size exceeds 5MB. Please select a smaller file.');
       return;
     }
-  
+
     // Proceed with the upload if the file size is within the limit
     this.productService.uploadImage(this.fileToUpload).subscribe(
       (res) => {
@@ -378,7 +383,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       }
     );
   }
-  
+
 
   onMultiInputChange(val: any, slug, addon) {
     this.others_color_code = val;

@@ -328,8 +328,11 @@ export class ProductContactComponent implements OnInit, OnChanges {
       const status = await this.productService.addToCart(product, extraStock);
       if (status) {
         product.stock = (product.stock - this.totalstock);
+        this.toastrService.success('Product updated in Cart.');
+      } else {
+        this.toastrService.warning('Different vendor product not allow');
       }
-      this.toastrService.success('Product updated in Cart.');
+
     }
     else {
       product.left_eye_qty = this.counter;
@@ -349,10 +352,13 @@ export class ProductContactComponent implements OnInit, OnChanges {
       const status = await this.productService.addToCart(product, this.totalstock);
       if (status) {
         product.stock = (product.stock - this.totalstock);
-
+        this.toastrService.success('Product has been added in Cart.');
+      }
+      else {
+        this.toastrService.warning('Different vendor product not allow');
       }
 
-      this.toastrService.success('Product has been added in Cart.');
+
     }
   }
 

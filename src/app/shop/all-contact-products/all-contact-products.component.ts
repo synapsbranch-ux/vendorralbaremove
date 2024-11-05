@@ -38,8 +38,8 @@ export class AllContactProductsComponent implements OnInit {
       this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
     }
 
-    if (localStorage.getItem('cur_page')) {
-      this.currentPage = Number(localStorage.getItem('cur_page'));
+    if (localStorage.getItem('cur_page_contact')) {
+      this.currentPage = Number(localStorage.getItem('cur_page_contact'));
     }
     else {
       this.currentPage = 1
@@ -99,7 +99,7 @@ export class AllContactProductsComponent implements OnInit {
   getBrandDeatils(brand:any)
   {
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_contact', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     localStorage.setItem('brand', this.selectedBrand);
@@ -129,7 +129,7 @@ export class AllContactProductsComponent implements OnInit {
     this.selectedBrand = '';
     this.selectedBrandName = ''
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_contact', pageNumber.toString())
     localStorage.setItem('brand', this.selectedBrand);
     localStorage.setItem('cat_slug', this.cat_slug);
     localStorage.setItem('cur_cat', this.cat_slug);
@@ -154,7 +154,7 @@ export class AllContactProductsComponent implements OnInit {
 
   changeBrandname(brand: any) {
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_contact', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----', this.selectedBrandName);
@@ -202,7 +202,7 @@ export class AllContactProductsComponent implements OnInit {
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_contact', pageNumber.toString())
     console.log('pageNumber================', pageNumber);
     // Do whatever you need to do when the page changes
     // For example, fetch data for the new page

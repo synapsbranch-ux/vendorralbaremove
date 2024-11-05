@@ -291,7 +291,7 @@ export class ProductService {
     //console.log('localStorage.getItem(vendor_id)', localStorage.getItem('vendor_id'))
 
     let SinglevendorStatus = true;
-    if (localStorage.getItem('vendor_id')) {
+    if (localStorage.getItem('vendor_id') && JSON.parse(localStorage.getItem('cartItems')).length > 0) {
       if (product?.product_owner) {
         if (localStorage.getItem('vendor_id') != product?.product_owner?._id) {
           SinglevendorStatus = false
@@ -299,10 +299,12 @@ export class ProductService {
         }
         else {
           this.addToCartforSingleVendor(product, prod_qty);
+          return true;
         }
       }
       else {
         this.addToCartforSingleVendor(product, prod_qty);
+        return true;
       }
 
     }
@@ -365,8 +367,8 @@ export class ProductService {
               "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
               "pro_slug": product.product_slug,
               "qty": product.quantity ? product.quantity : cartItem.quantity,
-              "left_eye_qty": product.left_eye_qty ? product.left_eye_qty : cartItem.left_eye_qty,
-              "right_eye_qty": product.right_eye_qty ? product.right_eye_qty : cartItem.right_eye_qty,
+              "left_eye_qty": product.left_eye_qty ? product.left_eye_qty : 0,
+              "right_eye_qty": product.right_eye_qty ? product.right_eye_qty : 0,
               "price": product_price,
               "addons": product.addons,
               "addonsprice": product.addonsprice
@@ -662,13 +664,11 @@ export class ProductService {
               let getCartList_ = []
               localStorage.setItem("cartItems", JSON.stringify(getCartList_));
               state.cart = getCartList_;
+              localStorage.removeItem('vendor_id')
               console.log('state.cart Delete', state.cart);
             }
-
-
           },
           error => {
-
             this.toastrService.error(error.error.message);
           }
         )

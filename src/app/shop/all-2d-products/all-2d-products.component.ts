@@ -34,8 +34,8 @@ export class AllTwoDProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('cur_page')) {
-      this.currentPage = Number(localStorage.getItem('cur_page'));
+    if (localStorage.getItem('cur_page_2d')) {
+      this.currentPage = Number(localStorage.getItem('cur_page_2d'));
     }
     else {
       this.currentPage = 1
@@ -123,7 +123,7 @@ export class AllTwoDProductsComponent implements OnInit {
     this.selectedBrand = '';
     this.selectedBrandName = ''
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_2d', pageNumber.toString())
     localStorage.setItem('brand', this.selectedBrand);
     localStorage.setItem('cat_slug',this.cat_slug);
     localStorage.setItem('cur_cat',this.cat_slug);
@@ -148,7 +148,7 @@ export class AllTwoDProductsComponent implements OnInit {
 
   getCAtegoryDeatils(Category: any) {
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_2d', pageNumber.toString())
     localStorage.setItem('cur_cat', Category.category_slug)
     console.log('Category============', Category);
     this.cat_slug = Category.category_slug;
@@ -174,7 +174,7 @@ export class AllTwoDProductsComponent implements OnInit {
 
   changeBrandname(brand: any) {
     let pageNumber = 1;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_2d', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----', this.selectedBrandName);
@@ -223,7 +223,7 @@ export class AllTwoDProductsComponent implements OnInit {
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
-    localStorage.setItem('cur_page', pageNumber.toString())
+    localStorage.setItem('cur_page_2d', pageNumber.toString())
     console.log('pageNumber================', pageNumber);
     // Do whatever you need to do when the page changes
     // For example, fetch data for the new page

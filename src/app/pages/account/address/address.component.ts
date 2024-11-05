@@ -4,7 +4,7 @@ import { Userlogin } from './../../../shared/classes/userslogin';
 import { UserAddress } from './../../../shared/classes/user';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { json } from 'express';
 
 @Component({
@@ -15,69 +15,64 @@ import { json } from 'express';
 export class AddressComponent implements OnInit {
   //public useraddressclass: UserAddress[] = [];
   public openDashboard: boolean = false;
-  userName:string="";
-  userEmail:string="";
-  userPhone:string="";
+  userName: string = "";
+  userEmail: string = "";
+  userPhone: string = "";
   userData: JSON;
-  public useraddressslist:any =[];
-  addressMassage:string=""
+  public useraddressslist: any = [];
+  addressMassage: string = ""
   form: FormGroup;
   isValid: boolean = false;
-  submitMassage:any;
-  returnUrl:string;
+  submitMassage: any;
+  returnUrl: string;
 
 
-  constructor( private router: Router, private userservice: UserService, private route: ActivatedRoute, private toastr:ToastrService) { 
-    
+  constructor(private router: Router, private userservice: UserService, private route: ActivatedRoute, private toastr: ToastrService, private ngZone: NgZone) {
+
   }
 
   ngOnInit(): void {
-    this.addressMassage="Add New Address";
+    this.addressMassage = "Add New Address";
     this.getallAddressList();
-    this.form =  new FormGroup({
-      'userfullname': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+    this.form = new FormGroup({
+      'userfullname': new FormControl(null, [Validators.required, Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'addressline1': new FormControl(null, [Validators.required]),
       'addressline2': new FormControl(null),
-      'city': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
-      'state': new FormControl(null, [Validators.required,Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+      'city': new FormControl(null, [Validators.required, Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
+      'state': new FormControl(null, [Validators.required, Validators.pattern(/^(?! )[a-zA-Z ]*$/)]),
       'postalCode': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(10)]),
       'telephone': new FormControl(null, [Validators.pattern('[0-9]*'), Validators.maxLength(15)]),
     })
 
-      // get return url from route parameters or default to '/'
-  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
-  getallAddressList()
-  {
+  getallAddressList() {
     this.userservice.getAllAddress().subscribe(
-      res =>
-      {
-        this.useraddressslist=res['data'];
+      res => {
+        this.useraddressslist = res['data'];
       }
     )
   }
-  editAddress(address_id:any)
-  {
+  editAddress(address_id: any) {
     this.userservice.setUserAddressid(address_id);
     this.router.navigateByUrl('edit-address');
   }
-  deleteAddress(address_id:any)
-  {
-    let Ddata=
+  deleteAddress(address_id: any) {
+    let Ddata =
     {
       "address_id": address_id
     }
 
     this.userservice.deleteAddress(Ddata).subscribe(
-      res =>
-      {
+      res => {
         this.getallAddressList();
       }
       ,
-  error => {
-    // .... HANDLE ERROR HERE 
-    this.toastr.error(error.error.message)
-}
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      }
     )
 
   }
@@ -85,13 +80,11 @@ export class AddressComponent implements OnInit {
     this.openDashboard = !this.openDashboard;
   }
 
-  logout()
-  {
+  logout() {
     this.userservice.logout();
   }
-  setDefaultAddress(val:any, address_id:any,address)
-  {
-    let Ddata=
+  setDefaultAddress(val: any, address_id: any, address) {
+    let Ddata =
     {
       "address_id": address_id,
       "user_full_name": address.user_full_name,
@@ -105,31 +98,28 @@ export class AddressComponent implements OnInit {
     }
 
     this.userservice.setDefaultAddress(Ddata).subscribe(
-      res =>
-      {
+      res => {
         this.getallAddressList();
       }
     )
   }
 
   get userfullname() { return this.form.get('userfullname'); }
-  get addressline1() { return this.form.get('addressline1');}
+  get addressline1() { return this.form.get('addressline1'); }
   get addressline2() { return this.form.get('addressline2'); }
-  get city() { return this.form.get('city');}
-  get state() { return this.form.get('state');}
-  get postalCode() { return this.form.get('postalCode');}
-  get telephone() { return this.form.get('telephone');}
+  get city() { return this.form.get('city'); }
+  get state() { return this.form.get('state'); }
+  get postalCode() { return this.form.get('postalCode'); }
+  get telephone() { return this.form.get('telephone'); }
 
-  onSubmit()
-  {
+  onSubmit() {
 
-    if(this.form.invalid) {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
     }
-    else
-    {
+    else {
       let formData = this.form.value;
-      let EdData={
+      let EdData = {
         "user_full_name": formData.userfullname,
         "addressline1": formData.addressline1,
         "addressline2": formData.addressline2,
@@ -137,37 +127,46 @@ export class AddressComponent implements OnInit {
         "postal_code": formData.postalCode,
         "mobile": formData.telephone,
         "state": formData.state,
-   }
-   this.userservice.addNewAddress(EdData).subscribe(
-    res =>
-    {
-      this.toastr.success("Address successfully Added");            
-      this.getallAddressList();
-      setTimeout(() => {
-        if(this.returnUrl)
-        {
-          console.log('Return URL found',this.returnUrl)
-        // login successful so redirect to return url
-        this.router.navigateByUrl(this.returnUrl)
-        }
-        else
-        {
-          console.log('Return URL Not found')
-          this.router.navigate(['address'])
-          .then(() => {
-            this.form.reset();
-            this.isValid=false;
+      }
+      this.userservice.addNewAddress(EdData).subscribe(
+        res => {
+          this.toastr.success("Address successfully Added");
+          this.getallAddressList();
+          /// settimeout Start
+          const startTime = performance.now();
+          this.ngZone.runOutsideAngular(() => {
+            const checkTime = (currentTime: number) => {
+              const elapsedTime = currentTime - startTime;
+              if (elapsedTime >= 2000) {
+                this.ngZone.run(() => {
+                  if (this.returnUrl) {
+                    console.log('Return URL found', this.returnUrl)
+                    // login successful so redirect to return url
+                    this.router.navigateByUrl(this.returnUrl)
+                  }
+                  else {
+                    console.log('Return URL Not found')
+                    this.router.navigate(['address'])
+                      .then(() => {
+                        this.form.reset();
+                        this.isValid = false;
+                      });
+                  }
+                });
+              } else {
+                requestAnimationFrame(checkTime);
+              }
+            };
+            requestAnimationFrame(checkTime);
           });
+          /// settimeout End
+        },
+        error => {
+          // .... HANDLE ERROR HERE 
+          this.toastr.error(error.error.message)
         }
-  
-      },2000) 
-    },
-    error => {
-      // .... HANDLE ERROR HERE 
-      this.toastr.error(error.error.message)
-  }
-  )
-  
+      )
+
     }
   }
 
@@ -182,7 +181,7 @@ export class AddressComponent implements OnInit {
         }
       } else {
         // If no next element id is provided, submit the form
-          this.onSubmit();
+        this.onSubmit();
       }
     }
   }

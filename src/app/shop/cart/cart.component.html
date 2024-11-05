@@ -19,31 +19,31 @@
                     *ngFor="let product of products">
                     <div class="col-sm-6 col-md-6 col-6 flex_item">
                         <div class="cart_product_img">
-                            <a *ngIf="(product.left_eye_qty < 1 || product.right_eye_qty < 1) ||(!product.left_eye_qty && !product.right_eye_qty )"
+                            <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
                                 [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
                                 <img class="img-fluid" [src]="product.product_image[0].pro_image"
                                     [alt]="product.product_name">
                             </a>
-                            <a *ngIf="(product.left_eye_qty > 0 || product.right_eye_qty > 0)"
+                            <a *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1"
                                 [routerLink]="['/contact-product/', product.product_slug]" routerLinkActive="active">
                                 <img class="img-fluid" [src]="product.product_image[0].pro_image"
                                     [alt]="product.product_name">
                             </a>
                         </div>
                         <div class="cart_product_info">
-                            <a *ngIf="(product.left_eye_qty < 1 || product.right_eye_qty < 1) ||(!product.left_eye_qty && !product.right_eye_qty )"
+                            <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
                                 [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
                                 <p class="mb-2 product_title">
                                     {{ product.product_name | titlecase }}
                                 </p>
                             </a>
-                            <a *ngIf="(product.left_eye_qty > 0 || product.right_eye_qty > 0)"
+                            <a *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1"
                                 [routerLink]="['/contact-product/', product.product_slug]" routerLinkActive="active">
                                 <p class="mb-2 product_title">
                                     {{ product.product_name | titlecase }}
                                 </p>
                             </a>
-                            <p class="mb-2" *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                            <p class="mb-2"  *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1">
                                 {{product.pack}}</p>
                             <p class="mb-2">Price : {{ ((product.product_sale_price)? product.product_sale_price:
                                 product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}
@@ -68,17 +68,17 @@
                                     product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}
                                 </p>
                             </span>
-                            <a *ngIf="(product.left_eye_qty < 1 || product.right_eye_qty < 1) ||(!product.left_eye_qty && !product.right_eye_qty )"
+                            <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
                                 [routerLink]="['/product/', product.product_slug]"
                                 class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
-                            <a *ngIf="(product.left_eye_qty > 0 || product.right_eye_qty > 0)"
+                            <a  *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1"
                                 [routerLink]="['/contact-product/', product.product_slug]"
                                 class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
                         </div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-4">
                         <div
-                            *ngIf="(product.left_eye_qty < 1 || product.right_eye_qty < 1) ||(!product.left_eye_qty && !product.right_eye_qty )">
+                        *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
                             <div class="qty-box">
                                 <div class="input-group">
                                     <span class="input-group-prepend">
@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex" *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                        <div class="d-flex"  *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1">
                             <div class="left-eye">
                                 <h6 class="product-title text-center">Left Eye</h6>
                                 <div class="qty-box">

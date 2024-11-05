@@ -44,28 +44,36 @@
                                             </tr>
                                             <tr *ngFor="let product of oderProducts">
                                                 <td>
-                                                    <img class="img-fluid product_img" [src]="product.product_image"
-                                                        [alt]="product.product_name">
+                                                    <img class="img-fluid product_img" [src]="product.product_image" [alt]="product.product_name">
                                                 </td>
-                                                <td>{{ product.product_name | titlecase }}</td>
-                                                <td>{{product.qty}}</td>
-                                                <td>{{product.price |
-                                                    currency:product_service?.Currency.currency:'symbol'}}</td>
+                                                <!-- Find the matching product details based on product_id -->
+                                                <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                                    {{ product.product_name | titlecase }} || {{ findProductDetails(product.product_id)?.attributes[0]?.value }}
+                                                </td>
+                                                <td *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                                    {{ product.product_name | titlecase }}
+                                                </td>
+                                                <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                                    Left Eye : {{ product.left_eye_qty }} | Right Eye : {{ product.right_eye_qty }}
+                                                </td>
+                                                <td *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                                    {{ product.qty }}
+                                                </td>
+                                                <td>{{ product.price | currency:product_service?.Currency.currency:'symbol' }}</td>
                                                 <td class="text-right">
-                                                    {{(product.addonsprice ? product.addonsprice: 0) |
-                                                    currency:product_service?.Currency.currency:'symbol'}}
+                                                    {{ (product.addonsprice ? product.addonsprice : 0) | currency:product_service?.Currency.currency:'symbol' }}
                                                     <p class="m-0" *ngIf="product.addons.length > 0">
-                                                        <a class="pe-auto"
-                                                            (click)="viewAddonsDetails(product.addons)">View
-                                                            Addons</a>
+                                                        <a class="pe-auto" (click)="viewAddonsDetails(product.addons)">View Addons</a>
                                                     </p>
                                                 </td>
                                             </tr>
+                                            
                                             <tfoot class="table">
                                                 <tr>
                                                     <td colspan="5" class="text-right"><strong>Subtotal:</strong>
-                                                        {{ total_order_amount - (tax_percentage_value + shipping_charge_value) | 
-                                                            currency:product_service?.Currency.currency:'symbol' }}
+                                                        {{ total_order_amount - (tax_percentage_value +
+                                                        shipping_charge_value) |
+                                                        currency:product_service?.Currency.currency:'symbol' }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -125,7 +133,10 @@
                                     <p><span>{{payment_method}}</span></p>
                                     <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery
                                         (COD) available. Card/Net banking acceptance subject to device availability.</p>
-                                    <p>Payment Status : <span *ngIf="payment_status != 'APPROVED'" class="text-warning">{{payment_status | uppercase}}</span><span *ngIf="payment_status == 'APPROVED'" class="text-success">{{payment_status | uppercase}}</span></p>
+                                    <p>Payment Status : <span *ngIf="payment_status != 'APPROVED'"
+                                            class="text-warning">{{payment_status | uppercase}}</span><span
+                                            *ngIf="payment_status == 'APPROVED'" class="text-success">{{payment_status |
+                                            uppercase}}</span></p>
                                 </div>
                                 <div class="col-md-12" *ngIf="payment_status == 'APPROVED'">
                                     <div class="delivery-sec">

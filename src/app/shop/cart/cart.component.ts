@@ -288,7 +288,6 @@ export class CartComponent implements OnInit {
     setTimeout(() => {
       this.delay = false
     }, 1000);
-    console.log('product.quantity===============', product.quantity);
     if (product.stock > 0) {
       product.stock = (product.stock - 1)
       product.quantity = product.quantity + 1
@@ -313,7 +312,6 @@ export class CartComponent implements OnInit {
     else {
       this.desableincrement = true;
     }
-    console.log('product.quantity===============', product.quantity);
   }
 
   // Decrement
@@ -341,8 +339,6 @@ export class CartComponent implements OnInit {
       this.product_service.updateCartQuantity(product, 0);
       // this.getTotal.subscribe();
     }
-
-
   }
 
   public checkwishlist(product) {
