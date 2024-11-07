@@ -60,7 +60,7 @@ export class AllTwoDProductsComponent implements OnInit {
         this.store_slug = params.get('storeSlug');
       });
     }
-    this.productService.getallBrands(this.store_slug).subscribe(
+    this.productService.getall2DBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];

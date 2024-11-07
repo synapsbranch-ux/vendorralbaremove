@@ -57,7 +57,7 @@ export class AllContactProductsComponent implements OnInit {
         this.store_slug = params.get('storeSlug');
       });
     }
-    this.productService.getallBrands(this.store_slug).subscribe(
+    this.productService.getallContactBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];

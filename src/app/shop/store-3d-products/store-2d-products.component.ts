@@ -51,7 +51,7 @@ export class StoreproductsComponent implements OnInit {
 
 
 
-    this.productService.getallBrands(this.store_slug).subscribe(
+    this.productService.getall3DBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];

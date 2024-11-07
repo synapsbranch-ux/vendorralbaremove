@@ -9,7 +9,7 @@ import { CompareComponent } from './compare/compare.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
-import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
+import { StoreproductsComponent } from './store-3d-products/store-2d-products.component';
 import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';
 import { AllContactProductsComponent } from './all-contact-products/all-contact-products.component';
 import { ProductContactComponent } from './product/sidebar/product-contact/product-contact.component';

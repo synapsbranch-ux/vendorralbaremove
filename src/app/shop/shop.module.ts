@@ -35,7 +35,7 @@ import { SafePipe } from '../safe.pipe';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
 import { ImageModeComponent } from './image-mode/image-mode.component';
-import { StoreproductsComponent } from './store-2d-products/store-2d-products.component';
+import { StoreproductsComponent } from './store-3d-products/store-2d-products.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';

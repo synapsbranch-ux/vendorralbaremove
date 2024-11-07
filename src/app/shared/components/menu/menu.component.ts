@@ -52,7 +52,7 @@ export class MenuComponent implements OnInit {
       this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
         res => {
           if (res.data[0].banner_top_brands.length > 0) {
-            localStorage.setItem('top_brands',JSON.stringify(res.data[0].banner_top_brands))
+            localStorage.setItem('top_brands',JSON.stringify(res.data[0].banner_homepage_brands))
           }
 
           if (res.data[0].banner_sub_categories.length > 0) {

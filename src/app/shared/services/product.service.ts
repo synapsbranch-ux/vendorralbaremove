@@ -130,6 +130,24 @@ export class ProductService {
     return this.http.get(environment.baseUrl + `brand/list?store_slug=${store_slug}`);
   }
 
+    //// Get all 3D Brands List
+
+    getall3DBrands(store_slug: any) {
+      return this.http.get(environment.baseUrl + `3d-product-brand/list?store_slug=${store_slug}`);
+    }
+
+      //// Get all 2D Brands List
+
+  getall2DBrands(store_slug: any) {
+    return this.http.get(environment.baseUrl + `2d-product-brand/list?store_slug=${store_slug}`);
+  }
+
+    //// Get all Contact Brands List
+
+    getallContactBrands(store_slug: any) {
+      return this.http.get(environment.baseUrl + `contact-product-brand/list?store_slug=${store_slug}`);
+    }
+
   //// Get all catyegoryList
 
   getallCategoryWithSubcat() {
