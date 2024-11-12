@@ -68,7 +68,7 @@ export class AllContactProductsComponent implements OnInit {
         this.toastr.error(error.error.message)
       });
 
-    this.productService.getallCategoryWithSubcat().subscribe(
+    this.productService.getallEyeGlassCategoryWithSubcat().subscribe(
       res => {
         this.categoryList = res['data'];
 

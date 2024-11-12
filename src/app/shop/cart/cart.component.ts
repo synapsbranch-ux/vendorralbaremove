@@ -46,7 +46,7 @@ export class CartComponent implements OnInit {
     this.products = JSON.parse(localStorage.getItem('cartItems'));
     this.product_service.cartItems.subscribe(response => response ? this.products = response : this.products = []);
     this.detectNavigationType();
-    console.log("ocalStorage.getItem('tax')", localStorage.getItem('tax'));
+    //console.log("ocalStorage.getItem('tax')", localStorage.getItem('tax'));
     if (localStorage.getItem('vendor_id')) {
       this.getShippingTax();
     }
@@ -74,7 +74,7 @@ export class CartComponent implements OnInit {
 
   removeAddon(product: any, addonIndex: number): void {
     const addonToRemove = product.addons[addonIndex];
-    console.log('addonToRemove', addonToRemove);
+    //console.log('addonToRemove', addonToRemove);
     // Remove the addon from the product's addons array
     product.addons.splice(addonIndex, 1);
     // Subtract the addon price from the total addons price
@@ -159,19 +159,20 @@ export class CartComponent implements OnInit {
   // Increament
   increment(product, qty = 1) {
     console.log('product.stock', product.stock);
+    console.log('product.quantity', product.quantity);
 
     this.desabledecrement = false;
     this.delay = true;
     setTimeout(() => {
       this.delay = false
     }, 1000);
-    console.log('product.quantity===============', product.quantity);
+    //console.log('product.quantity===============', product.quantity);
     if (product.stock > 0) {
       product.stock = (product.stock - 1)
       product.quantity = product.quantity + 1
 
       let incremtstatus = this.product_service.updateCartQuantity(product, 0);
-      console.log('incremtstatus------------------', incremtstatus);
+      //console.log('incremtstatus------------------', incremtstatus);
       // this.getTotal.subscribe();
       this.desableincrement = false;
     }
@@ -183,15 +184,14 @@ export class CartComponent implements OnInit {
     if (product.quantity >= 1) {
       this.desableincrement = false;
     }
-    else {
-      this.desableincrement = true;
-    }
-    console.log('product.quantity===============', product.quantity);
+
+    //console.log('product.quantity===============', product.quantity);
   }
 
   // Decrement
   decrement(product, qty = -1) {
     console.log('product.stock', product.stock);
+    console.log('product.quantity', product.quantity);
 
     this.desableincrement = false;
     this.delay = true;
@@ -217,12 +217,15 @@ export class CartComponent implements OnInit {
   // ------------------------------ Left Eye
   // Increament
   increment1(product, qty = 1) {
+    // console.log('product.stock', product.stock);
+    // console.log('product.quantity', product.quantity);
+
     this.desabledecrement = false;
     this.delay = true;
     setTimeout(() => {
       this.delay = false
     }, 1000);
-    console.log('product.quantity===============', product.quantity);
+    //console.log('product.quantity===============', product.quantity);
     if (product.stock > 0) {
       product.stock = (product.stock - 1)
       product.quantity = product.quantity + 1
@@ -231,7 +234,7 @@ export class CartComponent implements OnInit {
       this.totalstock = (product.left_eye_qty + product.right_eye_qty);
 
       let incremtstatus = this.product_service.updateCartQuantity(product, 0);
-      console.log('incremtstatus------------------', incremtstatus);
+      //console.log('incremtstatus------------------', incremtstatus);
       // this.getTotal.subscribe();
       this.desableincrement = false;
     }
@@ -243,15 +246,13 @@ export class CartComponent implements OnInit {
     if (product.quantity >= 1) {
       this.desableincrement = false;
     }
-    else {
-      this.desableincrement = true;
-    }
-    console.log('product.quantity===============', product.quantity);
+    //console.log('product.quantity===============', product.quantity);
   }
 
   // Decrement
   decrement1(product, qty = -1) {
-    console.log('product.stock', product.stock);
+    // console.log('product.stock', product.stock);
+    // console.log('product.quantity', product.quantity);
 
     this.desableincrement = false;
     this.delay = true;
@@ -264,14 +265,17 @@ export class CartComponent implements OnInit {
       this.desabledecrement = true;
     }
     else {
-      product.stock = (product.stock + 1);
-      product.quantity = product.quantity - 1
-      product.left_eye_qty = product.left_eye_qty - 1
-
-      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
-
-      this.desabledecrement = false;
-      this.product_service.updateCartQuantity(product, 0);
+      if(product.left_eye_qty > 0)
+      {
+        product.stock = (product.stock + 1);
+        product.quantity = product.quantity - 1
+        product.left_eye_qty = product.left_eye_qty - 1
+  
+        this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+  
+        this.desabledecrement = false;
+        this.product_service.updateCartQuantity(product, 0);
+      }
       // this.getTotal.subscribe();
     }
 
@@ -281,7 +285,8 @@ export class CartComponent implements OnInit {
   // ------------------------------ Right Eye
   // Increament
   increment2(product, qty = 1) {
-    console.log('product.stock', product.stock);
+    // console.log('product.stock', product.stock);
+    // console.log('product.quantity', product.quantity);
 
     this.desabledecrement = false;
     this.delay = true;
@@ -297,7 +302,7 @@ export class CartComponent implements OnInit {
 
 
       let incremtstatus = this.product_service.updateCartQuantity(product, 0);
-      console.log('incremtstatus------------------', incremtstatus);
+      //console.log('incremtstatus------------------', incremtstatus);
       // this.getTotal.subscribe();
       this.desableincrement = false;
     }
@@ -309,15 +314,12 @@ export class CartComponent implements OnInit {
     if (product.quantity >= 1) {
       this.desableincrement = false;
     }
-    else {
-      this.desableincrement = true;
-    }
   }
 
   // Decrement
   decrement2(product, qty = -1) {
-    console.log('product.stock', product.stock);
-
+    // console.log('product.stock', product.stock);
+    // console.log('product.quantity', product.quantity);
     this.desableincrement = false;
     this.delay = true;
     setTimeout(() => {
@@ -329,14 +331,17 @@ export class CartComponent implements OnInit {
       this.desabledecrement = true;
     }
     else {
-      product.stock = (product.stock + 1);
-      product.quantity = product.quantity - 1
-      product.right_eye_qty = product.right_eye_qty - 1
-
-      this.totalstock = (product.left_eye_qty + product.right_eye_qty);
-
-      this.desabledecrement = false;
-      this.product_service.updateCartQuantity(product, 0);
+      if(product.right_eye_qty > 0)
+      {
+        product.stock = (product.stock + 1);
+        product.quantity = product.quantity - 1
+        product.right_eye_qty = product.right_eye_qty - 1
+  
+        this.totalstock = (product.left_eye_qty + product.right_eye_qty);
+  
+        this.desabledecrement = false;
+        this.product_service.updateCartQuantity(product, 0);
+      }
       // this.getTotal.subscribe();
     }
   }

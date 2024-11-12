@@ -61,7 +61,7 @@ export class SingleStoreBannerComponent implements OnInit {
         this.router.navigateByUrl('/')
       }
     );
-    this.productService.getallCategoryWithSubcat().subscribe(
+    this.productService.getallEyeGlassCategoryWithSubcat().subscribe(
       res => {
         this.categories = res['data'][0];
         this.fetchAllProducts();

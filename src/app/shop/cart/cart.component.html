@@ -114,7 +114,7 @@
                                         <input type="text" name="quantity" class="form-control input-number"
                                             [(ngModel)]="product.left_eye_qty" disabled />
                                         <span class="input-group-prepend">
-                                            <button [disabled]="totalstock > product.stock" type="button"
+                                            <button [disabled]="product.stock <= 0" type="button"
                                                 class="btn quantity-right-plus" data-type="plus"
                                                 (click)="increment1(product)">
                                                 <i class="ti-plus"></i>
@@ -137,7 +137,7 @@
                                         <input type="text" name="quantity" class="form-control input-number"
                                             [(ngModel)]="product.right_eye_qty" disabled />
                                         <span class="input-group-prepend">
-                                            <button [disabled]="totalstock > product.stock" type="button"
+                                            <button [disabled]="product.stock <= 0" type="button"
                                                 class="btn quantity-right-plus" data-type="plus"
                                                 (click)="increment2(product)">
                                                 <i class="ti-plus"></i>

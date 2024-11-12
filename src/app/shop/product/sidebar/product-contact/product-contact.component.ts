@@ -326,13 +326,13 @@ export class ProductContactComponent implements OnInit, OnChanges {
       let extraStock = this.totalstock - this.currentCartProductDeatils.quantity
 
       const status = await this.productService.addToCart(product, extraStock);
-      if (status) {
-        product.stock = (product.stock - this.totalstock);
+      if (status || status == undefined) {
+        product.stock = (product.stock - this.counter);
         this.toastrService.success('Product updated in Cart.');
-      } else {
+      }
+      else {
         this.toastrService.warning('Different vendor product not allow');
       }
-
     }
     else {
       product.left_eye_qty = this.counter;
@@ -350,15 +350,13 @@ export class ProductContactComponent implements OnInit, OnChanges {
       console.log('Product Ready To cart------------------', product);
 
       const status = await this.productService.addToCart(product, this.totalstock);
-      if (status) {
-        product.stock = (product.stock - this.totalstock);
-        this.toastrService.success('Product has been added in Cart.');
+      if (status || status == undefined) {
+        product.stock = (product.stock - this.counter);
+        this.toastrService.success('Product updated in Cart.');
       }
       else {
         this.toastrService.warning('Different vendor product not allow');
       }
-
-
     }
   }
 
