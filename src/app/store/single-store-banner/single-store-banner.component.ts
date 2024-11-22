@@ -29,6 +29,7 @@ export class SingleStoreBannerComponent implements OnInit {
   is2Dshow: boolean = false;
   // Logo
   public brands = [];
+  public home_brands = [];
   //// for 2D products
 
   currentPage = 1;
@@ -41,6 +42,10 @@ export class SingleStoreBannerComponent implements OnInit {
     // this.getAllBrands();
     if (localStorage.getItem('top_brands')) {
       this.brands = JSON.parse(localStorage.getItem('top_brands'));
+    }
+
+    if (localStorage.getItem('home_brands')) {
+      this.home_brands = JSON.parse(localStorage.getItem('home_brands'));
     }
 
     this.route.params.subscribe(params => {

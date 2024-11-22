@@ -36,6 +36,7 @@ export class AllContactProductsComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem('top_brands')) {
       this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
+      console.log('this.topBransList----------------',this.topBransList)
     }
 
     if (localStorage.getItem('cur_page_contact')) {
@@ -110,7 +111,7 @@ export class AllContactProductsComponent implements OnInit {
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.get2DProductList(prodObj).subscribe(
+    this.productService.getContactFilterdProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
@@ -140,7 +141,7 @@ export class AllContactProductsComponent implements OnInit {
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.get2DProductList(prodObj).subscribe(
+    this.productService.getContactFilterdProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
@@ -166,7 +167,7 @@ export class AllContactProductsComponent implements OnInit {
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.get2DProductList(prodObj).subscribe(
+    this.productService.getContactFilterdProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
@@ -213,7 +214,7 @@ export class AllContactProductsComponent implements OnInit {
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.get2DProductList(prodObj).subscribe(
+    this.productService.getContactFilterdProductList(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount

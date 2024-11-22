@@ -52,13 +52,14 @@ export class MenuComponent implements OnInit {
       this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
         res => {
           if (res.data[0].banner_top_brands.length > 0) {
-            localStorage.setItem('top_brands',JSON.stringify(res.data[0].banner_homepage_brands))
+            localStorage.setItem('top_brands', JSON.stringify(res.data[0].banner_top_brands))
+          }
+          if (res.data[0].banner_homepage_brands.length > 0) {
+            localStorage.setItem('home_brands', JSON.stringify(res.data[0].banner_homepage_brands))
           }
 
           if (res.data[0].banner_sub_categories.length > 0) {
             menuarr = res.data[0].banner_sub_categories;
-            console.log('menuarr - --------------------', menuarr);
-
             this.menuItems = menuarr.map(items => {
               let menuChild;
 
@@ -94,18 +95,25 @@ export class MenuComponent implements OnInit {
         // get all home slider data from API
         this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
           res => {
+            if (res.data[0].banner_top_brands.length > 0) {
+              localStorage.setItem('top_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+            }
+            if (res.data[0].banner_homepage_brands.length > 0) {
+              localStorage.setItem('home_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+            }
             if (res.data[0].banner_sub_categories.length > 0) {
               menuarr = res.data[0].banner_sub_categories;
               this.menuItems = menuarr.map(items => {
                 let menuChild;
-                // if(items.child_categories.length > 0){
-                //   menuChild = items.child_categories.map(childItems => {
-                //      return { path: 'category/'+childItems.category_slug, title: childItems.category_name, type: 'link' }
-                //   });
-                // }
+
+                // Check if the slug is 'contact' to modify the path
+                let menuPath = items.category_slug === 'contact'
+                  ? `/contact-products/${this.store_slug}`
+                  : `/store-2d-products/${this.store_slug}/${items.category_slug}`;
+
                 return {
                   title: items.category_name,
-                  path: `/store-2d-products/${this.store_slug}/${items.category_slug}`,
+                  path: menuPath,
                   type: 'link',
                   active: false,
                   children: menuChild

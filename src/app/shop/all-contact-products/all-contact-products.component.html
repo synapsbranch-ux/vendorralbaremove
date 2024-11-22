@@ -8,7 +8,7 @@
                     <div class="col-sm-3">
                         <div class="brands mb-2">
                             <h5 >Filter Brand ::</h5>
-                            <ng-select [clearSearchOnAdd]="true" bindLabel="brand_name"
+                            <ng-select class="mt-1" [clearSearchOnAdd]="true" bindLabel="brand_name"
                                 (change)="changeBrandname($event)" [clearable]="false" [items]="brandList"
                                 [(ngModel)]="selectedBrandName">
                                 <ng-template ng-option-tmp let-item="item" let-index="index">
@@ -22,9 +22,9 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="brands d-flex flex-wrap">
                                 <h5 class="top-heading">Top Brands ::</h5>
-                                <div *ngFor="let brand of topBransList" class="d-flex flex-wrap">
+                                <div *ngFor="let brand of topBransList" class="d-flex flex-wrap mt-1">
                                         <div class="brand">
-                                            <button class="btn btn-primary rounded" (click)="getBrandDeatils(brand)" >{{brand.brand_name}}</button> 
+                                            <a (click)="getBrandDeatils(brand)"><img *ngIf="brand.brand_image" src="{{brand.brand_image}}" alt=""> <span *ngIf="!brand.brand_image">{{brand.brand_name}}</span></a>
                                         </div>
                                 </div>
                             </div>

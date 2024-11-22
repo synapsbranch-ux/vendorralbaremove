@@ -4,7 +4,8 @@
       <div>
         <div class="logo-block">
           <a (click)="viewResults(brand._id)" class="pe-auto">
-            <img src="assets/images/brands/{{brand.brand_slug}}.png" alt="brand" class="w-95">
+            <img *ngIf="!brand.brand_image" src="assets/images/brands/{{brand.brand_slug}}.png" alt="brand" class="w-95">
+            <img *ngIf="brand.brand_image" src="{{brand.brand_image}}" alt="brand" class="w-95">
           </a>
         </div>
       </div>
