@@ -49,7 +49,12 @@ export class SingleStoreBannerComponent implements OnInit {
     }
 
     this.route.params.subscribe(params => {
-      this.store_slug = params['slug'];
+      if (params['slug']) {
+        this.store_slug = params['slug'];
+      } else {
+        // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
+        this.store_slug = 'yunicbrightvision';
+      }
     });
 
     let storeObj =

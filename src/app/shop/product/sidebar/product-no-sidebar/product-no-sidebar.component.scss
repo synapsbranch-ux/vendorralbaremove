@@ -3,13 +3,19 @@
     width: 100px;
     object-fit: contain;
 }
+
 .product-slick1 {
-        height: 365px;
-        display: block;
+    height: 365px;
+    display: block;
 }
 
 .product-right .color-variant li.active {
     border: 2px solid #9d9999 !important;
+}
+
+.zoom-image {
+    max-height: 370px !important;
+    object-fit: contain !important;
 }
 
 .addons-price select,
@@ -56,6 +62,7 @@ iframe {
     margin: 0 auto;
     height: 130px;
 }
+
 .add_ons_level {
     width: 100%;
 
@@ -70,24 +77,25 @@ iframe {
         flex: 100%;
     }
 }
-.try_on_btn{
+
+.try_on_btn {
     border: 1px solid #007bff;
     padding: 5px 15px;
     font-size: 16px;
     border-radius: 3px;
-    i{
+
+    i {
         margin-right: 5px;
     }
-    
+
 }
 
-.try_on_btn:hover{
+.try_on_btn:hover {
     background-color: #007bff;
     color: #fff;
 }
 
-.modal-body
-{
+.modal-body {
     padding-left: 1rem !important;
     padding-bottom: 1rem !important;
 }
@@ -100,70 +108,77 @@ iframe {
     border-radius: 5px;
     outline: none;
     background: #d3d3d3;
-  }
-  
-  .color-range::-webkit-slider-thumb {
+}
+
+.color-range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
     background: #4CAF50;
     cursor: pointer;
-  }
-  
-  .color-range::-moz-range-thumb {
+}
+
+.color-range::-moz-range-thumb {
     width: 25px;
     height: 25px;
     background: #4CAF50;
     cursor: pointer;
-  }
-  
-  .color-range::-ms-thumb {
+}
+
+.color-range::-ms-thumb {
     width: 25px;
     height: 25px;
     background: #4CAF50;
     cursor: pointer;
-  }
+}
 
 
 
 
-  .zoom-container {
+.zoom-container {
     position: relative;
     overflow: hidden;
-    width: 100%; /* Adjust as needed */
-    height: 100%; /* Adjust as needed */
+    width: 100%;
+    /* Adjust as needed */
+    height: 100%;
+    /* Adjust as needed */
     cursor: crosshair;
-  }
-  
-  .zoom-image {
+}
+
+.zoom-image {
     transition: transform 0.2s ease;
     width: 100%;
-    height: auto; /* Maintain aspect ratio */
+    height: auto;
+    /* Maintain aspect ratio */
     display: block;
-  }
-  
-  .zoom-container.zoomed .zoom-image {
-    transform: scale(2); /* Adjust scale as needed */
-  }
-  
-  
-  
+}
+
+.zoom-container.zoomed .zoom-image {
+    transform: scale(2);
+    /* Adjust scale as needed */
+}
+
+
+
 
 @media only screen and (max-width: 600px) {
     .product-slick1 {
         height: 200px;
     }
+
     .small-slider-product img {
         height: 65px;
         width: 65px;
         object-fit: contain;
     }
+
     iframe {
         width: 100%;
         height: 200px;
     }
-    .try_on_btn{
+
+    .try_on_btn {
         margin-top: 25px;
     }
-  }
+}

@@ -46,9 +46,13 @@ export class SliderComponent implements OnInit {
 
   ngOnInit(): void {
     this.envstore = environment.storeUrl;
-    this.route.paramMap.subscribe(params => {
-      // Extract the 'slug' and 'page' values from the route parameters
-      this.store_slug = params.get('slug');
+    this.route.params.subscribe(params => {
+      if (params['slug']) {
+        this.store_slug = params['slug'];
+      } else {
+        // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
+        this.store_slug = 'yunicbrightvision';
+      }
     });
 
     let catdata =

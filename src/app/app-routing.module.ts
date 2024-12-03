@@ -18,11 +18,17 @@ import { NewHomeComponent } from './home/new-home/new-home.component';
 import { NewTermComponent } from './home/new-term/new-term.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   // component: FashionOneComponent,
+  //   component: NewHomeComponent,
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
-    // component: FashionOneComponent,
-    component: NewHomeComponent,
-    pathMatch: 'full'
+    component: SingleStoreBannerComponent,
+    pathMatch: 'full',
+    data: { slug: 'yunicbrightvision' },  // Static slug value
   },
   {
     path: 'terms-condition',
