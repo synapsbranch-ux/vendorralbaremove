@@ -113,7 +113,10 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)
         if (response.data.product_tryon_3d_image.length > 0 || response.data.product_tryon_2d_image.length > 0) {
-          this.tryonenable = true
+          if (response.data.product_tryon_3d_image[0].pro_3d_image != "" || response.data.product_tryon_2d_image[0].pro_2d_image != "") {
+
+            this.tryonenable = true
+          }
         }
         this.ceateForm();
         if (response.data.product_external_link) {
@@ -329,8 +332,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       if (status || status == undefined) {
         product.stock = (product.stock - this.counter);
         this.toastrService.success('Product has been added in Cart.');
-      } 
-      else{
+      }
+      else {
         this.toastrService.warning('Different vendor product not allow');
       }
 

@@ -26,7 +26,22 @@ export class FooterOneComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.store_slug = params['slug'];
+      if (params['slug']) {
+        this.store_slug = params['slug'];
+      } else {
+        if (localStorage.getItem('storeslug')) {
+          this.store_slug = localStorage.getItem('storeslug')
+        }
+        else {
+          if (localStorage.getItem('storeslug')) {
+            this.store_slug = localStorage.getItem('storeslug')
+          }
+          else {
+            // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
+            this.store_slug = 'yunicbrightvision';
+          }
+        }
+      }
     });
 
     if (this.store_slug) {

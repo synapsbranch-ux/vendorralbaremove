@@ -31,6 +31,10 @@
     object-fit: contain;
 }
 @media only screen and (max-width: 600px) {
+    .front.text-center img {
+        height: 90px;
+
+    }
     .items {
       height: 250px;
     }
