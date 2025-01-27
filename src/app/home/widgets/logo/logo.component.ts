@@ -20,6 +20,13 @@ export class LogoComponent implements OnInit {
       this.store_slug = params['slug'];
     });
 
+    if (this.store_slug) {
+      localStorage.setItem('storeslug', this.store_slug);
+    }
+    else {
+      this.store_slug = localStorage.getItem('storeslug')
+    }
+
   }
 
   public LogoSliderConfig: any = LogoSlider;

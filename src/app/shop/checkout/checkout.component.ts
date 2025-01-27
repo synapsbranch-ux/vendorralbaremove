@@ -86,7 +86,9 @@ export class CheckoutComponent implements OnInit {
         .subscribe({
           next: (v) => {
             if (!vendorSet && v.data.product_owner._id) {
-              localStorage.setItem('vendor_id', v.data.product_owner._id);
+              if (!localStorage.getItem('vendor_id')) {
+                localStorage.setItem('vendor_id', v.data.product_owner._id);
+              }
               vendorSet = true;
               this.getShippingTax(); // Call getShippingTax only once
             }
@@ -177,149 +179,149 @@ export class CheckoutComponent implements OnInit {
     this.router.navigate(['/address'], { queryParams: { returnUrl: '/checkout' } });
   }
 
-// PayPal Payment Gateway
-private initConfig(): void {
-  let orderProductspaypal: Object[] = [];
+  // PayPal Payment Gateway
+  private initConfig(): void {
+    let orderProductspaypal: Object[] = [];
 
-  for (const elem of this.products) {
-    let odetailsobj = {
-      name: elem.product_name,
-      quantity: elem.quantity,
-      unit_amount: {
-        currency_code: this.productService.Currency.currency,
-        value: (elem.product_sale_price + elem.addonsprice).toString(),
-      },
-    };
-    orderProductspaypal.push(odetailsobj);
-  }
+    for (const elem of this.products) {
+      let odetailsobj = {
+        name: elem.product_name,
+        quantity: elem.quantity,
+        unit_amount: {
+          currency_code: this.productService.Currency.currency,
+          value: (elem.product_sale_price + elem.addonsprice).toString(),
+        },
+      };
+      orderProductspaypal.push(odetailsobj);
+    }
 
-  let billAddress = this.useraddressslist.filter((address) => address._id == this.checkoutForm?.value?.userBillingAddressId);
-  let taxTotal = (this.amount * (Number(localStorage.getItem('tax')) / 100));
+    let billAddress = this.useraddressslist.filter((address) => address._id == this.checkoutForm?.value?.userBillingAddressId);
+    let taxTotal = (this.amount * (Number(localStorage.getItem('tax')) / 100));
 
-  this.payPalConfig = {
-    currency: this.productService.Currency.currency,
-    clientId: environment.paypal_token,
-    createOrderOnClient: (data) => <ICreateOrderRequest>{
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          amount: {
-            currency_code: this.productService.Currency.currency,
-            value: (this.amount + taxTotal + this.shipping_charge_value).toFixed(2),
-            breakdown: {
-              item_total: {
-                currency_code: this.productService.Currency.currency,
-                value: this.amount,
-              },
-              tax_total: {
-                currency_code: this.productService.Currency.currency,
-                value: taxTotal.toFixed(2),
-              },
-              shipping: {
-                currency_code: this.productService.Currency.currency,
-                value: this.shipping_charge_value.toFixed(2),
-              },
-            }
-          },
-          items: orderProductspaypal,
-          shipping: {
-            address: {
-              address_line_1: billAddress[0].addressline1,
-              address_line_2: billAddress[0].addressline2,
-              admin_area_2: billAddress[0].city,
-              admin_area_1: billAddress[0].state,
-              postal_code: billAddress[0].postal_code,
-              country_code: 'US'
+    this.payPalConfig = {
+      currency: this.productService.Currency.currency,
+      clientId: environment.paypal_token,
+      createOrderOnClient: (data) => <ICreateOrderRequest>{
+        intent: 'CAPTURE',
+        purchase_units: [
+          {
+            amount: {
+              currency_code: this.productService.Currency.currency,
+              value: (this.amount + taxTotal + this.shipping_charge_value).toFixed(2),
+              breakdown: {
+                item_total: {
+                  currency_code: this.productService.Currency.currency,
+                  value: this.amount,
+                },
+                tax_total: {
+                  currency_code: this.productService.Currency.currency,
+                  value: taxTotal.toFixed(2),
+                },
+                shipping: {
+                  currency_code: this.productService.Currency.currency,
+                  value: this.shipping_charge_value.toFixed(2),
+                },
+              }
+            },
+            items: orderProductspaypal,
+            shipping: {
+              address: {
+                address_line_1: billAddress[0].addressline1,
+                address_line_2: billAddress[0].addressline2,
+                admin_area_2: billAddress[0].city,
+                admin_area_1: billAddress[0].state,
+                postal_code: billAddress[0].postal_code,
+                country_code: 'US'
+              }
             }
           }
-        }
-      ]
-    },
+        ]
+      },
 
-    advanced: {
-      commit: 'true'
-    },
-    style: {
-      label: 'paypal',
-      layout: 'vertical'
-    },
-    onApprove: (data, actions) => {
-      actions.order.get().then(details => {
-        // Successful transaction (COMPLETED)
-        // Status expected here: COMPLETED
-        this.transactionId = details['id'];
+      advanced: {
+        commit: 'true'
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+      onApprove: (data, actions) => {
+        actions.order.get().then(details => {
+          // Successful transaction (COMPLETED)
+          // Status expected here: COMPLETED
+          this.transactionId = details['id'];
+          this.paypalReturnData = [
+            {
+              transaction_id: details.id,
+              country_code: details.payer.address.country_code,
+              email_address: details.payer.email_address,
+              name: `${details.payer.name.given_name} ${details.payer.name.surname}`,
+              customer_id_paypal: details.payer.payer_id,
+              paypal_status: details.status,
+              paypal_data: details
+            }
+          ];
+          this.placePaypalOrder(); // Handle completed status
+        });
+      },
+      onClientAuthorization: (data) => {
+        // Transaction successfully authorized (AUTHORIZED or APPROVED)
+        // Status expected here: COMPLETED or APPROVED (Authorization completed)
         this.paypalReturnData = [
           {
-            transaction_id: details.id,
-            country_code: details.payer.address.country_code,
-            email_address: details.payer.email_address,
-            name: `${details.payer.name.given_name} ${details.payer.name.surname}`,
-            customer_id_paypal: details.payer.payer_id,
-            paypal_status: details.status,
-            paypal_data: details
+            transaction_id: data.id || '',
+            country_code: data.payer?.address?.country_code || '',
+            email_address: data.payer?.email_address || '',
+            name: `${data.payer?.name?.given_name || ''} ${data.payer?.name?.surname || ''}`,
+            customer_id_paypal: data.payer?.payer_id || '',
+            paypal_status: data.status || 'COMPLETED',
+            paypal_data: data
           }
         ];
-        this.placePaypalOrder(); // Handle completed status
-      });
-    },
-    onClientAuthorization: (data) => {
-      // Transaction successfully authorized (AUTHORIZED or APPROVED)
-      // Status expected here: COMPLETED or APPROVED (Authorization completed)
-      this.paypalReturnData = [
-        {
-          transaction_id: data.id || '',
-          country_code: data.payer?.address?.country_code || '',
-          email_address: data.payer?.email_address || '',
-          name: `${data.payer?.name?.given_name || ''} ${data.payer?.name?.surname || ''}`,
-          customer_id_paypal: data.payer?.payer_id || '',
-          paypal_status: data.status || 'COMPLETED',
-          paypal_data: data
-        }
-      ];
-      this.placePaypalOrder(); // Handle client authorization status
-      console.log('onClientAuthorization', data);
-    },
-    onCancel: (data, actions) => {
-      // Transaction canceled by user (CANCELED)
-      // Status expected here: CANCELED
-      this.paypalReturnData = [
-        {
-          transaction_id: data['id'] || '',
-          country_code: '',
-          email_address: '',
-          name: '',
-          customer_id_paypal: '',
-          paypal_status: 'CANCELLED',
-          paypal_data: data
-        }
-      ];
-      this.placePaypalOrder(); // Handle canceled status
-      console.log('OnCancel', data, actions);
-    },
-    onError: err => {
-      // Error during transaction (ERROR, FAILED, DENIED)
-      // Possible statuses here: ERROR, FAILED, DENIED
-      this.paypalReturnData = [
-        {
-          transaction_id: '',
-          country_code: '',
-          email_address: '',
-          name: '',
-          customer_id_paypal: '',
-          paypal_status: 'ERROR',
-          paypal_data: err
-        }
-      ];
-      this.placePaypalOrder(); // Handle error status
-      console.log('OnError', err);
-    },
-    onClick: (data, actions) => {
-      // Click event before transaction starts
-      // No specific status expected here, this is just to confirm user intent
-      console.log('onClick', data, actions);
-    },
-  };
-}
+        this.placePaypalOrder(); // Handle client authorization status
+        console.log('onClientAuthorization', data);
+      },
+      onCancel: (data, actions) => {
+        // Transaction canceled by user (CANCELED)
+        // Status expected here: CANCELED
+        this.paypalReturnData = [
+          {
+            transaction_id: data['id'] || '',
+            country_code: '',
+            email_address: '',
+            name: '',
+            customer_id_paypal: '',
+            paypal_status: 'CANCELLED',
+            paypal_data: data
+          }
+        ];
+        this.placePaypalOrder(); // Handle canceled status
+        console.log('OnCancel', data, actions);
+      },
+      onError: err => {
+        // Error during transaction (ERROR, FAILED, DENIED)
+        // Possible statuses here: ERROR, FAILED, DENIED
+        this.paypalReturnData = [
+          {
+            transaction_id: '',
+            country_code: '',
+            email_address: '',
+            name: '',
+            customer_id_paypal: '',
+            paypal_status: 'ERROR',
+            paypal_data: err
+          }
+        ];
+        this.placePaypalOrder(); // Handle error status
+        console.log('OnError', err);
+      },
+      onClick: (data, actions) => {
+        // Click event before transaction starts
+        // No specific status expected here, this is just to confirm user intent
+        console.log('onClick', data, actions);
+      },
+    };
+  }
 
 
   getpaymentoption(event) {
@@ -370,7 +372,8 @@ private initConfig(): void {
             billing_email: formData.email,
             billing_phone: formData.phone,
             cart_id: localStorage.getItem('cart_'),
-            vendor_id: localStorage.getItem('vendor_id')
+            vendor_id: localStorage.getItem('vendor_id'),
+            store_slug: localStorage.getItem('storeslug')
           }
 
           for (const element of this.products) {
@@ -576,7 +579,7 @@ private initConfig(): void {
       this.orderService.userCreateOrderPayment(orderData).subscribe(
         res => {
           this.userservice.setUserOrderid(res['data']._id);
-          console.log('this.paypalReturnData[0].paypal_status',this.paypalReturnData[0].paypal_status);
+          console.log('this.paypalReturnData[0].paypal_status', this.paypalReturnData[0].paypal_status);
           if (this.paypalReturnData[0].paypal_status === 'APPROVED' || this.paypalReturnData[0].paypal_status === 'COMPLETED') {
             for (const elem of this.products) {
               this.productService.removeCartItem(elem);

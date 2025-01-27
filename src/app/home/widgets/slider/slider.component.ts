@@ -31,7 +31,7 @@ export class SliderComponent implements OnInit {
   store_slug: any
   vendor_id: any
   store_id: any;
-  storeVisiblity:boolean = false;
+  storeVisiblity: boolean = false;
   StoreLists = [];
 
   DepartmentsList = [];
@@ -40,9 +40,9 @@ export class SliderComponent implements OnInit {
 
   roomavailablity = [];
   envstore: any
-  isVisable2Dstore:boolean=false;
-  constructor(public productService: ProductService, private storeService: StoreService, private router: Router, private route:ActivatedRoute, private toastr:ToastrService) {
-   }
+  isVisable2Dstore: boolean = false;
+  constructor(public productService: ProductService, private storeService: StoreService, private router: Router, private route: ActivatedRoute, private toastr: ToastrService) {
+  }
 
   ngOnInit(): void {
     this.envstore = environment.storeUrl;
@@ -52,10 +52,6 @@ export class SliderComponent implements OnInit {
       } else {
         if (localStorage.getItem('storeslug')) {
           this.store_slug = localStorage.getItem('storeslug')
-        }
-        else {
-          // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
-          this.store_slug = 'yunicbrightvision';
         }
       }
     });
@@ -68,34 +64,31 @@ export class SliderComponent implements OnInit {
     }
     this.productService.get2DProductList(catdata).subscribe(
       res => {
-        if(res['data'].length > 0)
-          {
-            this.isVisable2Dstore = true;
-          }
-          else
-          {
-            this.isVisable2Dstore = false;
-          }
+        if (res['data'].length > 0) {
+          this.isVisable2Dstore = true;
+        }
+        else {
+          this.isVisable2Dstore = false;
+        }
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
-   });
-   let storedata =
-   {
-     'store_slug': this.store_slug,
-   }
-   this.productService.getStoreDetails(storedata).subscribe(
-    res => {
-      if(res['data'].length > 0)
-        {
-          this.storeVisiblity = res['data'][0].store_jpg_file ? true : false ;
+      });
+    let storedata =
+    {
+      'store_slug': this.store_slug,
+    }
+    this.productService.getStoreDetails(storedata).subscribe(
+      res => {
+        if (res['data'].length > 0) {
+          this.storeVisiblity = res['data'][0].store_jpg_file ? true : false;
         }
-    },
-    error => {
-      // .... HANDLE ERROR HERE 
-      this.toastr.error(error.error.message)
- });
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.error(error.error.message)
+      });
   }
 
   public HomeSliderConfig: any = HomeSlider;
@@ -104,13 +97,11 @@ export class SliderComponent implements OnInit {
     this.router.navigateByUrl(`/store-2d-products/${this.store_slug}/${catDetails.category_slug}`)
   }
 
-  redirectStore()
-  {
+  redirectStore() {
     let url = `https://store.ralbatech.com/${this.store_slug}/1`
     window.open(url, '_blank');
   }
-  redirec2dtStore()
-  {
+  redirec2dtStore() {
     this.router.navigateByUrl(`2d-products/${this.store_slug}`)
 
   }

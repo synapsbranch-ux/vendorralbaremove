@@ -309,7 +309,8 @@ export class ProductService {
     ////console.log('localStorage.getItem(vendor_id)', localStorage.getItem('vendor_id'))
 
     let SinglevendorStatus = true;
-    if (localStorage.getItem('vendor_id') && JSON.parse(localStorage.getItem('cartItems')).length > 0) {
+    const cartItems = localStorage.getItem('cartItems');
+    if (localStorage.getItem('vendor_id') && cartItems && JSON.parse(cartItems).length > 0) {
       if (product?.product_owner) {
         if (localStorage.getItem('vendor_id') != product?.product_owner?._id) {
           SinglevendorStatus = false

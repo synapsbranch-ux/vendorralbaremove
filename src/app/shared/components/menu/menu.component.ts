@@ -36,11 +36,6 @@ export class MenuComponent implements OnInit {
         if (localStorage.getItem('storeslug')) {
           this.store_slug = localStorage.getItem('storeslug')
         }
-        else {
-          // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
-          this.store_slug = 'yunicbrightvision';
-        }
-
       }
     });
 

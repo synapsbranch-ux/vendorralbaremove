@@ -103,10 +103,10 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           }
         });
 
-        // console.log('productAddons =================', this.productAddons);
+        console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
-          let colorCode = response.data.product_bg_color.slice(1);
+          let colorCode = response.data?.product_bg_color ? response.data?.product_bg_color?.slice(1) : '#fff';
           let fulliframeURL = this.iframeBaseLink + product3durl + '&color=' + colorCode;
           this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
         }

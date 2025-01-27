@@ -18,10 +18,10 @@ export class FooterOneComponent implements OnInit {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
-  vendorhome:boolean=false;
-  isvendorlogoimage:boolean = false;
+  vendorhome: boolean = false;
+  isvendorlogoimage: boolean = false;
   public today: number = Date.now();
-  store_slug:any
+  store_slug: any
   constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
@@ -35,10 +35,6 @@ export class FooterOneComponent implements OnInit {
         else {
           if (localStorage.getItem('storeslug')) {
             this.store_slug = localStorage.getItem('storeslug')
-          }
-          else {
-            // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
-            this.store_slug = 'yunicbrightvision';
           }
         }
       }
@@ -60,13 +56,11 @@ export class FooterOneComponent implements OnInit {
       this.storeService.vendorstoredetails(storeObj).subscribe(
         res => {
           if (res.data[0]?.is_logo) {
-            if(res.data[0]?.logo)
-            {
+            if (res.data[0]?.logo) {
               this.themeLogo = res.data[0].logo
               this.isvendorlogoimage = true;
             }
-            else
-            {
+            else {
               this.themeLogo = res.data[0]?.logo_name
               this.isvendorlogoimage = false;
             }
@@ -85,8 +79,7 @@ export class FooterOneComponent implements OnInit {
     }
   }
 
-  redirectcat(url:any)
-  {
+  redirectcat(url: any) {
     this.router.navigate([url])
   }
 
