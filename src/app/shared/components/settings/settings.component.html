@@ -1,5 +1,5 @@
 <div class="icon-nav">
-  <ul>
+  <ul class="d-flex align-items-center">
     <!-- <li class="onhover-div mobile-search search-widgets" id="search-widgets">
       <div (click)="searchToggle()">
         <img src="assets/images/icon/search.png" class="img-fluid" alt="">
@@ -43,14 +43,21 @@
         </ul>
       </div>
     </li> -->
-    <li class="onhover-dropdown mobile-account">
-      <a href="javascript:void(0)">
-        <i class="fa fa-user-o" aria-hidden="true"></i> My Account
+    <li class="onhover-dropdown mobile-account account">
+      <a href="javascript:void(0)" class="d-flex align-items-center justify-content-between">
+        <!-- <i class="fa fa-user-o" aria-hidden="true"></i>  -->
+        <img src="assets/images/user.svg" alt="User" width="18">
+        My Account
       </a>
       <ul class="onhover-show-div">
         <li *ngIf="!user_">
-          <a [routerLink]="['/login']" data-lng="en">
-            Login
+          <a class="loginBtn" [routerLink]="['/login']" data-lng="en">
+            Log In
+          </a>
+        </li>
+        <li *ngIf="!user_">
+          <a class="createBtn" [routerLink]="['/login']" data-lng="en">
+            Create Account
           </a>
         </li>
         <li *ngIf="user_">
@@ -68,15 +75,19 @@
     <li class="onhover-div mobile-wishlist">
       <div>
         <a [routerLink]="['/wishlist']">
-          <i class="fa fa-heart-o" aria-hidden="true"></i>Wishlist
+          <!-- <i class="fa fa-heart-o" aria-hidden="true"></i> -->
+          <img src="assets/images/wishlist-icon.svg" alt="wishlist" width="18">
+          <!-- Wishlist -->
         </a>
       </div>
     </li>
     <li class="onhover-div mobile-cart">
       <div>
         <a [routerLink]="['/cart']">
+          <img src="assets/images/shopping-cart.svg" alt="cart" width="18">
           <!-- <img src="assets/images/icon/cart.png" class="img-fluid" alt=""> -->
-          <i class="fa fa-shopping-bag"></i> My Cart
+          <!-- <i class="fa fa-shopping-bag"></i>  -->
+          <!-- My Cart -->
         </a>
       </div>
       <span class="cart_qty_cls">{{products? products.length : 0 }}</span>

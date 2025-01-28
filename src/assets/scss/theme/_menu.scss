@@ -15,21 +15,21 @@ header {
             text-align: left;
             >li {
                 position: relative;
-                float: left;
+                // float: left;
                 display: block;
                 >a {
                     display: block;
-                    padding-right: 45px;
+                    padding-right: 25px;
                     color: #222222;
                     font-size: 16px;
                     font-weight: 400;
                     line-height: 23px;
                     text-decoration: none;
-                    text-transform: uppercase;
-                    padding-top: 14px;
-                    padding-bottom: 14px;
+                    text-transform: capitalize;
+                    // padding-top: 7px;
+                    // padding-bottom: 14px;
                     padding-left: 0;
-                    letter-spacing: 0.07em;
+                    // letter-spacing: 0.07em;
                     position: relative;
                     .sub-arrow {
                         position: absolute;
