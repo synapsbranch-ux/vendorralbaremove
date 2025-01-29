@@ -2,7 +2,7 @@
     <div class="mobile-fix-option"></div>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 d-none d-lg-block">
                 <div class="main-menu">
                     <div class="menu-left">
                         <!-- <app-left-menu></app-left-menu> -->
@@ -22,10 +22,11 @@
                         <!-- <a class="btn btn-solid rounded-lg virtual_btn" [routerLink]="['/pages/3dstore']" routerLinkActive="router-link-active"  >VIRTUAL STUDIO</a> -->
                         <form class="ml-3">
                             <div class="input-group">
-                                <div class="input-group-prepend">
+                                <div class="input-group-prepend d-flex">
                                     <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" (keyup.enter)="getSearchVAl($event.target.value)" placeholder="Search anything here">
                                 </div>
-                                <input type="text" class="form-control" (keyup.enter)="getSearchVAl($event.target.value)" placeholder="Search for products">
+                                
                             </div>
                         </form>
                     </div>
@@ -38,6 +39,42 @@
                             <app-settings></app-settings>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- mobile menu -->
+            <div class="col-12 d-flex align-items-center justify-content-between d-lg-none">
+                <div class="brand-logo">
+                    <a *ngIf="!vendorhome" routerLink="/" id="headerlogo">
+                        <img [src]="themeLogo" class="img-fluid" alt="logo">
+                    </a>
+                    <a *ngIf="vendorhome" routerLink="/vendor/{{store_slug}}" id="headerlogo">
+                        <img *ngIf="isvendorlogoimage" [src]="themeLogo" class="img-fluid" alt="logo">
+                        <h2 *ngIf="!isvendorlogoimage">{{themeLogo}}</h2>
+                        <small>Powerd by Ralbatech</small>
+                    </a>
+                </div>
+                <div>
+                    <ul class="mobileMenuList">
+                        <li>
+                            <img src="assets/images/search.svg" width="20" alt="">
+                        </li>
+                        <li>
+                            <img src="assets/images/user.svg" width="20" alt="">
+                        </li>
+                        <li>
+                            <img src="assets/images/wishlist-icon.svg" width="20" alt="">
+                        </li>
+                        <li class="onhover-div mobile-cart">
+                            <div>
+                                <a href="">
+                                    <img src="assets/images/shopping-cart.svg" width="20" alt="">
+                                </a>
+                            </div>
+                            <span class="cart_qty_cls">0</span>
+                            
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

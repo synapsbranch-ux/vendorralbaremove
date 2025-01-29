@@ -4887,6 +4887,17 @@ background-color: $black;*/
             }
         }
     }
+    .form-check .form-check-input{
+        float: unset;
+        margin-right: 10px;
+    }
+    .blueBanner{
+        padding: 30px 0;
+    }
+    .pageBreadcrumb{
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
     .layout3-menu {
         .main-menu {
@@ -5317,9 +5328,22 @@ background-color: $black;*/
             }
         }
     }
+    .itemBox .productDetails .productName{
+        font-size: 12px;
+    }
+    .itemBox .productDetails .productCode{
+        font-size: 10px;
+    }
+    .itemBox .productDetails .productPrice{
+        font-size: 12px;
+        padding: 4px;
+    }
+    .itemBox .productDetails .productPrice span{
+        font-size: 10px;
+    }
 
     footer {
-        margin-bottom: 60px;
+        margin-bottom: 0px;
 
         .btn-solid {
             padding: 13px 29px;

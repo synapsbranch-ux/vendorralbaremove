@@ -16,7 +16,7 @@ header {
             >li {
                 position: relative;
                 // float: left;
-                display: block;
+                display: inline-block;
                 >a {
                     display: block;
                     padding-right: 25px;
@@ -1371,6 +1371,7 @@ header {
         width: 100vw;
         z-index: 9;
         box-shadow: 0 2px 5px 0 rgba(168, 168, 168, 1);
+        display: none;
     }
     .main-menu {
         .menu-center{
@@ -1698,7 +1699,7 @@ header {
 @media (max-width: 480px) {
     .brand-logo {
         img {
-            height: 25px;
+            height: 60px;
         }
     }
 }

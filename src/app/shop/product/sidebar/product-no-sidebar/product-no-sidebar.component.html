@@ -25,7 +25,7 @@
                     <div class="row align-items-center">
                         <div class="col-12 p-0">
                             <div class="slider-nav small-slider-product row">
-                                <div class="col-12 col-sm-9">
+                                <div class="col-12">
                                     <owl-carousel-o [options]="ProductDetailsThumbConfig" class="product-slick">
                                         <ng-container *ngFor="let image of productImages; index as i ">
                                             <ng-template carouselSlide [id]="i" *ngIf="i==0 && image.pro_3d_image">
@@ -50,10 +50,11 @@
 
                                     </owl-carousel-o>
                                 </div>
-                                <div class="col-12 col-sm-3 align-items-center justify-content-center d-flex">
-                                    <a *ngIf="tryonenable" class="try_on_btn" href="javascrip:void(0)"
-                                        (click)="view3D.openModal()"><i class="fa fa-video-camera"
-                                            aria-hidden="true"></i> Try On</a>
+                                <div class="col-12 align-items-center justify-content-evenly d-flex">
+                                    <img src="assets/images/rotate-360.svg" alt="">
+                                    <img src="assets/images/picView.svg" alt="">
+                                    <a *ngIf="tryonenable" class="skyBlueBtn" href="javascrip:void(0)"
+                                        (click)="view3D.openModal()"> Try On</a>
 
                                     <!-- <a *ngIf="tryonenable" class="try_on_btn" href="javascrip:void(0)" (click)="tryonpage()"><i class="fa fa-video-camera" aria-hidden="true"></i> Try On</a> -->
                                 </div>
@@ -65,12 +66,13 @@
                 </div>
                 <div class="col-lg-6 rtl-text">
                     <div class="product-right">
-                        <h5 class="avalibility" *ngIf="counter <= product.stock"><span>In Stock</span></h5>
-                        <h5 class="avalibility" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
+                        <h5 class="avalibility mb-2" *ngIf="counter <= product.stock"><span>Instock</span></h5>
+                        <h5 class="unavalibility mb-2" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
 
-                        <h2>{{ product?.product_name }}</h2>
+                        <h2 class="mb-0">{{ product?.product_name }}</h2>
+                        <p class="productCode">CK22538</p>
                         <h3 *ngIf="product?.product_sale_price">
-                            <del class="text-danger">{{ product?.product_retail_price | currency:
+                            <del>{{ product?.product_retail_price | currency:
                                 productService.Currency?.currency:'symbol'
                                 }}</del>
                             <span>{{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'
@@ -83,14 +85,13 @@
                         <!-- <div class="rating">
                         <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
                     </div> -->
-                        <p class="mb-2">{{ product?.product_description}}</p>
+                        <p class="mb-0">{{ product?.product_description}}</p>
                         <!-- <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory> -->
-                        <div class="product-attributes pb-4">
+                        <div class="product-attributes pb-3">
                             <div *ngIf="productAttributeArr">
                                 <div *ngFor="let attribute of productAttributeArr">
                                     <div *ngIf="attribute.value && !stingURLCheck(attribute.value)" class="py-2">
-                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
-                                        <p>{{attribute.value}}</p>
+                                        <p class="productFor">{{capitalizeString(attribute.attribute_slug)}} <span>{{attribute.value}}</span></p>
                                     </div>
                                     <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'img'"
                                         class="py-2">
@@ -270,15 +271,20 @@
                             </div>
                         </div>
                         <div *ngIf="cartbuttonhideStatus == 'inactive'">
-                            <div class="product-buttons" *ngIf="product_external_link.length < 12">
-                                <a class="btn btn-solid rounded-lg virtual_btn"
+                            <div class="product-buttons d-flex justify-content-center justify-content-lg-start" *ngIf="product_external_link.length < 12">
+                                <a class="blueBtn ms-0"
                                     [class.disabled]="counter > product.stock"
                                     (click)="addToCart(product)">{{isProductinCart? 'update
                                     cart': 'add to
                                     cart'}}</a>
+                                <button class="wishlistBtn ms-3" (click)="addToWishlist(product)"
+                                    [disabled]="productWishliststatus">
+                                    <i [ngClass]="productWishliststatus? 'fa fa-heart' : 'fa fa-heart-o'"
+                                        class=""></i>
+                                </button>
                             </div>
                             <div class="product-buttons" *ngIf="product_external_link.length > 12">
-                                <a class="btn btn-solid rounded-lg virtual_btn"
+                                <a class="blueBtn ms-0"
                                     (click)="externalLInk(product_external_link)">Buy Now </a>
                             </div>
                         </div>
