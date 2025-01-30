@@ -39,12 +39,12 @@ export class MenuComponent implements OnInit {
       }
     });
 
-    if (this.store_slug) {
-      localStorage.setItem('storeslug', this.store_slug);
-    }
-    else {
-      this.store_slug = localStorage.getItem('storeslug')
-    }
+    // if (this.store_slug) {
+    //   localStorage.setItem('storeslug', this.store_slug);
+    // }
+    // else {
+    //   this.store_slug = localStorage.getItem('storeslug')
+    // }
 
     if (this.store_slug) {
       if (!localStorage.getItem('storeslug')) {

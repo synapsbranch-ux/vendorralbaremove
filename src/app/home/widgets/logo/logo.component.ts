@@ -19,11 +19,10 @@ export class LogoComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
     });
-
-    if (this.store_slug) {
+    if (!localStorage.getItem('storeslug')) {
       localStorage.setItem('storeslug', this.store_slug);
     }
-    else {
+    if (!this.store_slug) {
       this.store_slug = localStorage.getItem('storeslug')
     }
 

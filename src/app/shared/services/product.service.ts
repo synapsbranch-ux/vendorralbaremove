@@ -934,6 +934,15 @@ export class ProductService {
     return this.http.post(environment.baseUrl + 'home-filter-store-product', data);
   }
 
+  gettagList() {
+    return this.http.get(environment.baseUrl + 'tag-list');
+  }
+
+  gettestMediaSection(store_slug:any)
+  {
+    return this.http.get(environment.baseUrl + `media-text-contain-list?store_slug=${store_slug}`);
+  }
+
 }
 
 

@@ -32,20 +32,15 @@ export class FooterOneComponent implements OnInit {
         if (localStorage.getItem('storeslug')) {
           this.store_slug = localStorage.getItem('storeslug')
         }
-        else {
-          if (localStorage.getItem('storeslug')) {
-            this.store_slug = localStorage.getItem('storeslug')
-          }
-        }
       }
     });
 
-    if (this.store_slug) {
-      localStorage.setItem('storeslug', this.store_slug);
-    }
-    else {
-      this.store_slug = localStorage.getItem('storeslug')
-    }
+    // if (this.store_slug) {
+    //   localStorage.setItem('storeslug', this.store_slug);
+    // }
+    // else {
+    //   this.store_slug = localStorage.getItem('storeslug')
+    // }
     if (this.store_slug) {
 
       let storeObj = {

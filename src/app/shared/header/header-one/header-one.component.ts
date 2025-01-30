@@ -27,22 +27,18 @@ export class HeaderOneComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.route.params.subscribe(params => {
-      if (params['slug']) {
-        this.store_slug = params['slug'];
-      }
-      else {
-        // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
-        this.store_slug = 'yunicbrightvision';
-      }
-    });
+    // this.route.params.subscribe(params => {
+    //   if (params['slug']) {
+    //     this.store_slug = params['slug'];
+    //   }
+    //   else {
+    //     // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
+    //     this.store_slug = 'yunicbrightvision';
+    //   }
+    // });
 
-    if (this.store_slug) {
-      localStorage.setItem('storeslug', this.store_slug);
-    }
-    else {
-      this.store_slug = localStorage.getItem('storeslug')
-    }
+    this.store_slug = localStorage.getItem('storeslug')
+    
     if (this.store_slug) {
 
       let storeObj = {

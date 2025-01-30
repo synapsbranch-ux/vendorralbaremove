@@ -31,7 +31,8 @@ export class SingleStoreBannerComponent implements OnInit {
   public brands = [];
   public home_brands = [];
   //// for 2D products
-
+  public tagListData = [];
+  public mediaTextData = [];
   currentPage = 1;
 
   constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService, private productService: ProductService, private toastr: ToastrService) {
@@ -51,9 +52,11 @@ export class SingleStoreBannerComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['slug']) {
         this.store_slug = params['slug'];
+        localStorage.setItem('storeslug', this.store_slug)
       } else {
         // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
         this.store_slug = 'yunicbrightvision';
+        localStorage.setItem('storeslug', this.store_slug)
       }
     });
 
@@ -81,7 +84,8 @@ export class SingleStoreBannerComponent implements OnInit {
         this.toastr.error(error.error.message)
       });
 
-
+    this.tagList();
+    this.testMediaSectionList(this.store_slug)
   }
 
   // getAllBrands() {
@@ -110,6 +114,30 @@ export class SingleStoreBannerComponent implements OnInit {
         // .... HANDLE ERROR HERE 
         this.toastr.success(error.error.message);
         this.router.navigateByUrl('/')
+      }
+    );
+  }
+
+  tagList() {
+    this.productService.gettagList().subscribe(
+      res => {
+        this.tagListData = res['data'];
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.success(error.error.message);
+      }
+    );
+  }
+
+  testMediaSectionList(store_slug: any) {
+    this.productService.gettestMediaSection(store_slug).subscribe(
+      res => {
+        this.mediaTextData = res['data'];
+      },
+      error => {
+        // .... HANDLE ERROR HERE 
+        this.toastr.success(error.error.message);
       }
     );
   }
