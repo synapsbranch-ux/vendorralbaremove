@@ -5,11 +5,11 @@ import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-store-2d-products',
-  templateUrl: './store-2d-products.component.html',
-  styleUrls: ['./store-2d-products.component.scss']
+  selector: 'app-store-3d-products',
+  templateUrl: './store-3d-products.component.html',
+  styleUrls: ['./store-3d-products.component.scss']
 })
-export class StoreproductsComponent implements OnInit {
+export class Store3DproductsComponent implements OnInit {
 
   public products: ProductNew[] = [];
   store_slug: any;

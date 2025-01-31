@@ -142,6 +142,15 @@ export class SingleStoreBannerComponent implements OnInit {
     );
   }
 
+  getTagsProducts(tag: any) {
+    localStorage.setItem('tag_id', tag._id);
+    this.router.navigate([`/all-products/${this.store_slug}/all`]);
+  }
+
+  showAllProducts() {
+    this.router.navigate([`/all-products/${this.store_slug}/all`]);
+  }
+
   filterProducts() {
     const menCategoryId = this.categories.find(cat => cat.category_name === 'Men')?.category_id;
     const womenCategoryId = this.categories.find(cat => cat.category_name === 'Women')?.category_id;

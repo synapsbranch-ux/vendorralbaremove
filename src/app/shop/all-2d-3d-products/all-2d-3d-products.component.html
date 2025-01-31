@@ -11,6 +11,16 @@
                 <div class="filterMenu mr-2">
                     <a class="clear" (click)="getAllProducts()">Clear Filter</a>
                 </div>
+                <div class="filterMenu">
+                    <ul>
+                        <li *ngFor="let category of categoryList.slice(1); let i = index">
+                            <a (click)="getCAtegoryDeatils(category, i + 1)"
+                                [ngClass]="{'active': cat_id == category.category_id }">
+                                {{ category.category_name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="filterMenu ms-3">
                     <ul>
                         <li class="">
@@ -31,18 +41,21 @@
         <div class="row">
             <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let product of productList">
                 <div class="itemBox">
-                    <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                        [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                        [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image" class="img-fluid lazy-loading"
-                        alt="{{ product.product_name }}" />
-
+                    <a [routerLink]="['/product/', product.product_slug]">
+                        <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
+                            [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
+                            [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
+                            class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
+                    </a>
                     <div class="wishlistIcon d-flex align-items-center">
                         <img src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist">
                     </div>
                     <div class="row m-0 mt-3 productDetails align-items-center gx-0">
                         <div class="col-6">
-                            <p class="productName">{{ product?.product_name | titlecase }}</p>
-                            <p class="productCode">{{ product?.attributes[0]?.value }}</p>
+                            <a [routerLink]="['/product/', product.product_slug]">
+                                <p class="productName">{{ product?.product_name | titlecase }}</p>
+                            </a>
+                            <p class="productCode">{{ product?.product_sku }}</p>
                         </div>
                         <div class="col-6">
                             <div class="productPrice" *ngIf="product?.product_sale_price">
@@ -77,7 +90,7 @@
         <li *ngFor="let brand of brandList">
             <a class="dropdown-item" (click)="changeBrandname(brand)"
                 [ngClass]="{'active': selectedBrand === brand._id}">
-                <img *ngIf="brand.brand_image" class="w-55" [src]="brand.brand_image" alt="Brand">
+                <img *ngIf="brand.brand_image" class="w-100" [src]="brand.brand_image" alt="Brand">
                 <span *ngIf="!brand.brand_image">{{ brand.brand_name }}</span>
             </a>
         </li>

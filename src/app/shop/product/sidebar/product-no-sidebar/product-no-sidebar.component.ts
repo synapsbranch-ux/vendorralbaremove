@@ -57,6 +57,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   isProductinCart: boolean = false;
   othervalue: any;
   fileUrl: any;
+  is3Dactive: boolean = false;
+  is2Dactive: boolean = true;
+
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -176,6 +179,17 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   }
 
+  active3DSlider() {
+    console.log('active3DSlider')
+    this.is3Dactive = true;
+    this.is2Dactive = false;
+  }
+
+  active2DSlider() {
+    console.log('active2DSlider')
+    this.is3Dactive = false;
+    this.is2Dactive = true;
+  }
 
   prefillAddons(savedAddons: any) {
     savedAddons.forEach((savedAddon: any) => {

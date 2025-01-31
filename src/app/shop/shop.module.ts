@@ -7,7 +7,6 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 // Product Details Components
 import { ProductNoSidebarComponent } from './product/sidebar/product-no-sidebar/product-no-sidebar.component';
 
-
 // Product Details Widgest Components
 import { ServicesComponent } from './product/widgets/services/services.component';
 import { CountdownComponent } from './product/widgets/countdown/countdown.component';
@@ -35,7 +34,6 @@ import { SafePipe } from '../safe.pipe';
 import { TryonComponent } from './tryon/tryon.component';
 import { VideoModeComponent } from './video-mode/video-mode.component';
 import { ImageModeComponent } from './image-mode/image-mode.component';
-import { StoreproductsComponent } from './store-3d-products/store-2d-products.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AllTwoDProductsComponent } from './all-2d-products/all-2d-products.component';
@@ -45,6 +43,8 @@ import { LogoComponent } from '../home/widgets/logo/logo.component';
 import { SliderComponent } from '../home/widgets/slider/slider.component';
 import { AllContactProductsComponent } from './all-contact-products/all-contact-products.component';
 import { ProductContactComponent } from './product/sidebar/product-contact/product-contact.component';
+import { Store3DproductsComponent } from './store-3d-products/store-3d-products.component';
+import { AllTwoDThreeDProductsComponent } from './all-2d-3d-products/all-2d-3d-products.component';
 @NgModule({
   declarations: [
     ProductNoSidebarComponent,
@@ -70,13 +70,14 @@ import { ProductContactComponent } from './product/sidebar/product-contact/produ
     TryonComponent,
     VideoModeComponent,
     ImageModeComponent,
-    StoreproductsComponent,
+    Store3DproductsComponent,
     AllTwoDProductsComponent,
     SingleStoreComponent,
     SliderComponent,
     LogoComponent,
     SingleStoreBannerComponent,
-    AllContactProductsComponent
+    AllContactProductsComponent,
+    AllTwoDThreeDProductsComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

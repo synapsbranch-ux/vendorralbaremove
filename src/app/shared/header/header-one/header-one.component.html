@@ -81,10 +81,7 @@
                 
                 <div class="w-100 text-center">
                     <ul class="mobileMenuList">
-                        <li>Men</li>
-                        <li>Women</li>
-                        <li>Unisex</li>
-                        <li>Contacts</li>
+                        <li *ngFor="let menu of menuarr"><a routerLink="/store-2d-products/{{store_slug}}/{{menu.category_slug}}" routerLinkActive="active">{{menu.category_name}}</a></li>
                     </ul>
                 </div>
             </div>

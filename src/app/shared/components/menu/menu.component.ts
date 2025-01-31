@@ -73,7 +73,7 @@ export class MenuComponent implements OnInit {
               // Check if the slug is 'contact' to modify the path
               let menuPath = items.category_slug === 'contact'
                 ? `/contact-products/${this.store_slug}`
-                : `/store-2d-products/${this.store_slug}/${items.category_slug}`;
+                : `/all-products/${this.store_slug}/${items.category_slug}`;
 
               return {
                 title: items.category_name,
@@ -116,7 +116,7 @@ export class MenuComponent implements OnInit {
                 // Check if the slug is 'contact' to modify the path
                 let menuPath = items.category_slug === 'contact'
                   ? `/contact-products/${this.store_slug}`
-                  : `/store-2d-products/${this.store_slug}/${items.category_slug}`;
+                  : `/all-products/${this.store_slug}/${items.category_slug}`;
 
                 return {
                   title: items.category_name,

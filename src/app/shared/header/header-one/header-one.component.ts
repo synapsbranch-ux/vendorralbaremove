@@ -2,6 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from '../../services/homeslider.service';
 
 @Component({
   selector: 'app-header-one',
@@ -17,13 +18,13 @@ export class HeaderOneComponent implements OnInit {
   public stick: boolean = false;
   vendorhome: boolean = false;
   isvendorlogoimage: boolean = false;
-
+  menuarr = []
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
-  constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
 
@@ -38,7 +39,7 @@ export class HeaderOneComponent implements OnInit {
     // });
 
     this.store_slug = localStorage.getItem('storeslug')
-    
+
     if (this.store_slug) {
 
       let storeObj = {
@@ -73,6 +74,33 @@ export class HeaderOneComponent implements OnInit {
         }
       );
     }
+
+
+
+    let storeObj = {
+      store_slug: this.store_slug
+    };
+
+    // get all home slider data from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        if (res.data[0].banner_top_brands.length > 0) {
+          localStorage.setItem('top_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+        }
+        if (res.data[0].banner_homepage_brands.length > 0) {
+          localStorage.setItem('home_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+        }
+        if (res.data[0].banner_sub_categories.length > 0) {
+          this.menuarr = res.data[0].banner_sub_categories;
+          console.log('menuarr------------------------------------',this.menuarr);
+        }
+      },
+      error => {
+        this.toaster.error(error.error.message);
+        this.router.navigateByUrl('/');
+      }
+    );
+
   }
 
   // @HostListener Decorator

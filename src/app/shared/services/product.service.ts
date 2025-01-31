@@ -118,10 +118,14 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'category');
   }
 
-  //// Get all Filtered Product List
+  //// Get all Filtered Product List  
 
   getallFilteredProduct(data) {
     return this.http.post(environment.baseUrl + 'filter-store-product', data);
+  }
+
+  get2D3DFilteredProduct(data) {
+    return this.http.post(environment.baseUrl + 'filter-all-store-product', data);
   }
 
   //// Get all Brands List
@@ -141,6 +145,12 @@ export class ProductService {
   getall2DBrands(store_slug: any) {
     return this.http.get(environment.baseUrl + `2d-product-brand/list?store_slug=${store_slug}`);
   }
+
+    //// Get all 2D 3D Brands List
+
+    getall2D3DBrands(store_slug: any) {
+      return this.http.get(environment.baseUrl + `2d-3d-product-brand/list?store_slug=${store_slug}`);
+    }
 
   //// Get all Contact Brands List
 

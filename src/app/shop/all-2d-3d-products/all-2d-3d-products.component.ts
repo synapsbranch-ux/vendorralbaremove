@@ -5,11 +5,11 @@ import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-all-contact-products',
-  templateUrl: './all-contact-products.component.html',
-  styleUrls: ['./all-contact-products.component.scss']
+  selector: 'app-all-2d-3d-products',
+  templateUrl: './all-2d-3d-products.component.html',
+  styleUrls: ['./all-2d-3d-products.component.scss']
 })
-export class AllContactProductsComponent implements OnInit {
+export class AllTwoDThreeDProductsComponent implements OnInit {
   @Input() store_slug: string | undefined;
   @Input() currency: any = this.productService.Currency; // Default Currency 
   public ImageSrc: string
@@ -21,9 +21,10 @@ export class AllContactProductsComponent implements OnInit {
   selectedBrandName: any
   categoryList = [];
   productList = [];
-  topBransList = []
-  // p: any
   showBrand: boolean = false;
+  activeCategoryIndex: number = 1;
+  tag_id: any;
+  // p: any
   currentPage: number = 1; // Initialize with default page number
   limit: number = 12;
   totalProducts: any;
@@ -36,24 +37,39 @@ export class AllContactProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('top_brands')) {
-      this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
-      console.log('this.topBransList----------------', this.topBransList)
-    }
-    if (localStorage.getItem('contract_brand')) {
-      this.selectedBrand = localStorage.getItem('contract_brand')
+    if (localStorage.getItem('2d_3d_brand')) {
+      this.selectedBrand = localStorage.getItem('2d_3d_brand')
     }
     else {
       this.selectedBrand = ''
     }
 
+    if (localStorage.getItem('tag_id')) {
+      this.tag_id = localStorage.getItem('tag_id')
+    }
+    else {
+      this.tag_id = ''
+    }
+
+    if (localStorage.getItem('2d_3d_cur_cat')) {
+      this.cat_id = localStorage.getItem('2d_3d_cur_cat')
+    }
+    else {
+      this.cat_slug = ''
+    }
+
     if (!this.store_slug) {
       this.route.paramMap.subscribe(params => {
-        // Extract the 'storeSlug' value from the route parameters
+        // Extract the 'slug' and 'page' values from the route parameters
         this.store_slug = params.get('storeSlug');
+        this.cat_slug = params.get('catSlug');
       });
+      if (this.cat_slug == 'all') {
+        this.cat_slug = ''
+        this.cat_id = ''
+      }
     }
-    this.productService.getallContactBrands(this.store_slug).subscribe(
+    this.productService.getall2D3DBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];
@@ -66,21 +82,28 @@ export class AllContactProductsComponent implements OnInit {
 
     this.productService.getallEyeGlassCategoryWithSubcat().subscribe(
       res => {
-        this.categoryList = res['data'];
+        console.log('res=========', res['data'])
+        this.categoryList = res['data'][0];
+        if (this.cat_slug !== '' && this.cat_slug !== 'all') {
+          let filter_cat = this.categoryList.filter((cat) => cat.category_slug === this.cat_slug);
+          console.log('filter_cat', filter_cat);
 
-        let prodObj = {
-          "product_category": this.cat_id,
-          "store_slug": this.store_slug,
-          "brand": this.selectedBrand,
-          "page": this.currentPage,
-          "limit": this.limit
+          // Check if filter_cat has any elements before accessing the first one
+          if (filter_cat.length > 0) {
+            console.log('filter_cat id', filter_cat[0].category_id);
+            this.cat_id = filter_cat[0].category_id;
+          } else {
+            console.log('No matching category found');
+          }
         }
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
     this.loadProducts();
+
   }
 
 
@@ -90,13 +113,14 @@ export class AllContactProductsComponent implements OnInit {
 
     this.isLoading = true;
     let prodObj = {
+      "tag_id": this.tag_id,
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
       "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
+    this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       (res: any) => {
         if (res['data'].hasOwnProperty('products') && res['data'].products.length > 0) {
           // Append the new products to the existing list
@@ -137,26 +161,28 @@ export class AllContactProductsComponent implements OnInit {
     this.showBrand = false;
   }
 
-
-  getBrandDeatils(brand: any) {
-    let pageNumber = 1;
+  getAllProducts() {
+    this.tag_id = ''
+    this.cat_slug = '';
+    this.cat_id = '';
+    this.selectedBrand = '';
+    this.selectedBrandName = ''
     this.currentPage = 1;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
-    this.selectedBrand = brand._id
-    this.selectedBrandName = brand.brand_name;
-    localStorage.setItem('contract_brand', this.selectedBrand);
+    localStorage.setItem('tag_id', this.tag_id);
+    localStorage.setItem('2d_3d_brand', this.selectedBrand);
+    localStorage.setItem('2d_3d_cur_cat', this.cat_id);
     let prodObj = {
-      "product_category": this.cat_id,
+      "tag_id": this.tag_id,
+      "product_category": '',
       "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
+      "brand": '',
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
+    this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -164,28 +190,27 @@ export class AllContactProductsComponent implements OnInit {
       });
   }
 
-  getAllProducts() {
 
-    this.cat_slug = '';
-    this.cat_id = '';
-    this.selectedBrand = '';
-    this.selectedBrandName = ''
-    this.currentPage = 1;
-    localStorage.setItem('contract_brand', this.selectedBrand);
-    localStorage.setItem('cat_slug', this.cat_slug);
-    localStorage.setItem('cur_cat', this.cat_slug);
+  getCAtegoryDeatils(Category: any, index: number) {
+    this.activeCategoryIndex = index;
+    let pageNumber = 1;
+    localStorage.setItem('2d_3d_cur_page', pageNumber.toString())
+    localStorage.setItem('2d_3d_cur_cat', Category.category_id)
+    console.log('Category============', Category);
+    this.cat_slug = Category.category_slug;
+    this.cat_id = Category.category_id;
     let prodObj = {
-      "product_category": '',
+      "tag_id": this.tag_id,
+      "product_category": this.cat_id,
       "store_slug": this.store_slug,
-      "brand": '',
+      "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
+    this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -194,25 +219,25 @@ export class AllContactProductsComponent implements OnInit {
   }
 
   changeBrandname(brand: any) {
+    this.showBrand = false;
     let pageNumber = 1;
-    this.currentPage = 1;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
+    localStorage.setItem('2d_3d_cur_page', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----', this.selectedBrandName);
-    localStorage.setItem('contract_brand', this.selectedBrand);
+    localStorage.setItem('2d_3d_brand', this.selectedBrand);
     let prodObj = {
+      "tag_id": this.tag_id,
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
       "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
     }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
+    this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-
       },
       error => {
         // .... HANDLE ERROR HERE 
