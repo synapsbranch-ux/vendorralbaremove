@@ -50,13 +50,13 @@
                 </div>
             </div>
         </section>
-        <div class="col-sm-12 text-center" *ngIf="oproductfount">
+        <div class="col-sm-12 text-center" *ngIf="productList.length == undefined">
             <img src="assets/images/empty-search.jpg" class="img-fluid mb-4">
             <h3>Sorry! Not results found </h3>
             <p>Please check if you have misspelt something or try searching with other words.</p>
             <a [routerLink]="['/']" class="btn btn-solid">continue shopping</a>
         </div>
-        <section class="pt-3" *ngIf="this.productList.length > 0">
+        <section class="pt-3" *ngIf="productList.length > 0">
             <div class="container">
                 <div class="row">
                     <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let product of productList">
@@ -68,7 +68,8 @@
                                     class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
                             </a>
                             <div class="wishlistIcon d-flex align-items-center">
-                                <img src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist">
+                                <img *ngIf="!(productservice.wishlistProductCheck(product))" src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist">
+                                <img *ngIf="(productservice.wishlistProductCheck(product))" src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist">
                             </div>
                             <div class="row m-0 mt-3 productDetails align-items-center gx-0">
                                 <div class="col-6">

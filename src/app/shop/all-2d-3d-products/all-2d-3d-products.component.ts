@@ -153,6 +153,11 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
     }
   }
 
+    // Add to Wishlist
+    addToWishlist(product: any) {
+      this.productService.addToWishlist(product);
+    }
+
   barndPopup() {
     this.showBrand = true;
   }

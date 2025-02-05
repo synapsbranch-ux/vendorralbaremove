@@ -48,7 +48,8 @@
                             class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
                     </a>
                     <div class="wishlistIcon d-flex align-items-center">
-                        <img src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist">
+                       <a (click)="addToWishlist(product)"> <img *ngIf="!(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></a>
+                       <a (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a>
                     </div>
                     <div class="row m-0 mt-3 productDetails align-items-center gx-0">
                         <div class="col-6">

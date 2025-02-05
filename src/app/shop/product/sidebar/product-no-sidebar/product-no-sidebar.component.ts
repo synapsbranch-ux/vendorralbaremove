@@ -54,6 +54,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   cartAddons: any;
   iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
   iframeLink: any
+  is3DProduct: boolean = false;
   isProductinCart: boolean = false;
   othervalue: any;
   fileUrl: any;
@@ -108,7 +109,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
         console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
+         
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
+          this.is3DProduct = product3durl ? true: false;
           let colorCode = response.data?.product_bg_color ? response.data?.product_bg_color?.slice(1) : '#fff';
           let fulliframeURL = this.iframeBaseLink + product3durl + '&color=' + colorCode;
           this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
@@ -180,13 +183,13 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   }
 
   active3DSlider() {
-    console.log('active3DSlider')
-    this.is3Dactive = true;
-    this.is2Dactive = false;
+    if (this.is3DProduct) {
+      this.is3Dactive = true;
+      this.is2Dactive = false;
+    }
   }
 
   active2DSlider() {
-    console.log('active2DSlider')
     this.is3Dactive = false;
     this.is2Dactive = true;
   }

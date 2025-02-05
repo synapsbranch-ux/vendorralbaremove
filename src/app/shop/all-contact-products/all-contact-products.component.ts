@@ -220,6 +220,11 @@ export class AllContactProductsComponent implements OnInit {
       });
   }
 
+  // Add to Wishlist
+  addToWishlist(product: any) {
+    this.productService.addToWishlist(product);
+  }
+
 
   getBrandName(brandarr, brandId) {
     if (brandarr.length > 0) {

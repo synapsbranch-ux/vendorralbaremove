@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
   @Input() thumbnail: boolean = false; // Default False 
   @Input() currency: any = this.productservice.Currency; // Default Currency 
 
-  constructor(private route: ActivatedRoute, private productservice: ProductService, private router: Router) {
+  constructor(private route: ActivatedRoute, public productservice: ProductService, private router: Router) {
     this.store_slug = localStorage.getItem('storeslug')
 
     this.route.queryParams.subscribe(params => {
@@ -35,6 +35,7 @@ export class SearchComponent implements OnInit {
       this.productservice.productSearch(sData).subscribe(
         res => {
           this.productList = res['data'];
+          console.log(this.productservice.wishlistProductCheck(this.productList[0]))
           console.log('product list Length', res['data'].length);
           if (res['data'].length == 0) {
             this.oproductfount = true;

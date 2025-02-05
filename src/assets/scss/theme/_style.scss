@@ -17008,6 +17008,7 @@ div#loading-bar {
         position: relative;
         z-index: 1;
         overflow: hidden;
+        cursor: pointer;
     }
 }
 
@@ -17026,7 +17027,7 @@ div#loading-bar {
 }
 
 .categoryBtn a:hover {
-    color: #fff;
+    color: #fff !important;
 }
 
 .categoryBtn a:hover::before {
