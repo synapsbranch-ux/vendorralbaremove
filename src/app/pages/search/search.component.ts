@@ -87,6 +87,19 @@ export class SearchComponent implements OnInit {
     this.ImageSrc = src;
   }
 
+  storeHomePage()
+  {
+    if(this.store_slug)
+    {
+      this.router.navigateByUrl(`/vendor/${this.store_slug}`)
+    }
+    else
+    {
+      this.router.navigateByUrl(`/`)
+    }
+
+  }
+
   onSubmit() {
     let formData = this.form.value;
     this.router.navigateByUrl('/search?u=' + formData.searchkey);

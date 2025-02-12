@@ -1,15 +1,17 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, DoCheck } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { HomesliderService } from '../../services/homeslider.service';
+import { ProductNew } from '../../classes/product';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-header-one',
   templateUrl: './header-one.component.html',
   styleUrls: ['./header-one.component.scss']
 })
-export class HeaderOneComponent implements OnInit {
+export class HeaderOneComponent implements OnInit, DoCheck {
   store_slug: any;
   @Input() class: string;
   @Input() themeLogo: string = 'assets/images/icon/logo_small_res.png'; // Default Logo
@@ -18,13 +20,14 @@ export class HeaderOneComponent implements OnInit {
   public stick: boolean = false;
   vendorhome: boolean = false;
   isvendorlogoimage: boolean = false;
+  public products: ProductNew[] = [];
   menuarr = []
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
-  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private storeService: StoreService, private toaster: ToastrService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public product_service: ProductService, private homesliderservice: HomesliderService, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
 
@@ -92,7 +95,7 @@ export class HeaderOneComponent implements OnInit {
         }
         if (res.data[0].banner_sub_categories.length > 0) {
           this.menuarr = res.data[0].banner_sub_categories;
-          console.log('menuarr------------------------------------',this.menuarr);
+          console.log('menuarr------------------------------------', this.menuarr);
         }
       },
       error => {
@@ -112,6 +115,9 @@ export class HeaderOneComponent implements OnInit {
     } else {
       this.stick = false;
     }
+  }
+  ngDoCheck(): void {
+    this.products = JSON.parse(localStorage.getItem('cartItems'));
   }
   getSearchVAl(inputval: any) {
     console.log('Serarch String', inputval);

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 
 @Component({
   selector: 'app-all-contact-products',
@@ -14,6 +15,7 @@ export class AllContactProductsComponent implements OnInit {
   @Input() currency: any = this.productService.Currency; // Default Currency 
   public ImageSrc: string
   public products: ProductNew[] = [];
+  public sliders = [];
   cat_slug: any = '';
   cat_id: any
   brandList = [];
@@ -31,7 +33,7 @@ export class AllContactProductsComponent implements OnInit {
   hasMoreProducts: boolean = true; // flag to track if more products exist
 
   constructor(private router: Router,
-    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService) {
+    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
     this.productService.compareItems.subscribe(response => this.products = response);
   }
 
@@ -80,6 +82,22 @@ export class AllContactProductsComponent implements OnInit {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
+    let storeObj =
+    {
+      store_slug: this.store_slug
+    }
+    // get all home slider date from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        this.sliders = res.data;
+      },
+      error => {
+        this.toastr.error(error.error.message);
+        this.router.navigateByUrl('/')
+      }
+    );
+
     this.loadProducts();
   }
 
@@ -222,6 +240,9 @@ export class AllContactProductsComponent implements OnInit {
 
   // Add to Wishlist
   addToWishlist(product: any) {
+    product.addonsprice = 0;
+    let addonSelectedResult = [];
+    product.addons = addonSelectedResult
     this.productService.addToWishlist(product);
   }
 

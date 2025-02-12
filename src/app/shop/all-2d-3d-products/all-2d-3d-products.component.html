@@ -1,6 +1,9 @@
 <!-- NEW HTML DESIGN -->
 <section>
-    <div class="container">
+    <app-slider [sliders]="sliders" [textClass]="'text-center'" [category]="'fashion'" [buttonText]="'shop now'">
+    </app-slider>
+
+    <div class="container pt-4">
         <div class="row align-items-center">
             <div class="col-12 col-sm-4">
                 <div class="pageBreadcrumb">
@@ -14,7 +17,7 @@
                 <div class="filterMenu">
                     <ul>
                         <li *ngFor="let category of categoryList.slice(1); let i = index">
-                            <a (click)="getCAtegoryDeatils(category, i + 1)"
+                            <a (click)="getCategoryDetails(category, i + 1)"
                                 [ngClass]="{'active': cat_id == category.category_id }">
                                 {{ category.category_name }}
                             </a>
@@ -42,14 +45,21 @@
             <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let product of productList">
                 <div class="itemBox">
                     <a [routerLink]="['/product/', product.product_slug]">
-                        <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                            [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                            [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                            class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
+                        <img 
+                            [defaultImage]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : 'assets/images/product/placeholder.jpg'"
+                            [lazyLoad]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                            [src]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                            class="img-fluid lazy-loading" 
+                            alt="{{ product.product_name }}" />
                     </a>
+                    
+
                     <div class="wishlistIcon d-flex align-items-center">
-                       <a (click)="addToWishlist(product)"> <img *ngIf="!(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></a>
-                       <a (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a>
+                        <a (click)="addToWishlist(product)"> <img
+                                *ngIf="!(productService.wishlistProductCheck(product))"
+                                src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></a>
+                        <a (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))"
+                                src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a>
                     </div>
                     <div class="row m-0 mt-3 productDetails align-items-center gx-0">
                         <div class="col-6">

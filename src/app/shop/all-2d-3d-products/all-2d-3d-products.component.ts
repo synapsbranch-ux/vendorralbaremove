@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 
 @Component({
   selector: 'app-all-2d-3d-products',
@@ -30,9 +31,10 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   totalProducts: any;
   isLoading: boolean = false;
   hasMoreProducts: boolean = true; // flag to track if more products exist
+  public sliders = [];
 
   constructor(private router: Router,
-    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService) {
+    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
     this.productService.compareItems.subscribe(response => this.products = response);
   }
 
@@ -63,12 +65,15 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
         // Extract the 'slug' and 'page' values from the route parameters
         this.store_slug = params.get('storeSlug');
         this.cat_slug = params.get('catSlug');
+
+        // If 'all' is passed as the category slug, reset cat_slug and cat_id
+        if (this.cat_slug == 'all') {
+          this.cat_slug = '';
+          this.cat_id = '';
+        }
       });
-      if (this.cat_slug == 'all') {
-        this.cat_slug = ''
-        this.cat_id = ''
-      }
     }
+
     this.productService.getall2D3DBrands(this.store_slug).subscribe(
       res => {
         console.log('res=========', res['data'])
@@ -85,22 +90,36 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
         console.log('res=========', res['data'])
         this.categoryList = res['data'][0];
         if (this.cat_slug !== '' && this.cat_slug !== 'all') {
-          let filter_cat = this.categoryList.filter((cat) => cat.category_slug === this.cat_slug);
-          console.log('filter_cat', filter_cat);
-
-          // Check if filter_cat has any elements before accessing the first one
-          if (filter_cat.length > 0) {
-            console.log('filter_cat id', filter_cat[0].category_id);
-            this.cat_id = filter_cat[0].category_id;
-          } else {
-            console.log('No matching category found');
+          // Check if cat_slug matches any category slug in the categoryList
+          const matchedCategory = this.categoryList.find(category => category.category_slug === this.cat_slug);
+          if (matchedCategory) {
+            this.cat_id = matchedCategory.category_id;
+            this.activeCategoryIndex = this.categoryList.indexOf(matchedCategory); // Set the active index
           }
+
+          this.getCategoryDetails(matchedCategory, this.activeCategoryIndex);
+
         }
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
+    let storeObj =
+    {
+      store_slug: this.store_slug
+    }
+    // get all home slider date from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        this.sliders = res.data;
+      },
+      error => {
+        this.toastr.error(error.error.message);
+        this.router.navigateByUrl('/')
+      }
+    );
 
     this.loadProducts();
 
@@ -153,10 +172,13 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
     }
   }
 
-    // Add to Wishlist
-    addToWishlist(product: any) {
-      this.productService.addToWishlist(product);
-    }
+  // Add to Wishlist
+  addToWishlist(product: any) {
+    product.addonsprice = 0;
+    let addonSelectedResult = [];
+    product.addons = addonSelectedResult
+    this.productService.addToWishlist(product);
+  }
 
   barndPopup() {
     this.showBrand = true;
@@ -196,14 +218,24 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   }
 
 
-  getCAtegoryDeatils(Category: any, index: number) {
+  getCategoryDetails(category: any, index: number) {
     this.activeCategoryIndex = index;
     let pageNumber = 1;
-    localStorage.setItem('2d_3d_cur_page', pageNumber.toString())
-    localStorage.setItem('2d_3d_cur_cat', Category.category_id)
-    console.log('Category============', Category);
-    this.cat_slug = Category.category_slug;
-    this.cat_id = Category.category_id;
+    this.currentPage = 1;
+    console.log('Category============', category);
+    localStorage.setItem('2d_3d_cur_page', pageNumber.toString());
+    localStorage.setItem('2d_3d_cur_cat', category.category_id);
+
+
+
+    this.cat_slug = category.category_slug;
+    this.cat_id = category.category_id;
+
+    // Update the URL by navigating with new path parameters
+    this.router.navigate(
+      ['/all-products', this.store_slug, this.cat_slug]  // Absolute path navigation
+    );
+
     let prodObj = {
       "tag_id": this.tag_id,
       "product_category": this.cat_id,
@@ -211,16 +243,17 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       "brand": this.selectedBrand,
       "page": this.currentPage,
       "limit": this.limit
-    }
+    };
+
     this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       res => {
-        this.productList = res['data'].products
-        this.totalProducts = res['data'].totalCount
+        this.productList = res['data'].products;
+        this.totalProducts = res['data'].totalCount;
       },
       error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
+        this.toastr.error(error.error.message);
+      }
+    );
   }
 
   changeBrandname(brand: any) {

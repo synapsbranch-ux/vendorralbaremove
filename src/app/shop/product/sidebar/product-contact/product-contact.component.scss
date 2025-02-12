@@ -22,6 +22,11 @@
     object-fit: contain !important;
 }
 
+.product-right h3 del,
+.product-right .h3 del {
+    padding-right: 5px;
+}
+
 .addons-price select,
 .addons-price textarea,
 .addons-price input,

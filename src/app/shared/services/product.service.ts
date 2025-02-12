@@ -682,7 +682,6 @@ export class ProductService {
                   cartproducts.push(data);
                   //console.log('Return LocalStorage Product Service', cartproducts);
                   localStorage.removeItem('cartItems');
-                  localStorage.setItem("cartItems", JSON.stringify(cartproducts));
                   state.cart = cartproducts;
                   //console.log('state.cart Delete', state.cart);
                 })

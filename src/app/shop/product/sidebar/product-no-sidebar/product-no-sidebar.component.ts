@@ -109,12 +109,16 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
         console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
-         
+
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
-          this.is3DProduct = product3durl ? true: false;
+          this.is3DProduct = product3durl ? true : false;
           let colorCode = response.data?.product_bg_color ? response.data?.product_bg_color?.slice(1) : '#fff';
           let fulliframeURL = this.iframeBaseLink + product3durl + '&color=' + colorCode;
           this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
+        }
+        if (!response.data.product_image[0]) {
+          this.is2Dactive = false;
+          this.is3Dactive = true;
         }
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)
