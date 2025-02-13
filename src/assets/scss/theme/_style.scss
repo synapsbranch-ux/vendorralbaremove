@@ -7591,6 +7591,7 @@ footer {
     padding: 40px 0;
 
     .form-header {
+        position: relative;
         .form-group {
             input {
                 background-color: transparent;
@@ -7615,12 +7616,12 @@ footer {
 
         button {
             position: absolute;
-            top: 10px;
+            top: 2px;
             background-color: transparent;
             border: 0;
             font-size: 24px;
             color: #aaaaaa;
-            right: 10px;
+            right: 0px;
         }
     }
 }
