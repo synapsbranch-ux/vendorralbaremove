@@ -389,8 +389,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       (res) => {
         this.value[formcontrolname] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0;
         let imgobj = {
-          keyname: formcontrolname,
+          key: formcontrolname,
           fileUrl: res['data'].fileUrl,
+          price: parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
         };
         const exists = this.uploadAddonsImage.findIndex(el => el.keyname == formcontrolname);
         let oldObj = this.uploadAddonsImage.find(el => el.keyname == formcontrolname);

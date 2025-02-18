@@ -58,15 +58,17 @@ export class MenuComponent implements OnInit {
       // get all home slider data from API
       this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
         res => {
-          if (res.data[0].banner_top_brands.length > 0) {
-            localStorage.setItem('top_brands', JSON.stringify(res.data[0].banner_top_brands))
+          const lastIndex = res.data.length - 1;  // Get the last index
+
+          if (res.data[lastIndex].banner_top_brands.length > 0) {
+            localStorage.setItem('top_brands', JSON.stringify(res.data[lastIndex].banner_top_brands))
           }
-          if (res.data[0].banner_homepage_brands.length > 0) {
-            localStorage.setItem('home_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+          if (res.data[lastIndex].banner_homepage_brands.length > 0) {
+            localStorage.setItem('home_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
           }
 
-          if (res.data[0].banner_sub_categories.length > 0) {
-            menuarr = res.data[0].banner_sub_categories;
+          if (res.data[lastIndex].banner_sub_categories.length > 0) {
+            menuarr = res.data[lastIndex].banner_sub_categories;
             this.menuItems = menuarr.map(items => {
               let menuChild;
 
@@ -84,7 +86,6 @@ export class MenuComponent implements OnInit {
               };
             });
           }
-
         },
         error => {
           this.toaster.error(error.error.message);
@@ -102,14 +103,15 @@ export class MenuComponent implements OnInit {
         // get all home slider data from API
         this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
           res => {
-            if (res.data[0].banner_top_brands.length > 0) {
-              localStorage.setItem('top_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+            const lastIndex = res.data.length - 1;  // Get the last index
+            if (res.data[lastIndex].banner_top_brands.length > 0) {
+              localStorage.setItem('top_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
             }
-            if (res.data[0].banner_homepage_brands.length > 0) {
-              localStorage.setItem('home_brands', JSON.stringify(res.data[0].banner_homepage_brands))
+            if (res.data[lastIndex].banner_homepage_brands.length > 0) {
+              localStorage.setItem('home_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
             }
-            if (res.data[0].banner_sub_categories.length > 0) {
-              menuarr = res.data[0].banner_sub_categories;
+            if (res.data[lastIndex].banner_sub_categories.length > 0) {
+              menuarr = res.data[lastIndex].banner_sub_categories;
               this.menuItems = menuarr.map(items => {
                 let menuChild;
 

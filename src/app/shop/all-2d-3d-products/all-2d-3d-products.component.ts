@@ -143,7 +143,7 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       (res: any) => {
         if (res['data'].hasOwnProperty('products') && res['data'].products.length > 0) {
           // Append the new products to the existing list
-          this.productList = [...this.productList, ...res['data'].products];
+          this.productList = [...res['data'].products];
           this.currentPage++; // Increment the page number for the next load
         } else {
           this.hasMoreProducts = false; // No more products available

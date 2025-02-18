@@ -67,9 +67,8 @@
                                         <li><a (click)="redirectcat('/category/apparels')">Apparels</a></li>
                                         <li><a (click)="redirectcat('/category/bags')">Hand Bags</a></li> -->
                                         <li *ngFor="let menu of menuarr"><a *ngIf="menu.category_slug != 'contact'"
-                                            routerLink="/all-products/{{store_slug}}/{{menu.category_slug}}"
-                                            routerLinkActive="active">{{menu.category_name}}</a>
-                                        <a *ngIf="menu.category_slug == 'contact'" routerLink="/contact-products/{{store_slug}}"
+                                            href="/all-products/{{store_slug}}/{{menu.category_slug}}">{{menu.category_name}}</a>
+                                        <a *ngIf="menu.category_slug == 'contact'" href="/contact-products/{{store_slug}}"
                                             routerLinkActive="active">{{menu.category_name}}</a>
                                     </li>
                                     </ul>

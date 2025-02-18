@@ -25,11 +25,10 @@
           <tbody>
             <tr *ngFor="let product of products">
               <td>
-                <img
-                  height="120"
-                  [src]="product.product_image[0].pro_image"
-                  [alt]="product.product_name"
-                />
+                <img [defaultImage]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : 'assets/images/product/placeholder.jpg'"
+                [lazyLoad]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                [src]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
               </td>
               <td>
                 <h2>{{ product.product_name | titlecase }}</h2>

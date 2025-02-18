@@ -56,14 +56,19 @@
                                 <p>Addons</p>
                                 <ul class="addon_cart">
                                     <li *ngFor="let addon of product.addons; let i = index">
-                                        {{addon.input_type}}
                                         <span *ngIf="addon.input_type">{{(addon.input_type == 'range' ||
                                             addon.input_type == 'range-input' ||
                                             addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} -
                                             {{
                                             addon.price | currency: product_service.Currency?.currency:'symbol'
                                             }}</span>
-                                        <span *ngIf="!addon.input_type">Prescription - 0</span>
+                                        <span *ngIf="addon.extra_document">
+                                            <span *ngFor="let doc of addon.extra_document; let i = index">
+                                                <span>{{doc.key}} -  {{
+                                                    doc.price | currency: product_service.Currency?.currency:'symbol'
+                                                    }}</span>
+                                            </span>
+                                        </span>
                                         <a (click)="removeAddon(product, i)"><i class="fa fa-times"
                                                 aria-hidden="true"></i></a>
                                     </li>
