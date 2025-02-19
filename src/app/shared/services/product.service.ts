@@ -584,7 +584,7 @@ export class ProductService {
                       //console.log('cartproducts Push', data);
                       cartproducts.push(data);
                       //console.log('Return LocalStorage Product Service', cartproducts);
-                      localStorage.removeItem('cartItems');
+                      // localStorage.removeItem('cartItems');
                       localStorage.setItem("cartItems", JSON.stringify(cartproducts));
 
 
@@ -681,7 +681,7 @@ export class ProductService {
                   //console.log('cartproducts Push', data);
                   cartproducts.push(data);
                   //console.log('Return LocalStorage Product Service', cartproducts);
-                  localStorage.removeItem('cartItems');
+                  // localStorage.removeItem('cartItems');
                   state.cart = cartproducts;
                   //console.log('state.cart Delete', state.cart);
                 })

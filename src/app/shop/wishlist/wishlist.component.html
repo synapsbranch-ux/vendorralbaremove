@@ -28,7 +28,7 @@
                 <img [defaultImage]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : 'assets/images/product/placeholder.jpg'"
                 [lazyLoad]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
                 [src]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
-                class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
+                class="img-fluid lazy-loading product-img" alt="{{ product.product_name }}" />
               </td>
               <td>
                 <h2>{{ product.product_name | titlecase }}</h2>
