@@ -1,14 +1,17 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, DoCheck } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from '../../services/homeslider.service';
+import { ProductNew } from '../../classes/product';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-header-one',
   templateUrl: './header-one.component.html',
   styleUrls: ['./header-one.component.scss']
 })
-export class HeaderOneComponent implements OnInit {
+export class HeaderOneComponent implements OnInit, DoCheck {
   store_slug: any;
   @Input() class: string;
   @Input() themeLogo: string = 'assets/images/icon/logo_small_res.png'; // Default Logo
@@ -17,32 +20,29 @@ export class HeaderOneComponent implements OnInit {
   public stick: boolean = false;
   vendorhome: boolean = false;
   isvendorlogoimage: boolean = false;
-
+  public products: ProductNew[] = [];
+  menuarr = []
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: Event): void {
     event.preventDefault(); // Prevent default behavior (e.g., context menu)
     event.stopPropagation(); // Stop event propagation to parent elements
   }
-  constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public product_service: ProductService, private homesliderservice: HomesliderService, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
 
-    this.route.params.subscribe(params => {
-      if (params['slug']) {
-        this.store_slug = params['slug'];
-      }
-      else {
-        // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
-        this.store_slug = 'yunicbrightvision';
-      }
-    });
+    // this.route.params.subscribe(params => {
+    //   if (params['slug']) {
+    //     this.store_slug = params['slug'];
+    //   }
+    //   else {
+    //     // If no slug in the params (i.e., root route), use the default slug 'yunicbrightvision'
+    //     this.store_slug = 'yunicbrightvision';
+    //   }
+    // });
 
-    if (this.store_slug) {
-      localStorage.setItem('storeslug', this.store_slug);
-    }
-    else {
-      this.store_slug = localStorage.getItem('storeslug')
-    }
+    this.store_slug = localStorage.getItem('storeslug')
+
     if (this.store_slug) {
 
       let storeObj = {
@@ -77,6 +77,34 @@ export class HeaderOneComponent implements OnInit {
         }
       );
     }
+
+
+
+    let storeObj = {
+      store_slug: this.store_slug
+    };
+
+    // get all home slider data from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        const lastIndex = res.data.length - 1;  // Get the last index
+        if (res.data[lastIndex].banner_top_brands.length > 0) {
+          localStorage.setItem('top_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
+        }
+        if (res.data[lastIndex].banner_homepage_brands.length > 0) {
+          localStorage.setItem('home_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
+        }
+        if (res.data[lastIndex].banner_sub_categories.length > 0) {
+          this.menuarr = res.data[lastIndex].banner_sub_categories;
+          console.log('menuarr------------------------------------', this.menuarr);
+        }
+      },
+      error => {
+        this.toaster.error(error.error.message);
+        this.router.navigateByUrl('/');
+      }
+    );
+
   }
 
   // @HostListener Decorator
@@ -88,6 +116,9 @@ export class HeaderOneComponent implements OnInit {
     } else {
       this.stick = false;
     }
+  }
+  ngDoCheck(): void {
+    this.products = JSON.parse(localStorage.getItem('cartItems'));
   }
   getSearchVAl(inputval: any) {
     console.log('Serarch String', inputval);

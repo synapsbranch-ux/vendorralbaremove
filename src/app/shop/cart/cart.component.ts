@@ -44,6 +44,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = JSON.parse(localStorage.getItem('cartItems'));
+    console.log('this.products--------',this.products);
     this.product_service.cartItems.subscribe(response => response ? this.products = response : this.products = []);
     this.detectNavigationType();
     //console.log("ocalStorage.getItem('tax')", localStorage.getItem('tax'));

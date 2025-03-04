@@ -100,7 +100,6 @@ export class AllTwoDProductsComponent implements OnInit {
           res => {
             this.productList = res['data'].products
             this.totalProducts = res['data'].totalCount
-            this.groupItemsIntoSections(this.productList);
           },
           error => {
             // .... HANDLE ERROR HERE 

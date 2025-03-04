@@ -15,18 +15,15 @@ export class LogoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    console.log('brands----------------', this.brands)
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
     });
-
-    if (this.store_slug) {
+    if (!localStorage.getItem('storeslug')) {
       localStorage.setItem('storeslug', this.store_slug);
     }
-    else {
+    if (!this.store_slug) {
       this.store_slug = localStorage.getItem('storeslug')
     }
-
   }
 
   public LogoSliderConfig: any = LogoSlider;
@@ -35,8 +32,9 @@ export class LogoComponent implements OnInit {
 
     if (keyname != 'all') {
       localStorage.setItem('brand', keyname)
+      localStorage.setItem('2d_3d_brand', keyname)
     }
-    this.router.navigate([`/store-2d-products/${this.store_slug}/all`]);
+    this.router.navigate([`/all-products/${this.store_slug}/all`]);
 
   }
 

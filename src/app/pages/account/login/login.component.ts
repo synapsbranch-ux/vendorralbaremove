@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
             {
               "pro_id": element._id,
               "pro_name": element.product_name,
-              "pro_image": element.product_image[0].pro_image,
+              "pro_image": element.product_image[0] ? element.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
               "pro_slug": element.product_slug,
               "qty": element.quantity,
               "left_eye_qty": element.left_eye_qty,
@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
                 for (const element of res['data'].products) {
                   this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
                     if (product['data']) {
-                      this.product_img = product['data'].product_image[0]? product['data'].product_image[0].pro_image:'assets/images/product/placeholder.jpg';
+                      this.product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                       let data =
                       {
                         "_id": element.pro_id,
@@ -184,7 +184,7 @@ export class LoginComponent implements OnInit {
                   for (const element of res['data'].products) {
                     this.product_service.getproductsBySlugs(element.pro_slug).subscribe(product => {
                       if (product['data']) {
-                        this.product_img = product['data'].product_image[0]? product['data'].product_image[0].pro_image:'assets/images/product/placeholder.jpg';
+                        this.product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                         let data =
                         {
                           "_id": element.pro_id,
@@ -270,7 +270,7 @@ export class LoginComponent implements OnInit {
         }
       } else {
         // If no next element id is provided, submit the form
-          this.onSubmit();
+        this.onSubmit();
       }
     }
   }

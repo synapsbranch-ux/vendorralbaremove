@@ -5,82 +5,48 @@
     <app-slider [sliders]="sliders" [textClass]="'text-center'" [category]="'fashion'" [buttonText]="'shop now'">
     </app-slider>
     <!-- NEW DESIGN HTML -->
-     <section class="py-4">
+    <section class="py-5">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
                     <h2 class="main-title">Popular Brand</h2>
                 </div>
                 <div class="col-10">
-                    <div class="row">
-                        <div class="col-6 col-sm-3">
-                            <img class="w-100" src="assets/images/versace.png" alt="Brand">
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <img class="w-100" src="assets/images/prada.png" alt="Brand">
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <img class="w-100" src="assets/images/vogue.png" alt="Brand">
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <img class="w-100" src="assets/images/versus.png" alt="Brand">
-                        </div>
-                    </div>
+                    <app-logo [brands]="home_brands"></app-logo>
                 </div>
             </div>
         </div>
-     </section>
-     <section class="categorySection">
+    </section>
+    <section class="categorySection">
         <div class="container pb-4">
             <div class="row">
                 <div class="col-12 mb-4">
                     <h2 class="main-title mb-3">Eyewear for everyone and every need</h2>
-                    <p class="main-sub-title">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                    <p class="main-sub-title">online shopping experience should be as fun and aesthetically pleasing as the physical one
+                    </p>
                 </div>
-                <div class="col-12 col-sm-3 position-relative mb-3">
-                    <img src="assets/images/new-arrivals.png" class="w-100" alt="">
+                <div class="col-12 col-sm-3 position-relative mb-3" *ngFor="let tag of tagListData">
+                    <img src="{{tag.tag_image}}" class="w-100" alt="">
                     <div class="categoryBtn">
-                        <a href="">New Arrivals</a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3 position-relative mb-3">
-                    <img src="assets/images/men-eyeglass.png" class="w-100" alt="">
-                    <div class="categoryBtn">
-                        <a href="">Men Eyeglasses</a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3 position-relative mb-3">
-                    <img src="assets/images/women-eyeglass.png" class="w-100" alt="">
-                    <div class="categoryBtn">
-                        <a href="">Women Eyeglasses</a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3 position-relative mb-3">
-                    <img src="assets/images/unisx-eyeglass.png" class="w-100" alt="">
-                    <div class="categoryBtn">
-                        <a href="">Unisex Eyeglasses</a>
+                        <a (click)="getTagsProducts(tag)">{{tag.tag_name}}</a>
                     </div>
                 </div>
             </div>
         </div>
-     </section>
+    </section>
 
-     <section class="py-3 py-lg-5">
+    <section *ngFor="let section of mediaTextData; let i = index" [ngClass]="{'blueBanner': i % 2 !== 0, 'py-3 py-lg-5': i % 2 === 0}">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-12 col-sm-6 text-center text-sm-start">
-                    <h2 class="bigTitle">Our Most Popular Brands</h2>
-                    <p class="bigTitleSubText">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <div class="w-100 d-block d-sm-none">
-                        <img src="../../../assets/images/brand-1.png" class="w-100 mb-3" alt="">
-                        <img src="../../../assets/images/brand-2.png" class="w-100 mb-3" alt="">
-                        <img src="../../../assets/images/brand-3.png" class="w-100 mb-3" alt="">
+            <div class="row align-items-center" [ngClass]="{'text-lg-end': i % 2 !== 0}">
+                <div class="col-12 col-md-6 col-lg-5 text-center text-lg-start" *ngIf="i % 2 === 0">
+                    <h2 class="bigTitle">{{ section.heading_text }}</h2>
+                    <p class="bigTitleSubText">{{ section.description_text }}</p>
+                    <div class="w-100 d-block d-sm-none" *ngIf="i % 2 === 0">
+                        <img [src]="section.section_image" class="w-100 brandImg" [alt]="section.section_image_name">
                     </div>
-                    <a class="blueBtn" href="">Shop Now</a>
+                    <a class="blueBtn" (click)="showAllProducts()">Shop Now</a>
                 </div>
-                <div class="col-12 col-sm-6 d-none d-sm-block">
-                    <img src="../../../assets/images/brandPic.png" class="w-100" alt="">
-                </div>
+                <div class="col-12 col-sm-6"></div>
             </div>
         </div>
      </section>
@@ -91,425 +57,20 @@
                 <div class="col-12 col-md-6 col-lg-7">
                     <img src="../../../assets/images/inner-banner-small.png" class="w-100" alt="">
                 </div>
-                <div class="col-12 col-md-6 col-lg-5 text-center text-lg-end">
-                    <h2 class="bigTitle">Wide Range of Sunglass Collections</h2>
-                    <p class="bigTitleSubText">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <div>
-                        <a class="skyBlueBtn me-3" href="">Shop Women</a>
-                        <a class="blueBtn" href="">Shop Men</a>
-                    </div>
+                <div class="col-12 col-md-6 col-lg-5 text-center text-lg-end" *ngIf="i % 2 !== 0">
+                    <h2 class="bigTitle">{{ section.heading_text }}</h2>
+                    <p class="bigTitleSubText">{{ section.description_text }}</p>
+                    <a class="blueBtn" (click)="showAllProducts()">Shop Now</a>
                 </div>
             </div>
         </div>
-     </section>
-        
+    </section>
+    
+
     <!-- NEW DESIGN HTML -->
-        <div class="container" *ngIf="allProducts.length > 0">
-            <div class="main-container pt-4 mt-4">
-                <h3 class="pb-3 text-dark">New Arrival Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of newArrivalProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
 
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all" (click)="viewResults('all')">
-                                View
-                                All</a></div>
-                    </div>
-                </div>
-            </div>
+    
 
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Men Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of menProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all" (click)="viewResults('men')">
-                                View
-                                All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Women Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of womenProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all" (click)="viewResults('women')">
-                                View All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Unisex Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of unisexProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all"
-                                (click)="viewResults('unisex')">
-                                View All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Prada Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of pradaProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all"
-                                (click)="viewResults('66274fcdd62f8e7573587aa1')"> View All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Gucci Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of gucciProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all"
-                                (click)="viewResults('6627501fd62f8e7573587aa9')"> View All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">Coach Eyeglasses</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-3" *ngFor="let product of coachProducts">
-                            <div class="items">
-                                <div class="img-wrapper">
-                                    <!-- <div class="lable-block">
-                          <span class="lable3" *ngIf="product.new">new</span>
-                          <span class="lable4" *ngIf="product.sale">on sale</span>
-                        </div> -->
-                                    <div class="front">
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                            <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
-                                                [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                class="img-prod lazy-loading" alt="{{ product.product_name }}" />
-                                        </a>
-                                        <img *ngIf="product.product_image[0].pro_image" class="single_self"
-                                            src="assets/images/single_prod_self.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="product-detail">
-                                    <div class="mt-4">
-                                        <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                        <a [routerLink]="['/product/', product.product_slug]">
-                                            <h6>{{ product?.product_name | titlecase }}</h6>
-                                        </a>
-                                        <!-- <p>{{ product?.description }}</p> -->
-                                        <h4 *ngIf="product?.product_sale_price">
-                                            <del>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</del>
-                                            <span>{{ product?.product_sale_price |
-                                                currency:currency?.currency:'symbol'
-                                                }}</span>
-                                        </h4>
-                                        <h4 *ngIf="product?.product_sale_price == null">
-                                            <span>{{ product?.product_retail_price |
-                                                currency:currency?.currency:'symbol'}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="py-3 text-center m-auto col-12"> <a class="view-all"
-                                (click)="viewResults('66275049d62f8e7573587ab5')"> View All</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <!--  logo section start-->
-            <section class="section-b-space">
-                <div class="container">
-                    <h3 class="py-4 text-dark">Brands</h3>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <app-logo [brands]="home_brands"></app-logo>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!--  logo section End-->
-
-            <div class="main-container">
-                <h3 class="pb-3 text-dark">2D Display</h3>
-                <div class="product-list">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="cat_2d-list py-3 text-center m-auto">
-                                <a class="cat_2d" (click)="viewResults2d('men')">
-                                    Men</a>
-                                <a class="cat_2d" (click)="viewResults2d('women')">
-                                    Women</a>
-                                <a class="cat_2d" (click)="viewResults2d('unisex')">
-                                    Unisex</a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <div class="twod-products" *ngIf="is2Dshow" >
-            <app-all-2d-products [store_slug]="store_slug" ></app-all-2d-products>
-    </div>
 </section>
 <!-- Home slider End -->
 <app-footer-one></app-footer-one>

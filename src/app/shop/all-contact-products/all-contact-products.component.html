@@ -1,113 +1,94 @@
-<!-- section start -->
-<section class="compare-padding">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-
-                <div class="row mb-4">
-                    <div class="col-sm-3">
-                        <div class="brands mb-2">
-                            <h5 >Filter Brand ::</h5>
-                            <ng-select class="mt-1" [clearSearchOnAdd]="true" bindLabel="brand_name"
-                                (change)="changeBrandname($event)" [clearable]="false" [items]="brandList"
-                                [(ngModel)]="selectedBrandName">
-                                <ng-template ng-option-tmp let-item="item" let-index="index">
-                                    <!-- <img height="25" width="25" style="object-fit: contain;" [src]="item.brand_image"/> -->
-                                    <b>{{item.brand_name}}</b>
-                                </ng-template>
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="brands d-flex flex-wrap">
-                                <h5 class="top-heading">Top Brands ::</h5>
-                                <div *ngFor="let brand of topBransList" class="d-flex flex-wrap mt-1">
-                                        <div class="brand">
-                                            <a (click)="getBrandDeatils(brand)"><img *ngIf="brand.brand_image" src="{{brand.brand_image}}" alt=""> <span *ngIf="!brand.brand_image">{{brand.brand_name}}</span></a>
-                                        </div>
-                                </div>
-                            </div>
-
-                            <div class="text-right">
-                                <button class="btn btn-primary rounded" (click)="getAllProducts()">Clear Filter</button>
-                            </div>
-                        </div>
-
-                        <div class="pagiantion text-left mt-5">
-                            <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
-                            <!-- <div class="mr-2">
-                                <button class="btn btn-sm btn-primary" *ngIf="showPrev" (click)="handlePrev()">Prev <<</button>
-                                <span class="buttons" *ngFor="let btnNumber of buttonNumbers">
-                                <button class="btn btn-sm btn-primary btns">{{btnNumber}}</button>
-                                </span>
-                                <button class="btn btn-sm btn-primary" *ngIf="showNext" (click)="handleNext();">Next >></button>
-                              </div> -->
-                        </div>
-
-                    </div>
+<!-- NEW HTML DESIGN -->
+<section>
+    <app-slider [sliders]="sliders" [textClass]="'text-center'" [category]="'fashion'" [buttonText]="'shop now'">
+    </app-slider>
+    <div class="container pt-4">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-4">
+                <div class="pageBreadcrumb">
+                    Home / <a class="ms-2" href="">Products</a>
                 </div>
-
-
             </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="rack_inn">
-                    <div *ngFor="let section of groupedItems | paginate: { itemsPerPage: 9, currentPage: currentPage, totalItems: totalProducts }"
-                        class="sunglass_main">
-                        <div class="row">
-                            <div *ngFor="let product of section" class="col-6 col-sm-6 col-md-4">
-                                <div class="items">
-                                    <div class="img-wrapper">
-                                        <!-- <div class="lable-block">
-                                      <span class="lable3" *ngIf="product.new">new</span>
-                                      <span class="lable4" *ngIf="product.sale">on sale</span>
-                                    </div> -->
-                                        <div class="front text-center">
-                                            <a [routerLink]="['/contact-product/', product.product_slug]">
-                                                <!-- <a [routerLink]="['/',product.product_store[0].store_slug,product.product_department[0].department_slug, product.product_slug]"> -->
-                                                <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/contact-product/placeholder.jpg'"
-                                                    [lazyLoad]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                    [src]="ImageSrc ? ImageSrc : product.product_image[0].pro_image"
-                                                    class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-detail">
-                                        <div class="mt-4">
-                                            <!-- <bar-rating [rate]="5" [readOnly]="true"></bar-rating> -->
-                                            <a [routerLink]="['/contact-product/', product.product_slug]">
-                                                <h5>{{ product?.product_name | titlecase }}</h5>
-                                                <h6 *ngIf="product?.attributes?.length">{{ product?.attributes[0]?.value | titlecase }}</h6>
-                                            </a>
-                                            <!-- <p>{{ product?.description }}</p> -->
-                                            <h4 *ngIf="product?.product_sale_price">
-                                                <del>{{ product?.product_retail_price |
-                                                    currency:currency?.currency:'symbol'
-                                                    }}</del>
-                                                <span>{{ product?.product_sale_price |
-                                                    currency:currency?.currency:'symbol'
-                                                    }}</span>
-                                            </h4>
-                                            <h4 *ngIf="product?.product_sale_price == null">
-                                                <span>{{ product?.product_retail_price |
-                                                    currency:currency?.currency:'symbol'}}</span>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="col-12 col-sm-8 text-center text-sm-end">
+                <div class="filterMenu mr-2">
+                    <a class="clear" (click)="getAllProducts()">Clear Filter</a>
+                </div>
+                <div class="filterMenu ms-3">
+                    <ul>
+                        <li class="">
+                            <a (click)="barndPopup()">Brand <img class="ms-2" src="assets/images/arrow-down.svg"
+                                    width="10" alt="arrow"></a>
+                        </li>
+                    </ul>
 
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
-
         </div>
     </div>
 </section>
-<!-- Section ends -->
+
+<section class="pt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let product of productList">
+                <div class="itemBox">
+                    <a [routerLink]="['/product/', product.product_slug]">
+                        <img 
+                            [defaultImage]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : 'assets/images/product/placeholder.jpg'"
+                            [lazyLoad]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                            [src]="product?.product_image?.[0]?.pro_image ? product?.product_image?.[0]?.pro_image : (product?.product_image?.[0]?.pro_image || 'assets/images/product/placeholder.jpg')"
+                            class="img-fluid lazy-loading" 
+                            alt="{{ product.product_name }}" />
+                    </a>
+
+                    <div class="wishlistIcon d-flex align-items-center">
+                        <a (click)="addToWishlist(product)"> <img *ngIf="!(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></a>
+                        <a (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))" src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a>
+                    </div>
+                    <div class="row m-0 mt-3 productDetails align-items-center gx-0">
+                        <div class="col-6">
+                            <a [routerLink]="['/contact-product/', product.product_slug]"><p class="productName">{{ product?.product_name | titlecase }}</p></a>
+                            <p class="productCode">{{ product?.attributes[0]?.value }}</p>
+                        </div>
+                        <div class="col-6">
+                            <div class="productPrice" *ngIf="product?.product_sale_price">
+
+                                <span>{{ product?.product_retail_price |
+                                    currency:currency?.currency:'symbol'
+                                    }}</span>
+                                {{ product?.product_sale_price |
+                                currency:currency?.currency:'symbol'
+                                }}
+                            </div>
+                            <div class="productPrice" *ngIf="product?.product_sale_price == null">
+                                {{ product?.product_retail_price |
+                                currency:currency?.currency:'symbol'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Loader while loading more products -->
+    <div *ngIf="isLoading" class="text-center">
+        <p>Loading more products...</p>
+    </div>
+</section>
+<div class="overlayDiv" *ngIf="showBrand">
+    <ul class="dropdown-menu">
+        <span class="closeBtn">
+            <a (click)="barndPopupClose()"><img src="assets/images/close.svg" width="100%" alt="Close"></a>
+        </span>
+        <li *ngFor="let brand of brandList">
+            <a class="dropdown-item" (click)="changeBrandname(brand)"
+                [ngClass]="{'active': selectedBrand === brand._id}">
+                <img *ngIf="brand.brand_image" class="w-55" [src]="brand.brand_image" alt="Brand">
+                <span *ngIf="!brand.brand_image">{{ brand.brand_name }}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- NEW HTML DESIGN -->

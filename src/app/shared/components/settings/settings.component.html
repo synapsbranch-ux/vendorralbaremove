@@ -56,7 +56,7 @@
           </a>
         </li>
         <li *ngIf="!user_">
-          <a class="createBtn" [routerLink]="['/login']" data-lng="en">
+          <a class="createBtn" [routerLink]="['/register']" data-lng="en">
             Create Account
           </a>
         </li>
@@ -98,16 +98,20 @@
         <li *ngFor="let product of products">
           <div class="media flex">
             <a [routerLink]="['/product/', product.product_slug]">
-            <img class="mr-3" [src]="product.product_image[0]? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg'" [alt]="product?.product_name">
+              <img class="mr-3"
+                [src]="product.product_image[0]? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg'"
+                [alt]="product?.product_name">
             </a>
             <div class="media-body">
               <a [routerLink]="['/product/', product.product_slug]">
-              <h4>{{ product?.product_name }}</h4>
+                <h4>{{ product?.product_name }}</h4>
               </a>
               <h4>
                 <span>
                   {{ product?.quantity }} x
-                  {{((product.product_sale_price)? product?.product_sale_price: product?.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}} + {{ (getTotalAddons | async) | currency: product_service.Currency?.currency:'symbol'}}
+                  {{((product.product_sale_price)? product?.product_sale_price: product?.product_retail_price) |
+                  currency: product_service.Currency?.currency:'symbol'}} + {{ (getTotalAddons | async) | currency:
+                  product_service.Currency?.currency:'symbol'}}
 
                 </span>
                 <!-- <span *ngIf="product?.product_sale_price == null">

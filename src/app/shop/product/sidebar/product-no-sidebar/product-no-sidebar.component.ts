@@ -54,9 +54,13 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   cartAddons: any;
   iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
   iframeLink: any
+  is3DProduct: boolean = false;
   isProductinCart: boolean = false;
   othervalue: any;
   fileUrl: any;
+  is3Dactive: boolean = false;
+  is2Dactive: boolean = true;
+
   @ViewChild("view3D") view3D: view3DModalComponent;
 
   public ProductDetailsMainSliderConfig: any = ProductDetailsMainSlider;
@@ -105,10 +109,16 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
         console.log('productAddons =================', this.productAddons);
         if (response.data.product_3d_image.length > 0) {
+
           let product3durl = response.data.product_3d_image[0].pro_3d_image;
+          this.is3DProduct = product3durl ? true : false;
           let colorCode = response.data?.product_bg_color ? response.data?.product_bg_color?.slice(1) : '#fff';
           let fulliframeURL = this.iframeBaseLink + product3durl + '&color=' + colorCode;
           this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
+        }
+        if (!response.data.product_image[0]) {
+          this.is2Dactive = false;
+          this.is3Dactive = true;
         }
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)
@@ -176,6 +186,17 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   }
 
+  active3DSlider() {
+    if (this.is3DProduct) {
+      this.is3Dactive = true;
+      this.is2Dactive = false;
+    }
+  }
+
+  active2DSlider() {
+    this.is3Dactive = false;
+    this.is2Dactive = true;
+  }
 
   prefillAddons(savedAddons: any) {
     savedAddons.forEach((savedAddon: any) => {
@@ -368,8 +389,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       (res) => {
         this.value[formcontrolname] = addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0;
         let imgobj = {
-          keyname: formcontrolname,
+          key: formcontrolname,
           fileUrl: res['data'].fileUrl,
+          price: parseFloat(addon.add_ons_value[0].price ? addon.add_ons_value[0].price : 0)
         };
         const exists = this.uploadAddonsImage.findIndex(el => el.keyname == formcontrolname);
         let oldObj = this.uploadAddonsImage.find(el => el.keyname == formcontrolname);

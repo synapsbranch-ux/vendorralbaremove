@@ -58,16 +58,18 @@
                           <div class="card-body">
                             <address class="mb-1" (click)="viewOrder(order._id)">
                               <div *ngIf="order.payment_status !== 'APPROVED' && order.payment_status !== 'COMPLETED'"
-                              class="bg-warning bg-gradient text-white pending">Order Pending</div>
-                         <div *ngIf="order.payment_status === 'APPROVED' || order.payment_status === 'COMPLETED'"
-                              class="bg-primary text-white ongoing">Order Ongoing</div>                         
+                                class="bg-warning bg-gradient text-white pending">Order Pending</div>
+                              <div *ngIf="order.payment_status === 'APPROVED' || order.payment_status === 'COMPLETED'"
+                                class="bg-primary text-white ongoing">Order Ongoing</div>
                               <div class="order-list">
                                 <img src="{{order.order_details[0].product_image}}"
                                   alt="{{order.order_details[0].product_name}}" class="img-fluid">
                               </div>
                               <div>
-                                <h4>{{order.order_details[0].product_name}}</h4>
-                                <p>No Items : {{order.order_details[0].qty}}</p>
+                                <h4>{{order.order_details[0].product_name}} <span
+                                  *ngIf="order.order_details.length > 1">... +{{(order.order_details.length - 1)}}
+                                  Items</span></h4>
+                              <p>Item Qty : {{order.order_details[0].qty}}</p>
                                 <p>Product Price : {{order.order_details[0].price |
                                   currency:productService?.Currency.currency:'symbol'}}</p>
                                 <p>Addons Price : {{order.order_details[0].addonsprice |
@@ -105,8 +107,10 @@
                                   alt="{{order.order_details[0].product_name}}" class="img-fluid">
                               </div>
                               <div>
-                                <h4>{{order.order_details[0].product_name}}</h4>
-                                <p>No Items : {{order.order_details[0].qty}}</p>
+                                <h4>{{order.order_details[0].product_name}} <span
+                                    *ngIf="order.order_details.length > 1">+ {{(order.order_details.length - 1)}}
+                                    Items</span></h4>
+                                <p>Item Qty : {{order.order_details[0].qty}}</p>
                                 <p>Product Price : {{order.order_details[0].price |
                                   currency:productService?.Currency.currency:'symbol'}}</p>
                                 <p>Addons Price : {{order.order_details[0].addonsprice |

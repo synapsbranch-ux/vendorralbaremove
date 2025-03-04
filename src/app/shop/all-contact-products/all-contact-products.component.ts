@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 
 @Component({
   selector: 'app-all-contact-products',
@@ -14,6 +15,7 @@ export class AllContactProductsComponent implements OnInit {
   @Input() currency: any = this.productService.Currency; // Default Currency 
   public ImageSrc: string
   public products: ProductNew[] = [];
+  public sliders = [];
   cat_slug: any = '';
   cat_id: any
   brandList = [];
@@ -23,30 +25,25 @@ export class AllContactProductsComponent implements OnInit {
   productList = [];
   topBransList = []
   // p: any
+  showBrand: boolean = false;
   currentPage: number = 1; // Initialize with default page number
-  numItemsPerSection = 3;
-  limit: number = 9;
-  groupedItems = [];
+  limit: number = 12;
   totalProducts: any;
+  isLoading: boolean = false;
+  hasMoreProducts: boolean = true; // flag to track if more products exist
+
   constructor(private router: Router,
-    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService) {
+    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
     this.productService.compareItems.subscribe(response => this.products = response);
   }
 
   ngOnInit(): void {
     if (localStorage.getItem('top_brands')) {
       this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
-      console.log('this.topBransList----------------',this.topBransList)
+      console.log('this.topBransList----------------', this.topBransList)
     }
-
-    if (localStorage.getItem('cur_page_contact')) {
-      this.currentPage = Number(localStorage.getItem('cur_page_contact'));
-    }
-    else {
-      this.currentPage = 1
-    }
-    if (localStorage.getItem('brand')) {
-      this.selectedBrand = localStorage.getItem('brand')
+    if (localStorage.getItem('contract_brand')) {
+      this.selectedBrand = localStorage.getItem('contract_brand')
     }
     else {
       this.selectedBrand = ''
@@ -80,30 +77,92 @@ export class AllContactProductsComponent implements OnInit {
           "page": this.currentPage,
           "limit": this.limit
         }
-        this.productService.getContactFilterdProductList(prodObj).subscribe(
-          res => {
-            this.productList = res['data'].products
-            this.totalProducts = res['data'].totalCount
-            this.groupItemsIntoSections(this.productList);
-          },
-          error => {
-            // .... HANDLE ERROR HERE 
-            this.toastr.error(error.error.message)
-          });
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
+    let storeObj =
+    {
+      store_slug: this.store_slug
+    }
+    // get all home slider date from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        this.sliders = res.data;
+      },
+      error => {
+        this.toastr.error(error.error.message);
+        this.router.navigateByUrl('/')
+      }
+    );
+
+    this.loadProducts();
   }
 
-  getBrandDeatils(brand:any)
-  {
+
+  // Method to load products from the API
+  loadProducts(): void {
+    if (this.isLoading || !this.hasMoreProducts) return;
+
+    this.isLoading = true;
+    let prodObj = {
+      "product_category": this.cat_id,
+      "store_slug": this.store_slug,
+      "brand": this.selectedBrand,
+      "page": this.currentPage,
+      "limit": this.limit
+    }
+    this.productService.getContactFilterdProductList(prodObj).subscribe(
+      (res: any) => {
+        if (res['data'].hasOwnProperty('products') && res['data'].products.length > 0) {
+          // Append the new products to the existing list
+          this.productList = [...this.productList, ...res['data'].products];
+          this.currentPage++; // Increment the page number for the next load
+        } else {
+          this.hasMoreProducts = false; // No more products available
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error loading products:', error);
+        this.isLoading = false;
+      }
+    );
+  }
+
+  // Listen to window scroll event to trigger pagination
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+
+    if (windowBottom >= docHeight - 100) {
+      // If scrolled near the bottom, load more products
+      this.loadProducts();
+    }
+  }
+
+  barndPopup() {
+    this.showBrand = true;
+  }
+
+  barndPopupClose() {
+    this.showBrand = false;
+  }
+
+
+  getBrandDeatils(brand: any) {
     let pageNumber = 1;
+    this.currentPage = 1;
     localStorage.setItem('cur_page_contact', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
-    localStorage.setItem('brand', this.selectedBrand);
+    localStorage.setItem('contract_brand', this.selectedBrand);
     let prodObj = {
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
@@ -115,7 +174,7 @@ export class AllContactProductsComponent implements OnInit {
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-        this.groupItemsIntoSections(this.productList);
+
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -129,9 +188,8 @@ export class AllContactProductsComponent implements OnInit {
     this.cat_id = '';
     this.selectedBrand = '';
     this.selectedBrandName = ''
-    let pageNumber = 1;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
-    localStorage.setItem('brand', this.selectedBrand);
+    this.currentPage = 1;
+    localStorage.setItem('contract_brand', this.selectedBrand);
     localStorage.setItem('cat_slug', this.cat_slug);
     localStorage.setItem('cur_cat', this.cat_slug);
     let prodObj = {
@@ -145,7 +203,7 @@ export class AllContactProductsComponent implements OnInit {
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-        this.groupItemsIntoSections(this.productList);
+
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -155,11 +213,12 @@ export class AllContactProductsComponent implements OnInit {
 
   changeBrandname(brand: any) {
     let pageNumber = 1;
+    this.currentPage = 1;
     localStorage.setItem('cur_page_contact', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
     console.log('this.selectedBrandName----', this.selectedBrandName);
-    localStorage.setItem('brand', this.selectedBrand);
+    localStorage.setItem('contract_brand', this.selectedBrand);
     let prodObj = {
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
@@ -171,7 +230,7 @@ export class AllContactProductsComponent implements OnInit {
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
-        this.groupItemsIntoSections(this.productList);
+
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -179,16 +238,14 @@ export class AllContactProductsComponent implements OnInit {
       });
   }
 
-
-  groupItemsIntoSections(items) {
-    this.groupedItems = [];
-    if (items) {
-      for (let i = 0; i < items.length; i += this.numItemsPerSection) {
-        const section = items.slice(i, i + this.numItemsPerSection);
-        this.groupedItems.push(section);
-      }
-    }
+  // Add to Wishlist
+  addToWishlist(product: any) {
+    product.addonsprice = 0;
+    let addonSelectedResult = [];
+    product.addons = addonSelectedResult
+    this.productService.addToWishlist(product);
   }
+
 
   getBrandName(brandarr, brandId) {
     if (brandarr.length > 0) {
@@ -199,31 +256,6 @@ export class AllContactProductsComponent implements OnInit {
       }
     }
     return null
-  }
-
-  onPageChange(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
-    console.log('pageNumber================', pageNumber);
-    // Do whatever you need to do when the page changes
-    // For example, fetch data for the new page
-    let prodObj = {
-      "product_category": this.cat_id,
-      "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
-      "page": this.currentPage,
-      "limit": this.limit
-    }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
-      res => {
-        this.productList = res['data'].products
-        this.totalProducts = res['data'].totalCount
-        this.groupItemsIntoSections(this.productList);
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
   }
 
 }

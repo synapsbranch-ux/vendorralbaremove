@@ -2,6 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { ToastrService } from 'ngx-toastr';
+import { HomesliderService } from '../../services/homeslider.service';
 
 @Component({
   selector: 'app-footer-one',
@@ -22,7 +23,8 @@ export class FooterOneComponent implements OnInit {
   isvendorlogoimage: boolean = false;
   public today: number = Date.now();
   store_slug: any
-  constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService, private toaster: ToastrService) { }
+  menuarr=[]
+  constructor(private router: Router, private route: ActivatedRoute,private homesliderservice: HomesliderService, private storeService: StoreService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -32,20 +34,15 @@ export class FooterOneComponent implements OnInit {
         if (localStorage.getItem('storeslug')) {
           this.store_slug = localStorage.getItem('storeslug')
         }
-        else {
-          if (localStorage.getItem('storeslug')) {
-            this.store_slug = localStorage.getItem('storeslug')
-          }
-        }
       }
     });
 
-    if (this.store_slug) {
-      localStorage.setItem('storeslug', this.store_slug);
-    }
-    else {
-      this.store_slug = localStorage.getItem('storeslug')
-    }
+    // if (this.store_slug) {
+    //   localStorage.setItem('storeslug', this.store_slug);
+    // }
+    // else {
+    //   this.store_slug = localStorage.getItem('storeslug')
+    // }
     if (this.store_slug) {
 
       let storeObj = {
@@ -77,6 +74,31 @@ export class FooterOneComponent implements OnInit {
         }
       );
     }
+
+    let storeObj = {
+      store_slug: this.store_slug
+    };
+
+    // get all home slider data from API
+    this.homesliderservice.getallVendorSliderData(storeObj).subscribe(
+      res => {
+        const lastIndex = res.data.length - 1;  // Get the last index
+        if (res.data[lastIndex].banner_top_brands.length > 0) {
+          localStorage.setItem('top_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
+        }
+        if (res.data[lastIndex].banner_homepage_brands.length > 0) {
+          localStorage.setItem('home_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
+        }
+        if (res.data[lastIndex].banner_sub_categories.length > 0) {
+          this.menuarr = res.data[lastIndex].banner_sub_categories;
+          console.log('menuarr------------------------------------',this.menuarr);
+        }
+      },
+      error => {
+        this.toaster.error(error.error.message);
+        this.router.navigateByUrl('/');
+      }
+    );
   }
 
   redirectcat(url: any) {
