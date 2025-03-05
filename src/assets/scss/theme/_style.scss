@@ -1442,7 +1442,7 @@ header {
 
     .menu-center {
         float: left;
-        width: auto;
+        width: 260px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1465,6 +1465,7 @@ header {
                 border-radius: 50px;
                 border: 1px solid #B0BEC5;
                 overflow: hidden;
+                width:100%;
             }
 
             .input-group-text {
@@ -1504,6 +1505,7 @@ header {
 
             a {
                 color: var(--black);
+                font-weight:600;
             }
 
             i {
@@ -7478,10 +7480,11 @@ footer {
         input {
             border-color: $round-border;
             font-size: 15px;
-            padding: 15px 25px;
+            padding: 10px 20px;
             margin-bottom: 15px;
             height: inherit;
             text-align: center;
+            border-radius: 8px;
         }
 
         .btn-solid {
@@ -7504,6 +7507,8 @@ footer {
         padding: 30px;
         border: 1px solid $round-border;
         line-height: 1;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px #00000033;
 
         .theme-form {
             label {
@@ -7517,9 +7522,10 @@ footer {
             input {
                 border-color: $round-border;
                 font-size: 12px;
-                padding: 17px 25px;
+                padding: 10px 20px;
                 margin-bottom: 30px;
                 height: inherit;
+                border-radius: 8px;;
             }
         }
     }
@@ -7557,6 +7563,8 @@ footer {
         padding: 30px;
         border: 1px solid $round-border;
         line-height: 1;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px #00000033;
 
         .theme-form {
             label {
@@ -7567,12 +7575,14 @@ footer {
                 padding-bottom: 8px;
             }
 
-            input {
+            input,
+            select {
                 border-color: $round-border;
                 font-size: 12px;
-                padding: 17px 25px;
+                padding: 10px 20px;
                 margin-bottom: 30px;
                 height: inherit;
+                border-radius:8px;
             }
         }
     }
@@ -16960,6 +16970,11 @@ div#loading-bar {
     border-radius: 50px;
     color: #fff !important;
     padding: 5px;
+    font-weight:500 !important;
+    border: 1px solid transparent;
+    &:hover{
+        background-color: #182c79;
+    }
 }
 
 .onhover-show-div .createBtn {
@@ -16967,6 +16982,11 @@ div#loading-bar {
     border-radius: 50px;
     color: #1E3799 !important;
     padding: 5px;
+    font-weight:500 !important;
+    &:hover{
+        background-color: #182c79;
+        color: #fff !important;
+    }
 }
 
 .main-title {
@@ -17002,7 +17022,7 @@ div#loading-bar {
         border-radius: 50px;
         color: #000;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         display: inline-block;
         padding: 8px;
         min-width: 150px;

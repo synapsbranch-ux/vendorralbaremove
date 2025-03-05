@@ -7,7 +7,7 @@
                 <h3>create account</h3>
                 <div class="theme-card">
                     <form class="theme-form" [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="showDiv.signUpDiv">
-                        <div class="form-row">
+                        <div class="row form-row">
                             <div class="col-md-6 mb-4">
                                 <label for="fname">First Name</label>
                                 <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname" (keydown)="handleEnter($event, 'lname')">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row" *ngIf="showDiv.signUpDiv">
+                        <div class="row form-row" *ngIf="showDiv.signUpDiv">
                             <div class="col-md-6 mb-4">
                                 <label for="email">email</label>
                                 <input type="email" id="email" class="form-control m-0" placeholder="Email" formControlName="email" (keydown)="handleEnter($event, 'password')">
@@ -93,7 +93,7 @@
 
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-solid rounded-lg"> Create Account </button>
+                            <button type="submit" class="createBtn"> Create Account </button>
                         </div>
                         <!-- 
                         <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
