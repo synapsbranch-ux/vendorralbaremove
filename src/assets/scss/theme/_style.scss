@@ -99,6 +99,7 @@ body {
     background: $white;
     font-size: 14px;
     overflow-x: hidden;
+    padding-top:82px;
 }
 
 h1 {
@@ -417,6 +418,10 @@ del {
 }
 
 .sticky {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
     &.fixed {
         position: fixed;
         width: 100%;
@@ -1038,6 +1043,7 @@ header {
         right: -50px;
         padding: 0;
         border-radius: 10px !important;
+        box-shadow: 0 0px 7px 0px #00000063;
     }
 
     &:hover {
@@ -1442,7 +1448,7 @@ header {
 
     .menu-center {
         float: left;
-        width: auto;
+        width: 260px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1465,6 +1471,7 @@ header {
                 border-radius: 50px;
                 border: 1px solid #B0BEC5;
                 overflow: hidden;
+                width:100%;
             }
 
             .input-group-text {
@@ -1504,6 +1511,7 @@ header {
 
             a {
                 color: var(--black);
+                font-weight:600;
             }
 
             i {
@@ -1539,9 +1547,13 @@ header {
                         &::-webkit-scrollbar-thumb:hover {
                             background: #555;
                         }
+                        h4{
+                            font-size:12px;
+                        }
 
                         h5 {
                             margin-bottom: 0;
+                            font-size:12px;
                         }
 
                         li {
@@ -1566,7 +1578,7 @@ header {
 
                                         span {
                                             color: $grey;
-                                            font-size: 16px;
+                                            font-size: 12px;
                                         }
                                     }
                                 }
@@ -1574,8 +1586,8 @@ header {
 
                             .close-circle {
                                 position: absolute;
-                                top: 0;
-                                right: 0;
+                                top: 12px;
+                                right: -13px;
 
                                 i {
                                     color: $grey-light;
@@ -1607,7 +1619,7 @@ header {
 
                             .buttons {
                                 a {
-                                    font-size: 16px;
+                                    font-size: 14px;
                                     color: $font-color;
                                     text-transform: capitalize;
                                     font-weight: 700;
@@ -7478,10 +7490,11 @@ footer {
         input {
             border-color: $round-border;
             font-size: 15px;
-            padding: 15px 25px;
+            padding: 10px 20px;
             margin-bottom: 15px;
             height: inherit;
             text-align: center;
+            border-radius: 8px;
         }
 
         .btn-solid {
@@ -7504,6 +7517,8 @@ footer {
         padding: 30px;
         border: 1px solid $round-border;
         line-height: 1;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px #00000033;
 
         .theme-form {
             label {
@@ -7517,9 +7532,10 @@ footer {
             input {
                 border-color: $round-border;
                 font-size: 12px;
-                padding: 17px 25px;
+                padding: 10px 20px;
                 margin-bottom: 30px;
                 height: inherit;
+                border-radius: 8px;;
             }
         }
     }
@@ -7557,6 +7573,8 @@ footer {
         padding: 30px;
         border: 1px solid $round-border;
         line-height: 1;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px #00000033;
 
         .theme-form {
             label {
@@ -7567,12 +7585,14 @@ footer {
                 padding-bottom: 8px;
             }
 
-            input {
+            input,
+            select {
                 border-color: $round-border;
                 font-size: 12px;
-                padding: 17px 25px;
+                padding: 10px 20px;
                 margin-bottom: 30px;
                 height: inherit;
+                border-radius:8px;
             }
         }
     }
@@ -9250,17 +9270,17 @@ a {
         li {
             position: relative;
             display: block;
-            font-size: 15px;
+            font-size: 12px;
             color: $grey4;
             line-height: 20px;
             margin-bottom: 20px;
 
             span {
                 float: right;
-                font-size: 16px;
+                font-size: 12px;
                 line-height: 20px;
                 color: #232323;
-                font-weight: 400;
+                font-weight: 500;
                 width: 35%;
             }
         }
@@ -9274,8 +9294,8 @@ a {
         li {
             position: relative;
             display: inline-block;
-            font-size: 16px;
-            font-weight: 400;
+            font-size: 14px;
+            font-weight: 600;
             color: $font-color;
             line-height: 20px;
             margin-bottom: 20px;
@@ -9283,10 +9303,10 @@ a {
 
             .count {
                 position: relative;
-                font-size: 16px;
+                font-size: 14px;
                 line-height: 20px;
                 color: var(--theme-deafult);
-                font-weight: 400;
+                font-weight: 600;
                 width: 35%;
                 float: right;
             }
@@ -16960,6 +16980,11 @@ div#loading-bar {
     border-radius: 50px;
     color: #fff !important;
     padding: 5px;
+    font-weight:500 !important;
+    border: 1px solid transparent;
+    &:hover{
+        background-color: #182c79;
+    }
 }
 
 .onhover-show-div .createBtn {
@@ -16967,6 +16992,11 @@ div#loading-bar {
     border-radius: 50px;
     color: #1E3799 !important;
     padding: 5px;
+    font-weight:500 !important;
+    &:hover{
+        background-color: #182c79;
+        color: #fff !important;
+    }
 }
 
 .main-title {
@@ -17002,7 +17032,7 @@ div#loading-bar {
         border-radius: 50px;
         color: #000;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         display: inline-block;
         padding: 8px;
         min-width: 150px;
@@ -17192,11 +17222,11 @@ div#loading-bar {
 
         .productPrice {
             color: #000;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             background-color: #fff;
             border-radius: 50px;
-            padding: 10px;
+            padding: 5px;
             white-space: nowrap;
             text-align: center;
 
@@ -17253,6 +17283,10 @@ div#loading-bar {
 .mobileMenuList {
     li {
         margin: 0 5px;
+        a{
+            color:#000;
+            font-weight: 600;
+        }
     }
 }
 
@@ -17360,10 +17394,11 @@ div#loading-bar {
         }
     }
 }
-
+.dropdown-item.active,
 .dropdown-item:hover,
 .dropdown-item:focus {
+    background:#fff;
     color: var(--bs-dropdown-link-active-color);
     text-decoration: none;
-    background-color: var(--bs-dropdown-link-active-bg);
+    border: 1px solid var(--bs-dropdown-link-active-bg);
 }

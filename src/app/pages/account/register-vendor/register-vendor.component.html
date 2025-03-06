@@ -7,7 +7,7 @@
                 <h3>Create your Business Account</h3>
                 <div class="theme-card">
                     <form class="theme-form" [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!vendorOTPStatus">
-                        <div class="form-row">
+                        <div class="row form-row">
                             <div class="col-md-6 mb-4">
                                 <label for="fname"> Name</label>
                                 <input type="text" class="form-control m-0" id="fname" placeholder="First Name" required="" formControlName="fname" (keydown)="handleEnter($event, 'email')">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row">
+                        <div class="row form-row">
 
                             <div class="col-md-6 mb-4">
                                 <label for="password">Password</label>
@@ -91,18 +91,18 @@
                                 <input type="text" class="form-control m-0" id="other_categories" placeholder="Other categories name" formControlName="other_categories" (keydown)="handleEnter($event, 'customControlAutosizing1')">
                             </div>
                         </div>
-                        <div class="form-terms mb-5">
+                        <div class="form-terms mb-3">
                             <div class="custom-control custom-checkbox mr-sm-2 d-flex align-items-center">
                                 <input type="checkbox" class="custom-control-input check-policy" id="customControlAutosizing1" (keydown)="handleEnter($event)">
                                 <label class="custom-control-label pt-04" for="customControlAutosizing1"><span>I agree all statements
-                                            in <a [routerLink]="['../privacy-policy']" target="_blank" routerLinkActive="router-link-active"  class="pull-right">Terms
+                                            in <a [routerLink]="['../privacy-policy']" target="_blank" routerLinkActive="router-link-active"  class="ms-1 pull-right">Terms
                                                 &amp;
                                                 Conditions</a></span></label>
 
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit"  class="btn btn-solid rounded-lg"> Create Account </button>
+                            <button type="submit"  class="createBtn"> Create Account </button>
                         </div>
 
                         <!-- <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">

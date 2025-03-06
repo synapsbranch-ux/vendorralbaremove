@@ -1,5 +1,5 @@
 <!-- NEW HTML DESIGN -->
-<section>
+<section class="pt-0">
     <app-slider [sliders]="sliders" [textClass]="'text-center'" [category]="'fashion'" [buttonText]="'shop now'">
     </app-slider>
 
@@ -70,13 +70,13 @@
                         </div>
                         <div class="col-6">
                             <div class="productPrice" *ngIf="product?.product_sale_price">
-
+                                {{ product?.product_sale_price |
+                                    currency:currency?.currency:'symbol'
+                                    }}<br/>
                                 <span>{{ product?.product_retail_price |
                                     currency:currency?.currency:'symbol'
                                     }}</span>
-                                {{ product?.product_sale_price |
-                                currency:currency?.currency:'symbol'
-                                }}
+                                
                             </div>
                             <div class="productPrice" *ngIf="product?.product_sale_price == null">
                                 {{ product?.product_retail_price |
