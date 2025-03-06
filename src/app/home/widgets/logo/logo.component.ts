@@ -15,6 +15,7 @@ export class LogoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    // console.log('brands', this.brands)
     this.route.params.subscribe(params => {
       this.store_slug = params['slug'];
     });

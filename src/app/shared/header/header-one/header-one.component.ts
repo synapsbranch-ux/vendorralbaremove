@@ -19,6 +19,7 @@ export class HeaderOneComponent implements OnInit, DoCheck {
   @Input() sticky: boolean = false; // Default false
   public stick: boolean = false;
   vendorhome: boolean = false;
+  islogo: boolean = false;
   isvendorlogoimage: boolean = false;
   public products: ProductNew[] = [];
   menuarr = []
@@ -42,9 +43,9 @@ export class HeaderOneComponent implements OnInit, DoCheck {
     // });
 
     this.store_slug = localStorage.getItem('storeslug')
-
+    console.log('store_slug', this.store_slug);
     if (this.store_slug) {
-
+      this.vendorhome = true;
       let storeObj = {
         store_slug: this.store_slug
       };
@@ -56,17 +57,25 @@ export class HeaderOneComponent implements OnInit, DoCheck {
           localStorage.setItem('store3diamge', (res.data[0]?.store_glb_file) ? res.data[0]?.store_glb_file : '')
           console.log('every click run Local Value', localStorage.getItem('store3diamge'))
           if (res.data[0]?.is_logo) {
+            this.islogo = true;
             if (res.data[0]?.logo) {
               this.themeLogo = res.data[0].logo
               this.isvendorlogoimage = true;
             }
             else {
               this.themeLogo = res.data[0]?.logo_name
-              this.isvendorlogoimage = false;
+              console.log('res.data[0]?.logo_name', res.data[0]?.logo_name)
+              if (res.data[0]?.logo_name) {
+                this.isvendorlogoimage = false;
+              }
+              else {
+                this.themeLogo = 'assets/images/icon/logo_small_res.png';
+              }
+
             }
-            this.vendorhome = true;
           }
           else {
+            this.islogo=false;
             this.themeLogo = 'assets/images/icon/logo_small_res.png';
           }
 
@@ -92,11 +101,12 @@ export class HeaderOneComponent implements OnInit, DoCheck {
           localStorage.setItem('top_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
         }
         if (res.data[lastIndex].banner_homepage_brands.length > 0) {
+          // console.log('home_brands------------------------------------', res.data[lastIndex].banner_homepage_brands);
           localStorage.setItem('home_brands', JSON.stringify(res.data[lastIndex].banner_homepage_brands))
         }
         if (res.data[lastIndex].banner_sub_categories.length > 0) {
           this.menuarr = res.data[lastIndex].banner_sub_categories;
-          console.log('menuarr------------------------------------', this.menuarr);
+          // console.log('menuarr------------------------------------', this.menuarr);
         }
       },
       error => {

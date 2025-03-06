@@ -95,13 +95,13 @@
 </section>
 <div class="overlayDiv" *ngIf="showBrand">
     <div class="dropdown-menu">
-        <ul >
+        <ul>
             <span class="closeBtn">
                 <a (click)="barndPopupClose()"><img src="assets/images/close.svg" width="100%" alt="Close"></a>
             </span>
-            <li *ngFor="let brand of brandList">
+            <li *ngFor="let brand of paginatedBrandList">
                 <a class="dropdown-item" (click)="changeBrandname(brand)"
-                    [ngClass]="{'active': selectedBrand === brand._id}">
+                   [ngClass]="{'active': selectedBrand === brand._id}">
                     <img *ngIf="brand.brand_image" class="w-100" [src]="brand.brand_image" alt="Brand">
                     <span *ngIf="!brand.brand_image">{{ brand.brand_name }}</span>
                 </a>
@@ -109,11 +109,12 @@
         </ul>
         <div class="brandNav">
             <ul>
-                <li class="pre">Previous</li>
-                <li class="next"> Next</li>
+                <li class="pre" (click)="showPrevious()">Previous</li>
+                <li class="next" (click)="showNext()"> Next</li>
             </ul>
         </div>
     </div>
+    
 </div>
 
 <!-- NEW HTML DESIGN -->
