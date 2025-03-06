@@ -99,6 +99,7 @@ body {
     background: $white;
     font-size: 14px;
     overflow-x: hidden;
+    padding-top:82px;
 }
 
 h1 {
@@ -417,6 +418,10 @@ del {
 }
 
 .sticky {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
     &.fixed {
         position: fixed;
         width: 100%;
@@ -1038,6 +1043,7 @@ header {
         right: -50px;
         padding: 0;
         border-radius: 10px !important;
+        box-shadow: 0 0px 7px 0px #00000063;
     }
 
     &:hover {
@@ -1541,9 +1547,13 @@ header {
                         &::-webkit-scrollbar-thumb:hover {
                             background: #555;
                         }
+                        h4{
+                            font-size:12px;
+                        }
 
                         h5 {
                             margin-bottom: 0;
+                            font-size:12px;
                         }
 
                         li {
@@ -1568,7 +1578,7 @@ header {
 
                                         span {
                                             color: $grey;
-                                            font-size: 16px;
+                                            font-size: 12px;
                                         }
                                     }
                                 }
@@ -1576,8 +1586,8 @@ header {
 
                             .close-circle {
                                 position: absolute;
-                                top: 0;
-                                right: 0;
+                                top: 12px;
+                                right: -13px;
 
                                 i {
                                     color: $grey-light;
@@ -1609,7 +1619,7 @@ header {
 
                             .buttons {
                                 a {
-                                    font-size: 16px;
+                                    font-size: 14px;
                                     color: $font-color;
                                     text-transform: capitalize;
                                     font-weight: 700;
@@ -9260,17 +9270,17 @@ a {
         li {
             position: relative;
             display: block;
-            font-size: 15px;
+            font-size: 12px;
             color: $grey4;
             line-height: 20px;
             margin-bottom: 20px;
 
             span {
                 float: right;
-                font-size: 16px;
+                font-size: 12px;
                 line-height: 20px;
                 color: #232323;
-                font-weight: 400;
+                font-weight: 500;
                 width: 35%;
             }
         }
@@ -9284,8 +9294,8 @@ a {
         li {
             position: relative;
             display: inline-block;
-            font-size: 16px;
-            font-weight: 400;
+            font-size: 14px;
+            font-weight: 600;
             color: $font-color;
             line-height: 20px;
             margin-bottom: 20px;
@@ -9293,10 +9303,10 @@ a {
 
             .count {
                 position: relative;
-                font-size: 16px;
+                font-size: 14px;
                 line-height: 20px;
                 color: var(--theme-deafult);
-                font-weight: 400;
+                font-weight: 600;
                 width: 35%;
                 float: right;
             }
@@ -17212,11 +17222,11 @@ div#loading-bar {
 
         .productPrice {
             color: #000;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             background-color: #fff;
             border-radius: 50px;
-            padding: 10px;
+            padding: 5px;
             white-space: nowrap;
             text-align: center;
 
@@ -17273,6 +17283,10 @@ div#loading-bar {
 .mobileMenuList {
     li {
         margin: 0 5px;
+        a{
+            color:#000;
+            font-weight: 600;
+        }
     }
 }
 
@@ -17380,10 +17394,11 @@ div#loading-bar {
         }
     }
 }
-
+.dropdown-item.active,
 .dropdown-item:hover,
 .dropdown-item:focus {
+    background:#fff;
     color: var(--bs-dropdown-link-active-color);
     text-decoration: none;
-    background-color: var(--bs-dropdown-link-active-bg);
+    border: 1px solid var(--bs-dropdown-link-active-bg);
 }
