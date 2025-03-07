@@ -911,6 +911,8 @@ button {
     ==========================*/
 
 .logo-block {
+    width: 100%;
+    height: 60px;
     a {
         &:focus {
             outline: none;
@@ -922,6 +924,10 @@ button {
         opacity: 0.5;
         transition: .5s ease;
         margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 10px;
 
         &:focus {
             outline: none;
@@ -1002,6 +1008,13 @@ header {
             a {
                 display: block;
                 text-align: center;
+                padding: 5px;
+                border-radius: 20px;
+                &:hover{
+                    background: #1E3799;
+                    border-radius: 20px;
+                    color: #fff !important;
+                }
             }
         }
     }
@@ -7716,9 +7729,10 @@ a {
         input {
             border-color: $round-border;
             font-size: 12px;
-            padding: 17px 25px;
+            padding: 10px 20px;
             margin-bottom: 30px;
             height: inherit;
+            border-radius: 8px;
         }
 
         textarea {
@@ -9539,6 +9553,8 @@ a {
     .dashboard {
         border: 1px solid #ddd;
         padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 
         .page-title h2 {
             font-size: 22px;
@@ -17336,10 +17352,11 @@ div#loading-bar {
     z-index: 999;
     align-items: center;
     justify-content: center;
+    color:#000;
 
     ul{
         height:210px;
-        overflow: auto;
+        // overflow: auto;
 
         li {
             display: inline-block;
@@ -17398,7 +17415,8 @@ div#loading-bar {
 .dropdown-item:hover,
 .dropdown-item:focus {
     background:#fff;
-    color: var(--bs-dropdown-link-active-color);
+    // color: var(--bs-dropdown-link-active-color);
+    color: #1E3799;
     text-decoration: none;
     border: 1px solid var(--bs-dropdown-link-active-bg);
 }
