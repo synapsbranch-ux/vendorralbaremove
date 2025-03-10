@@ -105,9 +105,9 @@
                         <div class="col-lg-12">
                             <div class="row order-success-sec">
                                 <div class="col-sm-6">
-                                    <h4>summary</h4>
+                                    <h4 class="fs-6">summary</h4>
                                     <hr>
-                                    <ul class="order-detail">
+                                    <ul class="order-detail fs-6">
                                         <li><span>Order ID:</span> {{order_id}}</li>
                                         <li><span>Order Date:</span> {{ createdAt | date:'MMMM d, y'}}</li>
                                         <li><span>Order Total:</span> {{total_order_amount |
@@ -115,9 +115,9 @@
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">
-                                    <h4>shipping address</h4>
+                                    <h4 class="fs-6">shipping address</h4>
                                     <hr>
-                                    <ul class="order-detail">
+                                    <ul class="order-detail fs-6">
                                         <li>{{orderAddress?.user_full_name}}</li>
                                         <li>{{orderAddress?.addressline1}}</li>
                                         <li>{{orderAddress?.addressline2}}</li>
@@ -128,12 +128,12 @@
                                 </div>
 
                                 <div class="col-sm-12 payment-mode">
-                                    <h4>payment method</h4>
+                                    <h4 class="fs-6">payment method</h4>
                                     <hr>
                                     <p><span>{{payment_method}}</span></p>
-                                    <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery
+                                    <p *ngIf="payment_method == 'COD'" class="fs-6">Pay on Delivery (Cash/Card). Cash on delivery
                                         (COD) available. Card/Net banking acceptance subject to device availability.</p>
-                                    <p>Payment Status : <span *ngIf="payment_status != 'APPROVED'"
+                                    <p class="fs-6">Payment Status : <span *ngIf="payment_status != 'APPROVED'"
                                             class="text-warning">{{payment_status | uppercase}}</span><span
                                             *ngIf="payment_status == 'APPROVED'" class="text-success">{{payment_status |
                                             uppercase}}</span></p>

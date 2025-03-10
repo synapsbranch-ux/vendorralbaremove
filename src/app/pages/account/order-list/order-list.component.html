@@ -61,25 +61,31 @@
                                 class="bg-warning bg-gradient text-white pending">Order Pending</div>
                               <div *ngIf="order.payment_status === 'APPROVED' || order.payment_status === 'COMPLETED'"
                                 class="bg-primary text-white ongoing">Order Ongoing</div>
-                              <div class="order-list">
-                                <img src="{{order.order_details[0].product_image}}"
-                                  alt="{{order.order_details[0].product_name}}" class="img-fluid">
-                              </div>
-                              <div>
-                                <h4>{{order.order_details[0].product_name}} <span
-                                  *ngIf="order.order_details.length > 1">... +{{(order.order_details.length - 1)}}
-                                  Items</span></h4>
-                              <p>Item Qty : {{order.order_details[0].qty}}</p>
-                                <p>Product Price : {{order.order_details[0].price |
-                                  currency:productService?.Currency.currency:'symbol'}}</p>
-                                <p>Addons Price : {{order.order_details[0].addonsprice |
-                                  currency:productService?.Currency.currency:'symbol'}}</p>
-                                <p>Total Amount : {{(order.order_details[0].price + order.order_details[0].addonsprice)
-                                  * (order.order_details[0].qty) | currency:productService?.Currency.currency:'symbol'
-                                  }}</p>
-                                <p class="pb-3 weight-600">Ph: {{order.billing_phone}}</p>
-                                <a class="btn btn-xs btn-solid rounded-lg" (click)="viewOrder(order._id)">View Order</a>
-                              </div>
+                                <div class="row align-items-center">
+                                  <div class="col-12 col-sm-3">
+                                    <div class="order-list">
+                                      <img src="{{order.order_details[0].product_image}}"
+                                        alt="{{order.order_details[0].product_name}}" class="img-fluid">
+                                    </div>
+                                  </div>
+                                  <div class="col-12 col-sm-9">
+                                      <h4 class="fs-6">{{order.order_details[0].product_name}} <span
+                                        *ngIf="order.order_details.length > 1">... +{{(order.order_details.length - 1)}}
+                                        Items</span></h4>
+                                      <p>Item Qty : {{order.order_details[0].qty}}</p>
+                                      <p>Product Price : {{order.order_details[0].price |
+                                        currency:productService?.Currency.currency:'symbol'}}</p>
+                                      <p>Addons Price : {{order.order_details[0].addonsprice |
+                                        currency:productService?.Currency.currency:'symbol'}}</p>
+                                      <p>Total Amount : {{(order.order_details[0].price + order.order_details[0].addonsprice)
+                                        * (order.order_details[0].qty) | currency:productService?.Currency.currency:'symbol'
+                                        }}</p>
+                                      <p class="pb-3 weight-600">Ph: {{order.billing_phone}}</p>
+                                      <a class="loginBtn" (click)="viewOrder(order._id)">View Order</a>
+                                  </div>
+                                </div>
+                              
+                              
                             </address>
                           </div>
                         </div>

@@ -48,7 +48,7 @@ address {
     align-items: center;
 
     div {
-        flex-basis: 48%;
+        // flex-basis: 48%;
     }
 
     img {
@@ -128,4 +128,31 @@ address {
 
 .delivery-card {
     background-color: #f2f2f2;
+}
+.loginBtn {
+    background-color: #1E3799;
+    border-radius: 50px;
+    color: #fff !important;
+    padding: 12px 15px;
+    border: 1px solid transparent;
+    min-width: 120px;
+    &:hover{
+        background-color: #182c79;
+    }
+}
+.createBtn {
+    border: 1px solid #1E3799;
+    border-radius: 50px;
+    color: #1E3799 !important;
+    padding: 12px 15px;
+    min-width: 120px;
+    &:hover{
+        background-color: #182c79;
+        color: #fff !important;
+    }
+}
+.pending,
+.ongoing{
+    border-radius: 4px 0 4px 0px;
+    font-size:12px;
 }
