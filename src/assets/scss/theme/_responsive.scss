@@ -6368,6 +6368,20 @@ background-color: $black;*/
             margin-bottom: 3px;
         }
     }
+
+    .dropdown-menu {
+        ul{
+            height: auto;
+           li{
+                width: calc((100% - 0px) / 6);
+            } 
+        }
+        
+    }
+    .filterMenu{
+        margin-bottom: 15px;
+        margin-right:5px !important;
+    }
 }
 
 @media (min-width: 577px) {

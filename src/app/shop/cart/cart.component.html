@@ -17,7 +17,7 @@
             <div class="col-sm-12 col-lg-8 col-12">
                 <div class="row justify-content-center align-items-center mb-3 cart-products-list"
                     *ngFor="let product of products">
-                    <div class="col-sm-6 col-md-6 col-6 flex_item">
+                    <div class="col-sm-2 col-md-2 col-6 mb-3 mb-sm-0">
                         <div class="cart_product_img">
                             <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
                                 [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
@@ -34,6 +34,9 @@
                                     class="img-fluid lazy-loading" alt="{{ product.product_name }}" />
                             </a>
                         </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-12 mb-3 mb-sm-0">
+                        
                         <div class="cart_product_info">
                             <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
                                 [routerLink]="['/product/', product.product_slug]" routerLinkActive="active">
@@ -53,10 +56,33 @@
                                 product.product_retail_price) | currency: product_service.Currency?.currency:'symbol'}}
                             </p>
                             <span *ngIf="product.addons && product.addons.length > 0">
-                                <p>Addons</p>
-                                <ul class="addon_cart">
+                                <p class="mt-3 mb-2">Addons</p>
+                                <table class="w-100">
+                                    <tr *ngFor="let addon of product.addons; let i = index">
+                                        <td>
+                                            <span class="me-2" *ngIf="addon.input_type">{{(addon.input_type == 'range' ||
+                                                addon.input_type == 'range-input' ||
+                                                addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} -
+                                                {{
+                                                addon.price | currency: product_service.Currency?.currency:'symbol'
+                                                }}</span>
+                                                <span *ngIf="addon.extra_document">
+                                                    <span *ngFor="let doc of addon.extra_document; let i = index">
+                                                        <span>{{doc.key}} -  {{
+                                                            doc.price | currency: product_service.Currency?.currency:'symbol'
+                                                            }}</span>
+                                                    </span>
+                                                </span>
+                                        </td>
+                                        <td>
+                                            <a (click)="removeAddon(product, i)"><i class="fa fa-times"
+                                                aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!-- <ul class="addon_cart">
                                     <li *ngFor="let addon of product.addons; let i = index">
-                                        <span *ngIf="addon.input_type">{{(addon.input_type == 'range' ||
+                                        <span class="me-2" *ngIf="addon.input_type">{{(addon.input_type == 'range' ||
                                             addon.input_type == 'range-input' ||
                                             addon.input_type == 'input')? addon.key+':'+addon.value : addon.value }} -
                                             {{
@@ -72,20 +98,16 @@
                                         <a (click)="removeAddon(product, i)"><i class="fa fa-times"
                                                 aria-hidden="true"></i></a>
                                     </li>
-                                </ul>
-                                <p class="mb-2 font-weight-bold">Total addons : {{ ((product.addonsprice)?
+                                </ul> -->
+                                <p class="mt-2 mb-2 fw-bold">Total addons : {{ ((product.addonsprice)?
                                     product.addonsprice: 0) | currency: product_service.Currency?.currency:'symbol'}}
                                 </p>
                             </span>
-                            <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
-                                [routerLink]="['/product/', product.product_slug]"
-                                class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
-                            <a *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1"
-                                [routerLink]="['/contact-product/', product.product_slug]"
-                                class="btn btn-solid rounded-sm anchor-remove">View Deatils</a>
+                            
+                            
                         </div>
                     </div>
-                    <div class="col-sm-4 col-md-4 col-4">
+                    <div class="col-sm-4 col-md-4 col-12 text-center">
                         <div
                             *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
                             <div class="qty-box">
@@ -156,8 +178,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 col-12">
+                        <p class="mt-3">
+                            <a *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)"
+                            [routerLink]="['/product/', product.product_slug]"
+                            class="loginBtn">View Deatils</a>
+                            <a *ngIf="product.left_eye_qty >= 1 || product.right_eye_qty >= 1"
+                            [routerLink]="['/contact-product/', product.product_slug]"
+                            class="loginBtn">View Deatils</a>
+                        </p>
                         <ul class="cart_item_action mt-2">
                             <!-- <li><i class="ti-pencil"></i>Edit Item</li> -->
                             <li><a (click)="removeItem(product)"><i class="ti-trash"></i>Remove</a></li>
@@ -165,6 +193,9 @@
                                         [ngClass]="checkwishlist(product)? 'fa fa-heart' : 'fa fa-heart-o'"
                                         class=""></i>Wishlist</a></li>
                         </ul>
+                    </div>
+                    <div class="col-sm-2 col-12">
+                        
                     </div>
                 </div>
             </div>
@@ -204,8 +235,8 @@
                         </ul>
                     </div>
                     <div class="text-center">
-                        <a [routerLink]="['/checkout']" class="btn btn-solid rounded-lg w-100"><i
-                                class="ti-lock mr-1"></i>Checkout</a>
+                        <a [routerLink]="['/checkout']" class="createBtn w-100"><i
+                                class="ti-lock me-2"></i>Checkout</a>
                         <!-- <button class="btn btn-solid rounded-lg w-100"></button> -->
                     </div>
                     <!-- <div class="text-center mt-3">

@@ -17,125 +17,127 @@
                                 class="btn btn-solid rounded-lg">Login</button>
                         </div>
                         <div class="col-lg-7 col-sm-12 col-xs-12" [class.desabledform]="isUserLogin">
-                            <div class="checkout-title">
-                                <h3>Billing Details</h3>
-                                <p class="mb-1">Contact Information</p>
-                                <p class="m-0">We'll use these details to keep you inform on your delivery.</p>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                    <div class="field-label">Email Address</div>
-                                    <input [(ngModel)]="email_" id="email_address" type="text" formControlName="email"
-                                        placeholder="" autocomplete="off">
-                                    <div *ngIf="email.invalid && (email.dirty || email.touched)"
-                                        class="text text-danger mt-1">
-                                        <div *ngIf="email.errors?.required">
-                                            Email is required.
-                                        </div>
-                                        <div *ngIf="email.errors?.email || email.errors?.pattern">
-                                            Please enter a valid email.
+                            <div class="checkout-details">
+                                <div class="checkout-title">
+                                    <h3>Billing Details</h3>
+                                    <p class="mb-1">Contact Information</p>
+                                    <p class="m-0">We'll use these details to keep you inform on your delivery.</p>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <div class="field-label">Email Address</div>
+                                        <input [(ngModel)]="email_" id="email_address" type="text" formControlName="email"
+                                            placeholder="" autocomplete="off">
+                                        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+                                            class="text text-danger mt-1">
+                                            <div *ngIf="email.errors?.required">
+                                                Email is required.
+                                            </div>
+                                            <div *ngIf="email.errors?.email || email.errors?.pattern">
+                                                Please enter a valid email.
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                        <div class="field-label">Phone</div>
+                                        <input [(ngModel)]="phone_" id="phone_no" type="number" formControlName="phone"
+                                            placeholder="" autocomplete="off">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                    <div class="field-label">Phone</div>
-                                    <input [(ngModel)]="phone_" id="phone_no" type="number" formControlName="phone"
-                                        placeholder="" autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <mat-accordion>
-                                        <mat-expansion-panel [expanded]="true">
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-title>
-                                                    <h5 class="m-0">1. Shipping Address </h5>
-                                                </mat-panel-title>
-                                            </mat-expansion-panel-header>
-                                            <div class="row">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <mat-accordion>
+                                            <mat-expansion-panel [expanded]="true">
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        <h5 class="m-0">1. Shipping Address </h5>
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div class="row">
 
-                                                <div class="col-sm-6"
-                                                    *ngFor="let address of useraddressslist let i = index">
+                                                    <div class="col-sm-6"
+                                                        *ngFor="let address of useraddressslist let i = index">
 
-                                                    <div class="radio-option d-flex align-items-start">
-                                                        <input *ngIf="address.is_default == 1" type="radio"
-                                                            class="user_address_id" id="userShippingAddressId{{i}}"
-                                                            ngModel="{{address._id}}" name="userShippingAddressId"
-                                                            value="{{address._id}}"
-                                                            formControlName="userShippingAddressId">
-                                                        <input
-                                                            *ngIf="address.is_default == 0 || address.is_default != 1"
-                                                            type="radio" class="user_address_id"
-                                                            id="userShippingAddressId{{i}}" name="userShippingAddressId"
-                                                            value="{{address._id}}"
-                                                            formControlName="userShippingAddressId">
-                                                        <label for="userShippingAddressId{{i}}">
-                                                            <address>
-                                                                <h4> {{address.user_full_name}} </h4>
-                                                                <p>{{address.addressline1}},
-                                                                    {{address.addressline2}}</p>
-                                                                <p>{{address.city}} - {{address.postal_code}}</p>
-                                                                <p>{{address.state}}</p>
-                                                                <h5>Ph: {{address.mobile}}</h5>
-                                                            </address>
-                                                        </label>
+                                                        <div class="radio-option d-flex align-items-start">
+                                                            <input *ngIf="address.is_default == 1" type="radio"
+                                                                class="user_address_id" id="userShippingAddressId{{i}}"
+                                                                ngModel="{{address._id}}" name="userShippingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userShippingAddressId">
+                                                            <input
+                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                                type="radio" class="user_address_id"
+                                                                id="userShippingAddressId{{i}}" name="userShippingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userShippingAddressId">
+                                                            <label for="userShippingAddressId{{i}}">
+                                                                <address>
+                                                                    <h4> {{address.user_full_name}} </h4>
+                                                                    <p>{{address.addressline1}},
+                                                                        {{address.addressline2}}</p>
+                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                    <p>{{address.state}}</p>
+                                                                    <h5>Ph: {{address.mobile}}</h5>
+                                                                </address>
+                                                            </label>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="linkaddress">
+                                                        <a class="add_address" (click)="checkaddress();">Add New
+                                                            adress</a><br>
                                                     </div>
                                                 </div>
-                                                <div class="linkaddress">
-                                                    <a class="add_address" (click)="checkaddress();">Add New
-                                                        adress</a><br>
-                                                </div>
-                                            </div>
-                                        </mat-expansion-panel>
-                                    </mat-accordion>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <mat-accordion>
-                                        <mat-expansion-panel [expanded]="true">
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-title>
-                                                    <h5 class="m-0">2. Billing Address</h5>
-                                                </mat-panel-title>
-                                            </mat-expansion-panel-header>
-                                            <div class="row">
-                                                <div class="col-sm-6"
-                                                    *ngFor="let address of useraddressslist let i = index">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <mat-accordion>
+                                            <mat-expansion-panel [expanded]="true">
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        <h5 class="m-0">2. Billing Address</h5>
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div class="row">
+                                                    <div class="col-sm-6"
+                                                        *ngFor="let address of useraddressslist let i = index">
 
-                                                    <div class="radio-option d-flex align-items-start">
-                                                        <input *ngIf="address.is_default == 1" type="radio"
-                                                            class="user_address_id" id="userBillingAddressId{{i}}"
-                                                            ngModel="{{address._id}}" name="userBillingAddressId"
-                                                            value="{{address._id}}"
-                                                            formControlName="userBillingAddressId">
-                                                        <input
-                                                            *ngIf="address.is_default == 0 || address.is_default != 1"
-                                                            type="radio" class="user_address_id"
-                                                            id="userBillingAddressId{{i}}" name="userBillingAddressId"
-                                                            value="{{address._id}}"
-                                                            formControlName="userBillingAddressId">
-                                                        <label for="userBillingAddressId{{i}}">
-                                                            <address>
-                                                                <h4> {{address.user_full_name}} </h4>
-                                                                <p>{{address.addressline1}},
-                                                                    {{address.addressline2}}</p>
-                                                                <p>{{address.city}} - {{address.postal_code}}</p>
-                                                                <p>{{address.state}}</p>
-                                                                <h5>Ph: {{address.mobile}}</h5>
-                                                            </address>
-                                                        </label>
+                                                        <div class="radio-option d-flex align-items-start">
+                                                            <input *ngIf="address.is_default == 1" type="radio"
+                                                                class="user_address_id" id="userBillingAddressId{{i}}"
+                                                                ngModel="{{address._id}}" name="userBillingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userBillingAddressId">
+                                                            <input
+                                                                *ngIf="address.is_default == 0 || address.is_default != 1"
+                                                                type="radio" class="user_address_id"
+                                                                id="userBillingAddressId{{i}}" name="userBillingAddressId"
+                                                                value="{{address._id}}"
+                                                                formControlName="userBillingAddressId">
+                                                            <label for="userBillingAddressId{{i}}">
+                                                                <address>
+                                                                    <h4> {{address.user_full_name}} </h4>
+                                                                    <p>{{address.addressline1}},
+                                                                        {{address.addressline2}}</p>
+                                                                    <p>{{address.city}} - {{address.postal_code}}</p>
+                                                                    <p>{{address.state}}</p>
+                                                                    <h5>Ph: {{address.mobile}}</h5>
+                                                                </address>
+                                                            </label>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="linkaddress">
+                                                        <a class="add_address" (click)="checkaddress();">Add New
+                                                            adress</a><br>
                                                     </div>
                                                 </div>
-                                                <div class="linkaddress">
-                                                    <a class="add_address" (click)="checkaddress();">Add New
-                                                        adress</a><br>
-                                                </div>
-                                            </div>
-                                        </mat-expansion-panel>
-                                    </mat-accordion>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +218,7 @@
                                     <div class="text-right">
                                         <button type="submit" *ngIf="!paypalstatus"
                                             [disabled]="checkoutForm.invalid || isSubmitting || !products.length"
-                                            class="btn-solid btn rounded-lg">
+                                            class="loginBtn btn">
                                             Place Order
                                         </button>
 

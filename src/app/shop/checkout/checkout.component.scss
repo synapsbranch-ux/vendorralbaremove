@@ -31,3 +31,18 @@ address {
 {
     padding-left: 6px;
 }
+
+.loginBtn {
+    background-color: #1E3799;
+    border-radius: 50px;
+    color: #fff !important;
+    padding: 12px 15px;
+    border: 1px solid transparent;
+    min-width: 120px;
+    text-decoration: none;
+    display: inline-block;
+    text-transform: capitalize;
+    &:hover{
+        background-color: #182c79;
+    }
+}

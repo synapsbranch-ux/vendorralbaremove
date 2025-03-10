@@ -60,229 +60,233 @@
                     </div>
                 </div>
                 <div class="col-lg-6 rtl-text">
-                    <div class="product-right">
-                        <h5 class="avalibility mb-2" *ngIf="counter <= product.stock"><span>Instock</span></h5>
-                        <h5 class="unavalibility mb-2" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
+                    <div class="product-right d-flex flex-column-reverse flex-lg-column ">
+                        <div>
+                            <h5 class="avalibility mb-2" *ngIf="counter <= product.stock"><span>Instock</span></h5>
+                            <h5 class="unavalibility mb-2" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
 
-                        <h2 class="mb-0">{{ product?.product_name }}</h2>
-                        <p class="productCode">CK22538</p>
-                        <h3 *ngIf="product?.product_sale_price">
-                            <del>{{ product?.product_retail_price | currency:
-                                productService.Currency?.currency:'symbol'
-                                }}</del>
-                            <span>{{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'
-                                }}</span>
-                        </h3>
-                        <h3 *ngIf="product?.product_sale_price == null">
-                            <span>{{ product?.product_retail_price | currency:
-                                productService.Currency?.currency:'symbol'}}</span>
-                        </h3>
-                        <!-- <div class="rating">
-                        <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
-                    </div> -->
-                        <p class="mb-0">{{ product?.product_description}}</p>
-                        <!-- <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory> -->
-                        <div class="product-attributes pb-3">
-                            <div *ngIf="productAttributeArr">
-                                <div *ngFor="let attribute of productAttributeArr">
-                                    <div *ngIf="attribute.value && !stingURLCheck(attribute.value)" class="py-2">
-                                        <p class="productFor">{{capitalizeString(attribute.attribute_slug)}}
-                                            <span>{{attribute.value}}</span>
-                                        </p>
-                                    </div>
-                                    <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'img'"
-                                        class="py-2">
-                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
+                            <h2 class="mb-0">{{ product?.product_name }}</h2>
+                            <p class="productCode">CK22538</p>
+                            <h3 *ngIf="product?.product_sale_price">
+                                <del>{{ product?.product_retail_price | currency:
+                                    productService.Currency?.currency:'symbol'
+                                    }}</del>
+                                <span>{{ product?.product_sale_price | currency: productService.Currency?.currency:'symbol'
+                                    }}</span>
+                            </h3>
+                            <h3 *ngIf="product?.product_sale_price == null">
+                                <span>{{ product?.product_retail_price | currency:
+                                    productService.Currency?.currency:'symbol'}}</span>
+                            </h3>
+                            <!-- <div class="rating">
+                            <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
+                            </div> -->
+                            <p class="mb-0">{{ product?.product_description}}</p>
+                            <!-- <app-stock-inventory [stock]="product.stock - counter"></app-stock-inventory> -->
+                            <div class="product-attributes pb-3">
+                                <div *ngIf="productAttributeArr">
+                                    <div *ngFor="let attribute of productAttributeArr">
+                                        <div *ngIf="attribute.value && !stingURLCheck(attribute.value)" class="py-2">
+                                            <p class="productFor">{{capitalizeString(attribute.attribute_slug)}}
+                                                <span>{{attribute.value}}</span>
+                                            </p>
+                                        </div>
+                                        <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'img'"
+                                            class="py-2">
+                                            <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
 
-                                        <img src="{{attribute.value | safe: 'resourceUrl'}}" alt="">
-                                    </div>
-                                    <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'pdf'"
-                                        class="py-2">
-                                        <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
-                                        <iframe [src]="attribute.value | safe: 'resourceUrl'" width="100%"></iframe>
+                                            <img src="{{attribute.value | safe: 'resourceUrl'}}" alt="">
+                                        </div>
+                                        <div *ngIf="attribute.value && stingURLCheck(attribute.value) == 'pdf'"
+                                            class="py-2">
+                                            <h4>{{capitalizeString(attribute.attribute_slug)}}</h4>
+                                            <iframe [src]="attribute.value | safe: 'resourceUrl'" width="100%"></iframe>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div *ngIf="productAddons">
+                                <div *ngIf="productAddons">
 
-                                <div class="form-check form-switch pb-2" *ngIf="productAddons.length > 0">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                        [(ngModel)]="AddonService">
-                                    <label class="form-check-label" for="flexSwitchCheckChecked">Lens Categories and
-                                        Additional Choices</label>
-                                </div>
+                                    <div class="form-check form-switch pb-2" *ngIf="productAddons.length > 0">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            [(ngModel)]="AddonService">
+                                        <label class="form-check-label" for="flexSwitchCheckChecked">Lens Categories and
+                                            Additional Choices</label>
+                                    </div>
 
 
-                                <div *ngIf="AddonService" class="border-product">
-                                    <h3>Addons</h3>
-                                    <div class="row">
-                                        <div class="col-sm-6 col-12" *ngFor="let addon of productAddons">
-                                            <div class="row m-0 form-group mb-3">
-                                                <div *ngIf="addon.add_ons_level" class="add_ons_level">
-                                                    <h4 class="pb-2 mb-3">{{ addon.add_ons_level }}</h4>
-                                                </div>
-                                                <h4 class="w-100">
-                                                    <span *ngIf="addon.is_mandatory">*</span> {{ addon.add_ons_name }}
-                                                </h4>
-                                                <img *ngIf="addon.add_ons_image" [src]="addon.add_ons_image"
-                                                    alt="Addon Image">
-                                                <ng-container [ngSwitch]="addon.add_ons_input">
-
-                                                    <div *ngSwitchCase="'video'" class="w-100 addons-price">
-                                                        <div *ngIf="addon.add_ons_value[0].price">
-                                                            <iframe
-                                                                [src]="addon.add_ons_value[0].price | safe: 'resourceUrl'"
-                                                                width="100%"></iframe>
-                                                        </div>
+                                    <div *ngIf="AddonService" class="border-product">
+                                        <h3>Addons</h3>
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12" *ngFor="let addon of productAddons">
+                                                <div class="row m-0 form-group mb-3">
+                                                    <div *ngIf="addon.add_ons_level" class="add_ons_level">
+                                                        <h4 class="pb-2 mb-3">{{ addon.add_ons_level }}</h4>
                                                     </div>
+                                                    <h4 class="w-100">
+                                                        <span *ngIf="addon.is_mandatory">*</span> {{ addon.add_ons_name }}
+                                                    </h4>
+                                                    <img *ngIf="addon.add_ons_image" [src]="addon.add_ons_image"
+                                                        alt="Addon Image">
+                                                    <ng-container [ngSwitch]="addon.add_ons_input">
 
-                                                    <div *ngSwitchCase="'range-input'" class="w-100 addons-price">
-                                                        <div>
-                                                            <!-- <input class="form-control" type="color" #otherInput
-                                                                (change)="onMultiInputChange(otherInput.value, addon.addon_slug, addon)"
-                                                                [disabled]="(addon.add_ons_value[0].values < 1 && range)"
-                                                                [(ngModel)]="selectedOptions[addon.addon_slug]"> -->
+                                                        <div *ngSwitchCase="'video'" class="w-100 addons-price">
+                                                            <div *ngIf="addon.add_ons_value[0].price">
+                                                                <iframe
+                                                                    [src]="addon.add_ons_value[0].price | safe: 'resourceUrl'"
+                                                                    width="100%"></iframe>
+                                                            </div>
+                                                        </div>
 
-                                                            <input class="form-control" type="color" #otherInput
-                                                                (change)="onMultiInputChange(otherInput.value, addon.key, addon)"
-                                                                [disabled]="(addon.values < 1 && range)"
-                                                                [(ngModel)]="othervalue">
-                                                            <input class="color-range mt-3" type="range" #ranger
+                                                        <div *ngSwitchCase="'range-input'" class="w-100 addons-price">
+                                                            <div>
+                                                                <!-- <input class="form-control" type="color" #otherInput
+                                                                    (change)="onMultiInputChange(otherInput.value, addon.addon_slug, addon)"
+                                                                    [disabled]="(addon.add_ons_value[0].values < 1 && range)"
+                                                                    [(ngModel)]="selectedOptions[addon.addon_slug]"> -->
+
+                                                                <input class="form-control" type="color" #otherInput
+                                                                    (change)="onMultiInputChange(otherInput.value, addon.key, addon)"
+                                                                    [disabled]="(addon.values < 1 && range)"
+                                                                    [(ngModel)]="othervalue">
+                                                                <input class="color-range mt-3" type="range" #ranger
+                                                                    (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
+                                                                    [disabled]="addon.add_ons_value[0].values < 1 && range"
+                                                                    [style.background]="otherInput.value"
+                                                                    [(ngModel)]="selectedOptions[addon.addon_slug]">
+                                                            </div>
+
+                                                            <div class="price-section"
+                                                                *ngIf="addon.add_ons_value[0].values > 0 && range && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div *ngSwitchCase="'input'" class="w-100 addons-price">
+                                                            <input class="form-control" type="number" #ranger
+                                                                (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
+                                                                [(ngModel)]="selectedOptions[addon.addon_slug]">
+                                                            <div class="price-section"
+                                                                *ngIf="selectedOptions[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div *ngSwitchCase="'range'" class="w-100 addons-price">
+                                                            <input class="color-range" type="range" #ranger
                                                                 (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
                                                                 [disabled]="addon.add_ons_value[0].values < 1 && range"
-                                                                [style.background]="otherInput.value"
+                                                                [style.background]="addon.add_ons_code"
                                                                 [(ngModel)]="selectedOptions[addon.addon_slug]">
+
+                                                            <div class="price-section"
+                                                                *ngIf="selectedOptions[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
                                                         </div>
 
-                                                        <div class="price-section"
-                                                            *ngIf="addon.add_ons_value[0].values > 0 && range && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
+                                                        <div *ngSwitchCase="'file'" class="w-100 addons-price">
+                                                            <input class="form-control" type="file"
+                                                                accept=".pdf,image/png, image/jpg, image/jpeg"
+                                                                (change)="uploadFiles($event.target.files, getFormControlName(addon.add_ons_name), addon)">
+                                                            <div class="price-section"
+                                                                *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
+                                                            <a *ngIf="fileUrl" href="{{fileUrl}}" target="_blank">View
+                                                                File</a>
                                                         </div>
-                                                    </div>
 
-                                                    <div *ngSwitchCase="'input'" class="w-100 addons-price">
-                                                        <input class="form-control" type="number" #ranger
-                                                            (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
-                                                            [(ngModel)]="selectedOptions[addon.addon_slug]">
-                                                        <div class="price-section"
-                                                            *ngIf="selectedOptions[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
+                                                        <div *ngSwitchCase="'textarea'" class="w-100 addons-price">
+                                                            <textarea class="form-control" #ranger
+                                                                (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
+                                                                [(ngModel)]="selectedOptions[addon.addon_slug]"></textarea>
+                                                            <div class="price-section"
+                                                                *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div *ngSwitchCase="'range'" class="w-100 addons-price">
-                                                        <input class="color-range" type="range" #ranger
-                                                            (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
-                                                            [disabled]="addon.add_ons_value[0].values < 1 && range"
-                                                            [style.background]="addon.add_ons_code"
-                                                            [(ngModel)]="selectedOptions[addon.addon_slug]">
-
-                                                        <div class="price-section"
-                                                            *ngIf="selectedOptions[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
+                                                        <div *ngSwitchCase="'select' || 'multiselect'"
+                                                            class="w-100 addons-price">
+                                                            <select class="form-select"
+                                                                [(ngModel)]="selectedOptions[addon.addon_slug]"
+                                                                (change)="updatePrice(addon.addon_slug)">
+                                                                <option *ngFor="let option of addon.add_ons_value"
+                                                                    [value]="option.value_slug">
+                                                                    <img *ngIf="option.value_image"
+                                                                        [src]="option.value_image" class="Addon-image" />
+                                                                    {{ capitalizeString(option.value_slug) }}
+                                                                </option>
+                                                            </select>
+                                                            <div class="price-section"
+                                                                *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
+                                                                <p class="mt-1">Selected Price: <input type="text"
+                                                                        [(ngModel)]="value[addon.addon_slug]"></p>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
 
-                                                    <div *ngSwitchCase="'file'" class="w-100 addons-price">
-                                                        <input class="form-control" type="file"
-                                                            accept=".pdf,image/png, image/jpg, image/jpeg"
-                                                            (change)="uploadFiles($event.target.files, getFormControlName(addon.add_ons_name), addon)">
-                                                        <div class="price-section"
-                                                            *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
-                                                        </div>
-                                                        <a *ngIf="fileUrl" href="{{fileUrl}}" target="_blank">View
-                                                            File</a>
-                                                    </div>
+                                        </div>
 
-                                                    <div *ngSwitchCase="'textarea'" class="w-100 addons-price">
-                                                        <textarea class="form-control" #ranger
-                                                            (change)="onInputChange(ranger.value, addon.addon_slug, addon)"
-                                                            [(ngModel)]="selectedOptions[addon.addon_slug]"></textarea>
-                                                        <div class="price-section"
-                                                            *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
-                                                        </div>
-                                                    </div>
+                                    </div>
 
-                                                    <div *ngSwitchCase="'select' || 'multiselect'"
-                                                        class="w-100 addons-price">
-                                                        <select class="form-select"
-                                                            [(ngModel)]="selectedOptions[addon.addon_slug]"
-                                                            (change)="updatePrice(addon.addon_slug)">
-                                                            <option *ngFor="let option of addon.add_ons_value"
-                                                                [value]="option.value_slug">
-                                                                <img *ngIf="option.value_image"
-                                                                    [src]="option.value_image" class="Addon-image" />
-                                                                {{ capitalizeString(option.value_slug) }}
-                                                            </option>
-                                                        </select>
-                                                        <div class="price-section"
-                                                            *ngIf="value[addon.addon_slug] > 0 && addon.add_ons_value[0].price > 0">
-                                                            <p class="mt-1">Selected Price: <input type="text"
-                                                                    [(ngModel)]="value[addon.addon_slug]"></p>
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
+                                    <h4 *ngIf="AddonService">Product Additional Cost : <span
+                                            style="font-weight: 700;">{{productAddonsPrice | currency:
+                                            productService.Currency?.currency:'symbol'}}</span></h4>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div>
+                            <div class="product-description pb-4">
+                                <div *ngIf="quentityStatus == 'inactive'">
+                                    <div *ngIf="product_external_link.length < 12">
+                                        <h6 class="product-title">quantity</h6>
+                                        <div class="qty-box">
+                                            <div class="input-group">
+                                                <span class="input-group-prepend">
+                                                    <button type="button" class="btn quantity-left-minus" data-type="minus"
+                                                        (click)="decrement()">
+                                                        <i class="ti-minus"></i>
+                                                    </button>
+                                                </span>
+                                                <input type="text" name="quantity" class="form-control input-number"
+                                                    [value]="counter" disabled />
+                                                <span class="input-group-prepend">
+                                                    <button [disabled]="counter > product.stock" type="button"
+                                                        class="btn quantity-right-plus" data-type="plus"
+                                                        (click)="increment()">
+                                                        <i class="ti-plus"></i>
+                                                    </button>
+                                                </span>
                                             </div>
                                         </div>
-
-                                    </div>
-
-                                </div>
-
-                                <h4 *ngIf="AddonService">Product Additional Cost : <span
-                                        style="font-weight: 700;">{{productAddonsPrice | currency:
-                                        productService.Currency?.currency:'symbol'}}</span></h4>
-                            </div>
-
-                        </div>
-                        <div class="product-description pb-4">
-                            <div *ngIf="quentityStatus == 'inactive'">
-                                <div *ngIf="product_external_link.length < 12">
-                                    <h6 class="product-title">quantity</h6>
-                                    <div class="qty-box">
-                                        <div class="input-group">
-                                            <span class="input-group-prepend">
-                                                <button type="button" class="btn quantity-left-minus" data-type="minus"
-                                                    (click)="decrement()">
-                                                    <i class="ti-minus"></i>
-                                                </button>
-                                            </span>
-                                            <input type="text" name="quantity" class="form-control input-number"
-                                                [value]="counter" disabled />
-                                            <span class="input-group-prepend">
-                                                <button [disabled]="counter > product.stock" type="button"
-                                                    class="btn quantity-right-plus" data-type="plus"
-                                                    (click)="increment()">
-                                                    <i class="ti-plus"></i>
-                                                </button>
-                                            </span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div *ngIf="cartbuttonhideStatus == 'inactive'">
-                            <div class="product-buttons d-flex justify-content-center justify-content-lg-start"
-                                *ngIf="product_external_link.length < 12">
-                                <a class="blueBtn ms-0" [class.disabled]="counter > product.stock"
-                                    (click)="addToCart(product)">{{isProductinCart? 'update
-                                    cart': 'add to
-                                    cart'}}</a>
-                                <button class="wishlistBtn ms-3" (click)="addToWishlist(product)"
-                                    [disabled]="productWishliststatus">
-                                    <i [ngClass]="productWishliststatus? 'fa fa-heart' : 'fa fa-heart-o'" class=""></i>
-                                </button>
-                            </div>
-                            <div class="product-buttons" *ngIf="product_external_link.length > 12">
-                                <a class="blueBtn ms-0" (click)="externalLInk(product_external_link)">Buy Now </a>
+                            <div *ngIf="cartbuttonhideStatus == 'inactive'">
+                                <div class="product-buttons d-flex justify-content-center justify-content-lg-start"
+                                    *ngIf="product_external_link.length < 12">
+                                    <a class="blueBtn ms-0" [class.disabled]="counter > product.stock"
+                                        (click)="addToCart(product)">{{isProductinCart? 'update
+                                        cart': 'add to
+                                        cart'}}</a>
+                                    <button class="wishlistBtn ms-3" (click)="addToWishlist(product)"
+                                        [disabled]="productWishliststatus">
+                                        <i [ngClass]="productWishliststatus? 'fa fa-heart' : 'fa fa-heart-o'" class=""></i>
+                                    </button>
+                                </div>
+                                <div class="product-buttons" *ngIf="product_external_link.length > 12">
+                                    <a class="blueBtn ms-0" (click)="externalLInk(product_external_link)">Buy Now </a>
+                                </div>
                             </div>
                         </div>
                         <!--<div class="border-product">
