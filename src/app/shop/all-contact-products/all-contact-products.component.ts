@@ -31,6 +31,9 @@ export class AllContactProductsComponent implements OnInit {
   totalProducts: any;
   isLoading: boolean = false;
   hasMoreProducts: boolean = true; // flag to track if more products exist
+  paginatedBrandList = []; // Brands to display
+  currentIndex = 0;
+  itemsPerPage = 28; // Number of brands to show per row
 
   constructor(private router: Router,
     public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
@@ -59,6 +62,7 @@ export class AllContactProductsComponent implements OnInit {
       res => {
         console.log('res=========', res['data'])
         this.brandList = res['data'];
+        this.updatePaginatedBrandList();
         this.selectedBrandName = this.getBrandName(this.brandList, this.selectedBrand)
       },
       error => {
@@ -99,6 +103,25 @@ export class AllContactProductsComponent implements OnInit {
     );
 
     this.loadProducts();
+  }
+
+
+  updatePaginatedBrandList() {
+    this.paginatedBrandList = this.brandList.slice(this.currentIndex, this.currentIndex + this.itemsPerPage);
+  }
+
+  showNext() {
+    if (this.currentIndex + this.itemsPerPage < this.brandList.length) {
+      this.currentIndex += this.itemsPerPage;
+      this.updatePaginatedBrandList();
+    }
+  }
+
+  showPrevious() {
+    if (this.currentIndex > 0) {
+      this.currentIndex -= this.itemsPerPage;
+      this.updatePaginatedBrandList();
+    }
   }
 
 

@@ -126,27 +126,27 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
     );
 
     this.loadProducts();
-    
+
 
   }
 
   updatePaginatedBrandList() {
     this.paginatedBrandList = this.brandList.slice(this.currentIndex, this.currentIndex + this.itemsPerPage);
-}
+  }
 
   showNext() {
     if (this.currentIndex + this.itemsPerPage < this.brandList.length) {
-        this.currentIndex += this.itemsPerPage;
-        this.updatePaginatedBrandList();
+      this.currentIndex += this.itemsPerPage;
+      this.updatePaginatedBrandList();
     }
-}
+  }
 
-showPrevious() {
+  showPrevious() {
     if (this.currentIndex > 0) {
-        this.currentIndex -= this.itemsPerPage;
-        this.updatePaginatedBrandList();
+      this.currentIndex -= this.itemsPerPage;
+      this.updatePaginatedBrandList();
     }
-}
+  }
 
 
 
