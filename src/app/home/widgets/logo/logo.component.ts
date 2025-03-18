@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LogoSlider } from '../../../shared/data/slider';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CriptoService } from 'src/app/shared/services/cripto.service';
 
 @Component({
   selector: 'app-logo',
@@ -12,7 +13,7 @@ export class LogoComponent implements OnInit {
   @Input() brands: any[] = [];
   store_slug: any
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router, private criptoService: CriptoService) { }
 
   ngOnInit(): void {
     // console.log('brands', this.brands)
@@ -30,13 +31,19 @@ export class LogoComponent implements OnInit {
   public LogoSliderConfig: any = LogoSlider;
 
   viewResults(keyname: any) {
+    let cat_id = '';
+    let tag_id = '';
+    // Encrypt the brand key
+    const encryptedBrand = this.criptoService.encryptParam(keyname);
 
-    if (keyname != 'all') {
-      localStorage.setItem('brand', keyname)
-      localStorage.setItem('2d_3d_brand', keyname)
-    }
-    this.router.navigate([`/all-products/${this.store_slug}/all`]);
-
+    // Navigate with the encrypted brand in the query parameters
+    this.router.navigate([`/all-products/${this.store_slug}/all`], {
+      queryParams: {
+        brand: encryptedBrand,  // Encrypted brand key
+        cat: this.criptoService.encryptParam(cat_id),  // Encrypt the current category ID
+        tag: this.criptoService.encryptParam(tag_id)   // Encrypt the current tag ID
+      }
+    });
   }
 
 

@@ -4,6 +4,7 @@ import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
 import { HomesliderService } from 'src/app/shared/services/homeslider.service';
+import { CriptoService } from 'src/app/shared/services/cripto.service';
 
 @Component({
   selector: 'app-all-contact-products',
@@ -16,12 +17,10 @@ export class AllContactProductsComponent implements OnInit {
   public ImageSrc: string
   public products: ProductNew[] = [];
   public sliders = [];
-  cat_slug: any = '';
   cat_id: any
   brandList = [];
   selectedBrand: any
   selectedBrandName: any
-  categoryList = [];
   productList = [];
   topBransList = []
   // p: any
@@ -36,7 +35,7 @@ export class AllContactProductsComponent implements OnInit {
   itemsPerPage = 28; // Number of brands to show per row
 
   constructor(private router: Router,
-    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
+    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService, private criptoService: CriptoService) {
     this.productService.compareItems.subscribe(response => this.products = response);
   }
 
@@ -45,12 +44,10 @@ export class AllContactProductsComponent implements OnInit {
       this.topBransList = JSON.parse(localStorage.getItem('top_brands'));
       console.log('this.topBransList----------------', this.topBransList)
     }
-    if (localStorage.getItem('contract_brand')) {
-      this.selectedBrand = localStorage.getItem('contract_brand')
-    }
-    else {
-      this.selectedBrand = ''
-    }
+    this.route.queryParams.subscribe(params => {
+      this.selectedBrand = this.criptoService.decryptParam(params['brand']);
+      console.log('Decrypted Params:',this.criptoService.decryptParam(params['brand'])); 
+    });
 
     if (!this.store_slug) {
       this.route.paramMap.subscribe(params => {
@@ -64,23 +61,6 @@ export class AllContactProductsComponent implements OnInit {
         this.brandList = res['data'];
         this.updatePaginatedBrandList();
         this.selectedBrandName = this.getBrandName(this.brandList, this.selectedBrand)
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
-
-    this.productService.getallEyeGlassCategoryWithSubcat().subscribe(
-      res => {
-        this.categoryList = res['data'];
-
-        let prodObj = {
-          "product_category": this.cat_id,
-          "store_slug": this.store_slug,
-          "brand": this.selectedBrand,
-          "page": this.currentPage,
-          "limit": this.limit
-        }
       },
       error => {
         // .... HANDLE ERROR HERE 
@@ -178,43 +158,11 @@ export class AllContactProductsComponent implements OnInit {
     this.showBrand = false;
   }
 
-
-  getBrandDeatils(brand: any) {
-    let pageNumber = 1;
-    this.currentPage = 1;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
-    this.selectedBrand = brand._id
-    this.selectedBrandName = brand.brand_name;
-    localStorage.setItem('contract_brand', this.selectedBrand);
-    let prodObj = {
-      "product_category": this.cat_id,
-      "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
-      "page": this.currentPage,
-      "limit": this.limit
-    }
-    this.productService.getContactFilterdProductList(prodObj).subscribe(
-      res => {
-        this.productList = res['data'].products
-        this.totalProducts = res['data'].totalCount
-
-      },
-      error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
-  }
-
   getAllProducts() {
-
-    this.cat_slug = '';
     this.cat_id = '';
     this.selectedBrand = '';
     this.selectedBrandName = ''
     this.currentPage = 1;
-    localStorage.setItem('contract_brand', this.selectedBrand);
-    localStorage.setItem('cat_slug', this.cat_slug);
-    localStorage.setItem('cur_cat', this.cat_slug);
     let prodObj = {
       "product_category": '',
       "store_slug": this.store_slug,
@@ -232,16 +180,27 @@ export class AllContactProductsComponent implements OnInit {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
+              // Navigate with encrypted query params to update the URL (only query params are encrypted)
+  this.router.navigate([`/contact-products/${this.store_slug}`], {
+    queryParams: {
+      brand: this.criptoService.encryptParam(this.selectedBrand), // Encrypt selectedBrand for URL query param
+    }
+  });
   }
 
   changeBrandname(brand: any) {
-    let pageNumber = 1;
     this.currentPage = 1;
-    localStorage.setItem('cur_page_contact', pageNumber.toString())
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
-    console.log('this.selectedBrandName----', this.selectedBrandName);
-    localStorage.setItem('contract_brand', this.selectedBrand);
+    this.router.navigate(
+      ['/contact-products', this.store_slug], // Absolute path navigation
+      {
+        queryParams: {
+          brand: this.criptoService.encryptParam(this.selectedBrand),  // Encrypt brand ID for the URL
+        }
+      }
+    );
     let prodObj = {
       "product_category": this.cat_id,
       "store_slug": this.store_slug,

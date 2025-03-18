@@ -6,6 +6,7 @@ import { HomesliderService } from 'src/app/shared/services/homeslider.service';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { CriptoService } from 'src/app/shared/services/cripto.service';
 
 @Component({
   selector: 'app-single-store-banner',
@@ -35,7 +36,7 @@ export class SingleStoreBannerComponent implements OnInit {
   public mediaTextData = [];
   currentPage = 1;
 
-  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService, private productService: ProductService, private toastr: ToastrService) {
+  constructor(private router: Router, private route: ActivatedRoute, private homesliderservice: HomesliderService, private toaster: ToastrService, private productService: ProductService, private toastr: ToastrService, private criptoService: CriptoService) {
 
   }
 
@@ -143,12 +144,27 @@ export class SingleStoreBannerComponent implements OnInit {
   }
 
   getTagsProducts(tag: any) {
-    localStorage.setItem('tag_id', tag._id);
-    this.router.navigate([`/all-products/${this.store_slug}/all`]);
+    const encryptedTag = this.criptoService.encryptParam(tag._id);
+    
+    // Navigate with encrypted query params
+    this.router.navigate([`/all-products/${this.store_slug}/all`], {
+      queryParams: {
+        cat: this.criptoService.encryptParam(''),   // Encrypt the empty value
+        brand: this.criptoService.encryptParam(''), // Encrypt the empty value
+        tag: encryptedTag                           // Encrypt the tag ID
+      }
+    });
   }
 
   showAllProducts() {
-    this.router.navigate([`/all-products/${this.store_slug}/all`]);
+    // Navigate with empty encrypted query params
+    this.router.navigate([`/all-products/${this.store_slug}/all`], {
+      queryParams: {
+        cat: this.criptoService.encryptParam(''),
+        brand: this.criptoService.encryptParam(''),
+        tag: this.criptoService.encryptParam('')
+      }
+    });
   }
 
   filterProducts() {
@@ -193,27 +209,6 @@ export class SingleStoreBannerComponent implements OnInit {
     const shuffled = array.sort(() => 0.5 - Math.random());
     return array.slice(0, count);
   }
-  viewResults(keyname: any) {
-    if (['men', 'women', 'unisex'].includes(keyname)) {
-      this.router.navigate([`/store-2d-products/${this.store_slug}/${keyname}`]);
-    }
-    else {
-      if (keyname != 'all') {
-        localStorage.setItem('brand', keyname)
-      }
-      this.router.navigate([`/store-2d-products/${this.store_slug}/all`]);
-    }
-
-  }
-
-  viewResults2d(keyname: any) {
-    if (['men', 'women', 'unisex'].includes(keyname)) {
-      localStorage.setItem('cat_slug', keyname);
-      this.router.navigate([`/2d-products/${this.store_slug}`]);
-    }
-  }
-
-  /// for 2D products
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;

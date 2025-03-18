@@ -4,6 +4,7 @@ import { ProductService } from "../../shared/services/product.service";
 import { ProductNew } from "../../shared/classes/product";
 import { ToastrService } from 'ngx-toastr';
 import { HomesliderService } from 'src/app/shared/services/homeslider.service';
+import { CriptoService } from 'src/app/shared/services/cripto.service';
 
 @Component({
   selector: 'app-all-2d-3d-products',
@@ -15,8 +16,8 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   @Input() currency: any = this.productService.Currency; // Default Currency 
   public ImageSrc: string
   public products: ProductNew[] = [];
-  cat_slug: any = '';
-  cat_id: any
+  cat_id: any;
+  cat_slug: any;
   brandList = [];
   selectedBrand: any
   selectedBrandName: any
@@ -37,49 +38,38 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   itemsPerPage = 28; // Number of brands to show per row
 
   constructor(private router: Router,
-    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService) {
+    public productService: ProductService, private route: ActivatedRoute, private toastr: ToastrService, private homesliderservice: HomesliderService, private criptoService: CriptoService) {
     this.productService.compareItems.subscribe(response => this.products = response);
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('2d_3d_brand')) {
-      this.selectedBrand = localStorage.getItem('2d_3d_brand')
-    }
-    else {
-      this.selectedBrand = ''
-    }
 
-    if (localStorage.getItem('tag_id')) {
-      this.tag_id = localStorage.getItem('tag_id')
-    }
-    else {
-      this.tag_id = ''
-    }
-
-    if (localStorage.getItem('2d_3d_cur_cat')) {
-      this.cat_id = localStorage.getItem('2d_3d_cur_cat')
-    }
-    else {
-      this.cat_slug = ''
-    }
+    this.route.queryParams.subscribe(params => {
+      // Decrypt query parameters only if they are present
+      this.cat_id = params['cat'] ? this.criptoService.decryptParam(params['cat']) : '';
+      this.selectedBrand = params['brand'] ? this.criptoService.decryptParam(params['brand']) : '';
+      this.tag_id = params['tag'] ? this.criptoService.decryptParam(params['tag']) : '';
+    
+      // Log the decrypted values or indicate if they were not present
+      console.log('Decrypted Params:', {
+        cat: this.cat_id || 'No category',
+        brand: this.selectedBrand || 'No brand',
+        tag: this.tag_id || 'No tag'
+      });
+    });
+    
 
     if (!this.store_slug) {
       this.route.paramMap.subscribe(params => {
         // Extract the 'slug' and 'page' values from the route parameters
         this.store_slug = params.get('storeSlug');
-        this.cat_slug = params.get('catSlug');
-
-        // If 'all' is passed as the category slug, reset cat_slug and cat_id
-        if (this.cat_slug == 'all') {
-          this.cat_slug = '';
-          this.cat_id = '';
-        }
+        this.cat_slug = params.get('catSlug') == 'all' ? '' : params.get('catSlug');
       });
     }
 
     this.productService.getall2D3DBrands(this.store_slug).subscribe(
       res => {
-        console.log('res=========', res['data'])
+        // console.log('res=========', res['data'])
         this.brandList = res['data'];
         this.updatePaginatedBrandList();
         this.selectedBrandName = this.getBrandName(this.brandList, this.selectedBrand)
@@ -91,10 +81,17 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
 
     this.productService.getallEyeGlassCategoryWithSubcat().subscribe(
       res => {
-        console.log('res=========', res['data'])
         this.categoryList = res['data'][0];
-        if (this.cat_slug !== '' && this.cat_slug !== 'all') {
-          // Check if cat_slug matches any category slug in the categoryList
+        if (this.cat_id !== '') {
+          const matchedCategory = this.categoryList.find(category => category.category_id === this.cat_id);
+          if (matchedCategory) {
+            this.cat_id = matchedCategory.category_id;
+            this.activeCategoryIndex = this.categoryList.indexOf(matchedCategory); // Set the active index
+          }
+
+          this.getCategoryDetails(matchedCategory, this.activeCategoryIndex);
+        }
+        else if (this.cat_slug) {
           const matchedCategory = this.categoryList.find(category => category.category_slug === this.cat_slug);
           if (matchedCategory) {
             this.cat_id = matchedCategory.category_id;
@@ -102,7 +99,6 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
           }
 
           this.getCategoryDetails(matchedCategory, this.activeCategoryIndex);
-
         }
       },
       error => {
@@ -121,13 +117,11 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       },
       error => {
         this.toastr.error(error.error.message);
-        this.router.navigateByUrl('/')
+        // this.router.navigateByUrl('/')
       }
     );
 
     this.loadProducts();
-
-
   }
 
   updatePaginatedBrandList() {
@@ -147,37 +141,47 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       this.updatePaginatedBrandList();
     }
   }
-
-
-
-
   // Method to load products from the API
   loadProducts(): void {
-    if (this.isLoading || !this.hasMoreProducts) return;
+    console.log('Calling Load Product', this.isLoading, this.hasMoreProducts);
 
-    this.isLoading = true;
+    if (this.isLoading || !this.hasMoreProducts) {
+      console.log('Exiting due to isLoading or hasMoreProducts condition.');
+      return; // Exit early if loading or no more products
+    }
+
+    this.isLoading = true; // Set loading state to true
+
+    // Use the fixed limit for each page, and just increase the page number
     let prodObj = {
       "tag_id": this.tag_id,
       "product_category": this.cat_id,
       "store_slug": this.store_slug,
       "brand": this.selectedBrand,
-      "page": this.currentPage,
-      "limit": this.limit
-    }
+      "page": this.currentPage,  // Incremented page number
+      "limit": this.limit  // Fixed limit per page
+    };
+
+    console.log('Calling API with prodObj:', prodObj);
+
     this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       (res: any) => {
+        console.log('API Response:', res);
+
         if (res['data'].hasOwnProperty('products') && res['data'].products.length > 0) {
-          // Append the new products to the existing list
-          this.productList = [...res['data'].products];
+          // Append the newly fetched products to the existing product list
+          this.productList = [...this.productList, ...res['data'].products]; // Append, not overwrite
           this.currentPage++; // Increment the page number for the next load
+          console.log('Product list updated. New page:', this.currentPage);
         } else {
           this.hasMoreProducts = false; // No more products available
+          console.log('No more products available.');
         }
-        this.isLoading = false;
+        this.isLoading = false; // Reset loading state
       },
       (error) => {
         console.error('Error loading products:', error);
-        this.isLoading = false;
+        this.isLoading = false; // Reset loading state in case of error
       }
     );
   }
@@ -215,14 +219,10 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
 
   getAllProducts() {
     this.tag_id = ''
-    this.cat_slug = '';
     this.cat_id = '';
     this.selectedBrand = '';
     this.selectedBrandName = ''
     this.currentPage = 1;
-    localStorage.setItem('tag_id', this.tag_id);
-    localStorage.setItem('2d_3d_brand', this.selectedBrand);
-    localStorage.setItem('2d_3d_cur_cat', this.cat_id);
     let prodObj = {
       "tag_id": this.tag_id,
       "product_category": '',
@@ -235,37 +235,51 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       res => {
         this.productList = res['data'].products
         this.totalProducts = res['data'].totalCount
+        if (this.totalProducts > 12) {
+          this.hasMoreProducts = true;
+          this.isLoading = false;
+        }
       },
       error => {
         // .... HANDLE ERROR HERE 
         this.toastr.error(error.error.message)
       });
+
+    // Navigate with encrypted query params to update the URL (only query params are encrypted)
+    this.router.navigate([`/all-products/${this.store_slug}/all`], {
+      queryParams: {
+        cat: this.criptoService.encryptParam(this.cat_id),          // Encrypt cat_id for URL query param
+        brand: this.criptoService.encryptParam(this.selectedBrand), // Encrypt selectedBrand for URL query param
+        tag: this.criptoService.encryptParam(this.tag_id),          // Encrypt tag_id for URL query param
+        page: this.currentPage                                     // Normal value for page
+      }
+    });
   }
 
-
-  getCategoryDetails(category: any, index: number) {
+  getCategoryDetailsQuery(category: any, index: number) {
     this.activeCategoryIndex = index;
-    let pageNumber = 1;
-    this.currentPage = 1;
-    console.log('Category============', category);
-    localStorage.setItem('2d_3d_cur_page', pageNumber.toString());
-    localStorage.setItem('2d_3d_cur_cat', category.category_id);
-
-
-
-    this.cat_slug = category.category_slug;
+    this.currentPage = 1;  // Reset to page 1
     this.cat_id = category.category_id;
 
-    // Update the URL by navigating with new path parameters
+    // Update the URL by navigating with new encrypted path parameters
     this.router.navigate(
-      ['/all-products', this.store_slug, this.cat_slug]  // Absolute path navigation
+      ['/all-products', this.store_slug,'all'], // Absolute path navigation
+      {
+        queryParams: {
+          cat: this.criptoService.encryptParam(this.cat_id),  // Encrypt category ID for the URL
+          brand: this.criptoService.encryptParam(this.selectedBrand),  // Encrypt brand ID for the URL
+          tag: this.criptoService.encryptParam(this.tag_id),  // Encrypt tag ID for the URL
+          page: this.currentPage  // Normal page number for the URL
+        }
+      }
     );
 
+    // API call with normal values (not encrypted)
     let prodObj = {
       "tag_id": this.tag_id,
-      "product_category": this.cat_id,
-      "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
+      "product_category": this.cat_id,  // Unencrypted category ID for API
+      "store_slug": this.store_slug,    // Unencrypted store slug for API
+      "brand": this.selectedBrand,      // Unencrypted brand for API
       "page": this.currentPage,
       "limit": this.limit
     };
@@ -274,6 +288,10 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       res => {
         this.productList = res['data'].products;
         this.totalProducts = res['data'].totalCount;
+        if (this.totalProducts > 12) {
+          this.hasMoreProducts = true;
+          this.isLoading = false;
+        }
       },
       error => {
         this.toastr.error(error.error.message);
@@ -281,32 +299,82 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
     );
   }
 
-  changeBrandname(brand: any) {
-    this.showBrand = false;
-    let pageNumber = 1;
-    localStorage.setItem('2d_3d_cur_page', pageNumber.toString())
-    this.selectedBrand = brand._id
-    this.selectedBrandName = brand.brand_name;
-    console.log('this.selectedBrandName----', this.selectedBrandName);
-    localStorage.setItem('2d_3d_brand', this.selectedBrand);
+  getCategoryDetails(category: any, index: number) {
+    this.activeCategoryIndex = index;
+    this.currentPage = 1;  // Reset to page 1
+    this.cat_id = category.category_id;
+
+    // API call with normal values (not encrypted)
     let prodObj = {
       "tag_id": this.tag_id,
-      "product_category": this.cat_id,
-      "store_slug": this.store_slug,
-      "brand": this.selectedBrand,
+      "product_category": this.cat_id,  // Unencrypted category ID for API
+      "store_slug": this.store_slug,    // Unencrypted store slug for API
+      "brand": this.selectedBrand,      // Unencrypted brand for API
       "page": this.currentPage,
       "limit": this.limit
-    }
+    };
+
     this.productService.get2D3DFilteredProduct(prodObj).subscribe(
       res => {
-        this.productList = res['data'].products
-        this.totalProducts = res['data'].totalCount
+        this.productList = res['data'].products;
+        this.totalProducts = res['data'].totalCount;
+        if (this.totalProducts > 12) {
+          this.hasMoreProducts = true;
+          this.isLoading = false;
+        }
       },
       error => {
-        // .... HANDLE ERROR HERE 
-        this.toastr.error(error.error.message)
-      });
+        this.toastr.error(error.error.message);
+      }
+    );
   }
+
+
+  changeBrandname(brand: any) {
+    this.showBrand = false;
+    this.currentPage = 1;  // Reset to page 1
+    this.selectedBrand = brand._id;
+    this.selectedBrandName = brand.brand_name;
+
+    console.log('this.selectedBrandName----', this.selectedBrandName);
+
+    // Update the URL by navigating with new encrypted path parameters
+    this.router.navigate(
+      ['/all-products', this.store_slug, 'all'], // Absolute path navigation
+      {
+        queryParams: {
+          cat: this.criptoService.encryptParam(this.cat_id),    // Encrypt category ID for the URL
+          brand: this.criptoService.encryptParam(this.selectedBrand),  // Encrypt brand ID for the URL
+          tag: this.criptoService.encryptParam(this.tag_id)    // Encrypt tag ID for the URL
+        }
+      }
+    );
+
+    // API call with normal values (not encrypted)
+    let prodObj = {
+      "tag_id": this.tag_id,
+      "product_category": this.cat_id,  // Unencrypted category ID for API
+      "store_slug": this.store_slug,    // Unencrypted store slug for API
+      "brand": this.selectedBrand,      // Unencrypted brand for API
+      "page": this.currentPage,
+      "limit": this.limit
+    };
+
+    this.productService.get2D3DFilteredProduct(prodObj).subscribe(
+      res => {
+        this.productList = res['data'].products;
+        this.totalProducts = res['data'].totalCount;
+        if (this.totalProducts > 12) {
+          this.hasMoreProducts = true;
+          this.isLoading = false;
+        }
+      },
+      error => {
+        this.toastr.error(error.error.message);
+      }
+    );
+  }
+
 
 
   getBrandName(brandarr, brandId) {

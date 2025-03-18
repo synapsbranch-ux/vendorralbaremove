@@ -46,6 +46,7 @@
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "domino": "^2.1.6",
     "express": "^4.20.0",
     "face-api.js": "^0.22.2",
