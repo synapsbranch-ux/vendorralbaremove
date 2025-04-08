@@ -312,8 +312,6 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Add to cart
   async addToCart(product: any) {
-    console.log('product ------------------', product);
-    console.log('this.counter ------------------', this.counter);
     if(this.counter > product.stock){
       return;
     }
