@@ -349,7 +349,7 @@ export class ProductService {
     const qty = prod_qty
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
-    ////console.log('stock =========================', stock);
+    console.log('stock =========================', stock);
     if (!stock) return false
     ////console.log('Cart Product', product);
     //console.log('product Before ----------------------', product);
@@ -519,7 +519,7 @@ export class ProductService {
         //console.log('Updated Product details-----------', items)
         const qty = product.quantity
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
-
+        console.log('Updated stock -----------', stock)
         if (localStorage.getItem('u_token')) {
           if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
             return true;
@@ -613,8 +613,8 @@ export class ProductService {
   // Calculate Stock Counts
   public calculateStockCounts(product, quantity) {
 
-    ////console.log('product===============', product);
-    ////console.log('product===============', quantity);
+    console.log('product===============', product);
+    console.log('quantity===============', quantity);
 
     const stock = product.stock
     if (stock < 0) {

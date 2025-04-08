@@ -17205,10 +17205,11 @@ div#loading-bar {
 }
 
 .itemBox {
-    background-color: #FFFAEC;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 15px;
     position: relative;
+    box-shadow: 1px 3px 10px #d1d1d1;
 
     img {
         width: 100%;

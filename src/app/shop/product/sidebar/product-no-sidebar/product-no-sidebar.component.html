@@ -62,9 +62,8 @@
                 <div class="col-lg-6 rtl-text">
                     <div class="product-right d-flex flex-column-reverse flex-lg-column ">
                         <div>
-                            <h5 class="avalibility mb-2" *ngIf="counter <= product.stock"><span>Instock</span></h5>
-                            <h5 class="unavalibility mb-2" *ngIf="counter > product.stock"><span>Out of Stock</span></h5>
-
+                           <h5 class="avalibility mb-2" *ngIf="(product.stock < 10 && product.stock > 1) && counter < product.stock "><span>{{product.stock}} products left</span></h5>
+                           <h5 class="unavalibility mb-2" *ngIf="counter > product.stock"><span>You can add {{product.stock > 0 ? product.stock : 0}} items in your cart</span></h5>
                             <h2 class="mb-0">{{ product?.product_name }}</h2>
                             <p class="productCode">CK22538</p>
                             <h3 *ngIf="product?.product_sale_price">

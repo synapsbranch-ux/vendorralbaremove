@@ -8,6 +8,9 @@
     height: 365px;
     display: block;
 }
+.blueBtn.disabled{
+    background-color: #808080;
+}
 
 .product-right .color-variant li.active {
     border: 2px solid #9d9999 !important;
