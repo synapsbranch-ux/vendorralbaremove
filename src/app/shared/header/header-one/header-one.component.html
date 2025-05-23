@@ -53,9 +53,9 @@
                             <img [src]="themeLogo" class="img-fluid" alt="logo">
                         </a>
                         <a *ngIf="vendorhome" routerLink="/vendor/{{store_slug}}" id="headerlogo">
-                            <img *ngIf="isvendorlogoimage" [src]="themeLogo" class="img-fluid" alt="logo">
-                            <h2 *ngIf="!isvendorlogoimage">{{themeLogo}}</h2>
-                            <small>Powerd by Ralbatech</small>
+                            <img *ngIf="isvendorlogoimage || !islogo" [src]="themeLogo" class="img-fluid" alt="logo">
+                            <h2 *ngIf="!isvendorlogoimage && islogo">{{themeLogo}}</h2>
+                            <small *ngIf="islogo">Powerd by Ralbatech</small>
                         </a>
                     </div>
                     <div>

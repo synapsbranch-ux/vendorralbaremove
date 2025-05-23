@@ -24,7 +24,7 @@ export class ProductBoxThreeComponent implements OnInit {
   }
 
   addToCart(product: any) {
-    this.productService.addToCart(product,1);
+    this.productService.addToCart(product,1,false);
   }
 
   addToWishlist(product: any) {

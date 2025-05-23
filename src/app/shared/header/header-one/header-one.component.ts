@@ -56,6 +56,8 @@ export class HeaderOneComponent implements OnInit, DoCheck {
           console.log('every click run')
           localStorage.setItem('store3diamge', (res.data[0]?.store_glb_file) ? res.data[0]?.store_glb_file : '')
           console.log('every click run Local Value', localStorage.getItem('store3diamge'))
+          console.log('res.data[0]?.is_logo', res.data[0]?.is_logo);
+          console.log('res.data[0]?.logo', res.data[0]?.logo);
           if (res.data[0]?.is_logo) {
             this.islogo = true;
             if (res.data[0]?.logo) {

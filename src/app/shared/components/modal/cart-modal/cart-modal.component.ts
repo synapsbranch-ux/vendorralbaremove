@@ -35,7 +35,7 @@ export class CartModalComponent implements OnInit, AfterViewInit, OnDestroy {
   async openModal(product) {
     await this.productService.getProducts.subscribe(response => this.products = response);
     this.products = await this.products.filter(items => items.category == product.category && items.id != product.id);
-    const status = await this.productService.addToCart(product,1);
+    const status = await this.productService.addToCart(product,1,false);
     if(status) {
       this.modalOpen = true;
       if (isPlatformBrowser(this.platformId)) { // For SSR 

@@ -146,11 +146,11 @@ export class ProductService {
     return this.http.get(environment.baseUrl + `2d-product-brand/list?store_slug=${store_slug}`);
   }
 
-    //// Get all 2D 3D Brands List
+  //// Get all 2D 3D Brands List
 
-    getall2D3DBrands(store_slug: any) {
-      return this.http.get(environment.baseUrl + `2d-3d-product-brand/list?store_slug=${store_slug}`);
-    }
+  getall2D3DBrands(store_slug: any) {
+    return this.http.get(environment.baseUrl + `2d-3d-product-brand/list?store_slug=${store_slug}`);
+  }
 
   //// Get all Contact Brands List
 
@@ -314,7 +314,7 @@ export class ProductService {
   }
 
   // Add to Cart
-  public addToCart(product, prod_qty): any {
+  public addToCart(product, prod_qty, isupdate): any {
     ////console.log('product.product_owner', product.product_owner._id);
     ////console.log('localStorage.getItem(vendor_id)', localStorage.getItem('vendor_id'))
 
@@ -327,23 +327,23 @@ export class ProductService {
           return false;
         }
         else {
-          this.addToCartforSingleVendor(product, prod_qty);
+          this.addToCartforSingleVendor(product, prod_qty, isupdate);
           return true;
         }
       }
       else {
-        this.addToCartforSingleVendor(product, prod_qty);
+        this.addToCartforSingleVendor(product, prod_qty, isupdate);
         return true;
       }
 
     }
     else {
       localStorage.setItem('vendor_id', product.product_owner._id);
-      this.addToCartforSingleVendor(product, prod_qty);
+      this.addToCartforSingleVendor(product, prod_qty, isupdate);
     }
   }
 
-  public addToCartforSingleVendor(product, prod_qty) {
+  public addToCartforSingleVendor(product, prod_qty, isupdate) {
     const cartItem = state.cart.find(item => item._id === product._id);
     //console.log('addToCartforSingleVendor state.cart-----------------------', state.cart)
     const qty = prod_qty
@@ -355,17 +355,28 @@ export class ProductService {
     //console.log('product Before ----------------------', product);
     //console.log('product Before cartItem----------------------', cartItem, qty);
     if (cartItem) {
-      cartItem.quantity += qty
+      console.log('isupdate', isupdate)
+      if (isupdate) {
+        cartItem.stock = (product.stock + cartItem.quantity) - qty;
+        cartItem.quantity = qty;
+      }
+      else {
+        cartItem.quantity += qty;
+        if (product.stock >= qty) {
+          if (product.stock > 0) {
+            product.stock -= qty;
+          }
+        }
+      }
     } else {
       product.quantity = qty;
-    }
-    if (product.stock >= qty) {
       if (product.stock > 0) {
         product.stock -= qty;
       }
     }
-    //console.log('product After ----------------------', product);
-    //console.log('prod_qty --------------------', prod_qty);
+
+    // console.log('product After ----------------------', product);
+    // console.log('cartItem.quantity --------------------', cartItem.quantity);
     ////console.log('user Login')
     if (localStorage.getItem('u_token')) {
       if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
@@ -413,7 +424,7 @@ export class ProductService {
               "pro_name": product.product_name,
               "pro_image": product.product_image[0] ? product.product_image[0].pro_image : 'assets/images/product/placeholder.jpg',
               "pro_slug": product.product_slug,
-              "qty": product.quantity ? product.quantity : cartItem.quantity,
+              "qty": cartItem? cartItem.quantity : product.quantity,
               "left_eye_qty": 0,
               "right_eye_qty": 0,
               "price": product_price,
@@ -423,7 +434,7 @@ export class ProductService {
           }
         }
 
-        ////console.log('full Product Cart Data for Submit', cdata);
+        console.log('full Product Cart Data for Submit', cdata);
 
         this.addToCartDbBulk(cdata).subscribe(
           res => {
@@ -436,8 +447,8 @@ export class ProductService {
               for (const element of res['data'].products) {
                 ////console.log('element.pro_slug ======================>', element.pro_slug)
                 this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                  ////console.log('product[data].product_image', product['data'].product_image)
-                  product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                  // console.log('product[data].product_image', product['data'].product_image)
+                  product_img = product['data'].product_image != undefined ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                   let data =
                   {
                     "_id": element.pro_id,
@@ -519,7 +530,7 @@ export class ProductService {
         //console.log('Updated Product details-----------', items)
         const qty = product.quantity
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
-        console.log('Updated stock -----------', stock)
+        // console.log('Updated stock -----------', stock)
         if (localStorage.getItem('u_token')) {
           if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
             return true;
@@ -559,7 +570,7 @@ export class ProductService {
                   let product_img
                   for (const element of res['data'].products) {
                     this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                      product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                      product_img = product['data']?.product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                       let data =
                       {
                         "_id": element.pro_id,
@@ -658,7 +669,7 @@ export class ProductService {
               let product_img
               for (const element of res['data'].products) {
                 this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                  product_img = product['data'].product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
+                  product_img = product['data']?.product_image[0] ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                   let data =
                   {
                     "_id": element.pro_id,
@@ -947,8 +958,7 @@ export class ProductService {
     return this.http.get(environment.baseUrl + 'tag-list');
   }
 
-  gettestMediaSection(store_slug:any)
-  {
+  gettestMediaSection(store_slug: any) {
     return this.http.get(environment.baseUrl + `media-text-contain-list?store_slug=${store_slug}`);
   }
 

@@ -325,7 +325,7 @@ export class ProductContactComponent implements OnInit, OnChanges {
       console.log('Product Ready To cart------------------', product);
       let extraStock = this.totalstock - this.currentCartProductDeatils.quantity
 
-      const status = await this.productService.addToCart(product, extraStock);
+      const status = await this.productService.addToCart(product, extraStock,this.isProductinCart);
       if (status || status == undefined) {
         product.stock = (product.stock - this.counter);
         this.toastrService.success('Product updated in Cart.');
@@ -349,7 +349,7 @@ export class ProductContactComponent implements OnInit, OnChanges {
       product.addons = this.addonSelectedResult
       console.log('Product Ready To cart------------------', product);
 
-      const status = await this.productService.addToCart(product, this.totalstock);
+      const status = await this.productService.addToCart(product, this.totalstock,this.isProductinCart);
       if (status || status == undefined) {
         product.stock = (product.stock - this.counter);
         this.toastrService.success('Product updated in Cart.');

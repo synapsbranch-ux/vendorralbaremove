@@ -169,7 +169,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
           <ul>
             <li class="selected-mask"><img src="${this.seletedimage}" class="full-mask"
                 data-mask-type="eye" data-scale-width="1.1" data-scale-height=".3"
-                data-top-adj=".15" data-left-adj="-.13"></li>
+                data-top-adj=".03" data-left-adj="-.15"></li>
           </ul>
         </div>
         <img id="arrowRight" src="assets/images/arrow-right.png">

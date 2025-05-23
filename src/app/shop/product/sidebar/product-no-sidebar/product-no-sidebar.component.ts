@@ -167,6 +167,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
             this.isProductinCart = true;
             console.log('this.currentCartProductDeatils', this.currentCartProductDeatils);
             this.counter = this.currentCartProductDeatils.quantity;
+            this.product.stock = this.product.stock - this.currentCartProductDeatils.quantity;
+            this.product.quantity = this.currentCartProductDeatils.quantity;
             if (this.currentCartProductDeatils.addons && this.currentCartProductDeatils.addons.length > 0) {
               this.cartAddons = this.currentCartProductDeatils.addons;
               this.addonSelectedResult = this.cartAddons;
@@ -312,7 +314,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Add to cart
   async addToCart(product: any) {
-    if(this.counter > product.stock){
+    if (this.counter > product.stock) {
       return;
     }
     //console.log('this.productAddonsPrice ==============', this.productAddonsPrice, this.addonSelectedResult);
@@ -329,10 +331,9 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       //console.log('Product Ready To cart------------------', product);
       let extraStock = this.counter - this.currentCartProductDeatils.quantity
 
-      const status = await this.productService.addToCart(product, extraStock);
+      const status = await this.productService.addToCart(product, this.counter, this.isProductinCart);
       console.log('status----', status);
       if (status || status == undefined) {
-        product.stock = (product.stock - this.counter);
         this.toastrService.success('Product updated in Cart.');
       }
       else {
@@ -352,9 +353,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
       product.addons = this.addonSelectedResult
       // console.log('Product Ready To cart------------------', product);
 
-      const status = await this.productService.addToCart(product, this.counter);
+      const status = await this.productService.addToCart(product, this.counter, this.isProductinCart);
       if (status || status == undefined) {
-        product.stock = (product.stock - this.counter);
         this.toastrService.success('Product has been added in Cart.');
       }
       else {

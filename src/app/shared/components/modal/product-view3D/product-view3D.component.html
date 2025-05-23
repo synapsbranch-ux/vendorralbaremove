@@ -1,18 +1,18 @@
-
-
 <ng-template class="theme-modal" #view3D let-modal>
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"
+			<a type="button" class="close" data-dismiss="modal" aria-label="Close"
 				(click)="modal.dismiss('Cross click')">
 				<span aria-hidden="true">&times;</span>
-			</button>
+			</a>
 		</div>
 		<div class="row row-centered justify-content-center ">
 			<div class="col-md-12 col-centered pt-3">
 				<div class="d-flex align-items-center justify-content-center mb-3">
-					<button  class="btn btn-solid rounded-lg virtual_btn mr-3" [ngClass]="mode =='video' ? 'active' : ''" (click)="modeChage('video')"> Video Mode</button>
-					<button  class="btn btn-solid rounded-lg virtual_btn" [ngClass]="mode =='image' ? 'active' : ''" (click)="modeChage('image')">Image Mode</button>
+					<button class="btn btn-solid rounded-lg virtual_btn mr-3" [ngClass]="mode =='video' ? 'active' : ''"
+						(click)="modeChage('video')"> Video Mode</button>
+					<button class="btn btn-solid rounded-lg virtual_btn" [ngClass]="mode =='image' ? 'active' : ''"
+						(click)="modeChage('image')">Image Mode</button>
 				</div>
 			</div>
 		</div>
@@ -20,7 +20,8 @@
 			<div class="row row-centered justify-content-center">
 				<div class="col-md-12 col-centered">
 					<div class="video-section" [ngClass]="mode =='video' ? 'd-block' : 'd-none'">
-						<iframe [src]="iframeLink" frameborder="0"  allow="camera; fullscreen 'self'" height="100%" width="100%"></iframe>
+						<iframe [src]="iframeLink" frameborder="0" allow="camera; fullscreen 'self'" height="100%"
+							width="100%"></iframe>
 					</div>
 					<div class="image-section" [ngClass]="mode =='image' ? 'd-block': 'd-none'" mh-500>
 						<div [ngStyle]="imageUrl?{'min-height': '0px'} : {'min-height': '350px'}">
@@ -28,7 +29,7 @@
 								<input type="file" (change)="onFileSelected($event)" accept="image/*">
 								<!-- <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image"> -->
 							</div>
-	
+
 							<main id="face-mask-app" #contentImageContainer [innerHTML]="modelImageHTML">
 							</main>
 						</div>

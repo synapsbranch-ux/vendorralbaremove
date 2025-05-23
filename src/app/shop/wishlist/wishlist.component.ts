@@ -44,7 +44,7 @@ export class WishlistComponent implements OnInit {
 
   async addToCart(product: any) {
     let quantity = 1;
-    const status = await this.productService.addToCart(product, quantity);
+    const status = await this.productService.addToCart(product, quantity, false);
     this.getTotal.subscribe();
     product.stock = (product.stock - 1);
       // Introduce a delay of 1000ms (1 second) using RxJS timer
