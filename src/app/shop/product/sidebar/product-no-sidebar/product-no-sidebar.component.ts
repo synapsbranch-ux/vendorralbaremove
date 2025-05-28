@@ -55,6 +55,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   iframeBaseLink = 'https://gltfviewer.ralbatech.com/?url='
   iframeLink: any
   is3DProduct: boolean = false;
+  is2DProduct: boolean = true;
   isProductinCart: boolean = false;
   othervalue: any;
   fileUrl: any;
@@ -119,6 +120,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
         if (!response.data.product_image[0]) {
           this.is2Dactive = false;
           this.is3Dactive = true;
+          this.is2DProduct = false;
         }
         this.productImages.push(...response.data.product_3d_image)
         this.productImages.push(...response.data.product_image)

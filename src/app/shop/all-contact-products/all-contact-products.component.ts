@@ -190,6 +190,7 @@ export class AllContactProductsComponent implements OnInit {
   }
 
   changeBrandname(brand: any) {
+    this.showBrand = false;
     this.currentPage = 1;
     this.selectedBrand = brand._id
     this.selectedBrandName = brand.brand_name;
