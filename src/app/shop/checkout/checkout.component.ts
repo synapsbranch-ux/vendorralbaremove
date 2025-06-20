@@ -495,7 +495,8 @@ export class CheckoutComponent implements OnInit {
             billing_email: formData.email,
             billing_phone: formData.phone,
             cart_id: localStorage.getItem('cart_'),
-            vendor_id: localStorage.getItem('vendor_id')
+            vendor_id: localStorage.getItem('vendor_id'),
+            store_slug: localStorage.getItem('storeslug')
           }
 
           for (const element of this.products) {
