@@ -7,7 +7,7 @@ import { ProductNew } from 'src/app/shared/classes/product';
 import { ProductSlider } from 'src/app/shared/data/slider';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { MatDialog } from '@angular/material/dialog';
-
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-order-details',
   templateUrl: './order-details.component.html',
@@ -18,7 +18,7 @@ export class OrderDetailsComponent implements OnInit {
 
   @ViewChild('addonsDetails', { static: true })
   addonsDetails!: TemplateRef<any>;
-
+  closeResult = '';
   public openDashboard: boolean = false;
   public today: number = Date.now();
   public products: ProductNew[] = [];
@@ -48,8 +48,8 @@ export class OrderDetailsComponent implements OnInit {
   addonsjson = [];
   shipping_charge_value = 0;
   tax_percentage_value = 0;
-  productDetails=[];
-  constructor(private dialog: MatDialog, public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
+  productDetails = [];
+  constructor(private modalService: NgbModal, private dialog: MatDialog, public product_service: ProductService, private orderservice: OrderService, private route: ActivatedRoute, private userservice: UserService, private router: Router) {
 
   }
 
@@ -107,13 +107,33 @@ export class OrderDetailsComponent implements OnInit {
   findProductDetails(productId: string) {
     return this.productDetails.find(detail => detail._id === productId);
   }
-  
 
-  viewAddonsDetails(addonsjsondata) {
+
+  // viewAddonsDetails(addonsjsondata) {
+  //   this.addonsjson = addonsjsondata;
+  //   this.dialog.open(this.addonsDetails, { disableClose: false });
+  //   console.log('addonsjson =========>', this.addonsjson);
+  // }
+
+
+  viewAddonsDetails(addonsjsondata, addonsDetails) {
     this.addonsjson = addonsjsondata;
-    this.dialog.open(this.addonsDetails, { disableClose: false });
-    console.log('addonsjson =========>', this.addonsjson);
+    this.modalService.open(addonsDetails, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 
   // key value to text convert with capitalize format
   capitalizeString(str) {

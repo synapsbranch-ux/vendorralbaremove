@@ -20,20 +20,35 @@
 			<div class="row row-centered justify-content-center">
 				<div class="col-md-12 col-centered">
 					<div class="video-section" [ngClass]="mode =='video' ? 'd-block' : 'd-none'">
-						<iframe [src]="iframeLink" frameborder="0" allow="camera; fullscreen 'self'" height="100%"
+						<iframe *ngIf="iframeLink" [src]="iframeLink" frameborder="0" allow="camera; fullscreen 'self'" height="100%"
 							width="100%"></iframe>
 					</div>
-					<div class="image-section" [ngClass]="mode =='image' ? 'd-block': 'd-none'" mh-500>
-						<div [ngStyle]="imageUrl?{'min-height': '0px'} : {'min-height': '350px'}">
+					<div class="image-section" *ngIf="mode === 'image'" mh-500>
+						<div [ngStyle]="imageUrl ? {'min-height': '0px'} : {'min-height': '350px'}">
+
 							<div class="upload-section text-center align-items-center justify-content-center">
-								<input type="file" (change)="onFileSelected($event)" accept="image/*">
-								<!-- <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image"> -->
+
+								<!-- Show face capture only if no selfie yet -->
+								<app-face-capture *ngIf="showFaceCapture" (selfieCaptured)="onSelfieCaptured($event)">
+								</app-face-capture>
+
+								<!-- Show captured selfie -->
+								<div *ngIf="imageUrl">
+									<!-- <img [src]="imageUrl" alt="Selfie" /> -->
+
+									<!-- Retake option -->
+									<button class="btn btn-outline-secondary mb-4" (click)="retakeSelfie()">
+										🔄 Retake
+									</button>
+								</div>
+
 							</div>
 
+
+							<!-- Your glass try-on container -->
 							<main id="face-mask-app" #contentImageContainer [innerHTML]="modelImageHTML">
 							</main>
 						</div>
-
 					</div>
 				</div>
 			</div>

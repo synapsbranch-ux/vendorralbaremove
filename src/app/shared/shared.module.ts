@@ -47,6 +47,7 @@ import { TapToTopComponent } from './components/tap-to-top/tap-to-top.component'
 // Pipes
 import { DiscountPipe } from './pipes/discount.pipe';
 import { view3DModalComponent } from './components/modal/product-view3D/product-view3D.component';
+import { FaceCaptureComponent } from './components/modal/face-capture/face-capture.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { view3DModalComponent } from './components/modal/product-view3D/product-
     SkeletonProductBoxComponent,
     LayoutBoxComponent,
     TapToTopComponent,
-    DiscountPipe
+    DiscountPipe,
+    FaceCaptureComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -124,6 +126,7 @@ import { view3DModalComponent } from './components/modal/product-view3D/product-
     TapToTopComponent,
     DiscountPipe,
     MenuComponent,
+    FaceCaptureComponent
   ]
 })
 export class SharedModule { }

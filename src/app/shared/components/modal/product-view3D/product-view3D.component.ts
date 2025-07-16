@@ -1,7 +1,7 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input,
-  Injectable, PLATFORM_ID, Inject, Renderer2, ElementRef,
-  HostListener
+  Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input, PLATFORM_ID, Inject, Renderer2, ElementRef,
+  HostListener,
+  AfterViewInit
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ declare let facemesh: any
   templateUrl: './product-view3D.component.html',
   styleUrls: ['./product-view3D.component.scss']
 })
-export class view3DModalComponent implements OnInit, OnDestroy {
+export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   redIcon = 'assets/images/red-close.png';
   greenIcon = 'assets/images/green-check.png';
@@ -51,10 +51,10 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   facedetectbool: boolean = true;
   lookStraght: any;
   facePostion: any;
-  returnUrl:any
+  returnUrl: any
 
-  iframeBaseLink='https://tryon.ralbatech.com/?p_name='
-  iframeLink:any
+  iframeBaseLink = 'https://tryon.ralbatech.com/?p_name='
+  iframeLink: any
 
   //Declear for face movement and oval face position
   canvas: HTMLCanvasElement;
@@ -73,8 +73,8 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   animationFrameVideoId
   animationFrameCanvasId
   animationFrameFaceId
-  isCustomARSystemRegistered:boolean = false; // Flag to track registration
-
+  isCustomARSystemRegistered: boolean = false; // Flag to track registration
+  showFaceCapture = true;
   curFaces = [];
   glassImageUrl = 'assets/images/overlay.png'; // Replace with your image path
   glassImage: HTMLImageElement = new Image();
@@ -94,10 +94,10 @@ export class view3DModalComponent implements OnInit, OnDestroy {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private modalService: NgbModal, private sanitizer: DomSanitizer, private renderer: Renderer2, private router: Router) {
-     }
+  }
 
   async ngOnInit() {
-    this.returnUrl=this.router.url;
+    this.returnUrl = this.router.url;
     this.cameraDetact = this.redIcon;
     this.faceDetact = this.redIcon;
     this.lookStraght = this.redIcon;
@@ -105,6 +105,13 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     this.glassImage.src = this.glassImageUrl;
     this.registerCustomARSystem();
     this.initializeFaceGlassImage();
+  }
+
+  ngAfterViewInit() {
+    const localImage = localStorage.getItem('storedSelfie');
+    if (localImage && this.mode === 'image') {
+      this.onSelfieCaptured(localImage);
+    }
   }
 
 
@@ -131,52 +138,126 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   async initializeFaceGlassImage() {
     // try {
     //   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      const imageHtml = `
-      <style>
-      .loading {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 24px;
-    }
-    
-    .spinner-border {
-        width: 15rem;
-        height: 15rem;
-        position: absolute;
-    }
-      </style>
-      <div id="image-container">
-      <img width="100%" id="faces" src="">
-      <div id="canvas"></div>
-      <div class="loading d-none">
-        Loading Model
-        <div class="spinner-border" role="status">
-          <span class="sr-only"></span>
-        </div>
-      </div>
+    const imageHtml = `<style>
+  .loading {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    z-index: 5;
+  }
 
+  .spinner-border {
+    width: 15rem;
+    height: 15rem;
+    position: absolute;
+  }
 
-      <div id="mask-slider" style="display: none;">
-        <img id="arrowLeft" src="assets/images/arrow-left.png">
-        <div id="mask-list">
-          <ul>
-            <li class="selected-mask"><img src="${this.seletedimage}" class="full-mask"
-                data-mask-type="eye" data-scale-width="1.1" data-scale-height=".3"
-                data-top-adj=".03" data-left-adj="-.15"></li>
-          </ul>
-        </div>
-        <img id="arrowRight" src="assets/images/arrow-right.png">
-      </div>
+  #image-container {
+    position: relative;
+  }
+
+#faces {
+  width: 279px;
+  height: auto;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+#canvas {
+  width: 279px;
+  height:  auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+  #mask-slider {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 4;
+  }
+
+  #mask-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mask-list li {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .full-mask {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    pointer-events: none;
+  }
+
+  #arrowLeft,
+  #arrowRight {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+</style>
+
+<div id="image-container">
+  <img id="faces" src="" class="fixed-face-size" alt="Face Image">
+  <div id="canvas"></div>
+
+  <div class="loading d-none">
+    Loading Model
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
     </div>
-    <div class="md-overlay"></div>`
-      this.modelImageHTML = this.sanitizer.bypassSecurityTrustHtml(imageHtml);
+  </div>
+
+  <div id="mask-slider" style="display: none;">
+    <img id="arrowLeft" src="assets/images/arrow-left.png">
+    <div id="mask-list">
+      <ul>
+        <li class="selected-mask">
+          <img id="glassesImage" src="${this.seletedimage}" class="full-mask draggable-mask"
+               data-mask-type="eye"
+               data-scale-width="1.1"
+               data-scale-height=".3"
+               data-top-adj=".18"
+               data-left-adj="-.48">
+        </li>
+      </ul>
+    </div>
+    <img id="arrowRight" src="assets/images/arrow-right.png">
+  </div>
+</div>
+
+<div class="md-overlay"></div>
+`
+    this.modelImageHTML = this.sanitizer.bypassSecurityTrustHtml(imageHtml);
     // } catch (error) {
     //   // Handle errors
     //   console.log('error =======', error);
@@ -257,6 +338,68 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  initDraggableGlasses() {
+    const glasses = document.getElementById('mask_0') as HTMLElement | null;
+    if (!glasses) return;
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    glasses.style.cursor = 'grab';
+
+    // ---- Mouse Events ----
+    glasses.addEventListener('mousedown', (e: MouseEvent) => {
+      isDragging = true;
+      const rect = glasses.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      glasses.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isDragging) return;
+      const parentRect = glasses.parentElement!.getBoundingClientRect();
+      const newLeft = e.clientX - parentRect.left - offsetX;
+      const newTop = e.clientY - parentRect.top - offsetY;
+      glasses.style.left = `${newLeft}px`;
+      glasses.style.top = `${newTop}px`;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        glasses.style.cursor = 'grab';
+        isDragging = false;
+      }
+    });
+
+    // ---- Touch Events ----
+    glasses.addEventListener('touchstart', (e: TouchEvent) => {
+      isDragging = true;
+      const rect = glasses.getBoundingClientRect();
+      offsetX = e.touches[0].clientX - rect.left;
+      offsetY = e.touches[0].clientY - rect.top;
+      e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!isDragging) return;
+      const parentRect = glasses.parentElement!.getBoundingClientRect();
+      const touch = e.touches[0];
+      const newLeft = touch.clientX - parentRect.left - offsetX;
+      const newTop = touch.clientY - parentRect.top - offsetY;
+      glasses.style.left = `${newLeft}px`;
+      glasses.style.top = `${newTop}px`;
+    });
+
+    window.addEventListener('touchend', () => {
+      if (isDragging) {
+        isDragging = false;
+      }
+    });
+  }
+
 
   onFileSelected(event: any): void {
     // Select the image element by its ID
@@ -278,6 +421,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         if (imgElement) {
           imgElement.style.display = 'block';
+
         }
       }, 1500);
     }
@@ -299,10 +443,15 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     const reader = new FileReader();
     reader.onload = () => {
       this.imageUrl = reader.result;
-      // Get a reference to the image element using TypeScript
-      const myImageElement = document.getElementById('faces') as HTMLImageElement;
-      // Set the src attribute of the image element
-      myImageElement.src = String(this.imageUrl);
+
+      const myImageElement = document.getElementById('faces') as HTMLImageElement | null;
+      if (myImageElement && this.imageUrl) {
+        myImageElement.style.display = 'block';
+        myImageElement.src = String(this.imageUrl); // ✅ Only access src if element is found
+      } else {
+        console.warn('Image element #faces not found when reading file.');
+      }
+
       this.canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
       this.imageElement = document.getElementById('faces') as HTMLImageElement;
       this.selectedMask = document.querySelector(".selected-mask img") as HTMLImageElement;
@@ -441,10 +590,12 @@ export class view3DModalComponent implements OnInit, OnDestroy {
         //console.log("model loaded");
         this.cameraFrame = await this.detectFaces();
         document.querySelector(".loading")?.classList.add('d-none');
+        this.initDraggableGlasses(); // Initialize draggable glasses after showing the image
         resolve();
       } else if (!this.isVideo) {
         this.cameraFrame = await this.detectFaces();
         document.querySelector(".loading")?.classList.add('d-none');
+        this.initDraggableGlasses(); // Initialize draggable glasses after showing the image
         resolve();
       }
     });
@@ -493,6 +644,7 @@ export class view3DModalComponent implements OnInit, OnDestroy {
         if (this.masks.length > x) {
           dots = this.masks[x].keypoints;
           maskElement = this.masks[x].maskElement;
+          this.canvasElement.appendChild(maskElement);
         } else {
           dots = [];
           maskElement = document.createElement("img");
@@ -526,7 +678,6 @@ export class view3DModalComponent implements OnInit, OnDestroy {
           dot.element.style.left = `${dot.left}px`;
           dot.element.style.position = 'absolute';
         }
-
         let maskType = this.selectedMask.getAttribute("data-mask-type");
         let maskCoordinate, maskHeight, maskWidth, maskSizeAdjustmentWidth, maskSizeAdjustmentHeight, maskSizeAdjustmentTop, maskSizeAdjustmentLeft;
         let maskTop, maskLeft;
@@ -590,7 +741,30 @@ export class view3DModalComponent implements OnInit, OnDestroy {
   }
   modeChage(modename: any) {
     this.mode = modename;
+    if (this.mode == 'image') {
+      let localImage = localStorage.getItem('storedSelfie');
+      if (localImage) {
+        this.onSelfieCaptured(localImage)
+      }
+      else {
+        this.retakeSelfie();
+      }
+    }
   }
+
+  dataURLtoFile(dataUrl: string, filename: string): File {
+    const arr = dataUrl.split(',');
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
+
 
 
   openModal() {
@@ -600,19 +774,17 @@ export class view3DModalComponent implements OnInit, OnDestroy {
     if (this.modelSrc == '') {
       this.mode = 'image'
       this.facedetectbool = false;
-     
     }
-    else
-    {
+    else {
       // this.main();
       // Split the URL by '/'
-    const parts = this.image3d.Threed_Tryon.split('/');
-    // Get the last part (filename)
-    const filename = parts[parts.length - 1];
-    let fulliframeURL=  this.iframeBaseLink+filename;
-    // console.log('fulliframeURL ===========',fulliframeURL)
-    this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL); 
-    // console.log('iframeLink ===========',this.iframeLink)
+      const parts = this.image3d.Threed_Tryon.split('/');
+      // Get the last part (filename)
+      const filename = parts[parts.length - 1];
+      let fulliframeURL = this.iframeBaseLink + filename;
+      // console.log('fulliframeURL ===========',fulliframeURL)
+      this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
+      // console.log('iframeLink ===========',this.iframeLink)
 
     }
     if (this.seletedimage == '') {
@@ -622,17 +794,21 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       const parts = this.image3d.Threed_Tryon.split('/');
       // Get the last part (filename)
       const filename = parts[parts.length - 1];
-      let fulliframeURL=  this.iframeBaseLink+filename;
+      let fulliframeURL = this.iframeBaseLink + filename;
       // console.log('fulliframeURL ===========',fulliframeURL)
-      this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL); 
+      this.iframeLink = this.sanitizer.bypassSecurityTrustResourceUrl(fulliframeURL);
       // console.log('iframeLink ===========',this.iframeLink)
     }
     else {
       this.initializeFaceGlassImage();
+      let localImage = localStorage.getItem('storedSelfie');
+      if (localImage) {
+        this.onSelfieCaptured(localImage)
+      }
     }
     this.modalOpen = true;
 
-    
+
     if (isPlatformBrowser(this.platformId)) {
       this.modalService.open(this.view3D, {
         size: 'md',
@@ -665,6 +841,52 @@ export class view3DModalComponent implements OnInit, OnDestroy {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
+    }
+  }
+
+  onSelfieCaptured(selfieDataUrl: string) {
+    // Save selfie to localStorage
+    localStorage.setItem('storedSelfie', selfieDataUrl);
+
+    // Convert base64 to File and read
+    const file = this.dataURLtoFile(selfieDataUrl, `selfie-${Date.now()}.png`);
+    this.readFile(file);
+
+    this.imageUrl = selfieDataUrl;
+    this.showFaceCapture = false;
+
+    // Wait until Angular updates DOM and image appears
+    setTimeout(() => {
+      const imgElement = document.getElementById('mask_0') as HTMLImageElement;
+      const facesImg = document.getElementById('faces') as HTMLImageElement;
+
+      if (imgElement) imgElement.style.display = 'none';
+
+      if (facesImg) {
+        facesImg.onload = () => {
+          if (imgElement) imgElement.style.display = 'block';
+          this.startFacemask(); // Only start when image is ready
+        };
+
+        // Trigger onload if image already cached
+        const src = facesImg.src;
+        facesImg.src = '';
+        facesImg.src = src;
+      } else {
+        // If not found, fallback
+        this.startFacemask();
+      }
+    }, 50); // slight delay to let DOM render
+  }
+
+
+
+  retakeSelfie() {
+    this.imageUrl = null;
+    this.showFaceCapture = true; // Show again to restart camera
+    const myImageElement = document.getElementById('faces') as HTMLImageElement;
+    if (myImageElement) {
+      myImageElement.style.display = 'none';
     }
   }
 
