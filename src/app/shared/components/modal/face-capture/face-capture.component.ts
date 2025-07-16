@@ -80,90 +80,101 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
 }
 
 
-  detectLoop = async () => {
-    const video = this.videoElement.nativeElement;
-    const canvas = this.canvasElement.nativeElement;
-    const ctx = canvas.getContext('2d')!;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+detectLoop = async () => {
+  const video = this.videoElement.nativeElement;
+  const canvas = this.canvasElement.nativeElement;
+  const ctx = canvas.getContext('2d')!;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const ovalCenterX = canvas.width / 2;
-    const ovalCenterY = canvas.height / 2;
-    const ovalRadiusX = 150;
-    const ovalRadiusY = 200;
+  const ovalCenterX = canvas.width / 2;
+  const ovalCenterY = canvas.height / 2;
+  const ovalRadiusX = 150;
+  const ovalRadiusY = 200;
 
-    // Draw dim overlay with oval cutout
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
-    ctx.fill('evenodd');
+  // Draw dim overlay with oval cutout
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.beginPath();
+  ctx.rect(0, 0, canvas.width, canvas.height);
+  ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
+  ctx.fill('evenodd');
 
-    // Vertical dotted green line for nose alignment
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 4]);
-    for (let y = -ovalRadiusY; y <= ovalRadiusY; y++) {
-      const x = ovalCenterX;
-      const yCoord = ovalCenterY + y;
-      if (y === -ovalRadiusY) ctx.moveTo(x, yCoord);
-      else ctx.lineTo(x, yCoord);
-    }
-    ctx.stroke();
+  // === Animated Outline (pulsing ring) ===
+  const time = Date.now() / 300;
+  const pulse = 4 + Math.sin(time) * 2;
 
-    // Curved horizontal dotted line for eye level
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 4]);
-    const curveYOffset = -40;
-    for (let x = -ovalRadiusX; x <= ovalRadiusX; x++) {
-      const xCoord = ovalCenterX + x;
-      const yOffset = 0.2 * Math.sin((x / ovalRadiusX) * Math.PI);
-      const yCoord = ovalCenterY + curveYOffset + yOffset * 15;
-      if (x === -ovalRadiusX) ctx.moveTo(xCoord, yCoord);
-      else ctx.lineTo(xCoord, yCoord);
-    }
-    ctx.stroke();
-    ctx.restore();
+  ctx.beginPath();
+  ctx.lineWidth = pulse;
+  ctx.setLineDash([]);
+  ctx.strokeStyle = this.isAligned ? 'rgba(0, 255, 0, 0.6)' : 'rgba(255, 0, 0, 0.6)';
+  ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
+  ctx.stroke();
 
-    // === Face Detection and Validations ===
-    const detection = await faceapi
-      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks();
+  // === Vertical (Nose) Alignment Line with Pulsing Dots ===
+  const dotGap = 12;
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(0,255,0,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([2, 6]);
+  ctx.moveTo(ovalCenterX, ovalCenterY - ovalRadiusY);
+  ctx.lineTo(ovalCenterX, ovalCenterY + ovalRadiusY);
+  ctx.stroke();
 
-    if (detection) {
-      const box = detection.detection.box;
-      const landmarks = detection.landmarks;
+  // === Curved Eye Line: Animated wave ===
+  ctx.save();
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(0, 255, 0, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([]);
+  const curveYOffset = -40;
+  const waveAmplitude = 12;
+  const waveFrequency = 2;
+  for (let x = -ovalRadiusX; x <= ovalRadiusX; x++) {
+    const xCoord = ovalCenterX + x;
+    const yOffset = waveAmplitude * Math.sin((x / ovalRadiusX) * Math.PI * waveFrequency + time);
+    const yCoord = ovalCenterY + curveYOffset + yOffset;
+    if (x === -ovalRadiusX) ctx.moveTo(xCoord, yCoord);
+    else ctx.lineTo(xCoord, yCoord);
+  }
+  ctx.stroke();
+  ctx.restore();
 
-      const fitsInsideOval =
-        box.x > ovalCenterX - ovalRadiusX &&
-        box.y > ovalCenterY - ovalRadiusY &&
-        box.x + box.width < ovalCenterX + ovalRadiusX &&
-        box.y + box.height < ovalCenterY + ovalRadiusY;
+  // === Face Detection ===
+  const detection = await faceapi
+    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks();
 
-      const nose = landmarks.getNose()[3];
-      const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 10;
+  if (detection) {
+    const box = detection.detection.box;
+    const landmarks = detection.landmarks;
 
-      const leftEye = landmarks.getLeftEye()[0];
-      const rightEye = landmarks.getRightEye()[3];
-      const avgEyeY = (leftEye.y + rightEye.y) / 2;
-      const isFaceLevel = Math.abs(avgEyeY - (ovalCenterY + curveYOffset)) < 20;
+    const fitsInsideOval =
+      box.x > ovalCenterX - ovalRadiusX &&
+      box.y > ovalCenterY - ovalRadiusY &&
+      box.x + box.width < ovalCenterX + ovalRadiusX &&
+      box.y + box.height < ovalCenterY + ovalRadiusY;
 
-      const faceWidth = box.width;
-      const isZoomCorrect = faceWidth >= 260 && faceWidth <= 300;
+    const nose = landmarks.getNose()[3];
+    const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 10;
 
-      this.isAligned = fitsInsideOval && isNoseCentered && isFaceLevel && isZoomCorrect;
+    const leftEye = landmarks.getLeftEye()[0];
+    const rightEye = landmarks.getRightEye()[3];
+    const avgEyeY = (leftEye.y + rightEye.y) / 2;
+    const isFaceLevel = Math.abs(avgEyeY - (ovalCenterY + curveYOffset)) < 20;
 
-      if (!this.isAligned) this.captured = false;
-    } else {
-      this.isAligned = false;
-    }
+    const faceWidth = box.width;
+    const isZoomCorrect = faceWidth >= 260 && faceWidth <= 300;
 
-    this.animationFrameId = requestAnimationFrame(this.detectLoop);
-  };
+    this.isAligned = fitsInsideOval && isNoseCentered && isFaceLevel && isZoomCorrect;
+
+    if (!this.isAligned) this.captured = false;
+  } else {
+    this.isAligned = false;
+  }
+
+  this.animationFrameId = requestAnimationFrame(this.detectLoop);
+};
+
 
   captureSelfie() {
   const video = this.videoElement.nativeElement;

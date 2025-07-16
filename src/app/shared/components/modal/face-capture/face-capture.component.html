@@ -2,7 +2,7 @@
     <video #videoElement autoplay muted playsinline style="display: none;"></video>
     <canvas #canvasElement width="640" height="480"></canvas>
 
-    <div class="oval-outline" [ngStyle]="{ borderColor: isAligned ? 'lime' : 'red' }"></div>
+    <!-- <div class="oval-outline" [ngStyle]="{ borderColor: isAligned ? 'lime' : 'red' }"></div> -->
 
     <button *ngIf="isAligned && !captured" (click)="captureSelfie()" class="selfie-button">
         📸 Take Selfie
