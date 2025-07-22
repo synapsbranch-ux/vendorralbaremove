@@ -136,9 +136,11 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async initializeFaceGlassImage() {
-    // try {
-    //   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const imageHtml = `<style>
+    const isMobile = window.innerWidth <= 768;  // You can adjust this breakpoint
+    const leftAdj = isMobile ? '-.17' : '-.48';  // mobile or desktop/tablet
+
+    const imageHtml = `
+<style>
   .loading {
     width: 100%;
     height: 100%;
@@ -163,22 +165,23 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
     position: relative;
   }
 
-#faces {
-  width: 279px;
-  height: auto;
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-}
+  #faces {
+    width: 279px;
+    height: auto;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+  }
 
-#canvas {
-  width: 279px;
-  height:  auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 99;
-}
+  #canvas {
+    width: 279px;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
+
   #mask-slider {
     position: absolute;
     bottom: 20px;
@@ -247,7 +250,7 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
                data-scale-width="1.1"
                data-scale-height=".3"
                data-top-adj=".18"
-               data-left-adj="-.48">
+               data-left-adj="${leftAdj}">
         </li>
       </ul>
     </div>
@@ -256,13 +259,11 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
 </div>
 
 <div class="md-overlay"></div>
-`
+`;
+
     this.modelImageHTML = this.sanitizer.bypassSecurityTrustHtml(imageHtml);
-    // } catch (error) {
-    //   // Handle errors
-    //   console.log('error =======', error);
-    // }
   }
+
 
   async initializeFaceGlassVideo() {
     try {
@@ -455,6 +456,11 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
       this.imageElement = document.getElementById('faces') as HTMLImageElement;
       this.selectedMask = document.querySelector(".selected-mask img") as HTMLImageElement;
+
+      const eyeImageElement = document.getElementById('mask_0') as HTMLImageElement;
+      if (eyeImageElement) {
+        eyeImageElement.style.display = 'block';
+      }
     };
     reader.readAsDataURL(file);
   }
@@ -883,10 +889,14 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   retakeSelfie() {
     this.imageUrl = null;
-    this.showFaceCapture = true; // Show again to restart camera
+    this.showFaceCapture = true; // Show again to restart camera 
     const myImageElement = document.getElementById('faces') as HTMLImageElement;
     if (myImageElement) {
       myImageElement.style.display = 'none';
+    }
+    const eyeImageElement = document.getElementById('mask_0') as HTMLImageElement;
+    if (eyeImageElement) {
+      eyeImageElement.style.display = 'none';
     }
   }
 

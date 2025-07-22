@@ -27,8 +27,8 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
   isAligned = false;
   captured = false;
   animationFrameId: number | null = null;
-
-  constructor(private sanitizer: DomSanitizer) {}
+  lastDetectionTime: number = 0;
+  constructor(private sanitizer: DomSanitizer) { }
 
   async ngOnInit() {
     await Promise.all([
@@ -48,168 +48,182 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async startVideo() {
-  try {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const hasVideoInput = devices.some(device => device.kind === 'videoinput');
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasVideoInput = devices.some(device => device.kind === 'videoinput');
+      if (!hasVideoInput) throw new Error('No video input device found');
 
-    if (!hasVideoInput) throw new Error('No video input device found');
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          aspectRatio: 4 / 3,
+        },
+        audio: false,
+      });
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: 'user',
-        width: { ideal: 640 },
-        height: { ideal: 480 },
-        aspectRatio: 4 / 3,
-      },
-    });
+      const video = this.videoElement.nativeElement;
 
+      // Stop previous stream if any
+      if (video.srcObject) {
+        (video.srcObject as MediaStream).getTracks().forEach(t => t.stop());
+      }
+
+      video.srcObject = stream;
+
+      video.onloadedmetadata = async () => {
+        await video.play();  // Ensures mobile support
+        const canvas = this.canvasElement.nativeElement;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        this.detectLoop();
+      };
+    } catch (err) {
+      console.error('Webcam error:', err);
+      alert('Unable to access webcam. Please ensure it is connected and allowed.');
+    }
+  }
+
+
+  detectLoop = async () => {
     const video = this.videoElement.nativeElement;
-    video.srcObject = stream;
+    const canvas = this.canvasElement.nativeElement;
+    const ctx = canvas.getContext('2d')!;
+    const now = Date.now();
 
-    video.onloadedmetadata = () => {
-      video.play();
-      const canvas = this.canvasElement.nativeElement;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      this.detectLoop();
-    };
-  } catch (err) {
-    console.error('Webcam error:', err);
-    alert('Unable to access webcam. Please ensure it is connected and allowed.');
-  }
-}
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    const ovalCenterX = canvas.width / 2;
+    const ovalCenterY = canvas.height / 2;
+    const ovalRadiusX = 150;
+    const ovalRadiusY = 200;
+    const eyeOffsetY = -40;
+    const eyeOffsetX = 55;
+    const eyeRadius = 22;
 
-detectLoop = async () => {
-  const video = this.videoElement.nativeElement;
-  const canvas = this.canvasElement.nativeElement;
-  const ctx = canvas.getContext('2d')!;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Dim Overlay
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
+    ctx.fill('evenodd');
 
-  const ovalCenterX = canvas.width / 2;
-  const ovalCenterY = canvas.height / 2;
-  const ovalRadiusX = 150;
-  const ovalRadiusY = 200;
+    // Outline
+    const pulse = 3 + Math.sin(now / 300) * 1.5;
+    ctx.beginPath();
+    ctx.lineWidth = pulse;
+    ctx.setLineDash([]);
+    ctx.strokeStyle = this.isAligned ? 'rgba(0, 255, 0, 0.6)' : 'rgba(255, 0, 0, 0.6)';
+    ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
+    ctx.stroke();
 
-  // Draw dim overlay with oval cutout
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-  ctx.beginPath();
-  ctx.rect(0, 0, canvas.width, canvas.height);
-  ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
-  ctx.fill('evenodd');
+    // Nose line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0,255,0,0.6)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 6]);
+    ctx.moveTo(ovalCenterX, ovalCenterY - ovalRadiusY);
+    ctx.lineTo(ovalCenterX, ovalCenterY + ovalRadiusY);
+    ctx.stroke();
 
-  // === Animated Outline (pulsing ring) ===
-  const time = Date.now() / 300;
-  const pulse = 4 + Math.sin(time) * 2;
+    // Eye circles
+    const leftEyeX = ovalCenterX - eyeOffsetX;
+    const rightEyeX = ovalCenterX + eyeOffsetX;
+    const eyeY = ovalCenterY + eyeOffsetY;
 
-  ctx.beginPath();
-  ctx.lineWidth = pulse;
-  ctx.setLineDash([]);
-  ctx.strokeStyle = this.isAligned ? 'rgba(0, 255, 0, 0.6)' : 'rgba(255, 0, 0, 0.6)';
-  ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
-  ctx.stroke();
+    ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
+    ctx.lineWidth = 2;
 
-  // === Vertical (Nose) Alignment Line with Pulsing Dots ===
-  const dotGap = 12;
-  ctx.beginPath();
-  ctx.strokeStyle = 'rgba(0,255,0,0.6)';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([2, 6]);
-  ctx.moveTo(ovalCenterX, ovalCenterY - ovalRadiusY);
-  ctx.lineTo(ovalCenterX, ovalCenterY + ovalRadiusY);
-  ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(leftEyeX, eyeY, eyeRadius, eyeRadius, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
 
-  // === Curved Eye Line: Animated wave ===
-  ctx.save();
-  ctx.beginPath();
-  ctx.strokeStyle = 'rgba(0, 255, 0, 0.6)';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([]);
-  const curveYOffset = -40;
-  const waveAmplitude = 12;
-  const waveFrequency = 2;
-  for (let x = -ovalRadiusX; x <= ovalRadiusX; x++) {
-    const xCoord = ovalCenterX + x;
-    const yOffset = waveAmplitude * Math.sin((x / ovalRadiusX) * Math.PI * waveFrequency + time);
-    const yCoord = ovalCenterY + curveYOffset + yOffset;
-    if (x === -ovalRadiusX) ctx.moveTo(xCoord, yCoord);
-    else ctx.lineTo(xCoord, yCoord);
-  }
-  ctx.stroke();
-  ctx.restore();
+    ctx.beginPath();
+    ctx.ellipse(rightEyeX, eyeY, eyeRadius, eyeRadius, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
 
-  // === Face Detection ===
-  const detection = await faceapi
-    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks();
+    // Throttle detection every 100ms (~10fps)
+    if (now - this.lastDetectionTime > 100) {
+      this.lastDetectionTime = now;
 
-  if (detection) {
-    const box = detection.detection.box;
-    const landmarks = detection.landmarks;
+      try {
+        const detection = await faceapi
+          .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks();
 
-    const fitsInsideOval =
-      box.x > ovalCenterX - ovalRadiusX &&
-      box.y > ovalCenterY - ovalRadiusY &&
-      box.x + box.width < ovalCenterX + ovalRadiusX &&
-      box.y + box.height < ovalCenterY + ovalRadiusY;
+        if (detection) {
+          const box = detection.detection.box;
+          const landmarks = detection.landmarks;
 
-    const nose = landmarks.getNose()[3];
-    const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 10;
+          const fitsInsideOval =
+            box.x > ovalCenterX - ovalRadiusX &&
+            box.y > ovalCenterY - ovalRadiusY &&
+            box.x + box.width < ovalCenterX + ovalRadiusX &&
+            box.y + box.height < ovalCenterY + ovalRadiusY;
 
-    const leftEye = landmarks.getLeftEye()[0];
-    const rightEye = landmarks.getRightEye()[3];
-    const avgEyeY = (leftEye.y + rightEye.y) / 2;
-    const isFaceLevel = Math.abs(avgEyeY - (ovalCenterY + curveYOffset)) < 20;
+          const nose = landmarks.getNose()[3];
+          const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 10;
 
-    const faceWidth = box.width;
-    const isZoomCorrect = faceWidth >= 260 && faceWidth <= 300;
+          const leftEye = landmarks.getLeftEye()[0];
+          const rightEye = landmarks.getRightEye()[3];
+          const avgEyeY = (leftEye.y + rightEye.y) / 2;
+          const isFaceLevel = Math.abs(avgEyeY - eyeY) < 25;
 
-    this.isAligned = fitsInsideOval && isNoseCentered && isFaceLevel && isZoomCorrect;
+          const faceWidth = box.width;
+          const isZoomCorrect = faceWidth >= 260 && faceWidth <= 300;
 
-    if (!this.isAligned) this.captured = false;
-  } else {
-    this.isAligned = false;
-  }
+          this.isAligned = fitsInsideOval && isNoseCentered && isFaceLevel && isZoomCorrect;
+          if (!this.isAligned) this.captured = false;
+        } else {
+          this.isAligned = false;
+        }
+      } catch (err) {
+        console.warn('Face detection error:', err);
+      }
+    }
 
-  this.animationFrameId = requestAnimationFrame(this.detectLoop);
-};
+    this.animationFrameId = requestAnimationFrame(this.detectLoop);
+  };
+
 
 
   captureSelfie() {
-  const video = this.videoElement.nativeElement;
-  const canvas = this.canvasElement.nativeElement;
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
 
-  const ovalRadiusX = 150;
-  const ovalRadiusY = 200;
-  const ovalCenterX = canvas.width / 2;
-  const ovalCenterY = canvas.height / 2;
+    const ovalRadiusX = 150;
+    const ovalRadiusY = 200;
+    const ovalCenterX = canvas.width / 2;
+    const ovalCenterY = canvas.height / 2;
 
-  const cropX = ovalCenterX - ovalRadiusX;
-  const cropY = ovalCenterY - ovalRadiusY;
-  const cropW = ovalRadiusX * 2;
-  const cropH = ovalRadiusY * 2;
+    const cropX = ovalCenterX - ovalRadiusX;
+    const cropY = ovalCenterY - ovalRadiusY;
+    const cropW = ovalRadiusX * 2;
+    const cropH = ovalRadiusY * 2;
 
-  const cropCanvas = document.createElement('canvas');
-  const cropCtx = cropCanvas.getContext('2d')!;
+    const cropCanvas = document.createElement('canvas');
+    const cropCtx = cropCanvas.getContext('2d')!;
 
-  cropCanvas.width = cropW;
-  cropCanvas.height = cropH;
+    cropCanvas.width = cropW;
+    cropCanvas.height = cropH;
 
-  // Draw cropped area
-  cropCtx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    // Draw cropped area
+    cropCtx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
 
-  // Apply oval mask
-  cropCtx.globalCompositeOperation = 'destination-in';
-  cropCtx.beginPath();
-  cropCtx.ellipse(cropW / 2, cropH / 2, cropW / 2, cropH / 2, 0, 0, Math.PI * 2);
-  cropCtx.fill();
+    // Apply oval mask
+    cropCtx.globalCompositeOperation = 'destination-in';
+    cropCtx.beginPath();
+    cropCtx.ellipse(cropW / 2, cropH / 2, cropW / 2, cropH / 2, 0, 0, Math.PI * 2);
+    cropCtx.fill();
 
-  const dataUrl = cropCanvas.toDataURL('image/png');
-  this.selfie = dataUrl;
-  this.safeSelfieUrl = this.sanitizer.bypassSecurityTrustUrl(dataUrl);
-  this.captured = true;
-  this.selfieCaptured.emit(dataUrl);
-}
+    const dataUrl = cropCanvas.toDataURL('image/png');
+    this.selfie = dataUrl;
+    this.safeSelfieUrl = this.sanitizer.bypassSecurityTrustUrl(dataUrl);
+    this.captured = true;
+    this.selfieCaptured.emit(dataUrl);
+  }
 
 }
