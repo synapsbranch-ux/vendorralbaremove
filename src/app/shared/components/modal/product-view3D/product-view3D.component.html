@@ -18,10 +18,10 @@
 		</div>
 		<div class="modal-body">
 			<div class="row row-centered justify-content-center">
-				<div class="col-md-12 col-centered">
+				<div class="col-md-12 col-centered" *ngIf="!showHelp">
 					<div class="video-section" [ngClass]="mode =='video' ? 'd-block' : 'd-none'">
-						<iframe *ngIf="iframeLink" [src]="iframeLink" frameborder="0" allow="camera; fullscreen 'self'" height="100%"
-							width="100%"></iframe>
+						<iframe *ngIf="iframeLink" [src]="iframeLink" frameborder="0" allow="camera; fullscreen 'self'"
+							height="100%" width="100%"></iframe>
 					</div>
 					<div class="image-section" *ngIf="mode === 'image'" mh-500>
 						<div [ngStyle]="imageUrl ? {'min-height': '0px'} : {'min-height': '350px'}">
@@ -37,7 +37,8 @@
 									<!-- <img [src]="imageUrl" alt="Selfie" /> -->
 
 									<!-- Retake option -->
-									<button class="btn btn-outline-secondary mb-4" (click)="retakeSelfie()">
+									<button class="btn btn-outline-secondary mb-4" (click)="retakeSelfie()"
+										[disabled]="!isGlassReady">
 										🔄 Retake
 									</button>
 								</div>
@@ -50,6 +51,17 @@
 							</main>
 						</div>
 					</div>
+					<button [disabled]="!isGlassReady" *ngIf="!showHelp" class="btn btn-link position-absolute show-help" (click)="toggleHelp()"
+						ngbTooltip="Help: How to try on">
+						<i class="fa fa-question-circle text-success fs-4"></i>
+					</button>
+				</div>
+				<div class="col-md-12 col-centered d-flex flex-column align-items-center" *ngIf="showHelp">
+					<img class="img-fluid mb-2 w-50" src="assets/images/shape_lineup_help.png" alt="help image">
+					<p class="text-center mt-3 text-black">Line up the green vertical line over your nose, and the horizontal line across your eyes.'The picture can be taken once the oval border turns green.'</p>
+					<button class="btn btn-solid rounded-lg virtual_btn active" (click)="startTryOn()">
+						Start
+					</button>
 				</div>
 			</div>
 

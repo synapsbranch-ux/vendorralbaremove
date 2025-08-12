@@ -4,10 +4,12 @@
 
     <!-- <div class="oval-outline" [ngStyle]="{ borderColor: isAligned ? 'lime' : 'red' }"></div> -->
 
-    <button *ngIf="isAligned && !captured" (click)="captureSelfie()" class="selfie-button">
+    <!-- <button *ngIf="isAligned && !captured" (click)="captureSelfie()" class="selfie-button">
         📸 Take Selfie
-    </button>
-
+    </button> -->
+    <div *ngIf="countdownValue !== null" class="countdown-overlay">
+        <span>{{ countdownValue }}</span>
+    </div>
     <div *ngIf="selfie" style="text-align: center; margin-top: 20px;">
         <h3>Selfie Captured:</h3>
         <img [src]="safeSelfieUrl" alt="Selfie" />

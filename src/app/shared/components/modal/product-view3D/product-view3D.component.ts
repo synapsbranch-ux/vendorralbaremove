@@ -52,7 +52,7 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
   lookStraght: any;
   facePostion: any;
   returnUrl: any
-
+  isGlassReady = false;
   iframeBaseLink = 'https://tryon.ralbatech.com/?p_name='
   iframeLink: any
 
@@ -80,7 +80,7 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
   glassImage: HTMLImageElement = new Image();
   isFaceDetect: boolean = false;
   loaderShow: boolean = true
-
+  showHelp: boolean = false;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef<HTMLDivElement>;
   @ViewChild('contentImageContainer', { static: false }) contentImageContainer: ElementRef<HTMLDivElement>;
 
@@ -104,6 +104,10 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.facePostion = this.redIcon;
     this.glassImage.src = this.glassImageUrl;
     this.registerCustomARSystem();
+    const myImageElement = document.getElementById('faces') as HTMLImageElement;
+    if (myImageElement) {
+      myImageElement.style.display = 'none';
+    }
     this.initializeFaceGlassImage();
   }
 
@@ -134,8 +138,17 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
       delete AFRAME.systems['custom-ar']; // Remove the system from AFRAME
     }
   }
+  toggleHelp() {
+    this.showHelp = !this.showHelp;
+  }
+
+  startTryOn() {
+    this.showHelp = false;
+    this.retakeSelfie();
+  }
 
   async initializeFaceGlassImage() {
+    this.isGlassReady = false;
     const isMobile = window.innerWidth <= 768;  // You can adjust this breakpoint
     const leftAdj = isMobile ? '-.17' : '-.48';  // mobile or desktop/tablet
 
@@ -651,6 +664,7 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
           dots = this.masks[x].keypoints;
           maskElement = this.masks[x].maskElement;
           this.canvasElement.appendChild(maskElement);
+          this.isGlassReady = true;
         } else {
           dots = [];
           maskElement = document.createElement("img");
@@ -662,6 +676,7 @@ export class view3DModalComponent implements OnInit, OnDestroy, AfterViewInit {
             maskElement: maskElement
           });
           this.canvasElement.appendChild(maskElement);
+          this.isGlassReady = true;
         }
 
         for (let i = 0; i < this.maskKeyPointIndexs.length; i++) {

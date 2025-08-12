@@ -63,6 +63,12 @@ iframe {
   user-select: none;
 }
 
+.show-help {
+  right: 10px;
+  bottom: 10px;
+  z-index: 999;
+}
+
 .mask {
   touch-action: none;
   user-select: none;

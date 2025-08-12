@@ -28,6 +28,11 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
   captured = false;
   animationFrameId: number | null = null;
   lastDetectionTime: number = 0;
+  alignmentStartTime: number | null = null;
+  alignmentDurationThreshold = 2000; // 2 seconds
+  countdownValue: number | null = null;
+  countdownInterval: any = null;
+  countdownTimeout: any = null;
   constructor(private sanitizer: DomSanitizer) { }
 
   async ngOnInit() {
@@ -100,17 +105,16 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
     const ovalRadiusX = 150;
     const ovalRadiusY = 200;
     const eyeOffsetY = -40;
-    const eyeOffsetX = 55;
-    const eyeRadius = 22;
+    const eyeY = ovalCenterY + eyeOffsetY;
 
-    // Dim Overlay
+    // Dim outside the oval
     ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
     ctx.fill('evenodd');
 
-    // Outline
+    // Oval outline
     const pulse = 3 + Math.sin(now / 300) * 1.5;
     ctx.beginPath();
     ctx.lineWidth = pulse;
@@ -119,33 +123,25 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
     ctx.ellipse(ovalCenterX, ovalCenterY, ovalRadiusX, ovalRadiusY, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Nose line
+    // Nose vertical guide line
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(0,255,0,0.6)';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 4;
     ctx.setLineDash([2, 6]);
     ctx.moveTo(ovalCenterX, ovalCenterY - ovalRadiusY);
     ctx.lineTo(ovalCenterX, ovalCenterY + ovalRadiusY);
     ctx.stroke();
 
-    // Eye circles
-    const leftEyeX = ovalCenterX - eyeOffsetX;
-    const rightEyeX = ovalCenterX + eyeOffsetX;
-    const eyeY = ovalCenterY + eyeOffsetY;
-
-    ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
-    ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
-    ctx.lineWidth = 2;
-
+    // Eye horizontal line guide
     ctx.beginPath();
-    ctx.ellipse(leftEyeX, eyeY, eyeRadius, eyeRadius, 0, 0, Math.PI * 2);
-    ctx.fill(); ctx.stroke();
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = 'rgba(0,255,0,0.4)';
+    ctx.lineWidth = 4;
+    ctx.moveTo(ovalCenterX - ovalRadiusX, eyeY);
+    ctx.lineTo(ovalCenterX + ovalRadiusX, eyeY);
+    ctx.stroke();
 
-    ctx.beginPath();
-    ctx.ellipse(rightEyeX, eyeY, eyeRadius, eyeRadius, 0, 0, Math.PI * 2);
-    ctx.fill(); ctx.stroke();
-
-    // Throttle detection every 100ms (~10fps)
+    // Throttle detection every 100ms
     if (now - this.lastDetectionTime > 100) {
       this.lastDetectionTime = now;
 
@@ -165,18 +161,37 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
             box.y + box.height < ovalCenterY + ovalRadiusY;
 
           const nose = landmarks.getNose()[3];
-          const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 10;
+          const isNoseCentered = Math.abs(nose.x - ovalCenterX) < 20; // more flexible
 
           const leftEye = landmarks.getLeftEye()[0];
           const rightEye = landmarks.getRightEye()[3];
           const avgEyeY = (leftEye.y + rightEye.y) / 2;
-          const isFaceLevel = Math.abs(avgEyeY - eyeY) < 25;
+          const isFaceLevel = Math.abs(avgEyeY - eyeY) < 40; // more flexible
 
           const faceWidth = box.width;
-          const isZoomCorrect = faceWidth >= 260 && faceWidth <= 300;
+          const isZoomCorrect = faceWidth >= 240 && faceWidth <= 320; // wider range
 
           this.isAligned = fitsInsideOval && isNoseCentered && isFaceLevel && isZoomCorrect;
-          if (!this.isAligned) this.captured = false;
+
+          // if (!this.isAligned) this.captured = false;
+          if (this.isAligned) {
+            if (!this.alignmentStartTime) {
+              this.alignmentStartTime = now;
+
+              // Start countdown
+              this.startCountdown();
+            }
+
+            const timeAligned = now - this.alignmentStartTime;
+            if (timeAligned >= this.alignmentDurationThreshold && !this.captured) {
+              this.captureSelfie();
+              this.clearCountdown();
+            }
+          } else {
+            this.alignmentStartTime = null;
+            this.captured = false;
+            this.clearCountdown();
+          }
         } else {
           this.isAligned = false;
         }
@@ -187,6 +202,25 @@ export class FaceCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.animationFrameId = requestAnimationFrame(this.detectLoop);
   };
+
+  startCountdown() {
+    this.countdownValue = 3;
+    this.countdownInterval = setInterval(() => {
+      if (this.countdownValue && this.countdownValue > 1) {
+        this.countdownValue--;
+      } else {
+        this.clearCountdown();
+      }
+    }, 700); // slightly faster for better UX
+  }
+
+  clearCountdown() {
+    this.countdownValue = null;
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
+  }
 
 
 
