@@ -89,6 +89,7 @@ export class SettingsComponent implements OnInit, DoCheck {
   }
 
   logout() {
+    event.preventDefault();
     localStorage.removeItem('u_token');
     localStorage.removeItem('cartItems');
     localStorage.removeItem('user_');

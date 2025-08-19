@@ -20,6 +20,7 @@ import { NgOtpInputModule } from  'ng-otp-input';
 import { DepartmentComponent } from './department/department.component';
 import { JwtInterceptor } from './jwt.interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import { SitemapComponent } from './pages/sitemap/sitemap.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -34,6 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ElementsComponent,
     DepartmentComponent,
     AboutUsComponent,
+    SitemapComponent,
     PrivacyPolicyComponent,
   ],
 

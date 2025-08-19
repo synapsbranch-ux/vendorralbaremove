@@ -12,23 +12,32 @@
             </div>
             <div class="col-12 col-sm-8 text-center text-sm-end">
                 <div class="filterMenu mr-2">
-                    <a class="clear" (click)="getAllProducts()">Clear Filter</a>
+                    <!-- <a class="clear" (click)="getAllProducts()">Clear Filter</a> -->
+                    <button class="clear" (click)="getAllProducts()">Clear Filter</button>
                 </div>
                 <div class="filterMenu">
                     <ul>
                         <li *ngFor="let category of categoryList.slice(1); let i = index">
-                            <a (click)="getCategoryDetails(category, i + 1)"
+                            <!-- <a (click)="getCategoryDetails(category, i + 1)"
                                 [ngClass]="{'active': cat_id == category.category_id }">
                                 {{ category.category_name }}
-                            </a>
+                            </a> -->
+                            <button style="padding: 8px 0;" (click)="getCategoryDetails(category, i + 1)"
+                                [ngClass]="{'active': cat_id == category.category_id }">
+                                {{ category.category_name }}
+                            </button>
                         </li>
                     </ul>
                 </div>
                 <div class="filterMenu ms-3">
                     <ul>
                         <li class="">
-                            <a (click)="barndPopup()">Brand <img class="ms-2" src="assets/images/arrow-down.svg"
-                                    width="10" alt="arrow"></a>
+                            <!-- <a (click)="barndPopup()">Brand <img class="ms-2" src="assets/images/arrow-down.svg"
+                                    width="10" alt="arrow">
+                            </a> -->
+                            <button (click)="barndPopup()">Brand <img class="ms-2" src="assets/images/arrow-down.svg"
+                                width="10px" height="100%" alt="arrow">
+                            </button>
                         </li>
                     </ul>
 
@@ -55,11 +64,16 @@
                     
 
                     <div class="wishlistIcon d-flex align-items-center">
-                        <a (click)="addToWishlist(product)"> <img
+                        <!-- <a (click)="addToWishlist(product)"> <img
                                 *ngIf="!(productService.wishlistProductCheck(product))"
                                 src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></a>
                         <a (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))"
-                                src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a>
+                                src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></a> -->
+                        <button (click)="addToWishlist(product)"> <img
+                                *ngIf="!(productService.wishlistProductCheck(product))"
+                                src="assets/images/wishlist-icon.svg" class="w-100" alt="Wishlist"></button>
+                        <button (click)="addToWishlist(product)"><img *ngIf="(productService.wishlistProductCheck(product))"
+                                src="assets/images/wishlist-icon-solid.svg" class="w-100" alt="Wishlist"></button>        
                     </div>
                     <div class="row m-0 mt-3 productDetails align-items-center gx-0">
                         <div class="col-6">
@@ -97,10 +111,10 @@
     <div class="dropdown-menu">
         <ul>
             <span class="closeBtn">
-                <a (click)="barndPopupClose()"><img src="assets/images/close.svg" width="100%" alt="Close"></a>
+                <a href="#" (click)="barndPopupClose()"><img src="assets/images/close.svg" width="100%" alt="Close"></a>
             </span>
             <li *ngFor="let brand of paginatedBrandList">
-                <a class="dropdown-item" (click)="changeBrandname(brand)"
+                <a href="#" class="dropdown-item" (click)="changeBrandname(brand)"
                    [ngClass]="{'active': selectedBrand === brand._id}">
                     <img *ngIf="brand.brand_image" class="w-100" [src]="brand.brand_image" alt="Brand">
                     <span *ngIf="!brand.brand_image">{{ brand.brand_name }}</span>

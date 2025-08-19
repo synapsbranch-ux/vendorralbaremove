@@ -214,6 +214,7 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   }
 
   barndPopupClose() {
+    event.preventDefault();
     this.showBrand = false;
   }
 
@@ -331,6 +332,7 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
 
 
   changeBrandname(brand: any) {
+    event.preventDefault();
     this.showBrand = false;
     this.currentPage = 1;  // Reset to page 1
     this.selectedBrand = brand._id;

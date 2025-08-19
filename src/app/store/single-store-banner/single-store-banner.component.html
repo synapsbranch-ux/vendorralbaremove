@@ -25,9 +25,10 @@
                     <p class="main-sub-title">Find Your Perfect Pair!</p>
                 </div>
                 <div class="col-12 col-sm-3 position-relative mb-3" *ngFor="let tag of tagListData">
-                    <img src="{{tag.tag_image}}" class="w-100" alt="">
+                    <img src="{{tag.tag_image}}" class="w-100" alt="{{tag.tag_name}}">
                     <div class="categoryBtn">
-                        <a (click)="getTagsProducts(tag)">{{tag.tag_name}}</a>
+                        <!-- <a (click)="getTagsProducts(tag)">{{tag.tag_name}}</a> -->
+                        <button (click)="getTagsProducts(tag)">{{tag.tag_name}}</button>
                     </div>
                 </div>
             </div>
@@ -43,7 +44,8 @@
                     <div class="w-100 d-block d-sm-none" *ngIf="i % 2 === 0">
                         <img [src]="section.section_image" class="w-100 brandImg" [alt]="section.section_image_name">
                     </div>
-                    <a class="blueBtn" (click)="showAllProducts()">Shop Now</a>
+                    <!-- <a class="blueBtn" (click)="showAllProducts()">Shop Now</a> -->
+                    <button style="border: 0;" class="blueBtn" (click)="showAllProducts()">Shop Now</button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-7 d-none d-sm-block" *ngIf="i % 2 === 0">
                     <img [src]="section.section_image" class="w-100 brandImg" [alt]="section.section_image_name">
@@ -56,7 +58,8 @@
                 <div class="col-12 col-md-6 col-lg-5 text-center text-lg-end" *ngIf="i % 2 !== 0">
                     <h2 class="bigTitle">{{ section.heading_text }}</h2>
                     <p class="bigTitleSubText">{{ section.description_text }}</p>
-                    <a class="blueBtn" (click)="showAllProducts()">Shop Now</a>
+                    <!-- <a class="blueBtn" (click)="showAllProducts()">Shop Now</a> -->
+                    <button style="border: 0;" class="blueBtn" (click)="showAllProducts()">Shop Now</button>
                 </div>
             </div>
         </div>

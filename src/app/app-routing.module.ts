@@ -16,6 +16,7 @@ import { SingleStoreBannerComponent } from './store/single-store-banner/single-s
 import { ComingSoonComponent } from './pages/coming-soon/coming-soon.component';
 import { NewHomeComponent } from './home/new-home/new-home.component';
 import { NewTermComponent } from './home/new-term/new-term.component';
+import { SitemapComponent } from './pages/sitemap/sitemap.component';
 
 const routes: Routes = [
   // {
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'our-story',
     component: AboutUsComponent,
+    pathMatch: 'full'
+  },
+   {
+    path: 'sitemap',
+    component: SitemapComponent,
     pathMatch: 'full'
   },
   // {

@@ -44,11 +44,18 @@
       </div>
     </li> -->
     <li class="onhover-dropdown mobile-account account">
-      <a href="javascript:void(0)" class="d-flex align-items-center justify-content-between">
+      <!-- <a href="javascript:void(0)" class="d-flex align-items-center justify-content-between"> -->
         <!-- <i class="fa fa-user-o" aria-hidden="true"></i>  -->
-        <img src="assets/images/user.svg" alt="User" width="18">
+        <!-- <img src="assets/images/user.svg" alt="User" width="18">
         My Account
-      </a>
+      </a> -->
+
+      <button style="border: none; background-color: white; padding: 0; font-weight: 600; gap: 10px;" href="javascript:void(0)" class="d-flex align-items-center justify-content-between">
+        <!-- <i class="fa fa-user-o" aria-hidden="true"></i>  -->
+        <img src="assets/images/user.svg" alt="User" width="18px" height="100%">
+        My Account
+      </button>
+
       <ul class="onhover-show-div">
         <li *ngIf="!user_">
           <a class="loginBtn" [routerLink]="['/login']" data-lng="en">
@@ -65,8 +72,13 @@
             Profile
           </a>
         </li>
-        <li *ngIf="user_" (click)="logout();">
+        <!-- <li *ngIf="user_" (click)="logout();">
           <a data-lng="es">
+            Logout
+          </a>
+        </li> -->
+        <li *ngIf="user_">
+          <a href="#" (click)="logout();" data-lng="es">
             Logout
           </a>
         </li>
@@ -124,7 +136,8 @@
             </div>
           </div>
           <div *ngIf="!user_" class="close-circle" (click)="removeItem(product)">
-            <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a>
+            <!-- <a href="javascript:void(0)"><i class="fa fa-times" aria-hidden="true"></i></a> -->
+            <button style="border: none; background-color: white;"><i class="fa fa-times" aria-hidden="true"></i></button>
           </div>
         </li>
         <li>

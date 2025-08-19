@@ -17,7 +17,7 @@
                                 <ng-template carouselSlide [id]="i" *ngIf="i > 0">
                                     <div class="zoom-container" (mousemove)="onMouseMove($event)"
                                         (mouseleave)="onMouseLeave()">
-                                        <img src="{{image.pro_image}}" class="zoom-image" />
+                                        <img src="{{image.pro_image}}" class="zoom-image" alt="{{product?.product_name}}" />
                                     </div>
                                 </ng-template>
                             </ng-container>
@@ -49,8 +49,8 @@
                         <div class="col-12 p-0">
                             <div class="slider-nav small-slider-product row">
                                 <div class="col-12 align-items-center justify-content-evenly d-flex">
-                                    <a *ngIf="is3DProduct" (click)="active3DSlider()"><img src="assets/images/rotate-360.svg" alt=""></a>
-                                    <a *ngIf="is2DProduct" (click)="active2DSlider()"><img src="assets/images/picView.svg" alt=""></a>
+                                    <a *ngIf="is3DProduct" href="#" (click)="active3DSlider()"><img src="assets/images/rotate-360.svg" alt="rotate-360"></a>
+                                    <a *ngIf="is2DProduct" href="#" (click)="active2DSlider()"><img src="assets/images/picView.svg" alt="pic-view"></a>
                                     <a *ngIf="tryonenable" class="skyBlueBtn" href="javascrip:void(0)"
                                         (click)="view3D.openModal()"> Try On</a>
                                     <!-- <a *ngIf="tryonenable" class="try_on_btn" href="javascrip:void(0)" (click)="tryonpage()"><i class="fa fa-video-camera" aria-hidden="true"></i> Try On</a> -->
@@ -274,7 +274,7 @@
                             <div *ngIf="cartbuttonhideStatus == 'inactive'">
                                 <div class="product-buttons d-flex justify-content-center justify-content-lg-start"
                                     *ngIf="product_external_link.length < 12">
-                                    <a class="blueBtn ms-0" [class.disabled]="counter > product.stock"
+                                    <a href="#" class="blueBtn ms-0" [class.disabled]="counter > product.stock"
                                         (click)="addToCart(product)">{{isProductinCart? 'update
                                         cart': 'add to
                                         cart'}}</a>

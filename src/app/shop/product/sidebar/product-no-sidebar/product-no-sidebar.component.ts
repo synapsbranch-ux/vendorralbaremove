@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import '@google/model-viewer';
 import { view3DModalComponent } from 'src/app/shared/components/modal/product-view3D/product-view3D.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, Meta, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { UserService } from 'src/app/shared/services/user.service';
 
 
@@ -75,6 +75,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
 
   constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router,
+    private title: Title,
+    private meta: Meta,
     public productService: ProductService, private toastrService: ToastrService, private formBuilder: FormBuilder, private userService: UserService) {
   }
 
@@ -93,7 +95,26 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     )
     this.productService.getproductsBySlugs(product_slug).subscribe(response => {
       this.product = response.data;
+      console.log("prodd", this.product);
+      // console.log("prodd",this.product.product_metadata);
       if (Object.keys(this.product).length > 0) {
+        // Normalize tags to array of strings
+        let tags = [];
+        if (Array.isArray(this.product.product_meta_tags)) {
+          tags = this.product.product_meta_tags;
+        } else if (typeof this.product.product_meta_tags === 'string') {
+          tags = this.product.product_meta_tags.split(',').map(t => t.trim());
+        }
+
+        // Set page title
+        if (this.product?.product_name) {
+          this.title.setTitle(`Ralba Technologies | ${this.product.product_name}`);
+        }
+
+        // Add/update meta tags
+        this.meta.updateTag({ name: 'keywords', content: tags.join(', ') });
+        this.meta.updateTag({ name: 'description', content: this.product.product_description || '' });
+
         this.productWishliststatus = this.productService.wishlistProductCheck(this.product)
         this.productAttributeArr = response.data.attributes;
         this.productAddons = response.data.add_ons;
@@ -191,6 +212,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   }
 
   active3DSlider() {
+    event.preventDefault();
     if (this.is3DProduct) {
       this.is3Dactive = true;
       this.is2Dactive = false;
@@ -198,6 +220,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   }
 
   active2DSlider() {
+    event.preventDefault();
     this.is3Dactive = false;
     this.is2Dactive = true;
   }
@@ -316,6 +339,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
 
   // Add to cart
   async addToCart(product: any) {
+    event.preventDefault();
     if (this.counter > product.stock) {
       return;
     }

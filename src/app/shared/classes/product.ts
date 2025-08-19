@@ -15,6 +15,7 @@ export interface Product {
     quantity?: number;
     tags?: any[];
     images?: Images[];
+    product_meta_tags?: string | string[];
 }
 
 export interface ProductNew {
@@ -41,6 +42,7 @@ export interface ProductNew {
     cart_id?: string;
     tags?: any[];
     addons?: any[];
+    product_meta_tags?: string | string[];
 }
 export interface ProductNew2 {
     _id?: string;
@@ -61,6 +63,7 @@ export interface ProductNew2 {
     updatedAt?: Date;
     quantity?: number;
     addons?: any[];
+  product_meta_tags?: string | string[];
 }
 export interface ProCatagories {
     category_name?: string;

@@ -123,6 +123,7 @@ export class SingleStoreBannerComponent implements OnInit {
     this.productService.gettagList().subscribe(
       res => {
         this.tagListData = res['data'];
+        console.log(this.tagListData )
       },
       error => {
         // .... HANDLE ERROR HERE 
