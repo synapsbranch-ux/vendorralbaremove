@@ -61,6 +61,7 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
   fileUrl: any;
   is3Dactive: boolean = false;
   is2Dactive: boolean = true;
+  select: string = 'select'; //johnley
 
   @ViewChild("view3D") view3D: view3DModalComponent;
 
@@ -225,24 +226,62 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     this.is2Dactive = true;
   }
 
+  // prefillAddons(savedAddons: any) {
+  //   savedAddons.forEach((savedAddon: any) => {
+  //     if (savedAddon.hasOwnProperty('extra_document')) {
+  //       savedAddon.extra_document.forEach((savedAddon: any) => {
+  //         const addon = this.productAddons.find(a => a.addon_slug === savedAddon.keyname);
+  //         if (addon) {
+  //           this.fileUrl = savedAddon.fileUrl;
+  //         }
+  //       });
+
+  //     }
+  //     else {
+  //       const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
+  //       if (addon) {
+  //         this.value[addon.addon_slug] = savedAddon.price;
+  //         this.selectedOptions[addon.addon_slug] = savedAddon.value;
+  //         addon.add_ons_value[0].values = savedAddon.value;
+  //         if (addon.input_type == 'range') {
+  //           this.range = true;
+  //         }
+  //         if (savedAddon.input_type == 'range-input') {
+  //           this.othervalue = savedAddon.other;
+  //           this.range = true;
+  //         }
+  //       }
+  //     }
+
+  //   });
+  // }
+  // Modifier la méthode prefillAddons pour utiliser add_ons_name
   prefillAddons(savedAddons: any) {
     savedAddons.forEach((savedAddon: any) => {
       if (savedAddon.hasOwnProperty('extra_document')) {
         savedAddon.extra_document.forEach((savedAddon: any) => {
-          const addon = this.productAddons.find(a => a.addon_slug === savedAddon.keyname);
+          // Chercher par keyname (qui pourrait être addon_slug ou add_ons_name)
+          const addon = this.productAddons.find(a =>
+            a.addon_slug === savedAddon.keyname || a.add_ons_name === savedAddon.keyname
+          );
           if (addon) {
             this.fileUrl = savedAddon.fileUrl;
           }
         });
-
       }
       else {
-        const addon = this.productAddons.find(a => a.addon_slug === savedAddon.key);
+        // Chercher l'addon soit par key (qui pourrait être addon_slug ou add_ons_name)
+        const addon = this.productAddons.find(a =>
+          a.addon_slug === savedAddon.key || a.add_ons_name === savedAddon.key
+        );
+
         if (addon) {
-          this.value[addon.addon_slug] = savedAddon.price;
-          this.selectedOptions[addon.addon_slug] = savedAddon.value;
-          addon.add_ons_value[0].values = savedAddon.value;
-          if (addon.input_type == 'range') {
+          this.value[addon.add_ons_name] = savedAddon.price;
+          this.selectedOptions[addon.add_ons_name] = savedAddon.value;
+
+          // Garder le code existant pour les types spécifiques
+          if (addon.add_ons_input == 'range') {
+            addon.add_ons_value[0].values = savedAddon.value;
             this.range = true;
           }
           if (savedAddon.input_type == 'range-input') {
@@ -251,10 +290,8 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
           }
         }
       }
-
     });
   }
-
   // Function to sanitize a single URL using DomSanitizer
   sanitizeURL(url: string): SafeResourceUrl {
     let urlYoutube = url.replace("watch?v=", "v/");
@@ -397,9 +434,34 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     let capitalizedWords = words.map(function (word) {
       return word.charAt(0).toUpperCase() + word.slice(1);
     });
-    let capitalizedString = capitalizedWords.join(' ');
 
+
+    const pattern = /\d{2}p\d/;
+
+    let capitalizedString = capitalizedWords.join(' ');
+    capitalizedString = this.removeLabelPrefix(capitalizedString);
+    capitalizedString = capitalizedString.replace(/\b(167|174)\b/g, match => {
+      return match === '167' ? '1.67' : '1.74';
+    });
+
+    if (pattern.test(capitalizedString)) {
+      capitalizedString = capitalizedString.replace('p', '.');
+    }
     return capitalizedString;
+  }
+
+
+
+  //johnley
+
+  removeLabelPrefix(str) {
+    let prefix_list = ['Sv', 'Ftb', 'Ftt', 'Vp', 'Dp'];
+    let prefix_index = str.indexOf(' ');
+    let prefix = str.substring(0, prefix_index);
+    if (prefix_list.includes(prefix)) {
+      str = str.substring(prefix_index + 1, str.length);
+    }
+    return str;
   }
 
   uploadFiles(files: FileList, formcontrolname, addon) {
@@ -537,23 +599,64 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     console.log('productAddonsPrice------------', this.productAddonsPrice)
   }
 
-  updatePrice(dropdownSlug: string) {
-    const dropdown = this.productAddons.find(item => item.addon_slug === dropdownSlug);
-    if (dropdown) {
-      const selectedOption = this.selectedOptions[dropdownSlug];
-      const priceObj = dropdown.add_ons_value.find(option => option.value_slug === selectedOption);
-      if (priceObj) {
-        let seletctObject = {
-          key: dropdownSlug,
-          input_type: dropdown.add_ons_input,
-          value: selectedOption,
-          price: priceObj.price ? priceObj.price : 0,
+  // updatePrice(dropdownSlug: string) {
+  //   const dropdown = this.productAddons.find(item => item.addon_slug === dropdownSlug);
+  //   if (dropdown) {
+  //     const selectedOption = this.selectedOptions[dropdownSlug];
+  //     const priceObj = dropdown.add_ons_value.find(option => option.value_slug === selectedOption);
+  //     if (priceObj) {
+  //       let seletctObject = {
+  //         key: dropdownSlug,
+  //         input_type: dropdown.add_ons_input,
+  //         value: selectedOption,
+  //         price: priceObj.price ? priceObj.price : 0,
+  //         other: ''
+  //       };
+
+  //       this.pushObjectIfKeyNotExists(this.addonSelectedResult, 'key', selectedOption, seletctObject);
+
+  //       this.value[dropdownSlug] = priceObj.price;
+  //     }
+  //   }
+  // }
+
+
+  // Méthode pour mettre à jour le prix lorsqu'une option est sélectionnée
+  updatePrice(addonName: string) {
+    const addon = this.productAddons.find(item => item.add_ons_name === addonName);
+
+    if (addon) {
+      const selectedValue = this.selectedOptions[addonName];
+      // const selectedOption = addon.add_ons_value.find(option => option.values === selectedValue);
+      const selectedOption = addon.add_ons_value.find(option => option.value_slug === selectedValue);
+
+      if (selectedOption) {
+        // Trouver si une option était déjà sélectionnée pour cet addon
+        const existingIndex = this.addonSelectedResult.findIndex(item => item.key === addonName);
+
+        // Si une option était déjà sélectionnée, soustraire son prix
+        if (existingIndex !== -1) {
+          this.productAddonsPrice -= parseFloat(this.addonSelectedResult[existingIndex].price || '0');
+          this.addonSelectedResult.splice(existingIndex, 1);
+        }
+
+        // Ajouter la nouvelle option
+        const optionObject = {
+          key: addonName,
+          input_type: addon.add_ons_input,
+          value: selectedValue,
+          price: selectedOption.price || '0',
           other: ''
         };
 
-        this.pushObjectIfKeyNotExists(this.addonSelectedResult, 'key', selectedOption, seletctObject);
+        this.addonSelectedResult.push(optionObject);
+        this.productAddonsPrice += parseFloat(selectedOption.price || '0');
+        // this.value[addonName] = selectedOption.price;
+        this.value[addonName] = parseFloat(selectedOption.price || '0'); // Pour être sûr que ce soit un nombre
 
-        this.value[dropdownSlug] = priceObj.price;
+
+        // Réinitialiser les sélections des champs enfants
+        this.resetChildSelections(addonName);
       }
     }
   }
@@ -637,4 +740,146 @@ export class ProductNoSidebarComponent implements OnInit, OnChanges {
     }
 
   }
+
+
+
+
+
+
+
+
+
+
+  //johnley
+
+
+
+  showHelp: boolean = false;
+  selectedHelpName: string = '';
+  getHelpByName(name: string): string {
+    const helpItem = this.productAddons.find(item => item.add_ons_name === name);
+    return helpItem && helpItem.add_ons_help?.trim()
+      ? helpItem.add_ons_help
+      : 'Aucune aide disponible';
+  }
+
+  hasHelp(name: string): boolean {
+    const help = this.getHelpByName(name);
+    return help !== 'Aucune aide disponible';
+  }
+
+  toggleHelp(name: string): void {
+    if (this.selectedHelpName === name && this.showHelp) {
+      // Si c'est le même élément et qu'il est ouvert, on le ferme
+      this.showHelp = false;
+      this.selectedHelpName = '';
+    } else {
+      // Sinon on ouvre l'aide pour cet élément
+      this.showHelp = true;
+      this.selectedHelpName = name;
+
+      // Ajuster la position après l'affichage
+      setTimeout(() => this.adjustTooltipPosition(), 10);
+    }
+  }
+
+  // Ajuste la position du tooltip selon l'espace disponible
+  adjustTooltipPosition(): void {
+    const tooltip = document.querySelector('.help-tooltip') as HTMLElement;
+    if (tooltip) {
+      const rect = tooltip.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+
+      // Si le tooltip dépasse à droite, l'afficher à gauche
+      if (rect.right > windowWidth - 20) {
+        tooltip.classList.add('help-tooltip-right');
+      } else {
+        tooltip.classList.remove('help-tooltip-right');
+      }
+    }
+  }
+
+  // Fermer l'aide en cliquant ailleurs
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.help-icon') && !target.closest('.help-tooltip')) {
+      this.showHelp = false;
+      this.selectedHelpName = '';
+    }
+  }
+
+  // Fermer avec la touche Échap
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapePress(): void {
+    this.showHelp = false;
+    this.selectedHelpName = '';
+  }
+
+
+
+  // Ajouter ou modifier ces méthodes
+
+  // Méthode pour récupérer la valeur sélectionnée d'un champ
+  getSelection(name: string): string {
+
+    let selection = this.selectedOptions[name];
+
+    const originalString = selection;
+    const newString = originalString.replace(/_/g, '-');
+    return newString;
+    // console.log(newString); // Output: "this-is-a-string-with-underscores"
+  }
+
+
+
+
+
+
+  // Initialiser les options sélectionnées
+  initializeSelectedOptions() {
+    // Initialiser les valeurs pour tous les addons
+    this.productAddons.forEach(addon => {
+      // Initialiser chaque addon avec une valeur vide
+      this.selectedOptions[addon.add_ons_name] = '';
+      this.value[addon.add_ons_name] = 0;
+    });
+  }
+
+
+  // Méthode pour réinitialiser les champs enfants lorsqu'un parent change
+  resetChildSelections(parentName: string) {
+    // Trouver tous les addons qui ont ce parent
+    const childAddons = this.productAddons.filter(addon =>
+      addon.add_ons_parent_name === parentName
+    );
+
+    // Réinitialiser chaque enfant
+    childAddons.forEach(childAddon => {
+      const childName = childAddon.add_ons_name;
+
+      // Retirer l'option de addonSelectedResult si elle existe
+      const existingIndex = this.addonSelectedResult.findIndex(item => item.key === childName);
+      if (existingIndex !== -1) {
+        this.productAddonsPrice -= parseFloat(this.addonSelectedResult[existingIndex].price || '0');
+        this.addonSelectedResult.splice(existingIndex, 1);
+      }
+
+      // Réinitialiser la sélection
+      this.selectedOptions[childName] = '';
+      this.value[childName] = 0;
+
+      // Récursivement réinitialiser les enfants de cet enfant
+      this.resetChildSelections(childName);
+    });
+  }
+
+
+
+  ChangingValue($event) {
+    return this.select;
+  }
+
+
+
 }
