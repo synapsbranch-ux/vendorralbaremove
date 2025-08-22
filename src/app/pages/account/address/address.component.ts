@@ -130,7 +130,7 @@ export class AddressComponent implements OnInit {
       }
       this.userservice.addNewAddress(EdData).subscribe(
         res => {
-          this.toastr.success("Address successfully Added");
+          this.toastr.success("Address added successfully.");
           this.getallAddressList();
           /// settimeout Start
           const startTime = performance.now();

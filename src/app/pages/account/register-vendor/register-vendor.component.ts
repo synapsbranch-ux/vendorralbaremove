@@ -105,7 +105,7 @@ export class RegisterVendorComponent implements OnInit {
       this.userService.vendorgenerateOTP(data).subscribe(
         res => {
           this.getOtpVal = res['data'].otpValue;
-          this.toastr.success('OTP have been send to your register Email please Check');
+          this.toastr.success('OTP has been sent to your registered email. Please check.');
           this.vendorOTPStatus=true; 
         },
         error => {
@@ -175,7 +175,7 @@ export class RegisterVendorComponent implements OnInit {
         }
         this.userService.vendorSignUp(data).subscribe(
           res => {      
-            this.toastr.success('Your Registration successful');
+            this.toastr.success('Your registration was successful.');
             setTimeout(() => {
               window.location.href = 'https://admin.ralbatech.com/'
             },3000) 
@@ -188,7 +188,7 @@ export class RegisterVendorComponent implements OnInit {
    
   
       }else{
-          this.toastr.error('Please enter OTP first')
+          this.toastr.error('Please enter OTP first.')
           this.otpValid=false;
       }
     }
@@ -210,7 +210,7 @@ export class RegisterVendorComponent implements OnInit {
       this.userService.vendorgenerateOTP(data).subscribe(
         res => {
           this.getOtpVal = res['data'].otpValue;
-          this.toastr.success('OTP have been send to your register Email please Check');
+          this.toastr.success('OTP has been sent to your registered email. Please check.');
           this.vendorOTPStatus=true;      
         },
         error => {

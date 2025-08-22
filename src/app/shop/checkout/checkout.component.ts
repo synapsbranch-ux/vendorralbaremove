@@ -342,7 +342,7 @@ export class CheckoutComponent implements OnInit {
       return;
     }
     if (formData.paymentOption != 'COD') {
-      this.toaster.warning('Please choose paypal once')
+      this.toaster.warning('Please select PayPal.')
     }
 
     if (this.products.length > 0) {
@@ -386,7 +386,7 @@ export class CheckoutComponent implements OnInit {
 
                   if (stock < 0) {
                     if (v.data.product_name) {
-                      this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+                      this.toaster.error(`${v.data.product_name} is out of stock. Please remove it from the cart to continue shopping.`)
                       this.router.navigateByUrl(`product/${v.data.product_slug}`)
                     }
                   }
@@ -510,7 +510,7 @@ export class CheckoutComponent implements OnInit {
 
                   if (stock < 0) {
                     if (v.data.product_name) {
-                      this.toaster.error(`${v.data.product_name} is out of stock, please delete from cart to continue shoping`)
+                      this.toaster.error(`${v.data.product_name} is out of stock. Please remove it from the cart to continue shopping.`)
                       this.router.navigateByUrl(`product/${v.data.product_slug}`)
                     }
                   }

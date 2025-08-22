@@ -178,7 +178,7 @@ export class CartComponent implements OnInit {
       this.desableincrement = false;
     }
     else {
-      this.toaster.error('Your product out of stock');
+      this.toaster.error('This product is out of stock.');
       this.desableincrement = true;
     }
 
@@ -240,7 +240,7 @@ export class CartComponent implements OnInit {
       this.desableincrement = false;
     }
     else {
-      this.toaster.error('Your product out of stock');
+      this.toaster.error('This product is out of stock.');
       this.desableincrement = true;
     }
 
@@ -308,7 +308,7 @@ export class CartComponent implements OnInit {
       this.desableincrement = false;
     }
     else {
-      this.toaster.error('Your product out of stock');
+      this.toaster.error('This product is out of stock.');
       this.desableincrement = true;
     }
 

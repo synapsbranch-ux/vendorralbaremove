@@ -70,7 +70,7 @@ export class EditProfileComponent implements OnInit {
     }
     this.userservice.userUpdateProdile(EdData).subscribe(
       res => {
-        this.toastr.success('User profile update successfully')
+        this.toastr.success('User profile updated successfully.')
         /// settimeout Start
         const startTime = performance.now();
         this.ngZone.runOutsideAngular(() => {

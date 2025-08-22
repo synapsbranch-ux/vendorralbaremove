@@ -125,7 +125,7 @@ export class RegisterComponent implements OnInit {
             this.phValid=true;
             this.showDiv.signUpDiv = false;
             this.getOtpVal = res['data'].otpValue;
-            this.toastr.success('OTP have been send to your register Email please Check');
+            this.toastr.success('OTP has been sent to your registered email. Please check.');
           }
         },
         error => {
@@ -163,7 +163,7 @@ export class RegisterComponent implements OnInit {
         res => {
 
           this.loginfn(formData.email,formData.password.trim());
-          this.toastr.success('OTP successfully Verified. Loging...')
+          this.toastr.success('OTP successfully verified. Logging in...')
           this.otpValid=true;
           this.isValid = true;
           // this.signupMassage="Your Registration successful";
@@ -171,14 +171,14 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           // .... HANDLE ERROR HERE 
-          this.toastr.error(error.error.message)
+          this.toastr.error('Invalid OTP. Please try again.')
           //this.otpMassage=error.message;
           this.otpValid=false;
      }
       );
     }else{
-        this.toastr.error('Please enter OTP first')
-       // this.otpMassage="Please enter OTP first";
+        this.toastr.error('Please enter the OTP first.')
+        // this.otpMassage="Please enter OTP first";
         this.otpValid=false;
     }
   }
@@ -207,12 +207,12 @@ export class RegisterComponent implements OnInit {
             this.phValid=true;
             this.showDiv.signUpDiv = false;
             this.getOtpVal = res['data'].otpValue;
-            this.toastr.success('OTP have been send to your register Email please Check');
+            this.toastr.success('OTP has been sent to your registered email. Please check.');
           }
         },
         error => {
           // .... HANDLE ERROR HERE 
-          this.toastr.error('Phone number already exist')
+          this.toastr.error('Phone number already exists')
           this.phValid=false;
           this.signupMassage="Phone number already exist";
           this.showDiv.signUpDiv = true;

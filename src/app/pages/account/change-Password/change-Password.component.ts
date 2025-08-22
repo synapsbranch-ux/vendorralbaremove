@@ -75,7 +75,7 @@ export class ChangePasswordComponent implements OnInit {
     if (this.changePasswordFormStatus) {
       this.userservice.changePassword(EdData).subscribe(
         res => {
-          this.toastr.success('Your Password has been Changed successfully')
+          this.toastr.success('Your password has been changed successfully.')
           setTimeout(() => {
             this.router.navigate(['/dashboard'])
           }, 2000)
@@ -86,7 +86,7 @@ export class ChangePasswordComponent implements OnInit {
         }
       )
     } else {
-      this.toastr.error('Please use different password . This password is already being used earlier.')
+      this.toastr.error('Please use a different password. This password has already been used.')
     }
   }
 

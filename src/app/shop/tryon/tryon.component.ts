@@ -39,7 +39,7 @@ export class TryonComponent implements OnInit {
 
     if(video == null && image == null)
     {
-      this.toaster.error('You have no video or image for Tryon')
+      this.toaster.error('No video or image available for Try-On.')
       this.router.navigateByUrl('/')
     }
 
