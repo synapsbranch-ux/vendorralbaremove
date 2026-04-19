@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, startWith, delay } from 'rxjs/operators';
+import { map, startWith, delay, tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { ProductNew } from '../classes/product';
 import { environment } from 'src/environments/environment';
@@ -120,7 +120,18 @@ export class ProductService {
   get2D3DFilteredProduct(data) {
     const url = environment.baseUrl + 'filter-all-store-product';
     const payload = this.normalizeAllStoreFilterPayload(data);
-    return this.securityService.signedRequest('POST', url, payload);
+    return this.securityService.signedRequest('POST', url, payload).pipe(
+      tap((res: any) => {
+        const products = Array.isArray(res?.data?.products) ? res.data.products.length : 'n/a';
+        const dataKeys = Object.keys(res?.data || {});
+        console.log('[ProductServiceDebug] filter-all-store-product response', {
+          payload,
+          productsCount: products,
+          dataKeys,
+          message: res?.message,
+        });
+      })
+    );
   }
 
   private normalizeAllStoreFilterPayload(data: any): any {
@@ -959,5 +970,4 @@ export class ProductService {
   }
 
 }
-
 
