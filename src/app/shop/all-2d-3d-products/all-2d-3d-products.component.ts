@@ -64,6 +64,11 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
         // Extract the 'slug' and 'page' values from the route parameters
         this.store_slug = params.get('storeSlug');
         this.cat_slug = params.get('catSlug') == 'all' ? '' : params.get('catSlug');
+
+        // Initial load can run before params resolve; retry once slug is available.
+        if (this.store_slug && this.productList.length === 0 && !this.isLoading && this.hasMoreProducts) {
+          this.loadProducts();
+        }
       });
     }
 
@@ -145,6 +150,11 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
   loadProducts(): void {
     console.log('Calling Load Product', this.isLoading, this.hasMoreProducts);
 
+    if (!this.store_slug) {
+      console.log('Skipping loadProducts: store_slug is not ready yet.');
+      return;
+    }
+
     if (this.isLoading || !this.hasMoreProducts) {
       console.log('Exiting due to isLoading or hasMoreProducts condition.');
       return; // Exit early if loading or no more products
@@ -182,8 +192,12 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       (error) => {
         console.error('Error loading products:', error);
         this.isLoading = false; // Reset loading state in case of error
-        // Prevent infinite retry loop on hard API errors while user stays at page bottom.
-        if (error?.status === 410 || error?.status === 404 || error?.status === 400) {
+
+        const apiMessage = (error?.error?.message || '').toString();
+        const missingStoreSlug = apiMessage.includes('"store_slug" is required');
+
+        // Prevent infinite retry loop on hard API errors, but do not freeze on missing slug race.
+        if (!missingStoreSlug && (error?.status === 410 || error?.status === 404)) {
           this.hasMoreProducts = false;
         }
       }
