@@ -25,6 +25,7 @@ jobs:
       S3_REGION: ${{ secrets.S3_REGION || vars.S3_REGION }}
       S3BUCKET: ${{ secrets.S3BUCKET || vars.S3BUCKET }}
       DISTRIBUTION: ${{ secrets.DISTRIBUTION || vars.DISTRIBUTION }}
+      NPM_CONFIG_LEGACY_PEER_DEPS: "true"
 
     steps:
       - name: Checkout repository
@@ -99,9 +100,9 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -f package-lock.json ]]; then
-            npm ci
+            npm ci --legacy-peer-deps
           else
-            npm install
+            npm install --legacy-peer-deps
           fi
 
       - name: Build production bundle
