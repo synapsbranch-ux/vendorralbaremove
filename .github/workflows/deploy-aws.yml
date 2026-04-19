@@ -7,6 +7,9 @@ on:
       - asset
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: deploy-aws-${{ github.ref_name }}
   cancel-in-progress: false
@@ -25,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -42,8 +45,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin main asset --prune
+          git fetch origin --prune
           target="origin/${GITHUB_REF_NAME}"
+          if ! git rev-parse --verify "${target}" >/dev/null 2>&1; then
+            echo "::error::Could not find remote branch ${target}."
+            exit 1
+          fi
           head_sha="$(git rev-parse HEAD)"
           target_sha="$(git rev-parse "${target}")"
           if [[ "${head_sha}" != "${target_sha}" ]]; then
@@ -66,7 +73,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
