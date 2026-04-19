@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { SecurityService } from 'src/security.service';
 import { Otp } from '../classes/otp';
 import { Usersignup } from '../classes/usersignup';
 
@@ -15,177 +16,113 @@ export class UserService {
   userorderid: any
   public Otp;
   public Usersignup;
-  constructor(private http: HttpClient, private router: Router,) { }
+  constructor(private http: HttpClient, private router: Router, private securityService: SecurityService) { }
 
   genOtp(data: any): Observable<Otp> {
-    return this.http.post(environment.baseUrl + 'user/generateOTP', data);
+    const url = environment.baseUrl + 'user/generateOTP';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
+  genOtpPages(data: any): Observable<Otp> {
+    const url = environment.baseUrl + 'user/generateOTPPages';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+
   userSignUp(data: any): Observable<Usersignup> {
-    return this.http.post(environment.baseUrl + 'user/signup', data);
+    const url = environment.baseUrl + 'user/signup';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   vendorSignUp(data: any): Observable<Usersignup> {
-    return this.http.post(environment.baseUrl + 'vendor/signup', data);
+    const url = environment.baseUrl + 'vendor/signup';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   vendorgenerateOTP(data: any): Observable<any> {
-    return this.http.post(environment.baseUrl + 'vendor/generateOTP', data);
+    const url = environment.baseUrl + 'vendor/generateOTP';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userLogin(data) {
-    return this.http.post(environment.baseUrl + 'user/login', data);
+    const url = environment.baseUrl + 'user/login';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userContact(data) {
-    return this.http.post(environment.baseUrl + 'user/contact', data);
+    const url = environment.baseUrl + 'user/contact';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userVendorRoomCount(data) {
-    return this.http.post(environment.baseUrl + 'user/vendor-roomcheck', data);
+    const url = environment.baseUrl + 'user/vendor-roomcheck';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
 
 
   getAllAddress() {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.get(environment.baseUrl + 'user/addressList', httpOptionsroom);
+    const url = environment.baseUrl + 'user/addressList';
+    return this.securityService.signedRequest('GET', url);
   }
   getAllOrderList() {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.get(environment.baseUrl + 'user/orderList', httpOptionsroom);
+    const url = environment.baseUrl + 'user/orderList';
+    return this.securityService.signedRequest('GET', url);
   }
   getAllOrderDetailsList(data) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/orderList', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/orderList';
+    return this.securityService.signedRequest('POST', url, data);
   }
   getSingleAddress(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/updateAddress';
+    return this.securityService.signedRequest('POST', url, data);
   }
   getUserDetails() {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.get(environment.baseUrl + 'user/details', httpOptionsroom);
+    const url = environment.baseUrl + 'user/details';
+    return this.securityService.signedRequest('GET', url);
   }
   userUpdateAddress(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/updateAddress';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   addNewAddress(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/addAddress', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/addAddress';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   getSingleAddressDetails(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/addressDetails', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/addressDetails';
+    return this.securityService.signedRequest('POST', url, data);
   }
   setDefaultAddress(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/updateAddress', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/updateAddress';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   deleteAddress(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/deleteAddress', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/deleteAddress';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userUpdateProdile(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/update', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/update';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   changePassword(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/changepassword', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/changepassword';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   samepasswordcheck(data: any) {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'user/checkSamePassword', data, httpOptionsroom);
+    const url = environment.baseUrl + 'user/checkSamePassword';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   forgotPassword(data: any) {
-    return this.http.post(environment.baseUrl + 'user/forgotpassword', data);
+    const url = environment.baseUrl + 'user/forgotpassword';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   setUserAddressid(userAddtrss: any) {
@@ -208,10 +145,10 @@ export class UserService {
     if (!token) {
       return true; // No token means it's not valid or expired
     }
-  
+
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the payload
     const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-  
+
     return payload.exp < currentTime; // Check if token is expired
   }
 
@@ -221,6 +158,21 @@ export class UserService {
     localStorage.removeItem('user_');
     localStorage.removeItem('vendor_id');
     this.router.navigate(['/login'])
+  }
+
+  sendAffiliateMail(data) {
+    const url = environment.baseUrl + 'user/sendAffiliateMail';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+  sendAffinityMail(data) {
+    const url = environment.baseUrl + 'user/sendAffinityMail';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+  sendCreateBusinessAccountMail(data) {
+    const url = environment.baseUrl + 'user/sendCreateBusinessAccountMail';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Store } from '../classes/store';
+import { SecurityService } from 'src/security.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,32 +11,37 @@ import { Store } from '../classes/store';
 export class StoreService {
 
   public Stores
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient, private securityService: SecurityService) {  }
 
   // get Stores
   public get getStores(): Observable<Store[]>{
     const body={"page": 1, "limit": 100}
-    this.Stores = this.http.post(environment.baseUrl+'stores',body);
+    const url = environment.baseUrl + 'stores';
+    this.Stores = this.securityService.signedRequest('POST', url, body);
     console.log('Store Service called!', this.Stores);
     return this.Stores;
   }
   public get getStoresMore(): Observable<Store[]>{
     const body={"page": 1, "limit": 50}
-    this.Stores = this.http.post(environment.baseUrl+'stores',body);
+    const url = environment.baseUrl + 'stores';
+    this.Stores = this.securityService.signedRequest('POST', url, body);
     
     return this.Stores;
   }
   
   roomAvailableCheck(data: any): Observable<any>{
-    return this.http.post(environment.baseUrl+'stores/roomconfiguration',data);
+    const url = environment.baseUrl + 'stores/roomconfiguration';
+    return this.securityService.signedRequest('POST', url, data);
   } 
 
   storeviewcount(data: any): Observable<any>{
-    return this.http.post(environment.baseUrl+'stores/storeview',data);
+    const url = environment.baseUrl + 'stores/storeview';
+    return this.securityService.signedRequest('POST', url, data);
   } 
 
   vendorstoredetails(data: any): Observable<any>{
-    return this.http.post(environment.baseUrl+'stores/vendor-store-details',data);
+    const url = environment.baseUrl + 'stores/vendor-store-details';
+    return this.securityService.signedRequest('POST', url, data);
   } 
 
 }

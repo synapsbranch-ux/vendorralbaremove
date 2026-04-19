@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/internal/operators/map';
+import { SecurityService } from 'src/security.service';
 
 
 
@@ -28,7 +29,7 @@ export class NavService {
 	//public menuItems:Observable<Menu>;
 	public MENUITEMS : Menu[] = [];
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient, private securityService: SecurityService) {
 		 this.genMenu().subscribe((result) => { 
 			this.MENUITEMS = result["data"]; 
 		});
@@ -45,7 +46,8 @@ export class NavService {
 	}
 
 	genMenu(): Observable<Menu>{
-		return this.http.get(environment.baseUrl+'category').pipe(map(data=>{
+		const url = environment.baseUrl + 'category';
+		return this.securityService.signedRequest('GET', url).pipe(map(data=>{
 			return data;
 		}));
 		

@@ -5,6 +5,7 @@ import { map, startWith, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { ProductNew } from '../classes/product';
 import { environment } from 'src/environments/environment';
+import { SecurityService } from 'src/security.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { UserService } from './user.service';
 
@@ -31,7 +32,7 @@ export class ProductService {
 
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private toastrService: ToastrService, private router: Router, private userService: UserService) {
+    private toastrService: ToastrService, private router: Router, private userService: UserService, private securityService: SecurityService) {
 
   }
 
@@ -40,11 +41,6 @@ export class ProductService {
     ---------------  Product  -------------------
     ---------------------------------------------
   */
-
-
-  //  resolve(route: ActivatedRouteSnapshot){
-  //   //////console.log('Current Slug Products ===== ',route.params.slug);
-  // }
 
 
   // Product
@@ -62,10 +58,7 @@ export class ProductService {
       if (localStorage.getItem("product_slug")) {
         this.getproductsBySlugs(localStorage.getItem("product_slug")).subscribe(
           res => {
-            //  //////console.log('Product Service Product Cat search Slug ===>',res);
-
             this.catagoriesalt = res['data'].product_category.category_slug;
-            //  //////console.log('product Slug catagories ======', res['data'].product_category.category_slug)
             this.catarr = {
               'category': this.catagoriesalt,
             };
@@ -83,7 +76,7 @@ export class ProductService {
       }
 
     }
-    this.Products = this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', this.catarr).pipe(map((data: any) => {
+    this.Products = this.securityService.signedRequest<ProductNew[]>('POST', environment.baseUrl + 'product/list', this.catarr).pipe(map((data: any) => {
       return data.data;
     }));
 
@@ -99,69 +92,76 @@ export class ProductService {
   }
 
   // get Shipping and Tax data
-
-  getallShippingTaxs(vendorObj: any) {
-    this.token = localStorage.getItem('u_token') // Will return if it is not set 
-    this.token = "Bearer " + this.token
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.token
-      })
-    }
-
-    return this.http.post(environment.baseUrl + 'user/getShippingTax', vendorObj, httpOptions);
+  
+  getallShippingTaxs(data) {
+    const url = environment.baseUrl + 'user/getShippingTax';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   //// Get all Categories List
 
   getallCategories() {
-    return this.http.get(environment.baseUrl + 'category');
+    const url = environment.baseUrl + 'category';
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all Filtered Product List  
 
   getallFilteredProduct(data) {
-    return this.http.post(environment.baseUrl + 'filter-store-product', data);
+    const url = environment.baseUrl + 'filter-store-product';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+  getHomeFilteredProduct(data) {
+    const url = environment.baseUrl + 'home-filter-store-product';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   get2D3DFilteredProduct(data) {
-    return this.http.post(environment.baseUrl + 'filter-all-store-product', data);
+    const url = environment.baseUrl + 'filter-all-store-product';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   //// Get all Brands List
 
   getallBrands(store_slug: any) {
-    return this.http.get(environment.baseUrl + `brand/list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `brand/list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all 3D Brands List
 
   getall3DBrands(store_slug: any) {
-    return this.http.get(environment.baseUrl + `3d-product-brand/list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `3d-product-brand/list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all 2D Brands List
 
   getall2DBrands(store_slug: any) {
-    return this.http.get(environment.baseUrl + `2d-product-brand/list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `2d-product-brand/list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all 2D 3D Brands List
 
   getall2D3DBrands(store_slug: any) {
-    return this.http.get(environment.baseUrl + `2d-3d-product-brand/list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `2d-3d-product-brand/list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all Contact Brands List
 
   getallContactBrands(store_slug: any) {
-    return this.http.get(environment.baseUrl + `contact-product-brand/list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `contact-product-brand/list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
   }
 
   //// Get all catyegoryList
 
   getallEyeGlassCategoryWithSubcat() {
-    return this.http.get(environment.baseUrl + 'eyeglass-category-list-for-store');
+    const url = environment.baseUrl + 'eyeglass-category-list-for-store';
+    return this.securityService.signedRequest('GET', url);
   }
 
 
@@ -172,26 +172,32 @@ export class ProductService {
   }
 
   getProductsBycat(catdata: any): Observable<any> {
-    return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', catdata);
+    const url = environment.baseUrl + 'product/list';
+    return this.securityService.signedRequest('POST', url, catdata);
   }
   getContactFilterdProductList(storeSlug: any): Observable<any> {
-    return this.http.post(environment.baseUrl + 'filter-contact-product', storeSlug);
+    const url = environment.baseUrl + 'filter-contact-product';
+    return this.securityService.signedRequest('POST', url, storeSlug);
   }
   get2DProductList(storeSlug: any): Observable<any> {
-    return this.http.post(environment.baseUrl + 'stores/all-product-2d-list-by-vendor-for-user', storeSlug);
+    const url = environment.baseUrl + 'stores/all-product-2d-list-by-vendor-for-user';
+    return this.securityService.signedRequest('POST', url, storeSlug);
   }
 
   getStoreDetails(storeSlug: any): Observable<any> {
-    return this.http.post(environment.baseUrl + 'stores/details', storeSlug);
+    const url = environment.baseUrl + 'stores/details';
+    return this.securityService.signedRequest('POST', url, storeSlug);
   }
 
   // Get Products BY categoriess
   getProductscat(data: any): Observable<any> {
-    return this.http.post<ProductNew[]>(environment.baseUrl + 'product/list', data);
+    const url = environment.baseUrl + 'product/list';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   getSettingsDetails(): Observable<any> {
-    return this.http.get(environment.baseUrl + 'settings');
+    const url = environment.baseUrl + 'settings';
+    return this.securityService.signedRequest('GET', url);
   }
 
   // Get Products By Slug
@@ -205,14 +211,15 @@ export class ProductService {
   }
 
   getproductsBySlugs(data: any): Observable<any> {
-
-    return this.http.get(environment.baseUrl + 'product/' + data);
+    const url = environment.baseUrl + 'product/' + data;
+    return this.securityService.signedRequest('GET', url);
   }
 
   uploadImage(fileToUpload: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', fileToUpload, fileToUpload.name);
-    return this.http.post(environment.baseUrl + 'user/upload', formData);
+    const url = environment.baseUrl + 'user/upload';
+    return this.securityService.signedRequest('POST', url, formData);
   }
 
   /*
@@ -306,7 +313,6 @@ export class ProductService {
   // Get Cart Items
   public get cartItems(): Observable<ProductNew[]> {
     const itemsStream = new Observable(observer => {
-      // ////console.log('state.cart =======================>',state.cart);
       observer.next(JSON.parse(localStorage.getItem('cartItems')));
       observer.complete();
     });
@@ -315,9 +321,6 @@ export class ProductService {
 
   // Add to Cart
   public addToCart(product, prod_qty, isupdate): any {
-    ////console.log('product.product_owner', product.product_owner._id);
-    ////console.log('localStorage.getItem(vendor_id)', localStorage.getItem('vendor_id'))
-
     let SinglevendorStatus = true;
     const cartItems = localStorage.getItem('cartItems');
     if (localStorage.getItem('vendor_id') && cartItems && JSON.parse(cartItems).length > 0) {
@@ -345,17 +348,11 @@ export class ProductService {
 
   public addToCartforSingleVendor(product, prod_qty, isupdate) {
     const cartItem = state.cart.find(item => item._id === product._id);
-    //console.log('addToCartforSingleVendor state.cart-----------------------', state.cart)
     const qty = prod_qty
     const items = cartItem ? cartItem : product;
     const stock = this.calculateStockCounts(items, qty);
-    console.log('stock =========================', stock);
     if (!stock) return false
-    ////console.log('Cart Product', product);
-    //console.log('product Before ----------------------', product);
-    //console.log('product Before cartItem----------------------', cartItem, qty);
     if (cartItem) {
-      console.log('isupdate', isupdate)
       if (isupdate) {
         cartItem.stock = (product.stock + cartItem.quantity) - qty;
         cartItem.quantity = qty;
@@ -374,10 +371,6 @@ export class ProductService {
         product.stock -= qty;
       }
     }
-
-    // console.log('product After ----------------------', product);
-    // console.log('cartItem.quantity --------------------', cartItem.quantity);
-    ////console.log('user Login')
     if (localStorage.getItem('u_token')) {
       if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
         if (!cartItem) {
@@ -396,8 +389,6 @@ export class ProductService {
         else {
           product_price = product.product_sale_price
         }
-        //console.log('addToCart function check cartItem ', cartItem)
-        //console.log('addToCart function check Product Cart ', product)
         let cdata
         if (product.hasOwnProperty('left_eye_qty') && product.hasOwnProperty('right_eye_qty')) {
           cdata =
@@ -441,13 +432,10 @@ export class ProductService {
             let bodydata = res['data'];
             localStorage.setItem('cart_', res['data']._id)
             if (bodydata.hasOwnProperty('products')) {
-              ////console.log('element.products ======================>', res['data'].products)
               let cartproducts = [];
               let product_img
               for (const element of res['data'].products) {
-                ////console.log('element.pro_slug ======================>', element.pro_slug)
                 this.getproductsBySlugs(element.pro_slug).subscribe(product => {
-                  // console.log('product[data].product_image', product['data'].product_image)
                   product_img = product['data'].product_image != undefined ? product['data'].product_image[0].pro_image : 'assets/images/product/placeholder.jpg';
                   let data =
                   {
@@ -469,17 +457,13 @@ export class ProductService {
                     "addons": element.addons,
                     "addonsprice": element.addonsprice
                   }
-                  //console.log('Before Push Cart Items List', cartproducts)
                   cartproducts.push(data);
-                  //console.log('After Push Cart Items List', cartproducts)
                   localStorage.setItem("cartItems", JSON.stringify(cartproducts));
-                  //console.log('Return LocalStorage Product Service', localStorage.getItem("cartItems"));
 
                 })
 
                 const cartItem = state.cart.find(item => item._id === product._id);
                 if (!cartItem) {
-                  ////console.log('addToCart function check state.cart Before push', state.cart)
                   state.cart.push({
                     ...product,
                     quantity: qty,
@@ -487,7 +471,6 @@ export class ProductService {
                     cart_id: res['data']._id,
                     product_owner: product.product_owner._id
                   })
-                  ////console.log('addToCart function check state.cart After push', state.cart)
                 }
 
               }
@@ -502,8 +485,6 @@ export class ProductService {
 
     }
     else {
-
-      ////console.log('user Not Login')
       if (!cartItem) {
         state.cart.push({
           ...product,
@@ -511,12 +492,10 @@ export class ProductService {
           product_owner: product.product_owner._id,
         })
       }
-      ////console.log('Cart item added from Without login Retain local ', state.cart);
     }
 
     this.OpenCart = true; // If we use cart variation modal
     localStorage.setItem("cartItems", JSON.stringify(state.cart));
-    //////console.log('Local Storage Cart Item',state.cart);
 
     return true;
   }
@@ -524,13 +503,12 @@ export class ProductService {
   // Update Cart Quantity
   public updateCartQuantity(product: ProductNew, quantity: number): ProductNew | boolean {
     let cartProducts = JSON.parse(localStorage.getItem('cartItems'));
-    //console.log('cartProducts--------------------', cartProducts);
+    console.log('cartProducts--------------------', cartProducts);
     return cartProducts.find((items, index) => {
       if (items._id === product._id) {
-        //console.log('Updated Product details-----------', items)
+        console.log('Updated Product details-----------', items)
         const qty = product.quantity
         const stock = this.calculateStockCounts(cartProducts[index], quantity)
-        // console.log('Updated stock -----------', stock)
         if (localStorage.getItem('u_token')) {
           if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
             return true;
@@ -559,12 +537,11 @@ export class ProductService {
                 "addonsprice": product.addonsprice
               }]
             }
-            //////console.log('full Product Cart Data for Submit',cdata);
 
             this.addToCartDbBulk(cdata).subscribe(
               res => {
                 let bodydata = res['data'];
-                //console.log('bodydata Cart Return', bodydata);
+                console.log('bodydata Cart Return', bodydata);
                 if (bodydata.hasOwnProperty('products')) {
                   let cartproducts = [];
                   let product_img
@@ -592,9 +569,9 @@ export class ProductService {
                         "addonsprice": element.addonsprice
                       }
 
-                      //console.log('cartproducts Push', data);
+                      console.log('cartproducts Push', data);
                       cartproducts.push(data);
-                      //console.log('Return LocalStorage Product Service', cartproducts);
+                      console.log('Return LocalStorage Product Service', cartproducts);
                       // localStorage.removeItem('cartItems');
                       localStorage.setItem("cartItems", JSON.stringify(cartproducts));
 
@@ -642,7 +619,7 @@ export class ProductService {
 
     const index = getCartList.findIndex(item => item._id === productIdToFind);
 
-    //console.log('Befor Structure Delete Cart', product, getCartList, index);
+    console.log('Befor Structure Delete Cart', product, getCartList, index);
     if (localStorage.getItem('u_token')) {
       if (this.userService.isTokenExpired(localStorage.getItem('u_token'))) {
         getCartList.splice(index, 1);
@@ -652,7 +629,7 @@ export class ProductService {
       }
       else {
         getCartList.splice(index, 1);
-        //console.log('After Remove Cart getCartList :', getCartList);
+        console.log('After Remove Cart getCartList :', getCartList);
         localStorage.setItem("cartItems", JSON.stringify(getCartList));
 
         let dcDAta =
@@ -663,7 +640,7 @@ export class ProductService {
         this.deleteToCartDb(dcDAta).subscribe(
           res => {
             let bodydata = res['data'];
-            //console.log('bodydata Cart Return', bodydata);
+            console.log('bodydata Cart Return', bodydata);
             if (bodydata.hasOwnProperty('products') && res['data'].products.length > 0) {
               let cartproducts = [];
               let product_img
@@ -689,12 +666,12 @@ export class ProductService {
                     "addonsprice": element.addonsprice
                   }
 
-                  //console.log('cartproducts Push', data);
+                  console.log('cartproducts Push', data);
                   cartproducts.push(data);
-                  //console.log('Return LocalStorage Product Service', cartproducts);
+                  console.log('Return LocalStorage Product Service', cartproducts);
                   // localStorage.removeItem('cartItems');
                   state.cart = cartproducts;
-                  //console.log('state.cart Delete', state.cart);
+                  console.log('state.cart Delete', state.cart);
                 })
 
               }
@@ -704,7 +681,7 @@ export class ProductService {
               localStorage.setItem("cartItems", JSON.stringify(getCartList_));
               state.cart = getCartList_;
               localStorage.removeItem('vendor_id')
-              //console.log('state.cart Delete', state.cart);
+              console.log('state.cart Delete', state.cart);
             }
           },
           error => {
@@ -714,7 +691,6 @@ export class ProductService {
       }
     }
     else {
-      ////console.log('Remove Cart User Without Login :', state.cart);
       getCartList.splice(index, 1);
       localStorage.setItem("cartItems", JSON.stringify(getCartList));
       state.cart = getCartList;
@@ -774,7 +750,6 @@ export class ProductService {
         if (!filter.length) return true
         const Tags = filter.some((prev) => { // Match Tags
           if (item) {
-            //////console.log('Product Service YTags',item)
             return prev
           }
         })
@@ -891,79 +866,65 @@ export class ProductService {
   ////////////////////////////////////////
 
   addToCartDb(data: any): Observable<any> {
-    this.token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    this.token = "Bearer " + this.token
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.token
-      })
-    }
-
-    return this.http.post(environment.baseUrl + 'cart/add', data, httpOptions);
+    const url = environment.baseUrl + 'cart/add';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   addToCartDbBulk(data: any): Observable<any> {
-    this.token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    this.token = "Bearer " + this.token
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.token
-      })
-    }
-
-    return this.http.post(environment.baseUrl + 'cart/bulkadd', data, httpOptions);
+    const url = environment.baseUrl + 'cart/bulkadd';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   deleteToCartDb(data: any): Observable<any> {
-    this.token = localStorage.getItem('u_token') // Will return if it is not set 
-    this.token = "Bearer " + this.token
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.token
-      })
-    }
-    return this.http.post(environment.baseUrl + 'cart/delete', data, httpOptions);
+    const url = environment.baseUrl + 'cart/delete';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   allCartProducts(): Observable<any> {
-    this.token = localStorage.getItem('u_token') // Will return if it is not set 
-
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + this.token
-      })
-    }
-
-    return this.http.get(environment.baseUrl + 'cart/list', httpOptionsroom);
+    const url = environment.baseUrl + 'cart/list';
+    return this.securityService.signedRequest('GET', url);
 
   }
 
   productSearch(data: any) {
-    return this.http.post(environment.baseUrl + 'productsearch', data);
+    const url = environment.baseUrl + 'productsearch';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   // for dashboard brands
 
   getHomeBrands() {
-    return this.http.get(environment.baseUrl + 'home-page-brand/list');
+    const url = environment.baseUrl + 'home-page-brand/list';
+    return this.securityService.signedRequest('GET', url);
   }
 
-  getHomeFilteredProduct(data) {
-    return this.http.post(environment.baseUrl + 'home-filter-store-product', data);
-  }
+  // getHomeFilteredProduct(data) {
+  //   const url = environment.baseUrl + 'home-filter-store-product';
+  //   return this.securityService.signedRequest('POST', url, data);
+  // }
 
   gettagList() {
-    return this.http.get(environment.baseUrl + 'tag-list');
+    const url = environment.baseUrl + 'tag-list';
+    return this.securityService.signedRequest('GET', url);
   }
 
   gettestMediaSection(store_slug: any) {
-    return this.http.get(environment.baseUrl + `media-text-contain-list?store_slug=${store_slug}`);
+    const url = environment.baseUrl + `media-text-contain-list?store_slug=${store_slug}`;
+    return this.securityService.signedRequest('GET', url);
+  }
+
+  checkReturnEligibility(orderId: string) {
+    const url = environment.baseUrl + 'returns/eligible/' + orderId;
+    return this.securityService.signedRequest('GET', url);
+    // return this.http.get(`/api/returns/eligible/${orderId}`);
+  }
+
+  submitReturn(data: any) {
+    const url = environment.baseUrl + 'return/submit';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
 }
-
 
 
 

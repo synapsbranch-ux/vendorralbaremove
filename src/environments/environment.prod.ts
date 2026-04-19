@@ -1,7 +1,9 @@
 export const environment = {
   production: true,
   instagram_token: 'INSTA_TOKEN',
-  stripe_token: 'STRIPE_TOKEN',
+  ENC_KEY: "WmS81fl8F6v3ghnN7VzbrTKbd85H7n4uFwhcFj89j0M=",
+  IV :"hMhzs+WOGF1xZwV+L1COeg==",
+  secureUrl: 'https://api.ralbatech.com/sec/v1/',
   paypal_token: 'AUqwOlb75yY_oKcU0hud9J8Rjc0_dVJJn5qHSeYZJ-eIBk-iQl5dI7o_isPd5l68aP1WjZkZKdvay1_a',
   baseUrl: 'https://api.ralbatech.com/api/v1/',
   storeUrl: 'https://store.ralbatech.com'

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SecurityService } from 'src/security.service';
 
 const state = {
   checkoutItems: JSON.parse(localStorage['checkoutItems'] || '[]')
@@ -13,7 +14,7 @@ const state = {
 })
 export class OrderService {
 
-  constructor(private http: HttpClient, private router: Router,) { }
+  constructor(private http: HttpClient, private router: Router, private securityService: SecurityService) { }
 
   // Get Checkout Items
   public get checkoutItems(): Observable<any> {
@@ -41,50 +42,45 @@ export class OrderService {
 
   getAllAddress()
   {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-  
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.get(environment.baseUrl+'user/addressList',httpOptionsroom);
+    const url = environment.baseUrl + 'user/addressList';
+    return this.securityService.signedRequest('GET', url);
   }
 
   userCreateOrder(data:Object)
   {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-  
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl+'user/orderCreate',data,httpOptionsroom);
+    const url = environment.baseUrl + 'user/orderCreate';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userCreateOrderPayment(data:Object)
   {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-  
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl+'user/orderPayment',data,httpOptionsroom);
+    const url = environment.baseUrl + 'user/orderPayment';
+    return this.securityService.signedRequest('POST', url, data);
   }
 
   userSingleOrderDetails(data:Object)
   {
-    let token = localStorage.getItem('u_token') // Will return if it is not set 
-  
-    let httpOptionsroom = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + token
-      })
-    }
-    return this.http.post(environment.baseUrl+'user/orderDetails',data,httpOptionsroom);
+    const url = environment.baseUrl + 'user/orderDetails';
+    return this.securityService.signedRequest('POST', url, data);
   }
-  
+
+  fetchCoupons(){
+    const url = environment.baseUrl + 'user/couponsList';
+    return this.securityService.signedRequest('GET', url);
+  }
+
+  searchCouponByCouponName(search: any) {
+    const url = environment.baseUrl + `user/coupons/search?search=${search}`;
+    return this.securityService.signedRequest('GET', url);
+  }
+
+  searchCouponByCouponNameAndCode(data: Object) {
+    const url = environment.baseUrl + 'user/coupons/search-name-code';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+  checkCouponUsage(data:Object){
+    const url = environment.baseUrl + 'user/coupons/checkUsage';
+    return this.securityService.signedRequest('POST', url, data);
+  }
 }
