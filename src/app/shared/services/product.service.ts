@@ -119,7 +119,41 @@ export class ProductService {
 
   get2D3DFilteredProduct(data) {
     const url = environment.baseUrl + 'filter-all-store-product';
-    return this.securityService.signedRequest('POST', url, data);
+    const payload = this.normalizeAllStoreFilterPayload(data);
+    return this.securityService.signedRequest('POST', url, payload);
+  }
+
+  private normalizeAllStoreFilterPayload(data: any): any {
+    const payload = { ...(data || {}) };
+
+    // Backend expects tag_ids (array) and fails with 410 when tag_ids is missing.
+    if (!Array.isArray(payload.tag_ids)) {
+      if (payload.tag_id === undefined || payload.tag_id === null || payload.tag_id === '') {
+        payload.tag_ids = [];
+      } else {
+        payload.tag_ids = [payload.tag_id];
+      }
+    }
+    delete payload.tag_id;
+
+    // Backend expects product_category as string (empty string allowed).
+    if (payload.product_category === undefined || payload.product_category === null) {
+      payload.product_category = '';
+    } else if (typeof payload.product_category !== 'string') {
+      payload.product_category = String(payload.product_category);
+    }
+
+    if (payload.brand === undefined || payload.brand === null) {
+      payload.brand = '';
+    }
+    if (payload.page === undefined || payload.page === null) {
+      payload.page = 1;
+    }
+    if (payload.limit === undefined || payload.limit === null) {
+      payload.limit = 12;
+    }
+
+    return payload;
   }
 
   //// Get all Brands List
@@ -925,6 +959,5 @@ export class ProductService {
   }
 
 }
-
 
 

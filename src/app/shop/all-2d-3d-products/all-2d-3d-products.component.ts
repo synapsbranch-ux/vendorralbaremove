@@ -182,6 +182,10 @@ export class AllTwoDThreeDProductsComponent implements OnInit {
       (error) => {
         console.error('Error loading products:', error);
         this.isLoading = false; // Reset loading state in case of error
+        // Prevent infinite retry loop on hard API errors while user stays at page bottom.
+        if (error?.status === 410 || error?.status === 404 || error?.status === 400) {
+          this.hasMoreProducts = false;
+        }
       }
     );
   }
